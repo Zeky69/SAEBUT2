@@ -18,7 +18,7 @@ DROP TABLE if exists disponibilite;
 DROP TABLE if exists taggue;
 
 CREATE TABLE utilisateur(
-   id_user INT,
+   id_user VARCHAR(50),
    permission INT,
    login VARCHAR(50),
    password VARCHAR(50),
@@ -173,9 +173,9 @@ INSERT INTO type VALUES('1', 'Stand'),
                       ('5', 'Toilettes');
 
 
-INSERT INTO utilisateur VALUES(1, 1, 'admin', 'admin'),
-                              (2, 0, 'user', 'user'),
-                              (3, 0, 'user2', 'user2');
+INSERT INTO utilisateur VALUES('1', 1, 'admin', 'admin'),
+                              ('2', 0, 'user', 'user'),
+                              ('3', 0, 'user2', 'user2');
 
 INSERT INTO client VALUES('1', 'DUPONT', 'Jean', '1990-01-01', 2);
 

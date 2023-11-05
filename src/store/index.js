@@ -3,8 +3,8 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-import ShopService from '../services/shop.service'
-import BankService from '../services/bankaccount.service'
+import CarteService from '../services/carte.service'
+import PrestaService from '../services/prestataire.service'
 
 export default new Vuex.Store({
   // state = les données centralisées
