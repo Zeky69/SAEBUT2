@@ -2,10 +2,11 @@
 
 const fs = require('fs');
 const path = require('path');
-const { v4: uuidv4 } = require('uuid');
-const filePath = path.join(__dirname,'admin.json');
+const filePath = path.join(__dirname, '..','datasource/users.json');
 
-const login = (email,password,callback) => {
+const login = (req,callback) => {
+    const email = req.body.email;
+    const password = req.body.password;
     try {
         const data = fs.readFileSync(filePath, 'utf8');
         const dataStr = data.toString();
@@ -13,13 +14,14 @@ const login = (email,password,callback) => {
     } catch (errorLecture) {
         console.log(errorLecture);
     }
-    const newUser = {id: uuidv4(), nom: nom , prenom: prenom};
-    users.push(newUser);
-    try {
-        fs.writeFileSync(filePath, JSON.stringify(users));
-        callback(null, "success");
-    } catch (errorEcriture) {
-        callback(errorEcriture, null);
+    const user = users.find(user => user.login === email && user.password === password);
+    if (user) {
+        callback(null, user);
+        
+    } else {
+        
+        callback("User not found", null);
+        
     }
 };
 

@@ -6,6 +6,6 @@ const loginMiddlewares = require('../middlewares/login.middlewares');
 var router = express.Router();
 
 //se connecter
-router.post('/login', loginMiddlewares.validateLoginInput,loginController.login);
+router.get('/', loginMiddlewares.validateLoginInput,loginController.login);
 
 module.exports = router;
