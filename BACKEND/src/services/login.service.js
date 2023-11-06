@@ -14,7 +14,7 @@ const login = (req,callback) => {
     } catch (errorLecture) {
         console.log(errorLecture);
     }
-    const user = users.find(user => user.login === email && user.password === password);
+    const user = users.find(user => user.email === email && user.password === password);
     if (user) {
         callback(null, user);
         

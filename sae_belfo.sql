@@ -21,6 +21,7 @@ CREATE TABLE utilisateur(
    id_user VARCHAR(50),
    permission INT,
    login VARCHAR(50),
+   email VARCHAR(50),
    password VARCHAR(50),
    PRIMARY KEY(id_user)
 );
@@ -173,9 +174,9 @@ INSERT INTO type VALUES('1', 'Stand'),
                       ('5', 'Toilettes');
 
 
-INSERT INTO utilisateur VALUES('1', 1, 'admin', 'admin'),
-                              ('2', 0, 'user', 'user'),
-                              ('3', 0, 'user2', 'user2');
+INSERT INTO utilisateur VALUES('1', 1, 'admin', 'admin@admin.com','admin'),
+                              ('2', 0, 'user', 'test@test.com','user'),
+                              ('3', 0, 'user2', 'test2@test2.com' ,'user2');
 
 INSERT INTO client VALUES('1', 'DUPONT', 'Jean', '1990-01-01', 2);
 

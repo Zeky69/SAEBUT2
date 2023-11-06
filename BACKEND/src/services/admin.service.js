@@ -13,7 +13,7 @@ const getAllUsers = (req) => {
         const data = fs.readFileSync(filePath, 'utf8');
         const dataStr = data.toString();
         temp = JSON.parse(dataStr);
-        users = users.filter(user => user.login.includes(filtre))
+        users = temp.filter(user => user.login.includes(filtre));
     } catch (errorLecture) {
         console.log(errorLecture);
     }
