@@ -28,7 +28,4 @@ jobs:
           cd ~/Documents/SAEBUT2/
           git pull origin main
           cd FRONT/
-          ~/.nvm/versions/node/v21.1.0/bin/npm install
-          ~/.nvm/versions/node/v21.1.0/bin/npm run build
-          sudo rsync -av --delete ~/Documents/SAEBUT2/FRONT/dist/ /var/www/sae
-          sudo systemctl restart apache2
+          ~/script.sh
