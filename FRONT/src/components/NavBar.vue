@@ -1,15 +1,16 @@
 <template>
+  <div>
   <div class="container navbar">
     <div class="menu-top">
       <div class="title"  @click="menuClicked(0)">
-        <img src="../assets/logoWF.png" class="logo">
+        <img src="../assets/logoWF.png" class="logo" alt="">
         <h1>BELFORAINE</h1>
       </div>
       <div class="icons">
 
-        <img src="../assets/icons/search.png" @click="menuClicked(6)" class="i">
-        <img src="../assets/icons/cart.png" @click="menuClicked(7)" class="i">
-         <img src="../assets/icons/prestataire-removebg-preview.png" @click="menuClicked(8)" class="i">
+        <img src="../assets/icons/search.png" @click="menuClicked(6)" class="i" alt="">
+        <img src="../assets/icons/cart.png" @click="menuClicked(7)" class="i" alt="">
+         <img src="../assets/icons/prestataire-removebg-preview.png" @click="menuClicked(8)" class="i" alt="">
       </div>
     </div>
 
@@ -20,7 +21,8 @@
     </div>
 
   </div>
-
+  <div style="width: 50px;height: 155px;"></div>
+</div>
 </template>
 
 <script>
@@ -48,7 +50,6 @@ window.addEventListener('scroll', function() {
   var navbar = document.querySelector('.navbar');
   if (window.scrollY > 100) {
     navbar.classList.add('scrolled');
-    console.log("heeyyy")
   } else {
     navbar.classList.remove('scrolled');
   }
@@ -137,5 +138,8 @@ justify-content: center;
   margin-top: 1%;
   gap:3%;
 }
+
+
+
 
 </style>
