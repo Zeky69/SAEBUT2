@@ -29,6 +29,7 @@
           else if(index===7) this.$router.push('/panier');
           else if(index===8) this.$router.push('/login');
 
+
           this.currentIndex=index;
         }
       }

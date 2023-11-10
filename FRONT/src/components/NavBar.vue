@@ -29,7 +29,7 @@ export default {
   name:'NavBar',
   data : () => ({
     navBarTitles : [
-        'ACCUEIL','ATTRACTIONS','RESTAURATION','BOUTIQUE','BILLETTERIE','ORGANISATEURS'
+        'ACCUEIL','ATTRACTIONS','RESTAURATION','BOUTIQUE','BILLETTERIE','ORGANISATEURS', 'TESTMAP'
     ]
   }),
   methods: {
