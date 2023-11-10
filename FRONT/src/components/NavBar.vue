@@ -1,6 +1,5 @@
 <template>
-  <div class="container">
-
+  <div class="container navbar">
     <div class="menu-top">
       <div class="title"  @click="menuClicked(0)">
         <img src="../assets/logoWF.png" class="logo">
@@ -10,7 +9,7 @@
 
         <img src="../assets/icons/search.png" @click="menuClicked(6)" class="i">
         <img src="../assets/icons/cart.png" @click="menuClicked(7)" class="i">
-         <img src="../assets/icons/prestataire.png" @click="menuClicked(8)" class="i">
+         <img src="../assets/icons/prestataire-removebg-preview.png" @click="menuClicked(8)" class="i">
       </div>
     </div>
 
@@ -33,12 +32,28 @@ export default {
     ]
   }),
   methods: {
-    menuClicked(index){
-      this.$emit('router-signal',index);
-    }
+    menuClicked(index) {
+      this.$emit('router-signal', index);
+    },
+
+    navbar() {
+
+  }
+
   }
 
 }
+
+window.addEventListener('scroll', function() {
+  var navbar = document.querySelector('.navbar');
+  if (window.scrollY > 100) {
+    navbar.classList.add('scrolled');
+    console.log("heeyyy")
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+
+});
 </script>
 
 <style>
@@ -53,21 +68,35 @@ export default {
 }
 
 .container{
-  padding-top: 1%;
-  padding-bottom: 1%;
   display: flex;
   flex-flow: column;
   gap: 60%;
   }
 
+.navbar{
+  padding: 10px 0;
+  position: fixed !important;
+  z-index: 100;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 1); /* Couleur blanche semi-transparente */
+  backdrop-filter: blur(20px);
+  box-shadow: black 0 0 10px;
+}
+
+.navbar.scrolled {
+  background-color: rgba(255, 255, 255, 0.5); /* Couleur blanche opaque lors du défilement */
+}
+
+
 .menu-top{
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   font-family: 'Tw Cen MT Condensed Extra Bold', sans-serif;
 
 }
+
+
 
 a{
   text-decoration: none;
@@ -78,19 +107,22 @@ a{
 
 
 .title{
+  grid-column: 2;
   display: flex;
   align-items: center;
-  font-size: 150%;
+  justify-content: center;
+  font-size: 20px;
 }
 
 .logo{
-  max-width: 15%;
+  max-width: 120px;
 }
 
 .icons {
-  margin-right: 3%;
+  grid-column: 3;
   display: flex;
-  gap: 6%;
+  align-items: center;
+justify-content: center;
 }
 
 
