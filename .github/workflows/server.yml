@@ -23,11 +23,14 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/githubkey
           cd ~/Documents/SAEBUT2/
           git pull origin main
           git status
           cd FRONT
           npm install 
           npm run build
+          
           sudo rsync -av --delete ~/Documents/SAEBUT2/FRONT/dist/ /var/www/sae
           sudo systemctl restart apache2
