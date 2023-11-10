@@ -28,4 +28,6 @@ jobs:
           cd ~/Documents/SAEBUT2/
           git pull origin main
           cd FRONT/
+          source ~/.nvm/nvm.sh
+          nvm use 21.1.0
           ~/script.sh
