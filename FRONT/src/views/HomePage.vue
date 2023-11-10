@@ -13,7 +13,7 @@
         <p>Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences inspirantes et divertissement sans fin fusionnent. Plongez dans l'inconnu avec une pointe de futurisme, le tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !</p>
       </div>
       <div class="multiple-card">
-        <Card title="Rejoignez la Belforaine LAN Fest !" description="Des tournois de jeu inoubliables vous attendent à LAN Fest, le paradis des gamers à Belforaine. Défiez vos amis, mesurez vos compétences et plongez dans l'action multijoueur ultime !"/>
+        <Card title="Rejoignez la Belforaine LAN Fest !" description="Des tournois de jeu inoubliables vous attendent à LAN Fest, le paradis des gamers à Belforaine. Défiez vos amis, mesurez vos compétences et plongez dans l'action multijoueur ultime ! testage"/>
         <Card title="Rejoignez la Belforaine LAN Fest !" description="Des tournois de jeu inoubliables vous attendent à LAN Fest, le paradis des gamers à Belforaine. Défiez vos amis, mesurez vos compétences et plongez dans l'action multijoueur ultime !" />
         <Card title="Rejoignez la Belforaine LAN Fest !" description="Des tournois de jeu inoubliables vous attendent à LAN Fest, le paradis des gamers à Belforaine. Défiez vos amis, mesurez vos compétences et plongez dans l'action multijoueur ultime !" />
       </div>
