@@ -88,10 +88,7 @@ export default {
   margin-right: 12%;
   border-radius: 40px;
   font-size: 24px;
-  padding-left: 8%;
-  padding-right: 8%;
-  padding-top: 3%;
-  padding-bottom: 3%;
+  padding: 3% 8%;
 }
 .multiple-card{
 

@@ -48,6 +48,7 @@ window.addEventListener('scroll', function() {
   var navbar = document.querySelector('.navbar');
   if (window.scrollY > 100) {
     navbar.classList.add('scrolled');
+    console.log("heeyyy")
   } else {
     navbar.classList.remove('scrolled');
   }
@@ -79,7 +80,7 @@ window.addEventListener('scroll', function() {
   width: 100%;
   background-color: rgba(255, 255, 255, 1); /* Couleur blanche semi-transparente */
   backdrop-filter: blur(20px);
-  box-shadow: black 0px 0px 10px;
+  box-shadow: black 0 0 10px;
 }
 
 .navbar.scrolled {
@@ -89,12 +90,13 @@ window.addEventListener('scroll', function() {
 
 .menu-top{
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   font-family: 'Tw Cen MT Condensed Extra Bold', sans-serif;
 
 }
+
+
 
 a{
   text-decoration: none;
@@ -105,19 +107,22 @@ a{
 
 
 .title{
+  grid-column: 2;
   display: flex;
   align-items: center;
-  font-size: 150%;
+  justify-content: center;
+  font-size: 20px;
 }
 
 .logo{
-  max-width: 15%;
+  max-width: 120px;
 }
 
 .icons {
-  margin-right: 3%;
+  grid-column: 3;
   display: flex;
-  gap: 6%;
+  align-items: center;
+justify-content: center;
 }
 
 
