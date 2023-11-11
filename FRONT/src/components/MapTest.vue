@@ -1,13 +1,21 @@
 <template>
-  <div id="container">
-    <div class="scene-container" style="background-color: beige; width: 100%;">
-      <button id="btn1">Place Batiment</button>
-      <div class="scene1" ref="scene1Container" style="height: 900px; width: 90vw; margin-left: 5vw; margin-right: 5vw; margin-bottom: 5px; background-color: black;"></div>
-      <div class="scene2" ref="scene2Container" style="height: 40vw; width: 40vw; margin-left: 30vw;"></div>
+  <div id="container" style="background-color: #D9D9D9; margin-top: 50px">
+    <div class="scene-container" style="height: 900px; width: 90vw; margin-left: 5vw; margin-right: 5vw; margin-bottom: 5px; background-color: black; display: flex; flex-direction: row;">
+      <div class="scene1" id="scene1" ref="scene1Container">
+      </div>
+      <div class="selectmenu" id="selectmenu" >
+        <div class="scene2" ref="scene2Container" style="height: 30%; width: 100%; background-color: beige; margin-bottom: 15px; margin-top: 40%"></div>
+        <label for="batidInput">Sélectionnez un bâtiment :</label>
+        <select id="batidInput" v-model="idbatafficher">
+          <option value="0" disabled selected>Sélectionnez un bâtiment</option>
+          <option v-for="batimentsolo in batiment" :key="batimentsolo.id" :value="batimentsolo.id">{{ batimentsolo.name }}</option>
+        </select>
+        <button id="btn1" @click="refreshcalmyfuncpls(1)" class="custom-btn">Place Batiment</button>
+      </div>
+      <div class="deletmenu" id="deletmenu">
+        <button id="btn1" @click="refreshcalmyfuncpls(2)" class="custom-btn">remove Batiment</button>
+      </div>
     </div>
-
-    <button id="btn2">choose batiment</button>
-    <input type="number" id="batidInput" v-model="ibat">
   </div>
 </template>
 
@@ -45,32 +53,73 @@ export default {
     texture_emp: null,
     empGroupe: null,
     groupe_sol: null,
+    ambientLightscene2: null,
+    scene2Container: null,
 
 
 
   }),
-  methods: {
-    ibat: function(){
+  watch: {
+    idbatafficher() {
+      // Appeler la fonction batvitrine avec la nouvelle valeur
       this.batvitrine();
-    },
-    batvitrine(){
-      // Récupérez la valeur de l'input
-      console.log(this.scene2)
-      if(this.idbatafficher != -1){
-        ///remove tout les enfants de la vitrine
-        while(this.vitrine.children.length > 0) {
-          this.vitrine.remove(this.vitrine.children[0]);
-        }
-      }
-      console.log("batiment choisi", this.batiment[this.idbatafficher]["child"] )
-      const objet= this.batiment[this.idbatafficher]["child"].clone();
-      objet.name = this.batiment[this.idbatafficher]["child"].name;
-      objet.material = this.batiment[this.idbatafficher]["material"];
-      console.log("objet", objet)
-      objet.position.set(0, 0, 0);
-      this.vitrine.add(objet);
+    }
+  },
+  methods: {
+      batvitrine() {
+        console.log("rentrer dans vitrine")
+        if (this.idbatafficher !== -1) {
+          // Retirez tous les enfants de la vitrine
+          while (this.vitrine.children.length > 0) {
+            this.vitrine.remove(this.vitrine.children[0]);
+          }
 
-      // Faites quelque chose avec la valeur, par exemple, affichez-la dans la console
+          // Ajoutez le nouvel objet à la vitrine
+          const objet = this.batiment[this.idbatafficher-1].child.clone();
+          objet.name = this.batiment[this.idbatafficher].child.name;
+          objet.material = this.batiment[this.idbatafficher].material;
+          objet.position.set(0, 0, 0);
+          console.log("objet", objet)
+          this.vitrine.add(objet);
+          console.log("vitrien", this.vitrine)
+          console.log("batiment", this.batiment)
+          console.log("scene2", this.scene2)
+        }
+      },
+
+    creationscene2(){
+      //test
+
+
+      setTimeout(() => {
+        this.scene2 = new THREE.Scene();
+        this.scene2Container = this.$refs.scene2Container;
+
+        this.camera2 = new THREE.PerspectiveCamera(75, this.scene2Container.offsetWidth/this.scene2Container.offsetHeight , 0.1, 1000);
+        this.renderer2 = new THREE.WebGLRenderer();
+        this.renderer2.setSize(window.innerWidth, window.innerHeight);
+        this.scene2Container.appendChild(this.renderer2.domElement);
+        this.renderer2.setSize(this.scene2Container.offsetWidth, this.scene2Container.offsetHeight);
+        this.controls3 = new OrbitControls(this.camera2, this.renderer2.domElement);
+///mettre un fond vert
+        this.scene2.background = new THREE.Color(0x00ff00);
+
+        this.ambientLightscene2 = new THREE.AmbientLight(0x404040);
+        this.ambientLightscene2.intensity = 10; // Intensité de la lumière ambiante
+        this.scene2.add(this.ambientLightscene2);
+        this.controls3.update();
+        this.scene2.add(this.vitrine);
+        console.log("scene2sjdkljdqlmskdml", this.scene2)
+        this.camera2.rotation.x = -0.5;
+        this.camera2.position.set( 5, 10, 9 );
+
+      }, 1000);
+      ////
+
+    },
+
+    deletscene2(){
+        this.scene2Container.removeChild(this.scene2Container.firstChild)
     },
 
     onMouseMove(event) {
@@ -155,12 +204,18 @@ export default {
         if (this.selectedObject.name.slice(-3) == "bat") {
           console.log("bat");
           if(this.selectab.length == 0 && id_asset != undefined){
+              // Toggle the 'active' class on the selectmenu div
+              document.getElementById('deletmenu').classList.toggle('active');
+              document.getElementById('scene1').classList.toggle('active');
             this.selectedObject.material.color.setHex(0xff0000);
             var info = {obj: this.selectedObject,id: id_asset, mat: originmat, col: origineColor}
             this.selectab.push(info);
           }
           else{
             if(this.selectedObject.uuid == this.selectab[0]["obj"].uuid){
+              // Toggle the 'active' class on the selectmenu div
+              document.getElementById('deletmenu').classList.toggle('active');
+              document.getElementById('scene1').classList.toggle('active');
               this.selectedObject.material = this.selectab[0]["mat"].clone()
               this.selectedObject.material.color.setHex(this.selectab[0]["col"])
               this.selectab.pop(0)
@@ -176,6 +231,10 @@ export default {
           if (this.selectedObject.name.slice(-3) == "emp") {
             console.log(this.selectab.length)
             if(this.selectab.length == 0 && id_asset != undefined ){
+              // Toggle the 'active' class on the selectmenu div
+              document.getElementById('selectmenu').classList.toggle('active');
+              document.getElementById('scene1').classList.toggle('active');
+              this.creationscene2()
               console.log("id_asset", id_asset);
               console.log("asset", this.asset[id_asset]);
               if(this.asset[id_asset].free){
@@ -192,6 +251,9 @@ export default {
             }
             else{
               if(this.selectedObject.name == this.selectab[0]["obj"].name){
+                // Toggle the 'active' class on the selectmenu div
+                document.getElementById('selectmenu').classList.toggle('active');
+                document.getElementById('scene1').classList.toggle('active');
                 this.selectedObject.material = this.selectab[0]["mat"]
                 this.selectedObject.material.color.setHex(this.selectab[0]["col"])
                 this.selectab.pop(0)
@@ -211,12 +273,19 @@ export default {
       }
     },
 
-    refreshcalmyfuncpls(){
+    refreshcalmyfuncpls(mode){
       console.log("refresh")
-      this.idbatafficher = 2;
       if(this.selectab.length == 1 && this.idbatafficher >= 0 && this.idbatafficher <= this.batiment.length){
 
-
+        if(mode == 1){
+          document.getElementById('selectmenu').classList.toggle('active');
+          document.getElementById('scene1').classList.toggle('active');
+          this.deletscene2()
+        }
+        if(mode == 2){
+          document.getElementById('deletmenu').classList.toggle('active');
+          document.getElementById('scene1').classList.toggle('active');
+        }
         var id_asset = this.selectab[0]["id"]
         var selected = this.asset[id_asset]
         var uuid = this.selectab[0]["obj"].uuid
@@ -361,10 +430,10 @@ export default {
         loader.load('map/mapData/map_try2.fbx', (loadedFbx) => {
 
               this.findchild(loadedFbx, this.children);
-
+              var indicebat = 0;
               for (var i = 0; i < this.children.length; i++) {
                 if (this.children[i].name.slice(-3) == "bat"){
-
+                  indicebat++;
                   const child = this.children[i];
                   const material = child.material;
                   const positionY = child.position.y;
@@ -372,11 +441,13 @@ export default {
                   const buildingInfo = {
                     child: child,
                     material: material,
-                    positionY: positionY
+                    positionY: positionY,
+                    name: child.name,
+                    id: indicebat
                   };
                   // Ajoutez l'objet à votre tableau principal
                   this.batiment.push(buildingInfo);
-
+                  console.log("buildinf", buildingInfo)
                   this.children[i].castShadow = true;
                   this.children[i].receiveShadow = true;
                 } else {
@@ -436,14 +507,13 @@ export default {
 
 
       this.animateScene2();
-
-      console.log("scene",this.scene)
     },
 
 
 
     animateScene2() {
       requestAnimationFrame(this.animateScene2);
+      this.controls3.update();
       this.renderer2.render(this.scene2, this.camera2);
     },
 
@@ -453,6 +523,8 @@ export default {
       this.renderer.render(this.scene, this.camera);
     }
   },
+
+
   mounted() {
 
     this.scene = new THREE.Scene();
@@ -492,7 +564,12 @@ export default {
 
     this.selectionables = new THREE.Group();
     this.raycaster = new THREE.Raycaster();
-///fonction
+
+
+
+
+
+    ///fonction
     /*
     asset template
 
@@ -513,50 +590,32 @@ export default {
 
     this.empGroupe = new THREE.Group();
     this.groupe_sol = new THREE.Group();
+    this.vitrine = new THREE.Group();
+    this.vitrine.scale.set(0.01, 0.01, 0.01);
 
 
 
 
 // scene 2
     this.scene2 = new THREE.Scene();
-    const scene2Container = this.$refs.scene2Container;
-    this.camera2 = new THREE.PerspectiveCamera(75, scene2Container.offsetWidth/scene2Container.offsetHeight , 0.1, 1000);
+    this.scene2Container = this.$refs.scene2Container;
+    this.camera2 = new THREE.PerspectiveCamera(75, this.scene2Container.offsetWidth/this.scene2Container.offsetHeight , 0.1, 1000);
     this.renderer2 = new THREE.WebGLRenderer();
     this.renderer2.setSize(window.innerWidth, window.innerHeight);
-    scene2Container.appendChild(this.renderer2.domElement);
-    this.renderer2.setSize(scene2Container.offsetWidth, scene2Container.offsetHeight);
     this.controls3 = new OrbitControls(this.camera2, this.renderer2.domElement);
-///mettre un fond blanc
-    this.scene2.background = new THREE.Color(0xffffff);
+///mettre un fond vert
+    this.scene2.background = new THREE.Color(0x00ff00);
 
-
-
-    const ambientLightscene2 = new THREE.AmbientLight(0x404040); // Couleur en hexadécimal
-    ambientLightscene2.intensity = 10; // Intensité de la lumière ambiante
-    this.scene2.add(ambientLightscene2);
-
-// Appelez la fonction pour charger le bâtiment
-    this.idbatafficher = 2;
-
-
-
-
-// Positionnez la caméra pour la nouvelle scène
-    this.camera2.position.set(5, 10, 9);
-
-//controle
+    this.ambientLightscene2 = new THREE.AmbientLight(0x404040); // Couleur en hexadécimal
+    this.ambientLightscene2.intensity = 10; // Intensité de la lumière ambiante
+    this.scene2.add(this.ambientLightscene2);
     this.controls3.update();
-
 // Vous pouvez également ajouter des lumières ou des contrôles spécifiques à cette scène si nécessaire
 
 
 
-// Appelez la fonction d'animation pour la nouvelle scène
 
-    this.vitrine = new THREE.Group();
-    this.vitrine.scale.set(0.01, 0.01, 0.01);
-
-// scene 2 fin
+/// scene 2 fin
 
 
 
@@ -571,3 +630,65 @@ export default {
   },
 };
 </script>
+
+<style>
+.custom-btn {
+  margin: 10px;
+  background-color: #28a745; /* couleur verte */
+  color: #fff; /* couleur du texte blanc */
+  padding: 10px 15px; /* rembourrage du bouton */
+  border: none; /* pas de bordure */
+  border-radius: 5px; /* coins arrondis */
+  cursor: pointer; /* curseur main au survol */
+  font-size: 16px; /* taille du texte */
+}
+
+.custom-btn:hover {
+  background-color: #218838; /* couleur verte légèrement plus foncée au survol */
+}
+
+.selectmenu {
+  width: 0;
+  height: 100%;
+  background-color: #D9D9D9;
+  transition: width 0.3s ease-out, transform 0.3s ease-out, opacity 0.6s ease-out;
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.selectmenu.active {
+  width: 30%;
+  transform: translateX(0%);
+  opacity: 1;
+  visibility: visible;
+}
+
+.deletmenu {
+  width: 0;
+  height: 100%;
+  background-color: #D9D9D9;
+  transition: width 0.3s ease-out, transform 0.3s ease-out, opacity 0.6s ease-out;
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.deletmenu.active {
+  width: 30%;
+  transform: translateX(0%);
+  opacity: 1;
+  visibility: visible;
+}
+
+
+.scene1{
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  transition: width 0.3s ease-out;
+}
+.scene1.active{
+  width: 70%;
+}
+</style>
