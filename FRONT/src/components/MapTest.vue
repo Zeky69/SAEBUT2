@@ -332,7 +332,7 @@ export default {
         this.selectedObject = 0
       }
       else{
-        console.log("selectionné un batiment a retirer")
+        console.log("selectionné un batiment a retirer ")
       }
     },
 
