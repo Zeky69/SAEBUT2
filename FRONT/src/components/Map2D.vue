@@ -8,8 +8,8 @@
   <l-map style="width:800px ; height: 500px" :zoom="zoom" :center="center">
     <l-tile-layer :url="url" ></l-tile-layer>
     <l-marker :lat-lng="markerLatLng"></l-marker>
-    <transition name="info-panel-transition"      enter-active-class="animated bounceOutRight" leave-active-class="animated bounceOutRight">
-    <div v-show="isVisiblePanel" class="info-panel">
+    <transition name="info-panel-transition" leave-active-class="info-panel-transition-leave-active"  >
+    <div v-if="isVisiblePanel" class="info-panel">
       <div class="close" @click="closePanel">
         <div></div>
       </div>
@@ -63,7 +63,8 @@ export default {
 }
 
 .info-panel-transition-leave-active {
-  transition: right 10s;
+  transition: right 1s;
+  right: -33%;
 }
 .info-panel-transition-enter {
   right: 0;
@@ -87,7 +88,7 @@ export default {
   background-color: #e7e7e7;
   color: #041676;
   z-index: 401;
-  transition: right 1s ease;
+  transition: all 1s;
 }
 
 
