@@ -4,7 +4,8 @@
       <div class="scene1" id="scene1" ref="scene1Container">
       </div>
       <div class="selectmenu" id="selectmenu" >
-        <div class="scene2" ref="scene2Container" style="height: 30%; width: 100%; background-color: beige; margin-bottom: 15px; margin-top: 40%"></div>
+        <h2 style="margin-top: 40%; margin-bottom: 5%">previsualisation du batiment</h2>
+        <div class="scene2" ref="scene2Container" style="height: 30%; width: 100%; background-color: beige; margin-bottom: 15px;"></div>
         <label for="batidInput">Sélectionnez un bâtiment :</label>
         <select id="batidInput" v-model="idbatafficher">
           <option value="0" disabled selected>Sélectionnez un bâtiment</option>
@@ -44,7 +45,7 @@ export default {
     selectionables: null,
     light: null,
     ambientLight: null,
-    idbatafficher: -1,
+    idbatafficher: 0,
     vitrine: null,
     scene2: null,
     camera2: null,
@@ -68,7 +69,8 @@ export default {
   methods: {
       batvitrine() {
         console.log("rentrer dans vitrine")
-        if (this.idbatafficher !== -1) {
+        console.log("idbat", this.idbatafficher)
+        if (this.idbatafficher !== 0) {
           // Retirez tous les enfants de la vitrine
           while (this.vitrine.children.length > 0) {
             this.vitrine.remove(this.vitrine.children[0]);
@@ -76,8 +78,8 @@ export default {
 
           // Ajoutez le nouvel objet à la vitrine
           const objet = this.batiment[this.idbatafficher-1].child.clone();
-          objet.name = this.batiment[this.idbatafficher].child.name;
-          objet.material = this.batiment[this.idbatafficher].material;
+          objet.name = this.batiment[this.idbatafficher-1].child.name;
+          objet.material = this.batiment[this.idbatafficher-1].material;
           objet.position.set(0, 0, 0);
           console.log("objet", objet)
           this.vitrine.add(objet);
@@ -101,19 +103,18 @@ export default {
         this.scene2Container.appendChild(this.renderer2.domElement);
         this.renderer2.setSize(this.scene2Container.offsetWidth, this.scene2Container.offsetHeight);
         this.controls3 = new OrbitControls(this.camera2, this.renderer2.domElement);
-///mettre un fond vert
-        this.scene2.background = new THREE.Color(0x00ff00);
+        //mettre un fond blanc
+        this.scene2.background = new THREE.Color(0xffffff)
 
         this.ambientLightscene2 = new THREE.AmbientLight(0x404040);
         this.ambientLightscene2.intensity = 10; // Intensité de la lumière ambiante
         this.scene2.add(this.ambientLightscene2);
         this.controls3.update();
         this.scene2.add(this.vitrine);
-        console.log("scene2sjdkljdqlmskdml", this.scene2)
         this.camera2.rotation.x = -0.5;
-        this.camera2.position.set( 5, 10, 9 );
+        this.camera2.position.set( 2.5, 5, 4.5 );
 
-      }, 1000);
+      }, 310);
       ////
 
     },
@@ -254,6 +255,7 @@ export default {
                 // Toggle the 'active' class on the selectmenu div
                 document.getElementById('selectmenu').classList.toggle('active');
                 document.getElementById('scene1').classList.toggle('active');
+                this.deletscene2()
                 this.selectedObject.material = this.selectab[0]["mat"]
                 this.selectedObject.material.color.setHex(this.selectab[0]["col"])
                 this.selectab.pop(0)
@@ -292,8 +294,8 @@ export default {
         console.log(selected)
         if(selected.type["fst"] == "emp"){
 
-          var batimentadd = this.batiment[this.idbatafficher]["child"].clone();
-          batimentadd.material = this.batiment[this.idbatafficher]["material"].clone();
+          var batimentadd = this.batiment[this.idbatafficher-1]["child"].clone();
+          batimentadd.material = this.batiment[this.idbatafficher-1]["material"].clone();
           var pos = this.asset[id_asset].position;
           var y = batimentadd.position.y;
 
@@ -313,16 +315,15 @@ export default {
           this.selectab[0]["obj"].material.color.setHex(this.selectab[0]["col"])
         }
         else{
-          this.selectionables.traverse(function (child) {
-                if (child.uuid == uuid){
-                  this.selectionables.remove(child);
-                  this.asset[id_asset].statut = false;
-                  console.log("pos", child.position.x)
-                  console.log(this.asset)
-                  this.asset[this.asset.find(x => x.position["x"] == child.position.x)._id].free = true;
-                }
-              }
-          );
+          this.selectionables.traverse((child) => {
+            if (child.uuid == uuid) {
+              this.selectionables.remove(child);
+              this.asset[id_asset].statut = false;
+              console.log("pos", child.position.x);
+              console.log(this.asset);
+              this.asset[this.asset.find((x) => x.position["x"] == child.position.x)._id].free = true;
+            }
+          });
 
         }
         while(this.selectab.length > 0) {
