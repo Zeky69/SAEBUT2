@@ -4,24 +4,25 @@
 <!--  <div id="map" style="width: 50%; height: 500px; display: block">-->
 <!--  </div>-->
 <div class="map-container">
-  <l-map style="width:800px ; height: 500px" :zoom="zoom" :center="center">
+  <l-map v-if="getVisible" style="width:800px ; height: 500px" :zoom="zoom" :center="center">
     <l-tile-layer :url="url" ></l-tile-layer>
     <l-marker :lat-lng="markerLatLng"></l-marker>
     <l-image-overlay :url="'carte.jpeg'" :bounds="cartebounds"></l-image-overlay>
       <l-polygon
-          v-for="(feature , index) in features "
+          v-for="(feature , index) in getFeature"
           :key="index"
           :lat-lngs="feature.geometry"
           :options="polygonOption(feature)"
           @click="openPanel(feature)"
+
       >
 
 
 
 
       </l-polygon>
-        <div class="info-panel">
-        <info-panel v-if="panelSelected!=null" @close-panel="closePanel" :prestataire="prestatiare" :feature="panelSelected"> </info-panel>
+        <div class="info-panel info-panel-close">
+        <info-panel v-if="featureSelected!=null" @close-panel="closePanel" @btn-click="updatefeature" :prestataire="provider" :feature="featureSelected"> </info-panel>
 
         </div>
   </l-map>
@@ -48,8 +49,8 @@ export default {
     center: [47.748200899354956,6.802237629890443],
     cartebounds: [[47.74915674062442, 6.800086498260499],[47.74737489408103 , 6.804184913635255]],
     markerLatLng: [51.504, -0.159],
-    isVisiblePanel: true,
-    prestatiare : {
+    isVisible: true,
+    provider : {
       id:"Zekeriya",
       type:"forrain"},
 
@@ -64,6 +65,7 @@ export default {
             ]
           ,
           "properties": {
+              "id": "1",
             "name": "Personne aussi",
             "description": "Ceci est un exemple de Polygon dans GeoJSON",
             "typeTerrain": "forrain",
@@ -80,6 +82,7 @@ export default {
             ]
           ,
           "properties": {
+            "id": "2",
             "name": "C'est a personne",
             "description": "Ceci est un exemple de Polygon dans GeoJSON",
             "typeTerrain": "scene",
@@ -98,6 +101,7 @@ export default {
             ]
           ,
           "properties": {
+            "id": "3",
             "name": "Celui de Enzo",
             "description": "Ceci est un exemple de Polygon dans GeoJSON",
             "typeTerrain": "scene",
@@ -113,6 +117,7 @@ export default {
               [47.74785462799751,6.802774071693421 ]
             ],
           "properties": {
+            "id": "4",
             "name": "Celui de Calixte",
             "description": "Ceci est un exemple de Polygon dans GeoJSON",
             "typeTerrain": "forrain",
@@ -120,23 +125,34 @@ export default {
           }
         }
       ],
-    panelSelected : null
+    featureSelected : null
 
   }),
+  computed: {
+    getFeature(){
+      return this.features;
+    }
+    ,
+    getVisible(){
+      return this.isVisible;
+    }
+
+  },
   methods: {
     closePanel() {
       document.querySelector('.info-panel').classList.add('info-panel-close');
-      this.panelSelected = null;
+      this.featureSelected = null;
 
     },
     openPanel(feature) {
       document.querySelector('.info-panel').classList.remove('info-panel-close');
-      this.panelSelected = feature;
+      this.featureSelected = feature;
 
     },
+
     polygonOption(feature){
-      const isPrestataire = feature.properties.apartient === this.prestatiare.id;
-      const isTypeTerrain = feature.properties.typeTerrain === this.prestatiare.type;
+      const isPrestataire = feature.properties.apartient === this.provider.id;
+      const isTypeTerrain = feature.properties.typeTerrain === this.provider.type;
       const isNullApartient = feature.properties.apartient === null;
 
       const fillColor =

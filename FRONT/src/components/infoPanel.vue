@@ -26,6 +26,7 @@
 
     </div>
     <div class="infoPanel-footer">
+      <button @click="btnClicked">Réserver</button>
       <button @click="closePanel">Fermer</button>
   </div>
   </div>
@@ -38,6 +39,8 @@ export default {
   methods: {
     closePanel() {
       this.$emit("close-panel");
+    },btnClicked() {
+      this.$emit("btn-click");
     },
     convertCoordinatesToMeters(coordinates) {
       const EARTH_RADIUS = 6371000;
