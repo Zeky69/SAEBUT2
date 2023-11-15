@@ -1,9 +1,9 @@
 <template>
-  <div id="container" style="background-color: #D9D9D9; margin-top: 50px">
-    <div class="scene-container" style="height: 900px; width: 90vw; margin-left: 5vw; margin-right: 5vw; margin-bottom: 5px; background-color: black; display: flex; flex-direction: row;">
-      <div class="scene1" id="scene1" ref="scene1Container">
-      </div>
-      <div class="selectmenu" id="selectmenu" >
+  <div id="container" style="background-color: #D9D9D9; width: 90vw; height: 900px; max-width: 90vw; margin: 5vw; overflow: hidden; display: flex;" >
+      <div class="scene1" id="scene1" ref="scene1Container">      </div>
+
+    <div class="selectmenu closed" id="selectmenu" >
+      <div class="add" id="add">
         <h2 style="margin-top: 40%; margin-bottom: 5%">previsualisation du batiment</h2>
         <div class="scene2" ref="scene2Container" style="height: 30%; width: 100%; background-color: beige; margin-bottom: 15px;"></div>
         <label for="batidInput">Sélectionnez un bâtiment :</label>
@@ -13,10 +13,11 @@
         </select>
         <button id="btn1" @click="refreshcalmyfuncpls(1)" class="custom-btn">Place Batiment</button>
       </div>
-      <div class="deletmenu" id="deletmenu">
-        <button id="btn1" @click="refreshcalmyfuncpls(2)" class="custom-btn">remove Batiment</button>
+      <div class="remove" id="remove">
+        <button style="margin-top: 45%;" id="btn1" @click="refreshcalmyfuncpls(2)" class="custom-btn">remove Batiment</button>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -206,8 +207,11 @@ export default {
           console.log("bat");
           if(this.selectab.length == 0 && id_asset != undefined){
               // Toggle the 'active' class on the selectmenu div
-              document.getElementById('deletmenu').classList.toggle('active');
+              document.getElementById('selectmenu').classList.toggle('closed');
+            document.getElementById('selectmenu').classList.toggle('supr');
+              document.getElementById('remove').classList.toggle('active');
               document.getElementById('scene1').classList.toggle('active');
+
             this.selectedObject.material.color.setHex(0xff0000);
             var info = {obj: this.selectedObject,id: id_asset, mat: originmat, col: origineColor}
             this.selectab.push(info);
@@ -215,8 +219,14 @@ export default {
           else{
             if(this.selectedObject.uuid == this.selectab[0]["obj"].uuid){
               // Toggle the 'active' class on the selectmenu div
-              document.getElementById('deletmenu').classList.toggle('active');
+              document.getElementById('selectmenu').classList.toggle('closed');
+
               document.getElementById('scene1').classList.toggle('active');
+              //wait 300ms
+              setTimeout(() => {
+                document.getElementById('remove').classList.toggle('active');
+                document.getElementById('selectmenu').classList.toggle('supr');
+              }, 300);
               this.selectedObject.material = this.selectab[0]["mat"].clone()
               this.selectedObject.material.color.setHex(this.selectab[0]["col"])
               this.selectab.pop(0)
@@ -233,7 +243,10 @@ export default {
             console.log(this.selectab.length)
             if(this.selectab.length == 0 && id_asset != undefined ){
               // Toggle the 'active' class on the selectmenu div
-              document.getElementById('selectmenu').classList.toggle('active');
+              document.getElementById('selectmenu').classList.toggle('supr');
+              document.getElementById('selectmenu').classList.toggle('closed');
+
+              document.getElementById('add').classList.toggle('active');
               document.getElementById('scene1').classList.toggle('active');
               this.creationscene2()
               console.log("id_asset", id_asset);
@@ -253,8 +266,14 @@ export default {
             else{
               if(this.selectedObject.name == this.selectab[0]["obj"].name){
                 // Toggle the 'active' class on the selectmenu div
-                document.getElementById('selectmenu').classList.toggle('active');
+                document.getElementById('selectmenu').classList.toggle('closed');
+
                 document.getElementById('scene1').classList.toggle('active');
+                //wait 300ms
+                setTimeout(() => {
+                  document.getElementById('add').classList.toggle('active');
+                  document.getElementById('selectmenu').classList.toggle('supr');
+                }, 300);
                 this.deletscene2()
                 this.selectedObject.material = this.selectab[0]["mat"]
                 this.selectedObject.material.color.setHex(this.selectab[0]["col"])
@@ -280,13 +299,27 @@ export default {
       if(this.selectab.length == 1 && this.idbatafficher >= 0 && this.idbatafficher <= this.batiment.length){
 
         if(mode == 1){
-          document.getElementById('selectmenu').classList.toggle('active');
+          document.getElementById('selectmenu').classList.toggle('closed');
+
           document.getElementById('scene1').classList.toggle('active');
+          //wait 300ms
+          setTimeout(() => {
+            document.getElementById('add').classList.toggle('active');
+            document.getElementById('selectmenu').classList.toggle('supr');
+          }, 300);
+
           this.deletscene2()
         }
         if(mode == 2){
-          document.getElementById('deletmenu').classList.toggle('active');
+          document.getElementById('selectmenu').classList.toggle('closed');
+
           document.getElementById('scene1').classList.toggle('active');
+          //wait 300ms
+          setTimeout(() => {
+            document.getElementById('remove').classList.toggle('active');
+            document.getElementById('selectmenu').classList.toggle('supr');
+          }, 300);
+
         }
         var id_asset = this.selectab[0]["id"]
         var selected = this.asset[id_asset]
@@ -529,14 +562,14 @@ export default {
   mounted() {
 
     this.scene = new THREE.Scene();
+    //90% de la largueur de l'ecran
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.shadowMap.enabled = true;
     this.renderer.setClearColor(0x000000, 0);
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
     const scene1Container = this.$refs.scene1Container;
-    this.renderer.setSize(scene1Container.offsetWidth, scene1Container.offsetHeight);
+    this.renderer.setSize(window.innerWidth, scene1Container.offsetHeight);
     scene1Container.appendChild(this.renderer.domElement);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
@@ -628,6 +661,9 @@ export default {
 
 
     this.start();
+    document.getElementById('selectmenu').classList.toggle('init');
+
+
   },
 };
 </script>
@@ -649,37 +685,16 @@ export default {
 }
 
 .selectmenu {
-  width: 0;
+  width: 30%;
   height: 100%;
   background-color: #D9D9D9;
-  transition: width 0.3s ease-out, transform 0.3s ease-out, opacity 0.6s ease-out;
-  transform: translateX(100%);
-  opacity: 0;
-  visibility: hidden;
+  transition:right 0.3s ease-in-out;
+  min-width: 30%;
 }
 
-.selectmenu.active {
-  width: 30%;
-  transform: translateX(0%);
-  opacity: 1;
-  visibility: visible;
-}
 
-.deletmenu {
-  width: 0;
-  height: 100%;
-  background-color: #D9D9D9;
-  transition: width 0.3s ease-out, transform 0.3s ease-out, opacity 0.6s ease-out;
-  transform: translateX(100%);
-  opacity: 0;
-  visibility: hidden;
-}
-
-.deletmenu.active {
-  width: 30%;
-  transform: translateX(0%);
-  opacity: 1;
-  visibility: visible;
+.selectmenu.closed{
+  right: -30%;
 }
 
 
@@ -687,9 +702,27 @@ export default {
   height: 100%;
   width: 100%;
   background-color: black;
-  transition: width 0.3s ease-out;
+  transition: width 0.3s ease-in-out;
 }
+
 .scene1.active{
   width: 70%;
+}
+
+.add{
+  display: none;
+  height: 100%;
+}
+
+.add.active{
+  display: block;
+}
+
+.remove{
+  display: none;
+}
+
+.remove.active{
+  display: block;
 }
 </style>
