@@ -108,11 +108,11 @@ window.addEventListener('scroll', function() {
 .navbar{
   padding: 10px 0;
   position: fixed !important;
-  z-index: 100;
   width: 100%;
   background-color: rgba(255, 255, 255, 1); /* Couleur blanche semi-transparente */
   backdrop-filter: blur(20px);
   box-shadow: black 0 0 10px;
+  z-index: 1001;
 }
 
 .navbar.scrolled {
