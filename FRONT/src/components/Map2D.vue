@@ -224,6 +224,7 @@ export default {
   margin: 5px;
   border-radius: 5px;
 }
+
 .close div {
   width: 15px;
   height: 5px;
