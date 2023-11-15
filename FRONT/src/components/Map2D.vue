@@ -22,7 +22,7 @@
 
       </l-polygon>
         <div class="info-panel info-panel-close">
-        <info-panel v-if="featureSelected!=null" @close-panel="closePanel" @btn-click="updatefeature" :prestataire="provider" :feature="featureSelected"> </info-panel>
+        <info-panel v-if="featureSelected!=null" @close-panel="closePanel" :prestataire="provider" :feature="featureSelected"> </info-panel>
 
         </div>
   </l-map>
@@ -129,14 +129,6 @@ export default {
 
   }),
   computed: {
-    getFeature(){
-      return this.features;
-    }
-    ,
-    getVisible(){
-      return this.isVisible;
-    }
-
   },
   methods: {
     closePanel() {
@@ -174,7 +166,7 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 .map {
   display: block;
   width: 100%;
@@ -210,20 +202,6 @@ export default {
 }
 
 
-.close {
-  display: flex;
-  font-weight: bold;
-  font-size: 1.5rem;
-  cursor: pointer;
-  border: 1px solid #041676;
-  width: 6vh;
-  height: 6vh;
-  justify-content: center;
-  align-items: center;
-  background-color: #041676;
-  margin: 5px;
-  border-radius: 5px;
-}
 .close div {
   width: 15px;
   height: 5px;
@@ -231,17 +209,4 @@ export default {
 
 }
 
-.btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 66%;
-  height: 10vh;
-  background-color: #041676;
-  color: #d7d7d7;
-  font-weight: bold;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: all .3s;
-}
 </style>
