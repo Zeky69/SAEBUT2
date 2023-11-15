@@ -40,9 +40,11 @@ export default {
 .FormulaireLogin{
   display: flex;
   flex-direction: column;
+  width: fit-content;
   align-items: flex-start;
   margin : 5% 25%;
   padding: 3% 2%;
+  width: 45%;
   gap: 30px;
   border : solid 5px #FEB42D;
   border-radius: 30px;
@@ -50,13 +52,14 @@ export default {
 
 #inputLogin{
   border-radius: 30px;
+  width: 100%;
   border: solid 1px black;
-  padding: 5% 4%;
-  padding-right: 250%;
+  padding: 9px 4px;
   font-size: 15px;
 }
 
 .Login{
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -75,9 +78,10 @@ export default {
 
 .valider{
   display: flex;
+  width: 100%;
   flex-direction:row;
+  justify-content: space-between;
   align-items: center;
-  gap: 340px;
 }
 
 #mdp{
