@@ -35,8 +35,39 @@ export default {
   }),
   methods: {
     menuClicked(index) {
-      this.$emit('router-signal', index);
-    },
+      console.log(index)
+      if (index !== this.currentIndex) {
+        switch (index) {
+          case 0:
+            this.$router.push('/');
+            break;
+          case 1:
+            this.$router.push('/attraction');
+            break;
+          case 2:
+            this.$router.push('/restauration');
+            break;
+          case 3:
+            this.$router.push('/boutique');
+            break;
+          case 4:
+            this.$router.push('/billeterie');
+            break;
+          case 5:
+            this.$router.push('/organisateurs');
+            break;
+          case 6:
+            this.$router.push('/search');
+            break;
+          case 7:
+            this.$router.push('/panier');
+            break;
+          case 8:
+            this.$router.push('/login');
+            break;
+        }
+        this.currentIndex = index;
+      }    },
 
     navbar() {
 

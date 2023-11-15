@@ -1,38 +1,24 @@
   <template>
     <div id="app">
-      <NavBar @router-signal="handleMenuItemClicked"/>
+      <NavBar/>
       <router-view></router-view>
+      <FooTer/>
     </div>
   </template>
 
   <script>
   import NavBar from '../src/components/NavBar.vue';
+  import FooTer from "@/components/FooTer.vue";
 
   export default {
     components: {
-      NavBar
+      NavBar,
+      FooTer
     },
     data : () => ({
       currentIndex:0
     }),
     methods: {
-      handleMenuItemClicked(index) {
-        console.log(index)
-        if(index !== this.currentIndex){
-          if(index===0) this.$router.push('/');
-          else if(index===1) this.$router.push('/attraction');
-          else if(index===2) this.$router.push('/restauration');
-          else if(index===3) this.$router.push('/boutique');
-          else if(index===4) this.$router.push('/billeterie');
-          else if(index===5) this.$router.push('/organisateurs');
-          else if(index===6) this.$router.push('/search');
-          else if(index===7) this.$router.push('/panier');
-          else if(index===8) this.$router.push('/login');
-
-
-          this.currentIndex=index;
-        }
-      }
     }
   };
   </script>

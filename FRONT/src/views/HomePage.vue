@@ -3,7 +3,8 @@
     <div class="imgTop">
       <video autoplay muted playsinline loop id="VideoAccueil" class="base-image">
         <source src="../assets/Observation_Wheel.mp4" type="video/mp4">
-      </video>      <img src="../assets/overlay.png" class="overlay-image">
+      </video>
+      <img src="../assets/overlay.png" class="overlay-image">
     </div>
     <div class="middle">
       <div class="card-center">
