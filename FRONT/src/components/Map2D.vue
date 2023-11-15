@@ -4,12 +4,12 @@
 <!--  <div id="map" style="width: 50%; height: 500px; display: block">-->
 <!--  </div>-->
 <div class="map-container">
-  <l-map v-if="getVisible" style="width:800px ; height: 500px" :zoom="zoom" :center="center">
+  <l-map style="width:800px ; height: 500px" :zoom="zoom" :center="center">
     <l-tile-layer :url="url" ></l-tile-layer>
     <l-marker :lat-lng="markerLatLng"></l-marker>
     <l-image-overlay :url="'carte.jpeg'" :bounds="cartebounds"></l-image-overlay>
       <l-polygon
-          v-for="(feature , index) in getFeature"
+          v-for="(feature , index) in features"
           :key="index"
           :lat-lngs="feature.geometry"
           :options="polygonOption(feature)"
