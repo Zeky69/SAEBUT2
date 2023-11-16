@@ -10,11 +10,12 @@
     <l-image-overlay :url="'carte.jpeg'" :bounds="cartebounds"></l-image-overlay>
       <l-polygon
           v-for="(feature , index) in features"
-          :key="index"
+          :key="`polygon-${index}`"
+          ref="zone"
           :lat-lngs="feature.geometry"
-          :options="polygonOption(feature)"
+          :color="couleur[index]"
+          :fill-color="couleur[index]"
           @click="openPanel(feature)"
-
       >
 
 
@@ -22,7 +23,7 @@
 
       </l-polygon>
         <div class="info-panel info-panel-close">
-        <info-panel v-if="featureSelected!=null" @close-panel="closePanel" :prestataire="provider" :feature="featureSelected"> </info-panel>
+        <info-panel v-if="featureSelected!=null" @update-feature="updateFeatures" @close-panel="closePanel" :prestataire="provider" :feature="featureSelected"> </info-panel>
 
         </div>
   </l-map>
@@ -125,11 +126,16 @@ export default {
           }
         }
       ],
-    featureSelected : null
+    featureSelected : null,
+    couleur: []
 
   }),
-  computed: {
-  },
+  created() {
+    this.features.forEach((feature)=>{
+      this.couleur.push(this.polygonOption(feature))
+    })
+  }
+  ,
   methods: {
     closePanel() {
       document.querySelector('.info-panel').classList.add('info-panel-close');
@@ -141,6 +147,24 @@ export default {
       this.featureSelected = feature;
 
     },
+    updateFeatures(feature){
+      if(feature.properties.apartient==null){
+        feature.properties.apartient = this.provider.id
+      }else
+      {
+        feature.properties.apartient = null;
+      }
+      this.couleur = []
+      this.features.forEach((feature)=>{
+        this.couleur.push(this.polygonOption(feature))
+      })
+
+      this.closePanel()
+
+
+
+    }
+    ,
 
     polygonOption(feature){
       const isPrestataire = feature.properties.apartient === this.provider.id;
@@ -153,9 +177,8 @@ export default {
                   (isNullApartient && !isTypeTerrain) ? '#7e7e7e' :
                       '#ff2b2b';
 
-      const color = fillColor
 
-      return { fillColor , color };
+      return fillColor;
 
 
     }

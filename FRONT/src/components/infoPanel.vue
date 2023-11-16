@@ -26,7 +26,10 @@
 
     </div>
     <div class="infoPanel-footer">
-      <button @click="btnClicked">Réserver</button>
+
+      <button v-if="feature.properties.typeTerrain === prestataire.type && (feature.properties.apartient === null || feature.properties.apartient === prestataire.id )  " @click="btnClicked">{{feature.properties.apartient === null ? "Reserver" : "Libérer"}} </button>
+      <button v-else disabled> Réserver </button>
+
       <button @click="closePanel">Fermer</button>
   </div>
   </div>
@@ -40,7 +43,7 @@ export default {
     closePanel() {
       this.$emit("close-panel");
     },btnClicked() {
-      this.$emit("btn-click");
+      this.$emit("update-feature", this.feature);
     },
     convertCoordinatesToMeters(coordinates) {
       const EARTH_RADIUS = 6371000;
@@ -98,6 +101,16 @@ tr:nth-child(odd) {
 
 button {
   background-color: #FEB42D;
+  color: white;
+  font-weight: bold;
+  border-radius: 50px;
+  padding: 4% 20%;
+  border: none;
+  cursor: pointer;
+  margin: 5px 0;
+}
+button:disabled {
+  background-color: #d0d0d0;
   color: white;
   font-weight: bold;
   border-radius: 50px;

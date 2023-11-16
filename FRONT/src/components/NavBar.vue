@@ -79,7 +79,7 @@ export default {
 
 window.addEventListener('scroll', function() {
   var navbar = document.querySelector('.navbar');
-  if (window.scrollY > 100) {
+  if (window.scrollY > 0) {
     navbar.classList.add('scrolled');
   } else {
     navbar.classList.remove('scrolled');
@@ -116,6 +116,7 @@ window.addEventListener('scroll', function() {
 }
 
 .navbar.scrolled {
+  transition: all 0.3s;
   background-color: rgba(255, 255, 255, 0.5); /* Couleur blanche opaque lors du défilement */
 }
 
