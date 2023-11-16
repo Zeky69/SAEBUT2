@@ -31,9 +31,10 @@
 </template>
 
 <script>
-import {LMap, LTileLayer, LMarker, LPolygon, LImageOverlay} from "vue2-leaflet";
+import {LImageOverlay, LMap, LMarker, LPolygon, LTileLayer} from "vue2-leaflet";
 import 'leaflet/dist/leaflet.css';
 import InfoPanel from "@/components/infoPanel.vue";
+
 export default {
   name: 'Map2D',
   components: {
@@ -171,14 +172,10 @@ export default {
       const isTypeTerrain = feature.properties.typeTerrain === this.provider.type;
       const isNullApartient = feature.properties.apartient === null;
 
-      const fillColor =
-          isPrestataire ? '#77ff1c' :
-              (isNullApartient && isTypeTerrain) ? '#0a5df6' :
-                  (isNullApartient && !isTypeTerrain) ? '#7e7e7e' :
-                      '#ff2b2b';
-
-
-      return fillColor;
+      return isPrestataire ? '#77ff1c' :
+          (isNullApartient && isTypeTerrain) ? '#0a5df6' :
+              (isNullApartient && !isTypeTerrain) ? '#7e7e7e' :
+                  '#ff2b2b';
 
 
     }
