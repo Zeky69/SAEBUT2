@@ -4,26 +4,30 @@
 
     <div class="selectmenu closed" id="selectmenu" >
       <div class="add" id="add">
-        <h2 style="margin-top: 40%; margin-bottom: 5%">previsualisation du batiment</h2>
-        <div class="scene2" ref="scene2Container" style="height: 30%; width: 100%; background-color: beige; margin-bottom: 15px;"></div>
+        <h2>previsualisation du batiment</h2>
+        <div class="scene2" ref="scene2Container" style="height: 30vh; width: 100%; background-color: beige; margin-bottom: 15px;"></div>
         <label for="batidInput">Sélectionnez un bâtiment :</label>
         <select id="batidInput" v-model="idbatafficher">
           <option value="0" disabled selected>Sélectionnez un bâtiment</option>
           <option v-for="batimentsolo in batiment" :key="batimentsolo.id" :value="batimentsolo.id">{{ batimentsolo.name }}</option>
         </select>
-        <button id="btn1" @click="refreshcalmyfuncpls(1)" class="custom-btn">Place Batiment</button>
+        <button id="btn1" @click="refreshcalmyfuncpls(1)" class="custom-btn" :disabled="idbatafficher == 0">Place Batiment</button>
       </div>
       <div class="remove" id="remove">
-        <button style="margin-top: 45%;" id="btn1" @click="refreshcalmyfuncpls(2)" class="custom-btn">remove Batiment</button>
+        <button id="btn1" @click="refreshcalmyfuncpls(2)" class="custom-btn">remove Batiment</button>
       </div>
     </div>
-
+    <div id="loadingScreen" class="loading-screen">
+      <div class="loader"></div>
+    </div>
   </div>
 </template>
 
 <script>
 import * as THREE from 'three';
-import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+
+//import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js"
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 //import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
 
@@ -31,6 +35,7 @@ export default {
   name: 'TestMap',
   data : () => ({
     currentIndex:0,
+    isLoading: true,
     idbat: 0,
     scene: null,
     camera: null,
@@ -63,34 +68,37 @@ export default {
   }),
   watch: {
     idbatafficher() {
+
       // Appeler la fonction batvitrine avec la nouvelle valeur
       this.batvitrine();
+
     }
   },
   methods: {
-      batvitrine() {
-        console.log("rentrer dans vitrine")
-        console.log("idbat", this.idbatafficher)
-        if (this.idbatafficher !== 0) {
-          // Retirez tous les enfants de la vitrine
-          while (this.vitrine.children.length > 0) {
-            this.vitrine.remove(this.vitrine.children[0]);
-          }
 
-          // Ajoutez le nouvel objet à la vitrine
-          const objet = this.batiment[this.idbatafficher-1].child.clone();
-          objet.name = this.batiment[this.idbatafficher-1].child.name;
-          objet.material = this.batiment[this.idbatafficher-1].material;
-          objet.position.set(0, 0, 0);
-          console.log("objet", objet)
-          this.vitrine.add(objet);
-          console.log("vitrien", this.vitrine)
-          console.log("batiment", this.batiment)
-          console.log("scene2", this.scene2)
+    batvitrine() {
+      console.log("rentrer dans vitrine")
+      console.log("idbat", this.idbatafficher)
+      if (this.idbatafficher !== 0) {
+        // Retirez tous les enfants de la vitrine
+        while (this.vitrine.children.length > 0) {
+          this.vitrine.remove(this.vitrine.children[0]);
         }
-      },
 
-    creationscene2(){
+        // Ajoutez le nouvel objet à la vitrine
+        const objet = this.batiment[this.idbatafficher - 1].child.clone();
+        objet.name = this.batiment[this.idbatafficher - 1].child.name;
+        objet.material = this.batiment[this.idbatafficher - 1].material;
+        objet.position.set(0, 0, 0);
+        console.log("objet", objet)
+        this.vitrine.add(objet);
+        console.log("vitrien", this.vitrine)
+        console.log("batiment", this.batiment)
+        console.log("scene2", this.scene2)
+      }
+    },
+
+    creationscene2() {
       //test
 
 
@@ -98,7 +106,7 @@ export default {
         this.scene2 = new THREE.Scene();
         this.scene2Container = this.$refs.scene2Container;
 
-        this.camera2 = new THREE.PerspectiveCamera(75, this.scene2Container.offsetWidth/this.scene2Container.offsetHeight , 0.1, 1000);
+        this.camera2 = new THREE.PerspectiveCamera(75, this.scene2Container.offsetWidth / this.scene2Container.offsetHeight, 0.1, 1000);
         this.renderer2 = new THREE.WebGLRenderer();
         this.renderer2.setSize(window.innerWidth, window.innerHeight);
         this.scene2Container.appendChild(this.renderer2.domElement);
@@ -113,15 +121,15 @@ export default {
         this.controls3.update();
         this.scene2.add(this.vitrine);
         this.camera2.rotation.x = -0.5;
-        this.camera2.position.set( 2.5, 5, 4.5 );
+        this.camera2.position.set(2.5, 5, 4.5);
 
       }, 310);
       ////
 
     },
 
-    deletscene2(){
-        this.scene2Container.removeChild(this.scene2Container.firstChild)
+    deletscene2() {
+      this.scene2Container.removeChild(this.scene2Container.firstChild)
     },
 
     onMouseMove(event) {
@@ -132,10 +140,9 @@ export default {
 
       var temp = this.getSelectionneLePlusProche2(position);
 
-      if(temp == 1){
+      if (temp == 1) {
         this.selectedObject = this.getSelectionneLePlusProche(position);
-      }
-      else{
+      } else {
         this.selectedObject = 0
       }
       // Vérifier si l'objet est sélectionnable
@@ -152,12 +159,12 @@ export default {
     getSelectionneLePlusProche(position) {
       // Mise à jour de la position du rayon à lancer.
       this.raycaster.setFromCamera(position, this.camera);
+      console.log("raycastr", this.selectionables.children)
       // Obtenir la liste des intersections
       var selectionnes = this.raycaster.intersectObjects(this.selectionables.children);
       if (selectionnes.length) {
         return selectionnes[0].object;
-      }
-      else{
+      } else {
         console.log("pas sur un obj")
         return null
       }
@@ -184,40 +191,37 @@ export default {
       position.y = -((event.clientY - domRect.top) / domRect.height) * 2 + 1;
       var temp = this.getSelectionneLePlusProche2(position);
 
-      if(temp == 1){
+      if (temp == 1) {
         this.selectedObject = this.getSelectionneLePlusProche(position);
-      }
-      else{
+      } else {
         this.selectedObject = 0
       }
 
 
       var originmat;
       var origineColor;
-      if(this.selectedObject){
+      if (this.selectedObject) {
         originmat = this.selectedObject.material.clone();
         origineColor = this.selectedObject.material.color.getHex();
       }
-
 
 
       if (this.selectedObject != 0) {
         var id_asset = this.asset.find(x => x.name === this.selectedObject.name)._id;
         if (this.selectedObject.name.slice(-3) == "bat") {
           console.log("bat");
-          if(this.selectab.length == 0 && id_asset != undefined){
-              // Toggle the 'active' class on the selectmenu div
-              document.getElementById('selectmenu').classList.toggle('closed');
+          if (this.selectab.length == 0 && id_asset != undefined) {
+            // Toggle the 'active' class on the selectmenu div
+            document.getElementById('selectmenu').classList.toggle('closed');
             document.getElementById('selectmenu').classList.toggle('supr');
-              document.getElementById('remove').classList.toggle('active');
-              document.getElementById('scene1').classList.toggle('active');
+            document.getElementById('remove').classList.toggle('active');
+            document.getElementById('scene1').classList.toggle('active');
 
             this.selectedObject.material.color.setHex(0xff0000);
-            var info = {obj: this.selectedObject,id: id_asset, mat: originmat, col: origineColor}
+            var info = {obj: this.selectedObject, id: id_asset, mat: originmat, col: origineColor}
             this.selectab.push(info);
-          }
-          else{
-            if(this.selectedObject.uuid == this.selectab[0]["obj"].uuid){
+          } else {
+            if (this.selectedObject.uuid == this.selectab[0]["obj"].uuid) {
               // Toggle the 'active' class on the selectmenu div
               document.getElementById('selectmenu').classList.toggle('closed');
 
@@ -231,17 +235,15 @@ export default {
               this.selectedObject.material.color.setHex(this.selectab[0]["col"])
               this.selectab.pop(0)
               this.selectedObject = 0
-            }
-            else{
+            } else {
               console.log("un objet est deja select")
               this.selectedObject = 0
             }
           }
-        }
-        else {
+        } else {
           if (this.selectedObject.name.slice(-3) == "emp") {
             console.log(this.selectab.length)
-            if(this.selectab.length == 0 && id_asset != undefined ){
+            if (this.selectab.length == 0 && id_asset != undefined) {
               // Toggle the 'active' class on the selectmenu div
               document.getElementById('selectmenu').classList.toggle('supr');
               document.getElementById('selectmenu').classList.toggle('closed');
@@ -251,20 +253,18 @@ export default {
               this.creationscene2()
               console.log("id_asset", id_asset);
               console.log("asset", this.asset[id_asset]);
-              if(this.asset[id_asset].free){
+              if (this.asset[id_asset].free) {
                 ///mettre l'emp en rouge
                 this.selectedObject.material.color.setHex(0xff0000);
-                var info2 = {obj: this.selectedObject,id: id_asset, mat: originmat, col: origineColor}
+                var info2 = {obj: this.selectedObject, id: id_asset, mat: originmat, col: origineColor}
                 this.selectab.push(info2);
-              }
-              else{
+              } else {
                 console.log("l'emp est deja pris")
                 this.selectedObject = 0
                 console.log(this.selectedObject)
               }
-            }
-            else{
-              if(this.selectedObject.name == this.selectab[0]["obj"].name){
+            } else {
+              if (this.selectedObject.name == this.selectab[0]["obj"].name) {
                 // Toggle the 'active' class on the selectmenu div
                 document.getElementById('selectmenu').classList.toggle('closed');
 
@@ -279,8 +279,7 @@ export default {
                 this.selectedObject.material.color.setHex(this.selectab[0]["col"])
                 this.selectab.pop(0)
                 this.selectedObject = 0
-              }
-              else{
+              } else {
                 console.log("un objet est deja select")
                 this.selectedObject = 0
               }
@@ -288,17 +287,17 @@ export default {
             }
 
 
-
           }
         }
       }
     },
 
-    refreshcalmyfuncpls(mode){
+    refreshcalmyfuncpls(mode) {
       console.log("refresh")
-      if(this.selectab.length == 1 && this.idbatafficher >= 0 && this.idbatafficher <= this.batiment.length){
+      if (this.selectab.length == 1 && this.idbatafficher >= 0 && this.idbatafficher <= this.batiment.length) {
 
-        if(mode == 1){
+        if (mode == 1) {
+          this.deletscene2()
           document.getElementById('selectmenu').classList.toggle('closed');
 
           document.getElementById('scene1').classList.toggle('active');
@@ -308,9 +307,9 @@ export default {
             document.getElementById('selectmenu').classList.toggle('supr');
           }, 300);
 
-          this.deletscene2()
+
         }
-        if(mode == 2){
+        if (mode == 2) {
           document.getElementById('selectmenu').classList.toggle('closed');
 
           document.getElementById('scene1').classList.toggle('active');
@@ -325,10 +324,10 @@ export default {
         var selected = this.asset[id_asset]
         var uuid = this.selectab[0]["obj"].uuid
         console.log(selected)
-        if(selected.type["fst"] == "emp"){
+        if (selected.type["fst"] == "emp") {
 
-          var batimentadd = this.batiment[this.idbatafficher-1]["child"].clone();
-          batimentadd.material = this.batiment[this.idbatafficher-1]["material"].clone();
+          var batimentadd = this.batiment[this.idbatafficher - 1]["child"].clone();
+          batimentadd.material = this.batiment[this.idbatafficher - 1]["material"].clone();
           var pos = this.asset[id_asset].position;
           var y = batimentadd.position.y;
 
@@ -346,8 +345,7 @@ export default {
 
           this.selectab[0]["obj"].material = this.selectab[0]["mat"]
           this.selectab[0]["obj"].material.color.setHex(this.selectab[0]["col"])
-        }
-        else{
+        } else {
           this.selectionables.traverse((child) => {
             if (child.uuid == uuid) {
               this.selectionables.remove(child);
@@ -359,13 +357,12 @@ export default {
           });
 
         }
-        while(this.selectab.length > 0) {
+        while (this.selectab.length > 0) {
           console.log("pop")
           this.selectab.pop(0);
         }
         this.selectedObject = 0
-      }
-      else{
+      } else {
         console.log("selectionné un batiment a retirer ")
       }
     },
@@ -382,7 +379,7 @@ export default {
           }
           if (!found) {
             var name = child.name;
-            var type = { fst: "", snd: "" };
+            var type = {fst: "", snd: ""};
 
             var newAsset = {
               _id: id,
@@ -397,20 +394,20 @@ export default {
             };
 
             if (name.slice(-3) == "bat") {
-              type = { fst: "bat" };
+              type = {fst: "bat"};
               newAsset.type = type;
               newAsset.free = false;
               newAsset.statut = false;
-              newAsset.position = { x: 0, y: child.position.y, z: 0 };
+              newAsset.position = {x: 0, y: child.position.y, z: 0};
             } else {
               if (name.slice(-3) == "emp") {
-                type = { fst: "emp" };
+                type = {fst: "emp"};
                 newAsset.type = type;
                 newAsset.free = true;
                 newAsset.statut = true;
                 newAsset.position = child.position;
               } else {
-                type = { fst: "sol" };
+                type = {fst: "sol"};
                 newAsset.type = type;
                 newAsset.free = true;
                 newAsset.statut = true;
@@ -431,9 +428,26 @@ export default {
 
 
     setup() {
-      this.empGroupe.traverse((child) => {
-        this.selectionables.add(child);
-      });
+      console.log("setup")
+
+
+      for (var g = 0;g<this.emp.length;g++){
+        var asset_id2 = this.asset.find((x) => x.name === this.emp[g]["child"].name)._id;
+          const emp_clone = this.emp[g]["child"].clone();
+          const pos = this.asset[asset_id2].position;
+          emp_clone.position.set(pos.x, pos.y, pos.z);
+          emp_clone.rotation.x = 0;
+          emp_clone.rotation.y = 0;
+          emp_clone.rotation.z = 0;
+          emp_clone.castShadow = true;
+          emp_clone.receiveShadow = true;
+          emp_clone.name = this.emp[g]["child"].name;
+          emp_clone.material = this.emp[g]["material"];
+          this.selectionables.add(emp_clone);
+
+      }
+
+
 
       for (let y = 0; y < this.batiment.length; y++) {
         var asset_id = this.asset.find((x) => x.name === this.batiment[y]["child"].name)._id;
@@ -452,71 +466,14 @@ export default {
         }
       }
 
-      this.selectionables.scale.set(0.01, 0.01, 0.01);
       this.camera.rotation.x = -0.5;
-      this.camera.position.set( 5, 10, 9 );
-    },
+      this.camera.position.set(6, 10, 8);
 
 
-
-    loadfinal(){
-      const loader = new FBXLoader();
-        loader.load('map/mapData/map_try2.fbx', (loadedFbx) => {
-
-              this.findchild(loadedFbx, this.children);
-              var indicebat = 0;
-              for (var i = 0; i < this.children.length; i++) {
-                if (this.children[i].name.slice(-3) == "bat"){
-                  indicebat++;
-                  const child = this.children[i];
-                  const material = child.material;
-                  const positionY = child.position.y;
-                  // Créez un objet ou un tableau imbriqué pour stocker les informations
-                  const buildingInfo = {
-                    child: child,
-                    material: material,
-                    positionY: positionY,
-                    name: child.name,
-                    id: indicebat
-                  };
-                  // Ajoutez l'objet à votre tableau principal
-                  this.batiment.push(buildingInfo);
-                  console.log("buildinf", buildingInfo)
-                  this.children[i].castShadow = true;
-                  this.children[i].receiveShadow = true;
-                } else {
-                  if (this.children[i].name.slice(-3) == "emp") {
-                    this.empGroupe.add(this.children[i]);
-                    this.children[i].castShadow = true;
-                    this.children[i].receiveShadow = true;
-                  }
-                  else{
-                    const texturesol = new THREE.TextureLoader().load('map/mapData/grass.jpg');
-                    texturesol.wrapS = THREE.RepeatWrapping;
-                    texturesol.wrapT = THREE.RepeatWrapping;
-                    texturesol.repeat.set(2, 2);
-                    const material_sol = new THREE.MeshPhongMaterial({ map: texturesol });
-                    this.children[i].material = material_sol;
-                    this.children[i].receiveShadow = true;
-                    this.groupe_sol.add(this.children[i]);
-                  }
-                }
-              }
-              this.groupe_sol.scale.set(0.01, 0.01, 0.01);
-            }, undefined, function (error) {
-              console.error(error);
-            }
-        );
-      },
-
-
-    async start(){
-      await this.loadfinal();
-      await this.setup();
       const texture_emp = new THREE.TextureLoader().load('map/mapData/tex_socle.jpg');
       const texture_bat = new THREE.TextureLoader().load('map/mapData/albedo.jpg');
-      const material_emp = new THREE.MeshPhongMaterial({ map: texture_emp });
-      const material_bat = new THREE.MeshPhongMaterial({ map: texture_bat });
+      const material_emp = new THREE.MeshPhongMaterial({map: texture_emp});
+      const material_bat = new THREE.MeshPhongMaterial({map: texture_bat});
       for (var i = 0; i < this.batiment.length; i++) {
         this.batiment[i].material = material_bat;
       }
@@ -524,25 +481,133 @@ export default {
         this.emp[j].material = material_emp;
       }
 
-      console.log("selectionnable" , this.selectionables)
 
-      this.scene.add(this.selectionables);
-      this.scene.add(this.groupe_sol);
-      this.scene.add(this.light);
-      this.scene.add(this.ambientLight);
-
-      this.animate();
-
-      const geometry = new THREE.BoxGeometry(1, 1, 1);
-      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-      const cube = new THREE.Mesh(geometry, material);
-      this.vitrine.add(cube);
-      this.scene2.add(this.vitrine);
-
-
-      this.animateScene2();
     },
 
+
+    loadfinal() {
+      return new Promise((resolve, reject) => {
+
+      const loader = new GLTFLoader();
+      loader.load('map/mapData/map_try4.glb', (gltf) => {
+        const loadedGltf = gltf.scene;
+
+
+        this.findchild(loadedGltf, this.children);
+
+        var indicebat = 0;
+        var indiceemp = 0;
+
+        for (var i = 0; i < this.children.length; i++) {
+          if (this.children[i].name.slice(-3) == "bat") {
+            indicebat++;
+            const child = this.children[i];
+            const material = child.material;
+            const positionY = child.position.y;
+
+            // Créez un objet ou un tableau imbriqué pour stocker les informations
+            const buildingInfo = {
+              child: child,
+              material: material,
+              positionY: positionY,
+              name: child.name,
+              id: indicebat
+            };
+
+            // Ajoutez l'objet à votre tableau principal
+            this.batiment.push(buildingInfo);
+
+            console.log("buildinf", buildingInfo);
+
+            this.children[i].castShadow = true;
+            this.children[i].receiveShadow = true;
+          } else {
+            if (this.children[i].name.slice(-3) == "emp") {
+              indiceemp++;
+
+              const child = this.children[i];
+              const material = child.material;
+              const positionY = child.position.y;
+              const free = true;
+              const id = indiceemp;
+
+              // Créez un objet ou un tableau imbriqué pour stocker les informations
+              const empInfo = {
+                child: child,
+                material: material,
+                positionY: positionY,
+                name: child.name,
+                free: free,
+                id: id
+              };
+
+              // Ajoutez l'objet à votre tableau principal
+              this.emp.push(empInfo);
+
+              this.children[i].castShadow = true;
+              this.children[i].receiveShadow = true;
+
+            } else {
+              const texturesol = new THREE.TextureLoader().load('map/mapData/grass.jpg');
+              texturesol.wrapS = THREE.RepeatWrapping;
+              texturesol.wrapT = THREE.RepeatWrapping;
+              texturesol.repeat.set(2, 2);
+              const material_sol = new THREE.MeshPhongMaterial({ map: texturesol });
+              this.children[i].material = material_sol;
+              this.children[i].receiveShadow = true;
+              this.groupe_sol.add(this.children[i]);
+            }
+          }
+        }
+        console.log(this.emp)
+        console.log(this.empGroupe)
+        // Assurez-vous d'appeler la fonction de résolution (ici, je suppose que vous avez une promesse basée sur votre code précédent)
+        console.log("loadfinalfin");
+        resolve();
+      }, undefined, (error) => {
+        console.error(error);
+        reject();
+      });
+      });
+
+    },
+
+
+
+    async start(){
+        this.showLoadingScreen();
+        await this.loadfinal();
+        this.setup();
+        this.scene.add(this.selectionables);
+        this.scene.add(this.groupe_sol);
+        this.scene.add(this.light);
+        this.scene.add(this.ambientLight);
+        this.renderer.render(this.scene, this.camera);
+        this.animate();
+
+        this.hideLoadingScreen();
+
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+        const cube = new THREE.Mesh(geometry, material);
+        this.vitrine.add(cube);
+        this.scene2.add(this.vitrine);
+
+
+        this.animateScene2();
+    },
+
+    showLoadingScreen() {
+      document.getElementById('loadingScreen').style.display = 'flex';
+      document.getElementById('scene1').style.display = 'none';
+      document.getElementById('selectmenu').style.display = 'none';
+    },
+
+    hideLoadingScreen() {
+      document.getElementById('loadingScreen').style.display = 'none';
+      document.getElementById('scene1').style.display = 'flex';
+      document.getElementById('selectmenu').style.display = 'block';
+    },
 
 
     animateScene2() {
@@ -555,11 +620,19 @@ export default {
       requestAnimationFrame(this.animate);
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
-    }
+    },
   },
 
 
   mounted() {
+
+    window.addEventListener('resize', () => {
+      this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.updateProjectionMatrix();
+
+      const scene1Container = this.$refs.scene1Container;
+      this.renderer.setSize(window.innerWidth, scene1Container.offsetHeight);
+    });
 
     this.scene = new THREE.Scene();
     //90% de la largueur de l'ecran
@@ -594,6 +667,8 @@ export default {
     this.light.shadow.camera.left = -10;
 
     this.light.castShadow = true;
+
+    window.dispatchEvent(new Event('resize'));
 //var id_prestataire = "calixte";
 
     this.selectionables = new THREE.Group();
@@ -625,7 +700,6 @@ export default {
     this.empGroupe = new THREE.Group();
     this.groupe_sol = new THREE.Group();
     this.vitrine = new THREE.Group();
-    this.vitrine.scale.set(0.01, 0.01, 0.01);
 
 
 
@@ -661,7 +735,6 @@ export default {
 
 
     this.start();
-    document.getElementById('selectmenu').classList.toggle('init');
 
 
   },
@@ -669,6 +742,36 @@ export default {
 </script>
 
 <style>
+
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  display: none;
+}
+
+.loader {
+  border: 8px solid #f3f3f3; /* gris clair */
+  border-top: 8px solid #3498db; /* bleu */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
 .custom-btn {
   margin: 10px;
   background-color: #28a745; /* couleur verte */
@@ -682,6 +785,12 @@ export default {
 
 .custom-btn:hover {
   background-color: #218838; /* couleur verte légèrement plus foncée au survol */
+}
+
+.btn1.disabled{
+  background-color: #6c757d; /* couleur grise */
+  cursor: not-allowed; /* curseur interdit */
+
 }
 
 .selectmenu {
@@ -711,7 +820,6 @@ export default {
 
 .add{
   display: none;
-  height: 100%;
 }
 
 .add.active{
@@ -725,4 +833,5 @@ export default {
 .remove.active{
   display: block;
 }
+
 </style>
