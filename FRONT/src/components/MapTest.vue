@@ -29,11 +29,16 @@ import * as THREE from 'three';
 //import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js"
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { Sky } from 'three/addons/objects/Sky.js';
 //import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
 
 export default {
   name: 'TestMap',
   data : () => ({
+    sky: null,
+    sun: null,
+    sky2: null,
+    sun2: null,
     currentIndex:0,
     isLoading: true,
     idbat: 0,
@@ -121,8 +126,21 @@ export default {
         this.scene2Container.appendChild(this.renderer2.domElement);
         this.renderer2.setSize(this.scene2Container.offsetWidth, this.scene2Container.offsetHeight);
         this.controls3 = new OrbitControls(this.camera2, this.renderer2.domElement);
-        //mettre un fond blanc
-        this.scene2.background = new THREE.Color(0xffffff)
+        this.sky2 = new Sky();
+        this.sky2.scale.setScalar(450000);
+        this.scene2.add(this.sky2);
+
+// Réglages pour le ciel
+        this.sky2.material.uniforms.turbidity.value = 0.3;
+        this.sky2.material.uniforms.rayleigh.value = 0.2;
+        this.sky2.material.uniforms.mieCoefficient.value = 0.005;
+        this.sky2.material.uniforms.mieDirectionalG.value = 0.7;
+
+// Réglages pour le soleil
+        this.sun2 = new THREE.Vector3();
+        this.sun2.setFromSphericalCoords(1, 1.2 ,2*Math.PI + Math.PI / 5);
+        this.sky2.material.uniforms.sunPosition.value.copy(this.sun2);
+
 
         this.ambientLightscene2 = new THREE.AmbientLight(0x404040);
         this.ambientLightscene2.intensity = 10; // Intensité de la lumière ambiante
@@ -131,6 +149,10 @@ export default {
         this.scene2.add(this.vitrine);
         this.camera2.rotation.x = -0.5;
         this.camera2.position.set(2.5, 5, 4.5);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(0, 1, 0);
+        this.scene2.add(directionalLight);
+        
 
       }, 310);
       ////
@@ -740,11 +762,12 @@ export default {
         console.log("setupfin", this.selectionables)
         this.hideLoadingScreen();
 
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const geometry = new THREE.BoxGeometry(0.01, 0.01, 0.01);
         const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
         const cube = new THREE.Mesh(geometry, material);
         this.vitrine.add(cube);
         this.scene2.add(this.vitrine);
+
 
 
         this.animateScene2();
@@ -766,6 +789,7 @@ export default {
     animateScene2() {
       requestAnimationFrame(this.animateScene2);
       this.controls3.update();
+      this.vitrine.rotation.y += 0.01;
       this.renderer2.render(this.scene2, this.camera2);
     },
 
@@ -793,7 +817,6 @@ export default {
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.shadowMap.enabled = true;
-    this.renderer.setClearColor(0x000000, 0);
     const scene1Container = this.$refs.scene1Container;
     this.renderer.setSize(window.innerWidth, scene1Container.offsetHeight);
     scene1Container.appendChild(this.renderer.domElement);
@@ -803,53 +826,47 @@ export default {
 
 //const canvasElement = document.querySelector('[data-engine="three.js r156"]');
 
-    this.light = new THREE.DirectionalLight(0xffffff, 1);
-    this.light.position.set(5, 10, 9);
-    this.light.castShadow = true;
     this.ambientLight = new THREE.AmbientLight(0x404040); // Couleur en hexadécimal
     this.ambientLight.intensity = 10; // Intensité de la lumière ambiante
+    this.scene.background = new THREE.Color(0xffffff);
+
+    // Add Sky
+    this.sky = new Sky();
+    this.sky.scale.setScalar(450000);
+    this.scene.add(this.sky);
+
+// Réglages pour le ciel
+    this.sky.material.uniforms.turbidity.value = 0.3;
+    this.sky.material.uniforms.rayleigh.value = 0.2;
+    this.sky.material.uniforms.mieCoefficient.value = 0.005;
+    this.sky.material.uniforms.mieDirectionalG.value = 0.7;
+
+// Réglages pour le soleil
+    this.sun = new THREE.Vector3();
+
+
+// Position du soleil
+    this.sun.setFromSphericalCoords(1, 1.2 ,2*Math.PI + Math.PI / 5);
+    this.sky.material.uniforms.sunPosition.value.copy(this.sun);
+
+
+    // Réglages pour la lumière directionnelle
+    this.light = new THREE.DirectionalLight(0xdddddd, 1);
+    this.light.position.copy(this.sun); // Copie la position du soleil pour que la lumière soit dans la même direction
+    this.light.castShadow = true;
 
 // Définir les propriétés spécifiques aux ombres pour la lumière
-    this.light.shadow.mapSize.width = 1024;
-    this.light.shadow.mapSize.height = 1024;
-    this.light.shadow.camera.near = 0.1;
-    this.light.shadow.camera.far = 100;
-    this.light.shadow.camera.top = 10;
-    this.light.shadow.camera.right = 10;
-    this.light.shadow.camera.bottom = -10;
-    this.light.shadow.camera.left = -10;
 
     this.light.castShadow = true;
 
+// Ajouter la lumière à la scène
+    this.scene.add(this.light);
     window.dispatchEvent(new Event('resize'));
 //var id_prestataire = "calixte";
 
     this.selectionables = new THREE.Group();
     this.nonselectionables = new THREE.Group();
     this.raycaster = new THREE.Raycaster();
-
-
-
-
-
-    ///fonction
-    /*
-    asset template
-
-
-    var newAsset = {
-        _id: 0, // Remplissez avec une valeur appropriée
-        name: emp_1_res_north, ou bat_1_res_north
-        type: none, with name
-        statut: true,
-
-        free: true, ///bat always false
-        id_prestataire: "test", // Remplissez avec une valeur appropriée
-        orientation: rotation
-        position: child.position, , ///bat always 0,0,0
-    };
-
-    */
 
     this.empGroupe = new THREE.Group();
     this.groupe_sol = new THREE.Group();
@@ -871,6 +888,22 @@ export default {
     this.ambientLightscene2 = new THREE.AmbientLight(0x404040); // Couleur en hexadécimal
     this.ambientLightscene2.intensity = 10; // Intensité de la lumière ambiante
     this.scene2.add(this.ambientLightscene2);
+    this.sky2 = new Sky();
+    this.sky2.scale.setScalar(450000);
+    this.scene2.add(this.sky2);
+
+// Réglages pour le ciel
+    this.sky2.material.uniforms.turbidity.value = 0.3;
+    this.sky2.material.uniforms.rayleigh.value = 0.2;
+    this.sky2.material.uniforms.mieCoefficient.value = 0.005;
+    this.sky2.material.uniforms.mieDirectionalG.value = 0.7;
+
+// Réglages pour le soleil
+    this.sun2 = new THREE.Vector3();
+
+
+// Position du soleil
+    this.sun2.setFromSphericalCoords(1, 1.2 ,2*Math.PI + Math.PI / 5);
     this.controls3.update();
 // Vous pouvez également ajouter des lumières ou des contrôles spécifiques à cette scène si nécessaire
 
@@ -970,9 +1003,9 @@ export default {
 
 
 .scene1{
+  user-select: none;
   height: 100%;
   width: 100%;
-  background-color: black;
   transition: width 0.3s ease-in-out;
 }
 
