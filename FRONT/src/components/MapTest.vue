@@ -11,7 +11,7 @@
           <option value="0" disabled selected>Sélectionnez un bâtiment</option>
           <option v-for="batimentsolo in batiment" :key="batimentsolo.id" :value="batimentsolo.id">{{ batimentsolo.name }}</option>
         </select>
-        <button id="btn1" @click="refreshcalmyfuncpls(1)" class="custom-btn" :disabled="idbatafficher == 0">Place Batiment</button>
+        <button id="btn1" @click="refreshcalmyfuncpls(1)" class="custom-btn" :disabled="idbatafficher == 0" :class="{ 'disabled-btn': idbatafficher == 0 }">Place Batiment</button>
       </div>
       <div class="remove" id="remove">
         <button id="btn1" @click="refreshcalmyfuncpls(2)" class="custom-btn">remove Batiment</button>
@@ -48,6 +48,9 @@ export default {
     children: [],
     batiment: [],
     emp: [],
+    emplacement_bdd: [],
+    batiment_bdd: [],
+    nonselectionables: null,
     selectionables: null,
     light: null,
     ambientLight: null,
@@ -62,6 +65,12 @@ export default {
     groupe_sol: null,
     ambientLightscene2: null,
     scene2Container: null,
+    prestataire: "calixte"
+
+
+    //style save batiment_bdd[0] = {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1"}
+
+    //style save emplacement_bdd[0] = {name: "emp1", type: "emplacement", position: {x: 0, y: 0, z: 0}, orientation: "none", free: true}
 
 
 
@@ -207,10 +216,18 @@ export default {
 
 
       if (this.selectedObject != 0) {
-        var id_asset = this.asset.find(x => x.name === this.selectedObject.name)._id;
         if (this.selectedObject.name.slice(-3) == "bat") {
+          let found;
+          for(let h = 0;h<this.batiment_bdd.length;h++){
+            if(this.batiment_bdd[h].name == this.selectedObject.name){
+              if (this.batiment_bdd[h].position.x == this.selectedObject.position.x && this.batiment_bdd[h].position.y == this.selectedObject.position.y && this.batiment_bdd[h].position.z == this.selectedObject.position.z){
+                found = true;
+                break;
+              }
+            }
+          }
           console.log("bat");
-          if (this.selectab.length == 0 && id_asset != undefined) {
+          if (this.selectab.length == 0 && found) {
             // Toggle the 'active' class on the selectmenu div
             document.getElementById('selectmenu').classList.toggle('closed');
             document.getElementById('selectmenu').classList.toggle('supr');
@@ -218,7 +235,7 @@ export default {
             document.getElementById('scene1').classList.toggle('active');
 
             this.selectedObject.material.color.setHex(0xff0000);
-            var info = {obj: this.selectedObject, id: id_asset, mat: originmat, col: origineColor}
+            var info = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "bat"}
             this.selectab.push(info);
           } else {
             if (this.selectedObject.uuid == this.selectab[0]["obj"].uuid) {
@@ -242,8 +259,20 @@ export default {
           }
         } else {
           if (this.selectedObject.name.slice(-3) == "emp") {
-            console.log(this.selectab.length)
-            if (this.selectab.length == 0 && id_asset != undefined) {
+            let found;
+            var indice_emp_bdd;
+            for (let h = 0; h < this.emplacement_bdd.length; h++) {
+              if (this.emplacement_bdd[h].name == this.selectedObject.name) {
+                if(this.emplacement_bdd[h].position.x == this.selectedObject.position.x && this.emplacement_bdd[h].position.y == this.selectedObject.position.y && this.emplacement_bdd[h].position.z == this.selectedObject.position.z){
+                  found = true;
+                  indice_emp_bdd = h;
+                  break;
+                }
+
+              }
+            }
+
+            if (this.selectab.length == 0 && found) {
               // Toggle the 'active' class on the selectmenu div
               document.getElementById('selectmenu').classList.toggle('supr');
               document.getElementById('selectmenu').classList.toggle('closed');
@@ -251,12 +280,10 @@ export default {
               document.getElementById('add').classList.toggle('active');
               document.getElementById('scene1').classList.toggle('active');
               this.creationscene2()
-              console.log("id_asset", id_asset);
-              console.log("asset", this.asset[id_asset]);
-              if (this.asset[id_asset].free) {
+              if (this.emplacement_bdd[indice_emp_bdd].free) {
                 ///mettre l'emp en rouge
                 this.selectedObject.material.color.setHex(0xff0000);
-                var info2 = {obj: this.selectedObject, id: id_asset, mat: originmat, col: origineColor}
+                var info2 = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "emp"}
                 this.selectab.push(info2);
               } else {
                 console.log("l'emp est deja pris")
@@ -320,15 +347,21 @@ export default {
           }, 300);
 
         }
-        var id_asset = this.selectab[0]["id"]
-        var selected = this.asset[id_asset]
-        var uuid = this.selectab[0]["obj"].uuid
-        console.log(selected)
-        if (selected.type["fst"] == "emp") {
+        //var uuid = this.selectab[0]["obj"].uuid;
+        if (this.selectab[0]["type"] == "emp") {
+          var indice_emp_bdd;
+          for (let h = 0; h < this.emplacement_bdd.length; h++) {
+            if (this.emplacement_bdd[h].name == this.selectab[0]["obj"].name) {
+              if(this.emplacement_bdd[h].position.x == this.selectab[0]["obj"].position.x && this.emplacement_bdd[h].position.y == this.selectab[0]["obj"].position.y && this.emplacement_bdd[h].position.z == this.selectab[0]["obj"].position.z){
+                indice_emp_bdd = h;
+                break;
+              }
+            }
+          }
 
           var batimentadd = this.batiment[this.idbatafficher - 1]["child"].clone();
           batimentadd.material = this.batiment[this.idbatafficher - 1]["material"].clone();
-          var pos = this.asset[id_asset].position;
+          var pos = this.emplacement_bdd[indice_emp_bdd].position;
           var y = batimentadd.position.y;
 
 
@@ -336,25 +369,76 @@ export default {
           //to do rota
           batimentadd.castShadow = true;
           batimentadd.receiveShadow = true;
+          batimentadd.material.color.setHex(0xffa500);
           this.selectionables.add(batimentadd);
 
 
+
           ///to do gerer les asset pour save dans la bdd
-          this.asset[id_asset].statut = true;
-          this.asset[id_asset].free = false;
+          //style save batiment_bdd[0] = {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1"}
+          var batsave = {
+            name: this.batiment[this.idbatafficher - 1]["child"].name,
+            type: "batiment",
+            position: {x: pos.x, y: y, z: pos.z},
+            rotation: {x: 0, y: 0, z: 0},
+            name_of_emp: this.selectab[0]["obj"].name,
+            prestataire_id: "prestataire1"
+          }
+          this.batiment_bdd.push(batsave)
+
 
           this.selectab[0]["obj"].material = this.selectab[0]["mat"]
-          this.selectab[0]["obj"].material.color.setHex(this.selectab[0]["col"])
+
+          //mettre en gris
+          this.selectab[0]["obj"].material.color.setHex(0x7e7e7e);
+          this.nonselectionables.add(this.selectab[0]["obj"])
+          this.emplacement_bdd[indice_emp_bdd].free = false
+          console.log("kmlkfmlqskmlqsklfkslqk",this.emplacement_bdd[indice_emp_bdd].free)
         } else {
-          this.selectionables.traverse((child) => {
-            if (child.uuid == uuid) {
-              this.selectionables.remove(child);
-              this.asset[id_asset].statut = false;
-              console.log("pos", child.position.x);
-              console.log(this.asset);
-              this.asset[this.asset.find((x) => x.position["x"] == child.position.x)._id].free = true;
+          if (this.selectab[0]["type"] == "bat") {
+            let found;
+            var indice_bdd;
+            var xpos = this.selectab[0]["obj"].position.x;
+            var zpos = this.selectab[0]["obj"].position.z;
+            for (let h = 0; h < this.batiment_bdd.length; h++) {
+              if (this.batiment_bdd[h].name == this.selectab[0]["obj"].name) {
+                if (this.batiment_bdd[h].position.x == this.selectab[0]["obj"].position.x && this.batiment_bdd[h].position.y == this.selectab[0]["obj"].position.y && this.batiment_bdd[h].position.z == this.selectab[0]["obj"].position.z) {
+                  found = true;
+                  indice_bdd = h;
+                  break;
+                }
+              }
             }
-          });
+            if (found) {
+              let name_emp = this.batiment_bdd[indice_bdd].name_of_emp;
+              for (let h = 0; h < this.emplacement_bdd.length; h++) {
+                if (this.emplacement_bdd[h].name == name_emp) {
+                  if (this.emplacement_bdd[h].position.x == xpos && this.emplacement_bdd[h].position.z == zpos) {
+                    this.emplacement_bdd[h].free = true;
+                    console.log("indice ")
+                    let childRemoved = false;
+                    var emp_to_rmove = null
+                    this.nonselectionables.traverse((child) => {
+                      if (!childRemoved && child.name == name_emp) {
+                        if (child.position.x == xpos && child.position.z == zpos) {
+                          emp_to_rmove = child
+                          childRemoved = true; // Indiquer que l'enfant a été supprimé
+                        }
+                      }
+                    });
+                    break;
+                  }
+                }
+              }
+              this.batiment_bdd.splice(indice_bdd, 1);
+              emp_to_rmove.material.color.setHex(this.emp[0].material.color.getHex());
+              this.selectionables.add(emp_to_rmove)
+              this.selectionables.remove(this.selectab[0]["obj"]);
+
+            }
+          }
+
+
 
         }
         while (this.selectab.length > 0) {
@@ -385,10 +469,6 @@ export default {
               _id: id,
               name: name,
               type: type,
-              statut: true,
-              free: true,
-              emp_id: 0,
-              id_prestataire: 0,
               orientation: "none",
               position: child.position,
             };
@@ -396,21 +476,15 @@ export default {
             if (name.slice(-3) == "bat") {
               type = {fst: "bat"};
               newAsset.type = type;
-              newAsset.free = false;
-              newAsset.statut = false;
               newAsset.position = {x: 0, y: child.position.y, z: 0};
             } else {
               if (name.slice(-3) == "emp") {
                 type = {fst: "emp"};
                 newAsset.type = type;
-                newAsset.free = true;
-                newAsset.statut = true;
                 newAsset.position = child.position;
               } else {
                 type = {fst: "sol"};
                 newAsset.type = type;
-                newAsset.free = true;
-                newAsset.statut = true;
                 newAsset.position = child.position;
               }
             }
@@ -426,50 +500,120 @@ export default {
       });
     },
 
+    debugprestafunc(){
+      console.log("debugprestafunc")
+      console.log("batiment_bdd", this.batiment_bdd)
+      console.log("emplacement_bdd", this.emplacement_bdd)
+      //mettre le batiment 2 sur l'emplacement 4  au nom de calixte
+      this.emplacement_bdd[4].free = false;
+
+      //style save batiment_bdd[0] = {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1"}
+
+      //style save emplacement_bdd[0] = {name: "emp1", type: "emplacement", position: {x: 0, y: 0, z: 0}, orientation: "none", free: true}
+      var test1 = {
+        name: this.batiment[2].name,
+        type: "batiment",
+        position: {x: this.emp[4]["child"].position.x, y: this.batiment[2]["child"].position.y, z: this.emp[4]["child"].position.z},
+        rotation: {x: 0, y: 0, z: 0},
+        name_of_emp: this.emp[4]["child"].name,
+        prestataire_id: "calixte"
+      }
+      this.batiment_bdd.push(test1)
+
+
+      //mettre le batiment 6 sur l'emplacement 1  au nom de prestataire1
+      this.emplacement_bdd[1].free = false;
+
+      var test2 = {
+        name: this.batiment[6].name,
+        type: "batiment",
+        position: {x: this.emp[1]["child"].position.x, y: this.batiment[6]["child"].position.y, z: this.emp[1]["child"].position.z},
+        rotation: {x: 0, y: 0, z: 0},
+        name_of_emp: this.emp[1]["child"].name,
+        prestataire_id: "prestataire1"
+      }
+      this.batiment_bdd.push(test2)
+
+
+    },
+
 
     setup() {
+      this.debugprestafunc()
       console.log("setup")
 
 
       for (var g = 0;g<this.emp.length;g++){
-        var asset_id2 = this.asset.find((x) => x.name === this.emp[g]["child"].name)._id;
-          const emp_clone = this.emp[g]["child"].clone();
-          const pos = this.asset[asset_id2].position;
-          emp_clone.position.set(pos.x, pos.y, pos.z);
-          emp_clone.rotation.x = 0;
-          emp_clone.rotation.y = 0;
-          emp_clone.rotation.z = 0;
-          emp_clone.castShadow = true;
-          emp_clone.receiveShadow = true;
-          emp_clone.name = this.emp[g]["child"].name;
-          emp_clone.material = this.emp[g]["material"];
-          this.selectionables.add(emp_clone);
+          let indice_bdd;
+          let found;
+          for(let h = 0;h<this.emplacement_bdd.length;h++){
+            if(this.emplacement_bdd[h].name == this.emp[g]["child"].name){
+                found = true;
+                indice_bdd = h;
+                if(found){
+                  const emp_clone = this.emp[g]["child"].clone();
+                  const pos = this.emplacement_bdd[indice_bdd].position;
+                  emp_clone.position.set(pos.x, pos.y, pos.z);
+                  emp_clone.rotation.x = 0;
+                  emp_clone.rotation.y = 0;
+                  emp_clone.rotation.z = 0;
+                  emp_clone.castShadow = true;
+                  emp_clone.receiveShadow = true;
+                  emp_clone.name = this.emp[g]["child"].name;
+                  emp_clone.material = this.emp[g]["material"];
+                  if(!this.emplacement_bdd[indice_bdd].free){
+                    //mettre en gris
+                    emp_clone.material.color.setHex(0x808080);
+                    this.nonselectionables.add(emp_clone);
+                  }
 
-      }
+                     else{
+                    this.selectionables.add(emp_clone);
 
+                  }
+                }
 
+              }
+
+            }
+          }
 
       for (let y = 0; y < this.batiment.length; y++) {
-        var asset_id = this.asset.find((x) => x.name === this.batiment[y]["child"].name)._id;
-        if (this.asset[asset_id].statut) {
-          const batiment_clone = this.batiment[y]["child"].clone();
-          const pos = this.asset[asset_id].position;
-          batiment_clone.position.set(pos.x, pos.y, pos.z);
-          batiment_clone.rotation.x = 0;
-          batiment_clone.rotation.y = 0;
-          batiment_clone.rotation.z = 0;
-          batiment_clone.castShadow = true;
-          batiment_clone.receiveShadow = true;
-          batiment_clone.name = this.batiment[y]["child"].name;
-          batiment_clone.material = this.batiment[y]["material"];
-          this.selectionables.add(batiment_clone);
+        let indice_bdd;
+        let found;
+        for(let h = 0;h<this.batiment_bdd.length;h++){
+          if(this.batiment_bdd[h].name == this.batiment[y]["child"].name){
+            found = true;
+            indice_bdd = h;
+            if (found) {
+              var batiment_clone = this.batiment[y]["child"].clone();
+              const pos = this.batiment_bdd[indice_bdd].position;
+              batiment_clone.position.set(pos.x, pos.y, pos.z);
+              batiment_clone.rotation.x = 0;
+              batiment_clone.rotation.y = 0;
+              batiment_clone.rotation.z = 0;
+              batiment_clone.castShadow = true;
+              batiment_clone.receiveShadow = true;
+              batiment_clone.name = this.batiment[y]["child"].name;
+              batiment_clone.material = this.batiment[y]["material"];
+              console.log("batiment_clone", this.batiment_bdd[indice_bdd].prestataire_id)
+              if (this.batiment_bdd[indice_bdd].prestataire_id == this.prestataire) {
+                this.nonselectionables.add(batiment_clone);
+              } else {
+                //mettre en vert
+                batiment_clone.material.color.setHex(0x00ff00);
+                this.selectionables.add(batiment_clone);
+              }
+          }
+        }
+
         }
       }
 
       this.camera.rotation.x = -0.5;
       this.camera.position.set(6, 10, 8);
 
-
+      //todo check use
       const texture_emp = new THREE.TextureLoader().load('map/mapData/tex_socle.jpg');
       const texture_bat = new THREE.TextureLoader().load('map/mapData/albedo.jpg');
       const material_emp = new THREE.MeshPhongMaterial({map: texture_emp});
@@ -544,6 +688,13 @@ export default {
               // Ajoutez l'objet à votre tableau principal
               this.emp.push(empInfo);
 
+              // ajuter l'objet a la bbd pour test
+              let position1 = {x: child.position.x, y: child.position.y, z: child.position.z}
+              let addbbd = {name: child.name, type: "emplacement", position: position1 , orientation: "none", free: true}
+              this.emplacement_bdd.push(addbbd)
+
+
+
               this.children[i].castShadow = true;
               this.children[i].receiveShadow = true;
 
@@ -578,13 +729,15 @@ export default {
         this.showLoadingScreen();
         await this.loadfinal();
         this.setup();
+        console.log("aftersetup", this.selectionables)
         this.scene.add(this.selectionables);
+        this.scene.add(this.nonselectionables);
         this.scene.add(this.groupe_sol);
         this.scene.add(this.light);
         this.scene.add(this.ambientLight);
         this.renderer.render(this.scene, this.camera);
         this.animate();
-
+        console.log("setupfin", this.selectionables)
         this.hideLoadingScreen();
 
         const geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -672,6 +825,7 @@ export default {
 //var id_prestataire = "calixte";
 
     this.selectionables = new THREE.Group();
+    this.nonselectionables = new THREE.Group();
     this.raycaster = new THREE.Raycaster();
 
 
@@ -743,6 +897,8 @@ export default {
 
 <style>
 
+
+
 .loading-screen {
   position: fixed;
   top: 0;
@@ -787,11 +943,17 @@ export default {
   background-color: #218838; /* couleur verte légèrement plus foncée au survol */
 }
 
-.btn1.disabled{
-  background-color: #6c757d; /* couleur grise */
-  cursor: not-allowed; /* curseur interdit */
-
+.disabled-btn {
+  background-color: #6c757d; /* Couleur grise pour le bouton désactivé */
+  color: #fff; /* Couleur du texte blanc pour le bouton désactivé */
+  cursor: not-allowed; /* Curseur "not-allowed" pour indiquer que le bouton est désactivé */
+  /* Ajoutez d'autres styles désactivés si nécessaire */
 }
+
+.disabled-btn:hover {
+  background-color: #6c757d; /* Gardez la couleur grise au survol pour le bouton désactivé */
+}
+
 
 .selectmenu {
   width: 30%;
