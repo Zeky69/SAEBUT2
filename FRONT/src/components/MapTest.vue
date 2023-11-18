@@ -73,7 +73,7 @@ export default {
     prestataire: "calixte"
 
 
-    //style save batiment_bdd[0] = {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1"}
+    //style save batiment_bdd[0] = {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1", status: "en cours"}
 
     //style save emplacement_bdd[0] = {name: "emp1", type: "emplacement", position: {x: 0, y: 0, z: 0}, orientation: "none", free: true}
 
@@ -152,7 +152,7 @@ export default {
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.set(0, 1, 0);
         this.scene2.add(directionalLight);
-        
+
 
       }, 310);
       ////
@@ -404,7 +404,8 @@ export default {
             position: {x: pos.x, y: y, z: pos.z},
             rotation: {x: 0, y: 0, z: 0},
             name_of_emp: this.selectab[0]["obj"].name,
-            prestataire_id: "prestataire1"
+            prestataire_id: this.prestataire,
+            status: "waiting"
           }
           this.batiment_bdd.push(batsave)
 
@@ -538,7 +539,8 @@ export default {
         position: {x: this.emp[4]["child"].position.x, y: this.batiment[2]["child"].position.y, z: this.emp[4]["child"].position.z},
         rotation: {x: 0, y: 0, z: 0},
         name_of_emp: this.emp[4]["child"].name,
-        prestataire_id: "calixte"
+        prestataire_id: "calixte",
+        status: "accepted"
       }
       this.batiment_bdd.push(test1)
 
@@ -552,9 +554,26 @@ export default {
         position: {x: this.emp[1]["child"].position.x, y: this.batiment[6]["child"].position.y, z: this.emp[1]["child"].position.z},
         rotation: {x: 0, y: 0, z: 0},
         name_of_emp: this.emp[1]["child"].name,
-        prestataire_id: "prestataire1"
+        prestataire_id: "prestataire1",
+        status: "accepted"
       }
       this.batiment_bdd.push(test2)
+
+
+      //mettre le batiment 7 sur l'emplacement 2  au nom de calixte
+      this.emplacement_bdd[7].free = false;
+
+      var test3 = {
+        name: this.batiment[7].name,
+        type: "batiment",
+        position: {x: this.emp[7]["child"].position.x, y: this.batiment[7]["child"].position.y, z: this.emp[7]["child"].position.z},
+        rotation: {x: 0, y: 0, z: 0},
+        name_of_emp: this.emp[7]["child"].name,
+        prestataire_id: "calixte",
+        status: "waiting"
+      }
+
+      this.batiment_bdd.push(test3)
 
 
     },
@@ -619,11 +638,21 @@ export default {
               batiment_clone.name = this.batiment[y]["child"].name;
               batiment_clone.material = this.batiment[y]["material"];
               console.log("batiment_clone", this.batiment_bdd[indice_bdd].prestataire_id)
-              if (this.batiment_bdd[indice_bdd].prestataire_id == this.prestataire) {
+              if (this.batiment_bdd[indice_bdd].prestataire_id != this.prestataire) {
                 this.nonselectionables.add(batiment_clone);
               } else {
-                //mettre en vert
-                batiment_clone.material.color.setHex(0x00ff00);
+                if(this.batiment_bdd[indice_bdd].status == "accepted"){
+                  //mettre en vert
+                  batiment_clone.material.color.setHex(0x00ff00);
+                  this.selectionables.add(batiment_clone);
+                }
+                else{
+                  if(this.batiment_bdd[indice_bdd].status == "waiting"){
+                    //metre en orange
+                    batiment_clone.material.color.setHex(0xffa500);
+                    this.selectionables.add(batiment_clone);
+                  }
+                }
                 this.selectionables.add(batiment_clone);
               }
           }
