@@ -27,7 +27,7 @@
     </div>
     <div class="infoPanel-footer">
 
-      <button v-if="feature.properties.typeTerrain === prestataire.type && (feature.properties.apartient === null || feature.properties.apartient === prestataire.id )  " @click="btnClicked">{{feature.properties.apartient === null ? "Reserver" : "Libérer"}} </button>
+      <button v-if="feature.properties.typeTerrain === prestataire.type && (feature.properties.apartient === null || feature.properties.apartient === prestataire.id )  " @click="btnClicked">{{feature.properties.apartient === null ? "Réserver" : "Libérer"}} </button>
       <button v-else disabled> Réserver </button>
 
       <button @click="closePanel">Fermer</button>

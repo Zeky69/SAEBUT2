@@ -47,7 +47,7 @@ export default {
   },
   data: () => ({
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    zoom: 15,
+    zoom: 20,
     center: [47.748200899354956,6.802237629890443],
     cartebounds: [[47.74915674062442, 6.800086498260499],[47.74737489408103 , 6.804184913635255]],
     markerLatLng: [51.504, -0.159],
