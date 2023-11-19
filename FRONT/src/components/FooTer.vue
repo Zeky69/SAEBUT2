@@ -70,7 +70,7 @@ export default {
   align-items: center;
   z-index: 1;
   margin-top: -90px;
-  width: 85%;
+  width: 65%;
   height: auto;
   border-radius: 20px;
   color: white;
@@ -84,7 +84,6 @@ export default {
   width: 100%;
   position: absolute;
   padding-top: 10% ;
-  gap: 5%;
   height: 500px;
   z-index: 0;
   background-color: #2c3e50;
@@ -117,13 +116,13 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   gap: 40px;
 }
 
 .logo{
   display: flex;
   justify-content: space-evenly;
-  gap:40px;
 }
 
 .logo img{
@@ -133,9 +132,9 @@ export default {
 
 .rubrique{
   display: flex;
+  width: 100%;
   flex-direction: row;
   justify-content: space-evenly;
-  gap:250px;
   color: white;
 }
 
