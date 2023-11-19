@@ -7,6 +7,15 @@
       <table>
         <tbody>
         <tr>
+          <th>Nom</th>
+          <td><input v-model=newfeature.properties.name type="text" name="name" id="name"></td>
+        </tr>
+        <tr>
+          <th>Description</th>
+          <td><input v-model=newfeature.properties.description type="text" name="description" id="description"></td>
+        </tr>
+        <tr>
+
           <th>Type terrain</th>
           <td>
           <select v-model=newfeature.properties.typeTerrain name="types" id="types">
@@ -30,13 +39,12 @@
         </tbody>
       </table>
 
-
-      <p class="description">{{feature.properties.description}}</p>
-
     </div>
-    <div class="infoPanel-footer">
+    <div class="list-btn">
 
-      <button @click="closePanel">Fermer</button>
+      <button class="btn-green"  @click="editPolygon">Modifier</button>
+      <button class="btn-red" @click="delPolygon">Supprimer</button>
+      <button class="btn-yellow" @click="closePanel">Fermer</button>
   </div>
   </div>
 </template>
@@ -97,8 +105,12 @@ export default {
   methods: {
     closePanel() {
       this.$emit("close-panel");
-    },btnClicked() {
-      this.$emit("update-feature", this.feature);
+    },
+    editPolygon(){
+      this.$emit("edit-feature", this.feature , this.newfeature);
+    },
+    delPolygon(){
+      this.$emit("del-feature", this.feature);
     }
 
   ,
@@ -165,22 +177,51 @@ tr:nth-child(odd) {
 
 }
 
-button {
+.btn-yellow {
   background-color: #FEB42D;
   color: white;
   font-weight: bold;
   border-radius: 50px;
-  padding: 4% 20%;
+padding: 5px 10px;
   border: none;
   cursor: pointer;
-  margin: 5px 0;
+  margin: 5px 5px;
+  width: fit-content;
+
 }
+.btn-red {
+  background-color: #e70000;
+  color: white;
+  font-weight: bold;
+  width: fit-content;
+  border-radius: 50px;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  margin: 5px 5px;
+}
+.btn-green{
+  background-color: #458d09;
+  color: white;
+  font-weight: bold;
+  border-radius: 50px;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  margin: 5px 5px;
+  width: fit-content;
+
+}
+.list-btn{
+  display: flex;
+  flex-direction: row;
+}
+
 button:disabled {
   background-color: #d0d0d0;
   color: white;
   font-weight: bold;
   border-radius: 50px;
-  padding: 4% 20%;
   border: none;
   cursor: pointer;
 }

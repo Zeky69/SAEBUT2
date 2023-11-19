@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <div class="infoPanel-header">
       <h1>Informations</h1>
     </div>
