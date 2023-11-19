@@ -1,14 +1,14 @@
 <template>
   <div class="container">
     <div class="imgTop">
-      <video autoplay muted playsinline loop id="VideoAccueil" class="base-image">
+      <video autoplay muted playsinline loop class="base-image">
         <source src="../assets/Observation_Wheel.mp4" type="video/mp4">
       </video>
       <img src="../assets/overlay.png" class="overlay-image">
     </div>
     <div class="middle">
       <div class="card-center">
-        <p style="color: grey;font-style: italic">Là où les rêves deviennent virtuellement réels.</p>
+        <p style="color: grey;">Là où les rêves deviennent virtuellement réels.</p>
         <h1 style="color: #FEB42D">BELFORAINE</h1>
         <p style="color:#FEB42D;font-weight:bold ">Bienvenue à Belforaine, le paradis du futur !</p>
         <p>Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences inspirantes et divertissement sans fin fusionnent. Plongez dans l'inconnu avec une pointe de futurisme, le tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !</p>
@@ -47,7 +47,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap');
+
 * {
   margin: 0;
     padding: 0;
@@ -55,6 +57,7 @@ export default {
 
 .container {
   position: relative;
+  background-color: #D9D9D9;
 }
 
 .imgTop {
@@ -75,6 +78,8 @@ export default {
 }
 
 .middle{
+  margin: -3% 12%;
+  z-index: 10;
   background-color: #D9D9D9;
   padding-bottom: 10%;
 }
@@ -85,19 +90,15 @@ export default {
   gap: 20px;
   background-color: white;
   border : solid 1px;
-  margin-left: 12%;
-  margin-right: 12%;
+  font-family: 'Syne','Arial';
   border-radius: 40px;
   font-size: 24px;
   padding: 3% 8%;
 }
 .multiple-card{
-
   display: flex;
-  gap:1%;
+  justify-content: space-between;
   margin-top: 5%;
-  margin-left: 12%;
-  margin-right: 12%;
 }
 
 .map h1{

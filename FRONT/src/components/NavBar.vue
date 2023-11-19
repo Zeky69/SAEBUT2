@@ -1,6 +1,6 @@
 <template>
-  <div>
-  <div class="container navbar">
+  <div class="container">
+  <div class="navbar">
     <div class="menu-top">
       <div class="title"  @click="menuClicked(0)">
         <img src="../assets/logoWF.png" class="logo" alt="">
@@ -89,6 +89,7 @@ window.addEventListener('scroll', function() {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap');
 @font-face {
   font-family: "Tw Cen MT Condensed Extra Bold";
   src: url("../assets/fonts/TCCEB.TTF") format("TTF");
@@ -99,14 +100,14 @@ window.addEventListener('scroll', function() {
   padding: 0;
 }
 
-.container{
+.container {
   display: flex;
   flex-flow: column;
   gap: 60%;
   }
 
 .navbar{
-  padding: 10px 0;
+  padding: 15px 0;
   position: fixed !important;
   width: 100%;
   background-color: rgba(255, 255, 255, 1); /* Couleur blanche semi-transparente */
@@ -125,7 +126,7 @@ window.addEventListener('scroll', function() {
   cursor: pointer;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  font-family: 'Tw Cen MT Condensed Extra Bold', sans-serif;
+  font-family: 'Tw Cen MT Condensed Regular', 'Syne';
 
 }
 
