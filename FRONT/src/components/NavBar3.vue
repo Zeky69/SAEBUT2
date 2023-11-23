@@ -1,24 +1,26 @@
 <template>
   <div>
-    <div class="navbar" :style="{ backgroundColor: isTransparent && isHomePage ? 'transparent' : 'white'}"
-         :class="{ 'transparent': isTransparent }">
-      <div class="menu-top">
-        <div class="title" @click="menuClicked(0)">
-          <img :src="isWhiteLogo(0)" class="logo" alt="">
-          <h1 :style="{ color: isTransparent && isHomePage ? 'white' : '#2c3e50' }">BELFORAINE</h1>
+    <div class="navbar">
+      <div class="navbar-content">
+        <div class="menu-top">
+          <div class="menu-burger">
+          <button >
+            <img :src="require('@/assets/icons/menu-burger.svg')" @click="navOpen=!navOpen" class="i" alt="">
+          </button>
+          </div>
+          <div class="title" @click="menuClicked(0)">
+            <img :src="require('@/assets/logoWF2W.png')" class="logo" alt="">
+            <h1>BELFORAINE</h1>
+          </div>
+          <div class="icons">
+            <img :src="require('@/assets/icons/panier.svg')" @click="menuClicked('/panier')"   class="i" alt="">
+          </div>
         </div>
-        <div class="icons">
-          <img :src="isWhiteLogo(1)" @click="menuClicked(6)" class="i" alt="">
-          <img :src="isWhiteLogo(2)" @click="menuClicked(7)" class="i" alt="">
-          <img :src="isWhiteLogo(3)" @click="menuClicked(8)" class="i" alt="">
+        <div class="menu-text" v-show="navOpen">
+          <a v-for="(text, index) in Object.entries(navBarTitles)" :key="index" @click="menuClicked(text[1])">{{ text[0] }}</a>
         </div>
-      </div>
-      <div class="menu-text">
-        <a v-for="(text, index) in navBarTitles" :key="index" @click="menuClicked(index)"
-           :style="{ color: isTransparent && isHomePage ? 'white' : '#2c3e50' }">{{ text }}</a>
       </div>
     </div>
-    <div v-if="!isHomePage" style="width: 50px;height: 155px;"></div>
   </div>
 </template>
 
@@ -26,63 +28,18 @@
 export default {
   name: 'NavBar',
   data: () => ({
-    currentIndex: 0,
     isTransparent: false,
     isHomePage: false,
-    navBarTitles: [
-      'ACCUEIL', 'ATTRACTIONS', 'RESTAURATION', 'BOUTIQUE', 'BILLETTERIE', 'ORGANISATEURS', 'TESTMAP'
-    ]
-  }),
+    navOpen: true,
+    navBarTitles: {
+      'Acceuil': '/', 'Attractions' : '/attraction', 'Restauration' : '/restauration', 'Boutique' : '/boutique', 'Billetterie' : '/billetterie', 'Organisateurs' : '/organisateurs'}
+  })
+,
+
   methods: {
-    isWhiteLogo(index) {
-      switch (index) {
-        case 0:
-          return (this.isTransparent && this.isHomePage) ? require('@/assets/logoWF2W.png') : require('@/assets/logoWF2.png');
-        case 1:
-          return (this.isTransparent && this.isHomePage) ? require('@/assets/icons/searchW.png') : require('@/assets/icons/search.png');
-        case 2:
-          return (this.isTransparent && this.isHomePage) ? require('@/assets/icons/cartW.png') : require('@/assets/icons/cart.png');
-        case 3:
-          return (this.isTransparent && this.isHomePage) ? require('@/assets/icons/prestataire-removebg-previewW.png') : require('@/assets/icons/prestataire-removebg-preview.png');
-        default:
-          return null;
-      }
-    },
-    menuClicked(index) {
-      console.log(index)
-      if (index !== this.currentIndex) {
-        switch (index) {
-          case 0:
-            this.$router.push('/');
-            break;
-          case 1:
-            this.$router.push('/attraction');
-            break;
-          case 2:
-            this.$router.push('/restauration');
-            break;
-          case 3:
-            this.$router.push('/boutique');
-            break;
-          case 4:
-            this.$router.push('/billeterie');
-            break;
-          case 5:
-            this.$router.push('/organisateurs');
-            break;
-          case 6:
-            this.$router.push('/search');
-            break;
-          case 7:
-            this.$router.push('/panier');
-            break;
-          case 8:
-            this.$router.push('/login');
-            break;
-        }
-        this.currentIndex = index;
-      }
-    },
+    menuClicked(path) {
+      this.$router.push(path).catch(() => {});
+      },
     handleScroll() {
       this.isTransparent = window.scrollY <= 200  ;
     },
@@ -94,8 +51,21 @@ export default {
     }
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll);
+    if (window.innerWidth > 902) {
+      this.navOpen = true;
+    }else{
+      this.navOpen = false;
+    }
 
+    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 902) {
+        this.navOpen = true;
+      }else{
+        this.navOpen = false;
+      }
+
+    });
     // Vérifiez également le chemin de la route lors du montage initial
     this.isHomePage = this.$route.path === '/attraction';
     this.isTransparent = this.isHomePage;
@@ -104,11 +74,14 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap');
 
 @font-face {
-  font-family: "Tw Cen MT Condensed Extra Bold";
-  src: url("../assets/fonts/TCCEB.TTF") format("TTF");
+  font-family: 'DM Sans Medium';
+  src: url('../assets/fonts/DM_Sans/static/DMSans-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'DM Sans Regular';
+  src: url('../assets/fonts/DM_Sans/static/DMSans-Regular.ttf') format('truetype');
 }
 
 * {
@@ -117,30 +90,64 @@ export default {
 }
 
 .navbar {
+  margin: 10px 0;
+  font-family: "DM Sans Medium", Syne, Helvetica, sans-serif;
+  z-index: 1001;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0);
+  position: fixed;
+  color: white;
+
+}
+.navbar-content {
   display: flex;
   flex-flow: column;
-  gap: 60%;
-  padding: 15px 0;
-  position: fixed !important;
-  width: 100%;
-  z-index: 1001;
+  border-radius: 20px;
+  width: 80%;
+  background-color: rgba(23, 35, 49, 0.8);
+  backdrop-filter: blur(20px);
+}
+
+.menu-text{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.menu-text a {
+  padding: 5px;
+  margin : 0 5px;
+  cursor: pointer;
+  font-size: 20px;
+  font-family: "DM Sans Regular" , Syne , Helvetica , sans-serif;
 }
 
 
 .menu-top {
-  cursor: pointer;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  font-family: 'Tw Cen MT Condensed Regular', 'Syne';
 
 }
 
+.menu-burger {
+  grid-column: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-a {
-  text-decoration: none;
-  font-size: 120%;
-  color: #2c3e50;
-  cursor: pointer;
+.menu-burger button {
+  background-color: transparent;
+  border: none;
+}
+
+.close {
+  position: absolute;
+  transform:translateY(-200px);
+  display: flex;
+  flex-direction: column;
 }
 
 
@@ -165,16 +172,46 @@ a {
 
 
 .i {
-  height: 60px;
+  height: 30px;
   cursor: pointer;
 }
+@media screen and (min-width: 902px) {
 
-.menu-text {
-  display: flex;
-  justify-content: center;
-  margin-top: 1%;
-  gap: 3%;
+  .menu-burger{
+    display: none;
+  }
 }
+
+@media screen and (max-width: 902px) and (min-width: 600px) {
+  .menu-text{
+    animation: 5s forwards;
+    display: flex;
+    flex-direction: column;
+  }
+
+
+}
+@media screen and (max-width: 600px)  {
+  .menu-burger{
+    display: flex;
+  }
+  .menu-text{
+    animation: 5s forwards;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .navbar-content{
+    width: 100%;
+  }
+  .title h1{
+display: none
+  }
+}
+
+
+
+
 
 
 </style>
