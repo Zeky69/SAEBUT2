@@ -32,7 +32,7 @@ let transactions=[
   {"_id":"64762dc9066dd654632aed5b","amount":75000,"account":"64762dc9066dd654632aed56","date":{"$date":"2023-05-30T17:09:29.201Z"},"uuid":"99990000-0000-0000-0000-000000000002"},
   {"_id":"64762dc9066dd654632aed5d","amount":-75000,"account":"64762dc9066dd654632aed50","date":{"$date":"2023-05-30T17:09:29.202Z"},"uuid":"99990000-0000-0000-0000-000000000003"},
 ]
-let auctionusers=[
+let users=[
   {"_id":"64762dc9066dd654632aed69","pseudo":"drmad","password":"$2a$10$BnPODInoJJJxLcjLDOBL3uHFUQQD9KiM5jfRVoEa0QmTHYSTzL/te","email":"drmad@bad.org","account":"FRDRMAD578901234567890-0000666"},
   {"_id":"64762dc9066dd654632aed6c","pseudo":"crime1","password":"$2a$10$NApPjAFy68l9TQO6iUIwYueK3hiA80tSdbPUZr5FYl5Aje8GPxHfO","email":"crime1@bad.org","account":"FRBADORG78901234567890-0000001"},
   {"_id":"64762dc9066dd654632aed6f","pseudo":"crime2","password":"$2a$10$t7JOXL3n/jQdOmJO7Tf71OJMVBCE83rawRTk/Seb./sIQeB9W1qPO","email":"crime2@bad.org","account":"FRBADORG78901234567890-0000002"},
@@ -45,6 +45,8 @@ let auctiontransactions=[
   {"_id":"64762dc9066dd654632aed77","buyer":{"ref":"64762dc9066dd654632aed6c","pseudo":"crime1","email":"crime1@bad.org","account":"FRBADORG78901234567890-0000001"},"seller":{"ref":"64762dc9066dd654632aed69","pseudo":"drmad","email":"drmad@bad.org","account":"FRDRMAD578901234567890-0000666"},"date":{"$date":"2023-05-30T17:09:29.506Z"},"name":"madovirus","price":75000,"lethality":40,"brainVirulence":9,"lungsVirulence":7,"kidneysVirulence":2,"heartVirulence":2,"temperature":{"min":-30,"max":70},"survival":{"air":1000,"ground":30,"water":200}},
 ]
 
+let 
+
 export {
   items,
   shopusers,
@@ -54,4 +56,5 @@ export {
   auctionusers,
   auctionrequests,
   auctiontransactions,
+  users
 }

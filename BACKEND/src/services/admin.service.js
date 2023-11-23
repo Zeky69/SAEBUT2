@@ -7,13 +7,18 @@ const filePath = path.join(__dirname, '..','datasource/users.json');
 
 
 const getAllUsers = (req) => {
-    let filtre = req.body.filtre;
+    let filtre = req.query.filtre;
+    console.log('filtre', filtre)
+    console.log('path', filePath)
     let users = [];
     try {
         const data = fs.readFileSync(filePath, 'utf8');
         const dataStr = data.toString();
+        console.log('before', dataStr)
         temp = JSON.parse(dataStr);
+        console.log('temp', temp)
         users = temp.filter(user => user.login.includes(filtre));
+        console.log('after', users)
     } catch (errorLecture) {
         console.log(errorLecture);
     }

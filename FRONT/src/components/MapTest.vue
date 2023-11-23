@@ -1,5 +1,5 @@
 <template>
-  <div id="container" style="background-color: #D9D9D9; width: 90vw; height: 900px; max-width: 90vw; margin: 5vw; overflow: hidden; display: flex;" >
+  <div id="container" style="background-color: #D9D9D9; width: 90vw; height: 900px; max-width: 90vw; margin: 5vw; overflow: hidden; display: flex; user-select: none;" >
       <div class="scene1" id="scene1" ref="scene1Container">      </div>
 
     <div class="selectmenu closed" id="selectmenu" >
@@ -26,12 +26,13 @@
 <script>
 import * as THREE from 'three';
 
-//import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js"
+//importer service/mapPrestataires.js
+import {getAllEmp} from '../services/mapPrestataire.service.js';
+
+
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Sky } from 'three/addons/objects/Sky.js';
-//import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
-
 export default {
   name: 'TestMap',
   data : () => ({
@@ -741,8 +742,12 @@ export default {
 
               // ajuter l'objet a la bbd pour test
               let position1 = {x: child.position.x, y: child.position.y, z: child.position.z}
-              let addbbd = {name: child.name, type: "emplacement", position: position1 , orientation: "none", free: true}
+              let addbbd = {name: child.name, type: "emplacement", position: position1 , orientation: "test", free: true}
+
+              //mettre en json addbbd
               this.emplacement_bdd.push(addbbd)
+
+
 
 
 
@@ -765,6 +770,8 @@ export default {
         console.log(this.empGroupe)
         // Assurez-vous d'appeler la fonction de résolution (ici, je suppose que vous avez une promesse basée sur votre code précédent)
         console.log("loadfinalfin");
+        let resuemp = getAllEmp("N");
+        console.log("resuemp", resuemp)
         resolve();
       }, undefined, (error) => {
         console.error(error);
@@ -828,7 +835,6 @@ export default {
       this.renderer.render(this.scene, this.camera);
     },
   },
-
 
   mounted() {
 
