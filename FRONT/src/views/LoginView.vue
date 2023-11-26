@@ -1,91 +1,284 @@
 <template>
-<div class="FormulaireLogin">
-  <h1>Espaces Prestataires</h1>
-  <div class="Login">
-    <p>Identifiant :</p>
-    <input type="text" placeholder="Entrez votre identifiant" id="inputLogin">
-  </div>
-  <div class="Login">
-    <p>Mot de passe :</p>
-    <input type="text" placeholder="Entrez votre identifiant" id="inputLogin">
-  </div>
-  <div class="valider">
-    <a id="mdp">Mot de passe oublié ?</a>
-    <a class="valideBoutton">Se connecter</a>
-  </div>
+  <div class="FormulaireLogin">
+    <img class="fond" src="../assets/fondFeteForaine.png">
+    <div class="container">
+      <div class="gauche">
+        <div class="formulaire">
+          <div class="formulaire-top">
+            <h2>Connexion <span style="font-weight: normal; color: rgba(90, 50, 50, 0.69);">- Inscription</span></h2>
+          </div>
+          <div class="formulaire-contenu">
+            <div class="connexion">
+            <div class="Login">
+            <p>E-mail</p>
+            <input type="text" class="inputFormulaire" placeholder="Adresse e-mail">
+            </div>
 
-</div>
+            <div class="Login">
+              <p>Mot de passe</p>
+              <input type="text" class="inputFormulaire" placeholder="Mot de passe">
+            </div>
+              <a>Mot de passe oublié ?</a>
+            </div>
+            <div class="boutton">
+            <p>Connexion</p>
+              <hr />
+                <p id="Inscription">Inscription</p>
+
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="droite">
+        <img src="../assets/logoWF2W.png" class="logo">
+        <div class="reseaux">
+          <img src="../assets/logo/TwitterX.svg">
+          <img src="../assets/logo/Facebook.svg">
+          <img src="../assets/logo/YouTube.svg">
+          <img src="../assets/logo/Instagram.svg">
+
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  name:"LoginView"
+  name: "LoginView"
 }
 </script>
 
-<style>
-*{
-  padding: 0;
+<style scoped>
+* {
   margin: 0;
+  padding: 0;
 }
 
-.FormulaireLogin h1{
-  margin-top: -11%;
-  padding: 0px 1px;
-  background-color: white;
+.fond {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  left: 0;
+  filter: blur(7px);
+}
+
+.container {
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  top: 200px;
+  margin: 0 7%;
+}
+
+.formulaire {
+  padding: 5%;
+  width: 600px;
+  height: 650px;
+  position: relative;
+  z-index: 10;
+  border-radius: 40px;
+  background-color: rgba(34, 29, 29, 0.45);
+}
+
+.formulaire-top h2 {
+  color: white;
+  font-family: "DM Sans";
   font-size: 40px;
-
 }
 
-.FormulaireLogin{
+.formulaire-contenu{
   display: flex;
   flex-direction: column;
-  width: fit-content;
-  align-items: flex-start;
-  margin : 5% 25%;
-  padding: 3% 2%;
-  width: 45%;
-  gap: 30px;
-  border : solid 5px #FEB42D;
-  border-radius: 30px;
-}
 
-#inputLogin{
-  border-radius: 30px;
-  width: 100%;
-  border: solid 1px black;
-  padding: 9px 4px;
-  font-size: 15px;
+  height: 70%;
+  width: 80%;
+  color: white;
+  position: relative;
+  padding: 10% 8% ;
+  margin-top: 10px;
 }
 
 .Login{
-  width: 100%;
   display: flex;
   flex-direction: column;
+  gap: 10px;
   align-items: flex-start;
-  font-size: 20px;
-  gap : 5px;
-  justify-content: space-evenly;
+  font-family: "DM Sans";
 }
 
-.valideBoutton{
-  background-color: #FEB42D;
-  padding: 10px 7px;
-  color: white;
-  border-radius: 15px;
-  font-weight: bold;
-}
-
-.valider{
+.connexion{
   display: flex;
+  flex-direction: column;
+  height: 300px;
+  justify-content: space-evenly;
+
+}
+
+.Login p{
+  font-size: 25px;
+}
+
+.connexion a{
+  padding-left: 63%;
+}
+
+.inputFormulaire{
+  font-size: 20px;
+  color: white;
+  border: none;
   width: 100%;
-  flex-direction:row;
+  border-bottom: 1px solid #ffffff;
+  outline: 0;
+  padding: 7px 0;
+ background-color: transparent;
+  transition: border-color 0.2s;
+}
+
+.connexion a{
+  text-decoration: underline;
+  font-family: "DM Sans";
+  font-size: 17px;
+}
+.boutton{
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 150px;
   justify-content: space-between;
+}
+
+.boutton p{
+  font-family: "DM Sans";
+  font-size: 25px;
+  width: 350px;
+  height: 50px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border : 1px solid #ffffff;
+}
+
+.boutton hr{
+  border-top: 3px double #ffffff;
+  text-align: center;
+}
+
+.boutton p:first-child {
+  margin-bottom: 10px;
+}
+
+.boutton hr {
+  border-top: 0.05px solid #ffffff;
+  width: 100%;
+  margin: 0 auto;
+}
+
+#Inscription{
+  background : linear-gradient(#5D34FF,#D1C6FF);
+  border: none;
+}
+
+.droite{
+  margin-right: 10%;
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
-#mdp{
-  color: #FEB42D;
-  font-weight: bold;
+.logo{
+  width: 100%;
+  height: auto;
+  max-width: 322px;
 }
+
+.reseaux img{
+  fill: red;
+}
+
+@media all and (max-width:1300px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .gauche {
+    margin-right: 0;
+    text-align: center;
+    justify-content: center;
+  }
+.droite{
+  display: none;
+}
+
+}
+
+@media all and (max-width: 900px) {
+  .formulaire{
+    padding: 7%;
+    width: 450px;
+    height: 500px;
+  }
+
+  .formulaire-top h2 {
+    font-size: 30px;
+  }
+
+  .Login p{
+    font-size: 20px;
+  }
+
+  .inputFormulaire{
+    font-size: 15px;
+  }
+
+  .connexion a {
+    font-size: 13px;
+  }
+
+  .boutton p{
+    font-size: 15px;
+    width: 350px;
+    height: 40px;
+  }
+
+}
+
+@media all and (max-width: 640px) {
+  .formulaire{
+    padding: 7%;
+    width: 400px;
+    height: 550px;
+  }
+
+  .formulaire-top h2 {
+    font-size: 30px;
+  }
+
+  .Login p{
+    font-size: 20px;
+  }
+
+  .inputFormulaire{
+    font-size: 15px;
+  }
+
+  .connexion a {
+    font-size: 13px;
+  }
+
+  .boutton p{
+    font-size: 15px;
+    width: 350px;
+    height: 40px;
+  }
+
+}
+
 </style>
