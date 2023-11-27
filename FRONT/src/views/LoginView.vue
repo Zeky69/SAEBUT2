@@ -11,19 +11,19 @@
             <div class="connexion">
             <div class="Login">
             <p>E-mail</p>
-            <input type="text" class="inputFormulaire" placeholder="Adresse e-mail">
+            <input type="text" class="inputFormulaire" placeholder="Adresse e-mail" v-model="login">
             </div>
 
             <div class="Login">
               <p>Mot de passe</p>
-              <input type="text" class="inputFormulaire" placeholder="Mot de passe">
+              <input type="password" class="inputFormulaire" placeholder="Mot de passe" v-model="password">
             </div>
               <a>Mot de passe oublié ?</a>
             </div>
             <div class="boutton">
-            <p>Connexion</p>
+            <p @click="connect()">Connexion</p>
               <hr />
-                <p id="Inscription">Inscription</p>
+              <p id="Inscription">Inscription</p>
 
 
             </div>
@@ -46,8 +46,30 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+import {log} from "three/nodes";
+
 export default {
-  name: "LoginView"
+  name: "LoginView",
+  computed:{
+    ...mapState(['users'])
+  },
+  data : () => ({
+    login:"",
+    password:"",
+  }),
+  methods:{
+    log,
+    ...mapActions(['loginUser']),
+    async connect(){
+      console.log(this.login)
+      var data =
+          {"login" : this.login,
+            "password" :this.password};
+      await this.loginUser(data);
+      console.log(this.users);
+    }
+  }
 }
 </script>
 
@@ -163,6 +185,8 @@ export default {
   align-items: center;
   justify-content: center;
   border : 1px solid #ffffff;
+  cursor: pointer;
+
 }
 
 .boutton hr{
