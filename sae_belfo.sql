@@ -1,39 +1,88 @@
-DROP TABLE if exists accueil;
-DROP TABLE if exists possède;
-DROP TABLE if exists vend;
-DROP TABLE if exists reservation;
-DROP TABLE if exists emplacement;
-DROP TABLE if exists attraction;
-DROP TABLE if exists scene;
-DROP TABLE if exists stand;
-DROP TABLE if exists prestataire;
-DROP TABLE if exists client;
-DROP TABLE if exists utilisateur;
-DROP TABLE if exists produit;
-DROP TABLE if exists intervenant;
-DROP TABLE if exists type;
-DROP TABLE if exists crenaux;
-DROP TABLE if exists tags;
-DROP TABLE if exists disponibilite;
-DROP TABLE if exists taggue;
+DROP TABLE if exists accueil CASCADE;
+DROP TABLE if exists possède CASCADE;
+DROP TABLE if exists vend CASCADE;
+DROP TABLE if exists reservation CASCADE;
+DROP TABLE if exists stand CASCADE;
+DROP TABLE if exists attraction CASCADE;
+DROP TABLE if exists scene CASCADE;
+DROP TABLE if exists disponibilite CASCADE;
+DROP TABLE if exists taggue CASCADE;
+DROP TABLE if exists emplacement CASCADE;
+DROP TABLE if exists prestataire CASCADE;
+DROP TABLE if exists client CASCADE;
+DROP TABLE if exists produit CASCADE;
+DROP TABLE if exists intervenant CASCADE;
+DROP TABLE if exists type CASCADE;
+DROP TABLE if exists crenaux CASCADE;
+DROP TABLE if exists tags CASCADE;
+drop table IF EXISTS droits_de_menus cascade;
+DROP TABLE IF EXISTS ELEMENTS_DE_MENU CASCADE;
+DROP TABLE IF EXISTS MENUS CASCADE;
+DROP TABLE IF EXISTS DROITS_DE_GROUPES CASCADE;
+DROP TABLE IF EXISTS DROITS CASCADE;
+drop table IF EXISTS mots_de_passe_utilisateurs cascade;
+DROP TABLE IF EXISTS JOURNAUX_UTILISATEURS CASCADE;
+drop table if exists utilisateurs cascade;
+drop table IF EXISTS groupes cascade;
 
-CREATE TABLE utilisateur(
-   id_user VARCHAR(50),
-   permission INT,
-   login VARCHAR(50),
-   email VARCHAR(50),
-   password VARCHAR(50),
-   PRIMARY KEY(id_user)
+CREATE TABLE GROUPES(
+    Id SERIAL PRIMARY KEY,
+    Groupe VARCHAR(255)
 );
 
-CREATE TABLE client(
-   id_client VARCHAR(50),
-   nom VARCHAR(50),
-   prenom VARCHAR(50),
-   date_naissance DATE,
-   id_user INT,
-   PRIMARY KEY(id_client),
-   FOREIGN KEY(id_user) REFERENCES utilisateur(id_user)
+CREATE TABLE UTILISATEURS (
+    User_Id varchar(50) PRIMARY KEY,
+    FIRST_NAME VARCHAR(255),
+    LAST_NAME VARCHAR(255),
+    email VARCHAR(255),
+    Date_Created TIMESTAMP,
+    Group_Id INTEGER REFERENCES GROUPES(Id)
+);
+
+CREATE TABLE MOTS_DE_PASSE_UTILISATEURS (
+    Id SERIAL PRIMARY KEY,
+    User_Id varchar(50) REFERENCES UTILISATEURS(User_Id),
+    Date_Created TIMESTAMP,
+    Password VARCHAR(255)
+);
+
+CREATE TABLE JOURNAUX_UTILISATEURS (
+    Id SERIAL PRIMARY KEY,
+    User_Id varchar(50) REFERENCES UTILISATEURS(User_Id),
+    Date_Time TIMESTAMP,
+    Event VARCHAR(255)
+);
+
+CREATE TABLE DROITS(
+    Id SERIAL PRIMARY KEY,
+    Right_Name VARCHAR(255)
+);
+
+CREATE TABLE DROITS_DE_GROUPES(
+    Id SERIAL PRIMARY KEY,
+    Group_Id INTEGER REFERENCES GROUPES(Id),
+    Right_Id INTEGER REFERENCES DROITS(Id)
+); -- On peut avoir plusieurs droits pour un element (ex : le menu accueil visible par tous)
+
+CREATE TABLE MENUS(
+    Id SERIAL PRIMARY KEY,
+    Nom_Menu VARCHAR(255) NOT NULL,
+    Ordre_Affichage INTEGER NOT NULL
+);
+
+CREATE TABLE ELEMENTS_DE_MENU(
+    Id SERIAL PRIMARY KEY,
+    Nom_Element VARCHAR(255) NOT NULL,
+    Ordre_Affichage INTEGER NOT NULL,
+    Lien VARCHAR(255) NOT NULL,
+    Menu_ID INTEGER REFERENCES MENUS(Id) ON DELETE CASCADE
+);
+
+CREATE TABLE DROITS_DE_MENUS(
+    Id SERIAL PRIMARY KEY,
+    Group_Id INTEGER NOT NULL REFERENCES GROUPES(Id),
+    Menu_ID INTEGER REFERENCES MENUS(Id) ON DELETE CASCADE,
+    Element_Id INTEGER REFERENCES ELEMENTS_DE_MENU(Id) ON DELETE CASCADE
 );
 
 CREATE TABLE produit(
@@ -42,14 +91,6 @@ CREATE TABLE produit(
    prix NUMERIC(5,2),
    stock INT,
    PRIMARY KEY(id_produit)
-);
-
-CREATE TABLE intervenant(
-   id_intervenant VARCHAR(50),
-   contact VARCHAR(50),
-   nom VARCHAR(50),
-   prenom VARCHAR(50),
-   PRIMARY KEY(id_intervenant)
 );
 
 CREATE TABLE type(
@@ -74,10 +115,10 @@ CREATE TABLE prestataire(
    description VARCHAR(255),
    nom VARCHAR(50),
    id_type VARCHAR(50) NOT NULL,
-   id_user INT NOT NULL,
+   id_user varchar(50) NOT NULL,
    PRIMARY KEY(id_prestataire),
    FOREIGN KEY(id_type) REFERENCES type(id_type),
-   FOREIGN KEY(id_user) REFERENCES utilisateur(id_user)
+   FOREIGN KEY(id_user) REFERENCES UTILISATEURS(User_Id)
 );
 
 CREATE TABLE emplacement(
@@ -96,7 +137,7 @@ CREATE TABLE reservation(
    PRIMARY KEY(id_reservation),
    FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
    FOREIGN KEY(date_reservation) REFERENCES crenaux(date_reservation),
-   FOREIGN KEY(id_client) REFERENCES client(id_client)
+   FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)
 );
 
 CREATE TABLE stand(
@@ -148,7 +189,7 @@ CREATE TABLE accueil(
    horaire timestamp,
    PRIMARY KEY(id_scene, id_intervenant),
    FOREIGN KEY(id_scene) REFERENCES scene(id_scene),
-   FOREIGN KEY(id_intervenant) REFERENCES intervenant(id_intervenant)
+   FOREIGN KEY(id_intervenant) REFERENCES UTILISATEURS(User_Id)
 );
 
 CREATE TABLE disponibilite(
@@ -167,33 +208,7 @@ CREATE TABLE taggue(
    FOREIGN KEY(id_tag) REFERENCES tags(id_tag)
 );
 
-INSERT INTO type VALUES('1', 'Stand'),
-                      ('2', 'Scene'),
-                      ('3', 'Attraction'),
-                      ('4', 'Parking'),
-                      ('5', 'Toilettes');
 
-
-INSERT INTO utilisateur VALUES('1', 1, 'admin', 'admin@admin.com','admin'),
-                              ('2', 0, 'user', 'test@test.com','user'),
-                              ('3', 0, 'user2', 'test2@test2.com' ,'user2');
-
-INSERT INTO client VALUES('1', 'DUPONT', 'Jean', '1990-01-01', 2);
-
-INSERT INTO prestataire VALUES ('1', 'prestataire qui prestate','prestatata','3','3');
-
-INSERT INTO emplacement VALUES ('1', 'emplacement 1', '1'),
-                                ('2', 'emplacement 2', '2'),
-                                ('3', 'emplacement 3', '3');
-
-INSERT INTO tags VALUES ('1', 'accessible handicapé'),
-                        ('2', 'wifi'),
-                        ('3', 'point d eau'),
-
-                        /* tags pour gérer l'affluence (s'attribuent automatiquement en fct du nombre de réservation*/
-                        ('4', 'surchargé'),
-                        ('5', 'modéré'),
-                        ('6', 'libre');
 
 
 
