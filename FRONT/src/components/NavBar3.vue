@@ -48,8 +48,10 @@ export default {
     handleScroll() {
       this.isTransparent = window.scrollY <= 200  ;
     },deconnexion(){
-      this.$router.push('/');
-      this.logout();
+      if(confirm("Etes vous sur de vouloir vous déconnecter ?")){
+        this.$router.push('/');
+        this.logout();
+      }
     },
     AffecterValeur(){
       let navBar = document.getElementsByClassName("navbar-content")[0];
