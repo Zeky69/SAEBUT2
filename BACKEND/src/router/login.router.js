@@ -8,6 +8,6 @@ var router = express.Router();
 //se connecter
 //router.get('/', loginMiddlewares.validateLoginInput,loginController.login);
 
-router.get('/',loginController.login);
+router.post('/',loginController.login);
 
 module.exports = router;

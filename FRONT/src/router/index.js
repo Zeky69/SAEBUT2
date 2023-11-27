@@ -42,6 +42,12 @@ const routes = [
     name: 'search',
     component: () => import('../views/SearchVue.vue')
     },
+  {
+    path: '/prestataire',
+    name: 'EspacePrestaire',
+    component: () => import('../views/EspacePrestaire.vue')
+
+  },
     {
       path: '*',
         name: 'notFound',
