@@ -242,9 +242,11 @@ export default {
 }
 
 .fondFeteForraine {
-  width: auto;
+  width: 100%;
   min-width: 100%;
   height: 1000px;
+  object-fit: cover;
+  filter: blur(2px);
 }
 
 
@@ -417,12 +419,6 @@ export default {
   }
 
 
-
-
-  .card{
-
-  }
-
 }
 
 
@@ -485,13 +481,18 @@ export default {
 
   }
 
+  .title-card{
+    width: fit-content;
+  }
+
   .fondFeteForraine{
     height: 1200px;
   }
 
   .list-container{
     margin: 0 0 0 100px;
-    width: 100%;
+    width: fit-content;
+
   }
   .btn-card{
     margin: 20px 0;
@@ -502,9 +503,6 @@ export default {
 
 
 @media all and (max-width: 730px) {
-
-
-
 
   .base-image {
     height: 750px;
@@ -562,7 +560,12 @@ export default {
   }
 
   .list-container{
-    margin-left: 50px;
+    margin: 0;
+
+  }
+
+  .title-card{
+    width: fit-content;
   }
 
 
