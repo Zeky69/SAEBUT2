@@ -14,6 +14,7 @@
     <img src="../assets/overlay.svg" class="overlay-image">
 
     <div class="introduction">
+      <div class="container-intro">
       <div class="imageGauche">
         <img src="../assets/pageAccueil/feteForaine1.png">
         <img id="imgLongue" src="../assets/pageAccueil/feteForaine2.png">
@@ -28,14 +29,17 @@
           <a class="boutton">Plus d'information</a>
         </div>
       </div>
+      </div>
     </div>
 
     <div class="passBillet">
-<!--      <img class="fondFeteForaine" src="../assets/fondFeteForaine.png">-->
+      <img class="fondFeteForraine" src="../assets/pageAccueil/fond-roue.png" alt="fond roue">
       <div class="card-wrap">
-        <div class="card">
-          <div class="card-header">
 
+        <div class="card">
+
+          <div class="card-header">
+              test
           </div>
 
         </div>
@@ -111,11 +115,17 @@ export default {
 
 
 .introduction {
-  padding: 5%;
-  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  gap: 3%;
+}
+
+.container-intro{
   display: flex;
   flex-direction: row;
   gap: 3%;
+  width: 95%;
+  padding: 50px 0 ;
 }
 
 
@@ -170,8 +180,9 @@ export default {
   font-size: 20px;
 }
 
-.fondFeteForaine{
+.fondFeteForraine{
   filter: blur(2px);
+  position: relative;
 
 }
 
@@ -227,9 +238,6 @@ export default {
 
   .card-wrap{
     z-index: 10;
-    position: relative;
-    margin:1000px;
-    height: 100px;
     background-color: red;
 
   }
