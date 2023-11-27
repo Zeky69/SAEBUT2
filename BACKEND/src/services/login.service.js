@@ -3,28 +3,23 @@
 const fs = require('fs');
 const path = require('path');
 const filePath = path.join(__dirname, '..','datasource/users.json');
+const pool = require("../database/db.js");
 
-const login = (req,callback) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    try {
-        const data = fs.readFileSync(filePath, 'utf8');
-        const dataStr = data.toString();
-        users = JSON.parse(dataStr);
-    } catch (errorLecture) {
-        console.log(errorLecture);
+async function loginUser(login,password){
+    const client = await pool.connect();
+    try{
+        const query = `SELECT * from utilisateur where login=$1 and password=$2;`;
+        res = await client.query(query,[login,password]);
+        console.log("Connexion réussi");
+        return res.rows[0];
+    }catch(err){
+        console.log("Connexion échoué")
+
+    }finally{
+        client.release();
     }
-    const user = users.find(user => user.email === email && user.password === password);
-    if (user) {
-        callback(null, user);
-        
-    } else {
-        
-        callback("User not found", null);
-        
-    }
-};
+}
 
 module.exports = {
-    login : login,
+    loginUser : loginUser,
 }
