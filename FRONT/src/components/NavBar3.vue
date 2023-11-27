@@ -32,7 +32,7 @@ export default {
     isHomePage: false,
     navOpen: true,
     navBarTitles: {
-      'Acceuil': '/', 'Attractions' : '/attraction', 'Restauration' : '/restauration', 'Boutique' : '/boutique', 'Billetterie' : '/billetterie', 'Organisateurs' : '/organisateurs'}
+      'Accueil': '/', 'Attractions' : '/attraction', 'Restauration' : '/restauration', 'Boutique' : '/boutique', 'Billetterie' : '/billetterie', 'Organisateurs' : '/organisateurs'}
   })
 ,
 

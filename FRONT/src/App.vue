@@ -2,48 +2,31 @@
     <div id="app">
       <NavBar/>
       <router-view></router-view>
-      <FooTer/>
     </div>
   </template>
 
   <script>
   import NavBar from '../src/components/NavBar3.vue';
-  import FooTer from "@/components/FooTer.vue";
 
   export default {
     components: {
       NavBar,
-      FooTer
     },
-    data : () => ({
-      currentIndex:0
-    }),
-    methods: {
-    }
   };
   </script>
 
   <style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100;0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;0,9..40,1000;1,9..40,100;1,9..40,200;1,9..40,300;1,9..40,400;1,9..40,500;1,9..40,600;1,9..40,700;1,9..40,800;1,9..40,900;1,9..40,1000&family=Syne:wght@400;500;600;700;800&display=swap');
+*{
+  padding: 0;
+  margin: 0;
+}
+
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-  }
-
-
-
-  nav {
-    padding: 30px;
-  }
-
-  nav a {
-    font-weight: bold;
-    color: #2c3e50;
-  }
-
-  nav a.router-link-exact-active {
-    color: #42b983;
   }
   </style>

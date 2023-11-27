@@ -1,49 +1,58 @@
 <template>
-  <div class="container">
-    <div class="imgTop">
-      <video autoplay muted playsinline loop class="base-image">
+  <div class="HomePage">
+    <div class="fullscreen-video">
+      <video autoplay muted playsinline loop class="base-image" style="filter: brightness(50%)">
         <source src="../assets/Observation_Wheel.mp4" type="video/mp4">
       </video>
-      <img src="../assets/overlay.png" class="overlay-image">
-    </div>
-    <div class="middle">
-      <div class="card-center">
-        <p style="color: grey;">Là où les rêves deviennent virtuellement réels.</p>
-        <h1 style="color: #FEB42D">BELFORAINE</h1>
-        <p style="color:#FEB42D;font-weight:bold ">Bienvenue à Belforaine, le paradis du futur !</p>
-        <p>Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences inspirantes et divertissement sans fin fusionnent. Plongez dans l'inconnu avec une pointe de futurisme, le tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !</p>
+      <div class="contenuHautDePage">
+        <tittle>Explorez l'extraordinaire : là où les<br> rêves prennent vie !</tittle>
+        <p>Saisissez l'excitation dès maintenant ! Réservez vos billets pour la fête foraine et<br>
+          plongez dans une journée de joie, de rires et de sensations inoubliables !</p>
+        <a class="boutton">Billeterie</a>
       </div>
-      <div class="multiple-card">
-        <Card title="Rejoignez la Belforaine LAN Fest !" description="Des tournois de jeu inoubliables vous attendent à LAN Fest, le paradis des gamers à Belforaine. Défiez vos amis, mesurez vos compétences et plongez dans l'action multijoueur ultime !"/>
-        <Card title="Rejoignez la Belforaine LAN Fest !" description="Des tournois de jeu inoubliables vous attendent à LAN Fest, le paradis des gamers à Belforaine. Défiez vos amis, mesurez vos compétences et plongez dans l'action multijoueur ultime !" />
-        <Card title="Rejoignez la Belforaine LAN Fest !" description="Des tournois de jeu inoubliables vous attendent à LAN Fest, le paradis des gamers à Belforaine. Défiez vos amis, mesurez vos compétences et plongez dans l'action multijoueur ultime !" />
-      </div>
-
     </div>
-    <div class="bottom">
-      <img src="../assets/overlayReverse.png" class="overlay-reverse">
-      <div class="map">
-      <h1>CARTE INTERACTIVE</h1>
-        <p>Que vous soyez à la recherche de nos attractions, restaurants ou spectacles : notre carte interactive du parc vous aidera à le trouver et vous donnera également un excellent aperçu de la zone du parc.
-        </p>
+    <img src="../assets/overlay.svg" class="overlay-image">
+
+    <div class="introduction">
+      <div class="container-intro">
+      <div class="imageGauche">
+        <img src="../assets/pageAccueil/feteForaine1.png">
+        <img id="imgLongue" src="../assets/pageAccueil/feteForaine2.png">
+        <img src="../assets/pageAccueil/feteForaine3.png">
       </div>
-      <img class="image" src="../assets/map.png" >
-
-
-
-
+      <div class="droite">
+        <div class="textePresentatif">
+          <h2>Bienvenue à Belforaine <span style="color:#553C65"><br>le paradis du futur !</span></h2>
+          <p>Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences
+            inspirantes et divertissement sans fin fusionnent. Plongez dans l'inconnu avec une pointe de futurisme, le
+            tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !</p>
+          <a class="boutton">Plus d'information</a>
+        </div>
+      </div>
+      </div>
     </div>
+
+    <div class="passBillet">
+      <img class="fondFeteForraine" src="../assets/pageAccueil/fond-roue.png" alt="fond roue">
+      <div class="card-wrap">
+
+        <div class="card">
+
+          <div class="card-header">
+              test
+          </div>
+
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
-import Card from '@/components/CardComponent.vue';
 export default {
-  name : 'HomePage',
-  components :{
-    Card
-
-  }
+  name: 'HomePage',
+  components: {}
 }
 </script>
 
@@ -52,90 +61,238 @@ export default {
 
 * {
   margin: 0;
-    padding: 0;
-}
-
-.container {
-  position: relative;
-  background-color: #D9D9D9;
-}
-
-.imgTop {
-  position: relative;
-}
-
-.base-image {
+  padding: 0;
   width: 100%;
-  height: auto;
+  background-color: transparent;
 }
 
-.overlay-image {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+.fullscreen-video {
   width: 100%;
-  height: auto;
-}
-
-.middle{
-  margin: -3% 12%;
-  z-index: 10;
-  background-color: #D9D9D9;
-  padding-bottom: 10%;
-}
-
-.card-center{
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  background-color: white;
-  border : solid 1px;
-  font-family: 'Syne','Arial';
-  border-radius: 40px;
-  font-size: 24px;
-  padding: 3% 8%;
-}
-.multiple-card{
-  display: flex;
-  justify-content: space-between;
-  margin-top: 5%;
-}
-
-.map h1{
-  z-index: 10;
-  margin-top: -8%;
-  color : #FEB42D;
-
-}
-
-.overlay-reverse{
-  width: 100%;
-  height: auto;
   position: relative;
+  object-fit: cover;
+  background-color: transparent;
   z-index: 0;
 }
 
-
-.bottom{
-
-  background-color: white;
-  padding-bottom: 10%;
+.overlay-image {
+  width: 100%;
+  margin-top: -10%;
+  position: relative;
 }
 
-.map{
+.contenuHautDePage {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap : 20px;
-  margin-left: 15%;
-  margin-right: 15%;
-  font-size: 24px;
-  padding-bottom: 2%;
+  gap: 25px;
+  align-items: center;
+  position: absolute;
+  z-index: 2;
+  text-align: center;
+  top: 50%;
+  color: #ffffff;
 }
 
-.image{
-  width: 100%;
-  height: auto;
+.contenuHautDePage tittle {
+  font-size: 55px;
+  font-family: 'Syne';
+}
+
+.contenuHautDePage p {
+  font-size: 20px;
+  font-family: "DM Sans Regular";
+}
+
+.boutton {
+  position: relative;
+  z-index: 3;
+  font-size: 20px;
+  background-color: #2B4256;
+  width: 180px;
+  padding: 15px 0px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+
+.introduction {
+  display: flex;
+  justify-content: center;
+  gap: 3%;
+}
+
+.container-intro{
+  display: flex;
+  flex-direction: row;
+  gap: 3%;
+  width: 95%;
+  padding: 50px 0 ;
+}
+
+
+.imageGauche {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.imageGauche img {
+  width: 600px;
+  height: 189px;
+}
+
+#imgLongue {
+  width: 800px;
+}
+
+.droite {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 15%;
+}
+
+.textePresentatif {
+  padding-top: 15%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  text-align: -webkit-left;
+  align-items: center;
+  font-family: Syne;
+  color: #1b1b1b;
+
+}
+
+.textePresentatif h2 {
+  font-size: 50px;
+}
+
+.textePresentatif p {
+  font-family: "DM Sans Regular";
+  font-size: 25px;
+}
+
+.droite .boutton {
+  color: white;
+  background-color: #553C65;
+  padding: 15px 10px;
+  font-size: 20px;
+}
+
+.fondFeteForraine{
+  filter: blur(2px);
+  position: relative;
+
+}
+
+@media all and (max-width: 1160px) {
+  .base-image {
+    height: 600px;
+    object-fit: cover;
+  }
+
+  .contenuHautDePage tittle {
+    font-size: 45px;
+  }
+
+  .contenuHautDePage p {
+    font-size: 15px;
+  }
+
+  .boutton {
+    font-size: 15px;
+    width: 160px;
+  }
+
+  .imageGauche img {
+    width: 400px;
+    height: 119px;
+  }
+
+  #imgLongue {
+    width: 500px;
+  }
+
+  .textePresentatif h2 {
+    font-size: 30px;
+  }
+
+  .textePresentatif p {
+    font-size: 20px;
+  }
+
+  .droite .boutton {
+    font-size: 18px;
+  }
+
+  .passBillet{
+    width: 100%;
+    height: 100%;
+  }
+
+  .fondFeteForaine{
+    position: relative;
+    z-index: 0;
+  }
+
+  .card-wrap{
+    z-index: 10;
+    background-color: red;
+
+  }
+
+  .card{
+
+  }
+
+}
+
+@media all and (max-width: 730px) {
+  .base-image {
+    height: 750px;
+    object-fit: cover;
+  }
+
+  .contenuHautDePage tittle {
+    font-size: 25px;
+  }
+
+  .contenuHautDePage p {
+    font-size: 10px;
+  }
+
+  .boutton {
+    font-size: 12px;
+    width: 140px;
+    padding: 8px 0px;
+  }
+
+  .droite {
+    margin-top: -15%;
+  }
+
+  .imageGauche {
+    display: none;
+  }
+
+  .textePresentatif {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .textePresentatif h2 {
+    font-size: 30px;
+  }
+
+  .textePresentatif p {
+    font-size: 15px;
+  }
+
+  .droite .boutton {
+    margin-top: 10px;
+    font-size: 15px;
+  }
 }
 
 
