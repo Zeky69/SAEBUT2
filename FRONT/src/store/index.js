@@ -7,13 +7,14 @@ import userService from '../services/utilisateur'
 
 export default new Vuex.Store({
   state: {
-    users : []
+    token: localStorage.getItem('token') || null,
   },
   getters: {
   },
   mutations: {
-    updateUser(state, user){
-      state.users = user;
+    setToken(state, token) {
+      state.token = token;
+      localStorage.setItem('token', token); // Enregistrez le token dans le stockage local
     }
   },
   actions: {
@@ -23,7 +24,7 @@ export default new Vuex.Store({
         let response = await userService.Login(data);
         if (response.status === 200) {
           console.log(response)
-          commit('updateUser', response.data);
+          commit('setToken', response.data);
         } else {
           console.log("Connexion impossible");
           console.log(response);
@@ -31,7 +32,10 @@ export default new Vuex.Store({
       } catch (error) {
         console.error("An error occurred:", error);
       }
-    }
+    },logout({ commit }) {
+      commit('setToken', null);
+      localStorage.removeItem('token');
+    },
   },
   modules: {
   }

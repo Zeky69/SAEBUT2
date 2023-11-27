@@ -11,12 +11,14 @@
             <div class="connexion">
             <div class="Login">
             <p>E-mail</p>
-            <input type="text" class="inputFormulaire" placeholder="Adresse e-mail" v-model="login">
+            <input type="text" class="inputFormulaire" :class="{ 'invalid': isInvalidCredentials }" placeholder="Adresse e-mail" v-model="login">
+              <span class="faux"></span>
             </div>
 
             <div class="Login">
               <p>Mot de passe</p>
-              <input type="password" class="inputFormulaire" placeholder="Mot de passe" v-model="password">
+              <input type="password" class="inputFormulaire" :class="{ 'invalid': isInvalidCredentials }"  placeholder="Mot de passe" v-model="password">
+              <span class="faux"></span>
             </div>
               <a>Mot de passe oublié ?</a>
             </div>
@@ -52,11 +54,12 @@ import {log} from "three/nodes";
 export default {
   name: "LoginView",
   computed:{
-    ...mapState(['users'])
+    ...mapState(['token'])
   },
   data : () => ({
     login:"",
     password:"",
+    isInvalidCredentials: false,
   }),
   methods:{
     log,
@@ -67,7 +70,19 @@ export default {
           {"login" : this.login,
             "password" :this.password};
       await this.loginUser(data);
-      console.log(this.users);
+      if(this.token){
+        this.$router.push('/prestataire');
+      }else{
+        this.isInvalidCredentials = true;
+        this.login = "";
+        this.password = "";
+        let elements = document.getElementsByClassName("faux");
+        for (let i = 0; i < elements.length; i++) {
+          elements[i].innerHTML = 'Mot de passe ou email incorrect';
+        }
+
+      }
+      console.log(this.token);
     }
   }
 }
@@ -162,6 +177,13 @@ export default {
   transition: border-color 0.2s;
 }
 
+.inputFormulaire.invalid {
+  border-bottom: 1px solid red;
+}
+
+.faux{
+  color: red;
+}
 .connexion a{
   text-decoration: underline;
   font-family: "DM Sans";
