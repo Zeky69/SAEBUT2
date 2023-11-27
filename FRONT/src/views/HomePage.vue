@@ -217,6 +217,8 @@ export default {
 .textePresentatif p {
   font-family: "DM Sans Regular";
   font-size: 25px;
+  text-align: justify;
+
 }
 
 .droite .boutton {
@@ -554,7 +556,7 @@ export default {
 
 @media screen and (max-width: 430px){
   .card{
-    width: 100%;
+    width: 99%;
     border-radius: 0 !important;
 
   }
@@ -566,7 +568,9 @@ export default {
 
   .title-card{
     width: fit-content;
+    margin-left: 5%;
   }
+
 
 
 }
