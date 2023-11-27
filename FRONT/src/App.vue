@@ -6,12 +6,22 @@
   </template>
 
   <script>
+  import {mapState} from "vuex";
   import NavBar from '../src/components/NavBar3.vue';
 
   export default {
     components: {
       NavBar,
+    },computed:{
+      ...mapState(['token'])
     },
+    mounted() {
+      if (this.token) {
+        this.$store.commit('setLoggedIn', true);
+      } else {
+        this.$store.commit('setLoggedIn', false);
+      }
+    }
   };
   </script>
 

@@ -1,6 +1,14 @@
 <template>
   <div class="EspacePrestaire" v-if="token">
     <h1>Espace Prestataire</h1>
+    <h1>Espace Prestataire</h1>
+    <h1>Espace Prestataire</h1>
+    <h1>Espace Prestataire</h1>
+    <h1>Espace Prestataire</h1>
+    <h1>Espace Prestataire</h1>
+    <h1>Espace Prestataire</h1>
+    <h1>Espace Prestataire</h1>
+
   </div>
   <div v-else>
     <router-link to="/login" ref="loginLink"></router-link>

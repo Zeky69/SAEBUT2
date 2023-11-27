@@ -13,7 +13,8 @@
             <h1>BELFORAINE</h1>
           </div>
           <div class="icons">
-            <img :src="require('@/assets/icons/panier.svg')" @click="menuClicked('/panier')"   class="i" alt="">
+            <img v-if="!PrestataireLog" :src="require('@/assets/icons/panier.svg')" @click="menuClicked('/panier')"   class="i" alt="">
+            <img v-if="PrestataireLog" :src="require('@/assets/icons/prestataire.png')" @click="deconnexion()"   class="i" alt="">
           </div>
         </div>
         <div class="menu-text" v-show="navOpen">
@@ -25,6 +26,8 @@
 </template>
 
 <script>
+import {mapState,mapActions} from "vuex";
+
 export default {
   name: 'NavBar',
   data: () => ({
@@ -34,21 +37,52 @@ export default {
     navBarTitles: {
       'Accueil': '/', 'Attractions' : '/attraction', 'Restauration' : '/restauration', 'Boutique' : '/boutique', 'Billetterie' : '/billetterie', 'Organisateurs' : '/organisateurs'}
   })
-,
-
+,computed:{
+    ...mapState(['PrestataireLog'])
+  },
   methods: {
-    menuClicked(path) {
+    ...mapActions(['logout'])
+    ,menuClicked(path) {
       this.$router.push(path).catch(() => {});
       },
     handleScroll() {
       this.isTransparent = window.scrollY <= 200  ;
+    },deconnexion(){
+      this.$router.push('/');
+      this.logout();
     },
+    AffecterValeur(){
+      let navBar = document.getElementsByClassName("navbar-content")[0];
+      if (this.PrestataireLog) {
+      this.navBarTitles = {
+        'Gestion': '/',
+        'Gestions': '/attraction',
+        'Restauration': '/restauration',
+        'Boutique': '/boutique',
+        'Billetterie': '/billetterie',
+        'Organisateurs': '/organisateurs'
+      };
+        navBar.style.backgroundColor = 'rgba(255, 0, 0, 0.5)';
+    } else {
+      this.navBarTitles = {
+        'Accueil': '/',
+        'Attractions': '/attraction',
+        'Restauration': '/restauration',
+        'Boutique': '/boutique',
+        'Billetterie': '/billetterie',
+        'Organisateurs': '/organisateurs'};
+        navBar.style.backgroundColor = 'rgba(23, 35, 49, 0.8)';
+
+      }
+    }
   },
   watch: {
     '$route'() {
       this.isHomePage = this.$route.path === '/attraction';
       this.isTransparent = this.isHomePage;
-    }
+    },'PrestataireLog'() {
+      this.AffecterValeur();
+      }
   },
   mounted() {
     if (window.innerWidth > 902) {
@@ -69,6 +103,8 @@ export default {
     // Vérifiez également le chemin de la route lors du montage initial
     this.isHomePage = this.$route.path === '/attraction';
     this.isTransparent = this.isHomePage;
+
+    this.AffecterValeur();
   }
 }
 </script>

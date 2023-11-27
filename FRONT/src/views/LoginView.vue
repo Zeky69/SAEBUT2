@@ -71,6 +71,7 @@ export default {
             "password" :this.password};
       await this.loginUser(data);
       if(this.token){
+        this.isInvalidCredentials;
         this.$router.push('/prestataire');
       }else{
         this.isInvalidCredentials = true;
