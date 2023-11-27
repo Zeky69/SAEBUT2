@@ -35,14 +35,64 @@
     <div class="passBillet">
       <img class="fondFeteForraine" src="../assets/pageAccueil/fond-roue.png" alt="fond roue">
       <div class="card-wrap">
-
         <div class="card">
-
-          <div class="card-header">
-              test
+          <div class="card-head" >
+            <div class="title-card">
+              <h1 class="title">Billet Basic</h1>
+              <h2 class="subtitle">1 jour</h2>
+            </div>
+            <p class="price">24,99€</p>
           </div>
-
+          <hr>
+          <div class="card-body">
+            <div class="list-container">
+              <ul class="list-info">
+                <li>Accès au parc</li>
+              </ul>
+            </div>
+            <a class="btn-card">Ajouter au panier</a>
+          </div>
         </div>
+        <div class="card">
+          <div class="card-head" >
+            <div class="title-card">
+              <h1 class="title">Billet Fast</h1>
+              <h2 class="subtitle">1 jour</h2>
+            </div>
+            <p class="price">34,99€</p>
+          </div>
+          <hr>
+          <div class="card-body">
+            <div class="list-container">
+              <ul class="list-info">
+                <li>Accès au parc</li>
+                <li>Accès sans attente aux attractions</li>
+              </ul>
+            </div>
+            <a class="btn-card">Ajouter au panier</a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head" >
+            <div class="title-card">
+              <h1 class="title">Billet Premium</h1>
+              <h2 class="subtitle">1 jour</h2>
+            </div>
+            <p class="price">59,99€</p>
+          </div>
+          <hr>
+          <div class="card-body">
+            <div class="list-container">
+              <ul class="list-info">
+                <li>Accès au parc</li>
+                <li>Accès sans attente aux attractions</li>
+                <li>Des goodies offerts</li>
+              </ul>
+            </div>
+            <a class="btn-card">Ajouter au panier</a>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -71,7 +121,6 @@ export default {
   position: relative;
   object-fit: cover;
   background-color: transparent;
-  z-index: 0;
 }
 
 .overlay-image {
@@ -96,7 +145,6 @@ export default {
   font-size: 55px;
   font-family: 'Syne';
 }
-
 .contenuHautDePage p {
   font-size: 20px;
   font-family: "DM Sans Regular";
@@ -108,11 +156,10 @@ export default {
   font-size: 20px;
   background-color: #2B4256;
   width: 180px;
-  padding: 15px 0px;
+  padding: 15px 10px;
   border-radius: 10px;
   cursor: pointer;
 }
-
 
 .introduction {
   display: flex;
@@ -127,7 +174,6 @@ export default {
   width: 95%;
   padding: 50px 0 ;
 }
-
 
 .imageGauche {
   display: flex;
@@ -180,11 +226,150 @@ export default {
   font-size: 20px;
 }
 
-.fondFeteForraine{
-  filter: blur(2px);
+@font-face {
+  font-family: 'DM Sans Medium';
+  src: url('../assets/fonts/DM_Sans/static/DMSans-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'DM Sans Regular';
+  src: url('../assets/fonts/DM_Sans/static/DMSans-Regular.ttf') format('truetype');
+}
+
+.passBillet {
   position: relative;
+  display: inline-block; /* or display: block; depending on your layout */
 
 }
+
+.fondFeteForraine {
+  width: auto;
+  min-width: 100%;
+  height: 1000px;
+}
+
+
+.card-wrap {
+  display: grid;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  grid-template-columns: repeat(3, 1fr);
+  border-radius: 60px;
+  backdrop-filter: blur(10px);
+  background-color: rgba(23, 35, 49, 0.4);
+  border: solid 1px  rgba(255, 255, 255, 0.2)  ;
+
+  width: 80%;
+  min-width: 1000px;
+  height: 100%;
+  min-height: 400px;
+  max-height: 600px;
+
+}
+
+.btn-card{
+  background-color: #2c3e50;
+  padding: 10px 20px;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 10px;
+}
+
+.card:nth-child(1) {
+  border-radius: 60px 0 0 60px ;
+  border-right-color: rgba(255, 255, 255, 0.5) ;
+}
+.card:nth-child(3) {
+  border-left-color: rgba(255, 255, 255, 0.5)  ;
+
+  border-radius: 0 60px 60px 0  ;
+}
+
+.card:nth-child(2){
+  border-color: transparent rgba(255, 255, 255, 0.5) transparent rgba(255, 255, 255, 0.5)  ;
+}
+
+.card {
+  font-family: "DM Sans Regular" , Syne , Helvetica , sans-serif;
+  //border-color: rgba(255, 255, 255, 0.2)  ;
+  border: solid 1px transparent;
+  color: white;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 1px 1fr;
+
+}
+
+
+.card hr {
+  width: 80%;
+  margin: 0 auto;
+  border-top: solid 1px rgb(255, 255, 255);
+
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+  font-family: "DM Sans Medium" , Syne , Helvetica , sans-serif;
+  text-align: center;
+  height: 30%;
+}
+
+.title-card {
+  margin: 50px ;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  font-family: "DM Sans Regular" , Syne , Helvetica , sans-serif;
+
+}
+.title{
+  width: fit-content;
+  font-size: 40px;
+}
+.subtitle{
+  width: fit-content;
+  font-size: 20px;
+}
+
+.card-body{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+.list-info li {
+  font-size: 20px;
+  font-family: "DM Sans Regular" , Syne , Helvetica , sans-serif;
+  width: fit-content;
+}
+.list-info{
+  width: fit-content;
+  margin: 0 50px 0 100px;
+
+}
+.list-container{
+  padding-top: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 60%;
+
+}
+
+
+
+
+
+
+
+
+
 
 @media all and (max-width: 1160px) {
   .base-image {
@@ -231,16 +416,8 @@ export default {
     height: 100%;
   }
 
-  .fondFeteForaine{
-    position: relative;
-    z-index: 0;
-  }
 
-  .card-wrap{
-    z-index: 10;
-    background-color: red;
 
-  }
 
   .card{
 
@@ -248,7 +425,87 @@ export default {
 
 }
 
+
+@media screen and (max-width: 1030px) {
+
+  .title-card {
+    margin: 25px 0 20px 50px;
+  }
+  .list-info{
+    margin: 0;
+  }
+
+  .card-wrap{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+  .card{
+    width: 90%;
+    height: auto;
+    display: flex;
+    border: solid 1px rgba(255, 255, 255, 0.2) !important;
+    border-radius: 30px !important;
+    backdrop-filter: blur(10px);
+    background-color: rgba(23, 35, 49, 0.4);
+    margin-top: 10px;
+  }
+
+  .card-wrap{
+    max-width: none;
+    min-width: 0;
+    max-height: none;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    backdrop-filter: none;
+    border-radius: 0;
+    border: none;
+  }
+
+
+
+  .card hr{
+    display: none;
+  }
+
+
+}
+
+
+@media screen and (max-width: 900px){
+  .card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+  .fondFeteForraine{
+    height: 1200px;
+  }
+
+  .list-container{
+    margin: 0 0 0 100px;
+    width: 100%;
+  }
+  .btn-card{
+    margin: 20px 0;
+  }
+
+}
+
+
+
 @media all and (max-width: 730px) {
+
+
+
+
   .base-image {
     height: 750px;
     object-fit: cover;
@@ -295,5 +552,20 @@ export default {
   }
 }
 
+
+
+@media screen and (max-width: 430px){
+  .card{
+    width: 100%;
+    border-radius: 0 !important;
+
+  }
+
+  .list-container{
+    margin-left: 50px;
+  }
+
+
+}
 
 </style>
