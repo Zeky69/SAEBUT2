@@ -4,6 +4,7 @@
   <div class="all-container">
     <div class="dotted"></div>
     <div class="title-container"><h1 class="title">Carte <span>Interactive</span></h1></div>
+    <div><button class="btn" @click="$router.push('/panier')"> Acceder a la map 3D</button></div>
   <div class="map">
     <div class="filtre-container">
       <div class="filtre-head">
@@ -282,6 +283,16 @@ export default {
 
 .title span {
   color: rgba(255, 255, 255, 0.3);
+}
+
+.btn {
+  background-color: #553C65;
+  color: white;
+  padding: 10px 25px;
+  border-radius: 10px;
+  border: none;
+  margin: 10px 0;
+  cursor: pointer;
 }
 
 .search-bar{
