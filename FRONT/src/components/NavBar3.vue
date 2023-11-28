@@ -17,8 +17,10 @@
             <img v-if="PrestataireLog" :src="require('@/assets/icons/prestataire.png')" @click="deconnexion()"   class="i" alt="">
           </div>
         </div>
-        <div class="menu-text" v-show="navOpen">
-          <a v-for="(text, index) in Object.entries(navBarTitles)" :key="index" @click="menuClicked(text[1])">{{ text[0] }}</a>
+        <div class="menu-text--wrapper" v-show="navOpen">
+          <div class="menu-text">
+            <a v-for="(text, index) in Object.entries(navBarTitles)" :key="index" @click="menuClicked(text[1])">{{ text[0] }}</a>
+          </div>
         </div>
       </div>
     </div>
@@ -43,6 +45,7 @@ export default {
   methods: {
     ...mapActions(['logout'])
     ,menuClicked(path) {
+      this.navOpen=!this.navOpen
       this.$router.push(path).catch(() => {});
       },
     handleScroll() {
@@ -121,6 +124,14 @@ export default {
   font-family: 'DM Sans Regular';
   src: url('../assets/fonts/DM_Sans/static/DMSans-Regular.ttf') format('truetype');
 }
+@keyframes menuSlideDown {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 200px;
+  }
+}
 
 * {
   margin: 0;
@@ -146,6 +157,12 @@ export default {
   width: 80%;
   background-color: rgba(23, 35, 49, 0.8);
   backdrop-filter: blur(20px);
+}
+
+.menu-text--wrapper {
+  overflow: hidden;
+  overflow-x : hidden;
+  animation: 300ms ease-in-out menuSlideDown;
 }
 
 .menu-text{
@@ -222,7 +239,6 @@ export default {
 
 @media screen and (max-width: 902px) and (min-width: 600px) {
   .menu-text{
-    animation: 5s forwards;
     display: flex;
     flex-direction: column;
   }

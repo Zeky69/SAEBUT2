@@ -203,6 +203,34 @@ export default {
 <style scoped>
 
 
+/* Largeur de la barre de défilement */
+::-webkit-scrollbar {
+  width: 9px;
+}
+
+/* Couleur de fond de la barre de défilement */
+::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+}
+
+/* Couleur de la poignée de défilement (la partie mobile) */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.30);
+  border-radius: 20px;
+}
+
+/* Changement de couleur au survol de la poignée de défilement */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.47);
+
+}
+
+
+
+
+
+
 
 .dotted {
   width: 100%;
@@ -376,6 +404,8 @@ background-color: transparent;
 .resultat{
   height: 300px;
   overflow: scroll;
+  overflow-x:hidden;
+
 
 }
 
