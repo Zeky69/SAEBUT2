@@ -8,7 +8,7 @@
         <tittle>Explorez l'extraordinaire : là où les<br> rêves prennent vie !</tittle>
         <p>Saisissez l'excitation dès maintenant ! Réservez vos billets pour la fête foraine et<br>
           plongez dans une journée de joie, de rires et de sensations inoubliables !</p>
-        <a class="boutton">Billeterie</a>
+        <a class="boutton">Billetterie</a>
       </div>
     </div>
     <img src="../assets/overlay.svg" class="overlay-image">

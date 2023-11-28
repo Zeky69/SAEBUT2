@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-top: 300px;">
   <Map2D/>
   <Map2DUser/>
   </div>
