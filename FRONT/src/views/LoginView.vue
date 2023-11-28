@@ -5,7 +5,7 @@
       <div class="gauche">
         <div class="formulaire">
           <div class="formulaire-top">
-            <h2>Connexion <span style="font-weight: normal; color: rgba(90, 50, 50, 0.69);">- Inscription</span></h2>
+            <h2>Connexion <span style="font-weight: normal; color: gray;">- Inscription</span></h2>
           </div>
           <div class="formulaire-contenu">
             <div class="connexion">
@@ -36,7 +36,7 @@
       <div class="droite">
         <img src="../assets/logoWF2W.png" class="logo">
         <div class="reseaux">
-          <img src="../assets/logo/TwitterX.svg">
+            <img src="../assets/logo/TwitterX.svg">
           <img src="../assets/logo/Facebook.svg">
           <img src="../assets/logo/YouTube.svg">
           <img src="../assets/logo/Instagram.svg">

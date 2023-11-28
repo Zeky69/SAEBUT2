@@ -8,7 +8,7 @@
         <tittle>Explorez l'extraordinaire : là où les<br> rêves prennent vie !</tittle>
         <p>Saisissez l'excitation dès maintenant ! Réservez vos billets pour la fête foraine et<br>
           plongez dans une journée de joie, de rires et de sensations inoubliables !</p>
-        <a class="boutton">Billetterie</a>
+        <a style="position: relative; z-index: 0" class="boutton">Billetterie</a>
       </div>
     </div>
     <img src="../assets/overlay.svg" class="overlay-image">
@@ -163,7 +163,7 @@ import Map2DUser from "@/components/Map2DUser.vue";
 
 export default {
   name: 'HomePage',
-  components: {Map2DUser}
+  components: {Map2DUser},
 }
 </script>
 
@@ -180,6 +180,7 @@ export default {
 .fullscreen-video {
   width: 100%;
   position: relative;
+  z-index: -10;
   object-fit: cover;
   background-color: transparent;
 }
