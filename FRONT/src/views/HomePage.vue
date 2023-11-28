@@ -8,7 +8,7 @@
         <tittle>Explorez l'extraordinaire : là où les<br> rêves prennent vie !</tittle>
         <p>Saisissez l'excitation dès maintenant ! Réservez vos billets pour la fête foraine et<br>
           plongez dans une journée de joie, de rires et de sensations inoubliables !</p>
-        <a class="boutton">Billeterie</a>
+        <a class="boutton">Billetterie</a>
       </div>
     </div>
     <img src="../assets/overlay.svg" class="overlay-image">
@@ -97,6 +97,7 @@
     </div>
 
     <div class="presentationCards">
+      <br>
       <h2>Plus que des manèges, une expérience<br>
         <span style="color: #553C65">qui tourne la magie à l'infini !</span></h2>
       <div class="cards-multiple">
