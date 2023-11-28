@@ -11,7 +11,7 @@
           <option value="0" disabled selected>Sélectionnez un bâtiment</option>
           <option v-for="batimentsolo in batiment" :key="batimentsolo.id" :value="batimentsolo.id">{{ batimentsolo.name }}</option>
         </select>
-        <button id="btn1" @click="refreshcalmyfuncpls(1)" class="custom-btn" :disabled="idbatafficher == 0" :class="{ 'disabled-btn': idbatafficher == 0 }">Place Batiment</button>
+        <button id="btn1" @click="refreshcalmyfuncpls(1)" class="custom-btn" :disabled="idbatafficher == -1" :class="{ 'disabled-btn': idbatafficher == -1 }">Place Batiment</button>
       </div>
       <div class="remove" id="remove">
         <button id="btn1" @click="refreshcalmyfuncpls(2)" class="custom-btn">remove Batiment</button>
@@ -27,7 +27,15 @@
 import * as THREE from 'three';
 
 //importer service/mapPrestataires.js
-import {getAllEmp} from '../services/mapPrestataire.service.js';
+import {createEmp,getAllEmp,getOneEmp,getOneBat, updateEmpFree, createBat, getAllBat} from '../services/mapPrestataire.service.js';
+
+/*   getAllEmp,
+getOneEmp
+createEmp,
+    deleteEmp,
+    getAllbat,
+    createbat,
+    deletebat*/
 
 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -36,6 +44,7 @@ import { Sky } from 'three/addons/objects/Sky.js';
 export default {
   name: 'TestMap',
   data : () => ({
+    loaded: null,
     sky: null,
     sun: null,
     sky2: null,
@@ -60,7 +69,7 @@ export default {
     selectionables: null,
     light: null,
     ambientLight: null,
-    idbatafficher: 0,
+    idbatafficher: -1,
     vitrine: null,
     scene2: null,
     camera2: null,
@@ -91,25 +100,51 @@ export default {
   },
   methods: {
 
-    batvitrine() {
+    async findObjectByName(object, name) {
+      // Vérifier si l'objet actuel a le nom recherché
+      if (object.name === name) {
+        return object;
+      }
+
+      // Si l'objet a des enfants, parcourir récursivement chaque enfant
+      if (object.children) {
+        for (const child of object.children) {
+          const foundObject = await this.findObjectByName(child, name);
+          if (foundObject) {
+            return foundObject;
+          }
+        }
+      }
+
+      // Aucun objet trouvé avec le nom donné dans cette branche
+      return null;
+    },
+
+
+    async batvitrine() {
       console.log("rentrer dans vitrine")
       console.log("idbat", this.idbatafficher)
-      if (this.idbatafficher !== 0) {
+      console.log(this.loaded)
+      if (this.idbatafficher !== -1) {
         // Retirez tous les enfants de la vitrine
         while (this.vitrine.children.length > 0) {
           this.vitrine.remove(this.vitrine.children[0]);
         }
 
         // Ajoutez le nouvel objet à la vitrine
-        const objet = this.batiment[this.idbatafficher - 1].child.clone();
-        objet.name = this.batiment[this.idbatafficher - 1].child.name;
-        objet.material = this.batiment[this.idbatafficher - 1].material;
-        objet.position.set(0, 0, 0);
+        console.log("batiment", this.batiment)
+        console.log("bat a afficher", this.batiment[this.idbatafficher].name)
+        var objet_model = await this.findObjectByName(this.loaded, this.batiment[this.idbatafficher].name)
+        console.log("objet_model", objet_model)
+        var objet = objet_model.clone();
+        objet.position.set(0, objet.position.y, 0);
+        objet.name = this.batiment[this.idbatafficher].name;
         console.log("objet", objet)
         this.vitrine.add(objet);
         console.log("vitrien", this.vitrine)
         console.log("batiment", this.batiment)
         console.log("scene2", this.scene2)
+
       }
     },
 
@@ -191,13 +226,11 @@ export default {
     getSelectionneLePlusProche(position) {
       // Mise à jour de la position du rayon à lancer.
       this.raycaster.setFromCamera(position, this.camera);
-      console.log("raycastr", this.selectionables.children)
       // Obtenir la liste des intersections
       var selectionnes = this.raycaster.intersectObjects(this.selectionables.children);
       if (selectionnes.length) {
         return selectionnes[0].object;
       } else {
-        console.log("pas sur un obj")
         return null
       }
     },
@@ -210,13 +243,12 @@ export default {
       if (selectionnes.length) {
         return 1;
       } else {
-        console.log("pas sur un obj");
         return 0;
       }
     },
 
 
-    onMouseClick(event) {
+    async onMouseClick(event) {
       var position = new THREE.Vector2();
       var domRect = this.renderer.domElement.getBoundingClientRect();
       position.x = ((event.clientX - domRect.left) / domRect.width) * 2 - 1;
@@ -239,17 +271,18 @@ export default {
 
 
       if (this.selectedObject != 0) {
-        if (this.selectedObject.name.slice(-3) == "bat") {
+        if (this.selectedObject.name.slice(0,3) == "bat") {
           let found;
-          for(let h = 0;h<this.batiment_bdd.length;h++){
-            if(this.batiment_bdd[h].name == this.selectedObject.name){
-              if (this.batiment_bdd[h].position.x == this.selectedObject.position.x && this.batiment_bdd[h].position.y == this.selectedObject.position.y && this.batiment_bdd[h].position.z == this.selectedObject.position.z){
-                found = true;
-                break;
-              }
-            }
+          found = await getOneBat({name: this.selectedObject.name, posx: this.selectedObject.position.x, posz: this.selectedObject.position.z});
+          if (found != []){
+            found = true;
           }
+          else {
+            found = false;
+          }
+
           console.log("bat");
+          console.log("found", found)
           if (this.selectab.length == 0 && found) {
             // Toggle the 'active' class on the selectmenu div
             document.getElementById('selectmenu').classList.toggle('closed');
@@ -281,18 +314,14 @@ export default {
             }
           }
         } else {
-          if (this.selectedObject.name.slice(-3) == "emp") {
+          if (this.selectedObject.name.slice(0,3) == "emp") {
             let found;
-            var indice_emp_bdd;
-            for (let h = 0; h < this.emplacement_bdd.length; h++) {
-              if (this.emplacement_bdd[h].name == this.selectedObject.name) {
-                if(this.emplacement_bdd[h].position.x == this.selectedObject.position.x && this.emplacement_bdd[h].position.y == this.selectedObject.position.y && this.emplacement_bdd[h].position.z == this.selectedObject.position.z){
-                  found = true;
-                  indice_emp_bdd = h;
-                  break;
-                }
-
-              }
+            found = await getOneEmp({name: this.selectedObject.name, posx: this.selectedObject.position.x, posz: this.selectedObject.position.z});
+            if (found != []){
+              found = true;
+            }
+            else {
+              found = false;
             }
 
             if (this.selectab.length == 0 && found) {
@@ -303,16 +332,9 @@ export default {
               document.getElementById('add').classList.toggle('active');
               document.getElementById('scene1').classList.toggle('active');
               this.creationscene2()
-              if (this.emplacement_bdd[indice_emp_bdd].free) {
-                ///mettre l'emp en rouge
                 this.selectedObject.material.color.setHex(0xff0000);
                 var info2 = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "emp"}
                 this.selectab.push(info2);
-              } else {
-                console.log("l'emp est deja pris")
-                this.selectedObject = 0
-                console.log(this.selectedObject)
-              }
             } else {
               if (this.selectedObject.name == this.selectab[0]["obj"].name) {
                 // Toggle the 'active' class on the selectmenu div
@@ -342,7 +364,7 @@ export default {
       }
     },
 
-    refreshcalmyfuncpls(mode) {
+    async refreshcalmyfuncpls(mode) {
       console.log("refresh")
       if (this.selectab.length == 1 && this.idbatafficher >= 0 && this.idbatafficher <= this.batiment.length) {
 
@@ -372,43 +394,69 @@ export default {
         }
         //var uuid = this.selectab[0]["obj"].uuid;
         if (this.selectab[0]["type"] == "emp") {
-          var indice_emp_bdd;
-          for (let h = 0; h < this.emplacement_bdd.length; h++) {
-            if (this.emplacement_bdd[h].name == this.selectab[0]["obj"].name) {
-              if(this.emplacement_bdd[h].position.x == this.selectab[0]["obj"].position.x && this.emplacement_bdd[h].position.y == this.selectab[0]["obj"].position.y && this.emplacement_bdd[h].position.z == this.selectab[0]["obj"].position.z){
-                indice_emp_bdd = h;
-                break;
-              }
-            }
-          }
+          let found;
+          let empbdd = null;
+          found = await getOneEmp({name: this.selectab[0]["obj"].name, posx: this.selectab[0]["obj"].position.x, posz: this.selectab[0]["obj"].position.z});
+          if (found != []){
+            empbdd = found[0];
+            found = true;
 
-          var batimentadd = this.batiment[this.idbatafficher - 1]["child"].clone();
-          batimentadd.material = this.batiment[this.idbatafficher - 1]["material"].clone();
-          var pos = this.emplacement_bdd[indice_emp_bdd].position;
+          }
+          else {
+            found = false;
+          }
+          if(!found){
+            console.log("emp n'est pas dans la bdd")
+            return
+          }
+          console.log("temoijdkljdkljzskldjklsjlk")
+          console.log(this.idbatafficher)
+          console.log(this.batiment[this.idbatafficher].name)
+          console.log("load", this.loaded)
+          var batiment_bdd_found = await this.findObjectByName(this.loaded, this.batiment[this.idbatafficher].name)
+          var batimentadd = batiment_bdd_found.clone();
+          var mat = batimentadd.material.clone();
+          var battobdd = batimentadd.toJSON()
+          try{
+            battobdd.images[0].url = "none"
+          } catch (e) {
+            console.log("pas d'image")
+          }
+          batimentadd.material = mat;
+          var posx= empbdd.posx;
+          var posz= empbdd.posz;
           var y = batimentadd.position.y;
 
+          var databat = {
+            objet: battobdd,
+            idModel: this.batiment[this.idbatafficher].id,
+            posx: posx,
+            posy: y,
+            posz: posz,
+            prestataire_id: this.prestataire,
+            status: "waiting"
+          }
 
-          batimentadd.position.set(pos.x, y, pos.z);
+          batimentadd.position.set(posx, y, posz);
           //to do rota
           batimentadd.castShadow = true;
           batimentadd.receiveShadow = true;
           batimentadd.material.color.setHex(0xffa500);
           this.selectionables.add(batimentadd);
 
+          await createBat(databat);
 
+          let data = {
+            name: this.selectab[0]["obj"].name,
+            posx: databat.posx,
+            posz: databat.posz,
+            batid: this.batiment[2].id,
+          }
+
+          await updateEmpFree(data);
 
           ///to do gerer les asset pour save dans la bdd
           //style save batiment_bdd[0] = {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1"}
-          var batsave = {
-            name: this.batiment[this.idbatafficher - 1]["child"].name,
-            type: "batiment",
-            position: {x: pos.x, y: y, z: pos.z},
-            rotation: {x: 0, y: 0, z: 0},
-            name_of_emp: this.selectab[0]["obj"].name,
-            prestataire_id: this.prestataire,
-            status: "waiting"
-          }
-          this.batiment_bdd.push(batsave)
 
 
           this.selectab[0]["obj"].material = this.selectab[0]["mat"]
@@ -416,23 +464,23 @@ export default {
           //mettre en gris
           this.selectab[0]["obj"].material.color.setHex(0x7e7e7e);
           this.nonselectionables.add(this.selectab[0]["obj"])
-          this.emplacement_bdd[indice_emp_bdd].free = false
-          console.log("kmlkfmlqskmlqsklfkslqk",this.emplacement_bdd[indice_emp_bdd].free)
         } else {
           if (this.selectab[0]["type"] == "bat") {
             let found;
+            let batbdd = null;
             var indice_bdd;
             var xpos = this.selectab[0]["obj"].position.x;
             var zpos = this.selectab[0]["obj"].position.z;
-            for (let h = 0; h < this.batiment_bdd.length; h++) {
-              if (this.batiment_bdd[h].name == this.selectab[0]["obj"].name) {
-                if (this.batiment_bdd[h].position.x == this.selectab[0]["obj"].position.x && this.batiment_bdd[h].position.y == this.selectab[0]["obj"].position.y && this.batiment_bdd[h].position.z == this.selectab[0]["obj"].position.z) {
-                  found = true;
-                  indice_bdd = h;
-                  break;
-                }
-              }
+            found = await getOneBat({name: this.selectab[0]["obj"].name, posx: this.selectab[0]["obj"].position.x, posz: this.selectab[0]["obj"].position.z});
+            if (found != []){
+              batbdd = found[0];
+              console.log("batbdd", batbdd)
+              found = true;
             }
+            else {
+              found = false;
+            }
+
             if (found) {
               let name_emp = this.batiment_bdd[indice_bdd].name_of_emp;
               for (let h = 0; h < this.emplacement_bdd.length; h++) {
@@ -476,206 +524,199 @@ export default {
     },
 
     findchild(obj, childtab) {
-      var id = 0;
       obj.traverse((child) => {
-        if (child.isMesh) {
-          var found = false;
-          for (var i = 0; i < childtab.length; i++) {
-            if (childtab[i] == child) {
-              found = true;
-            }
-          }
-          if (!found) {
-            var name = child.name;
-            var type = {fst: "", snd: ""};
-
-            var newAsset = {
-              _id: id,
-              name: name,
-              type: type,
-              orientation: "none",
-              position: child.position,
-            };
-
-            if (name.slice(-3) == "bat") {
-              type = {fst: "bat"};
-              newAsset.type = type;
-              newAsset.position = {x: 0, y: child.position.y, z: 0};
-            } else {
-              if (name.slice(-3) == "emp") {
-                type = {fst: "emp"};
-                newAsset.type = type;
-                newAsset.position = child.position;
-              } else {
-                type = {fst: "sol"};
-                newAsset.type = type;
-                newAsset.position = child.position;
-              }
-            }
-
-            if (this.asset.find((x) => x.name === child.name) == undefined) {
-              id++;
-              this.asset.push(newAsset);
-            }
-            childtab.push(child);
-            this.findchild(child, childtab);
-          }
+        if (child.isMesh && !childtab.includes(child)) {
+          childtab.push(child);
+          this.findchild(child, childtab);
         }
       });
     },
 
-    debugprestafunc(){
+    async debugprestafunc() {
       console.log("debugprestafunc")
-      console.log("batiment_bdd", this.batiment_bdd)
-      console.log("emplacement_bdd", this.emplacement_bdd)
       //mettre le batiment 2 sur l'emplacement 4  au nom de calixte
-      this.emplacement_bdd[4].free = false;
 
       //style save batiment_bdd[0] = {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1"}
 
       //style save emplacement_bdd[0] = {name: "emp1", type: "emplacement", position: {x: 0, y: 0, z: 0}, orientation: "none", free: true}
+      var emp = await this.findObjectByName(this.loaded, this.emp[4])
+      console.log("emp", emp)
+      var posx = emp.position.x;
+      var posz = emp.position.z;
+      //var empbdd = await getOneEmp({name: emp.name, posx: posx, posz : posz});
+      console.log("batiment", this.batiment)
+      var bat = await this.findObjectByName(this.loaded, this.batiment[2].name)
+      var batjson = bat.toJSON()
+      try{
+        batjson.images[0].url = "none"
+      } catch (e) {
+        console.log("pas d'image")
+      }
       var test1 = {
-        name: this.batiment[2].name,
-        type: "batiment",
-        position: {x: this.emp[4]["child"].position.x, y: this.batiment[2]["child"].position.y, z: this.emp[4]["child"].position.z},
-        rotation: {x: 0, y: 0, z: 0},
-        name_of_emp: this.emp[4]["child"].name,
+        objet: batjson,
+        posx: posx,
+        posy: bat.position.y,
+        posz: posz,
         prestataire_id: "calixte",
         status: "accepted"
       }
-      this.batiment_bdd.push(test1)
+
+      await createBat(test1);
+
+      let data = {
+        name: emp.name,
+        posx: test1.posx,
+        posz: test1.posz,
+        batid: this.batiment[2].id,
+      }
+
+      await updateEmpFree(data);
 
 
       //mettre le batiment 6 sur l'emplacement 1  au nom de prestataire1
-      this.emplacement_bdd[1].free = false;
 
-      var test2 = {
-        name: this.batiment[6].name,
-        type: "batiment",
-        position: {x: this.emp[1]["child"].position.x, y: this.batiment[6]["child"].position.y, z: this.emp[1]["child"].position.z},
-        rotation: {x: 0, y: 0, z: 0},
-        name_of_emp: this.emp[1]["child"].name,
-        prestataire_id: "prestataire1",
-        status: "accepted"
+      var emp2 = await this.findObjectByName(this.loaded, this.emp[1])
+      console.log("emp", emp2)
+      var posx2 = emp2.position.x;
+      var posz2 = emp2.position.z;
+      //var empbdd = await getOneEmp({name: emp.name, posx: posx, posz : posz});
+      console.log("batiment", this.batiment)
+      var bat2 = await this.findObjectByName(this.loaded, this.batiment[6].name)
+      var batjson2 = bat2.toJSON()
+      try{
+        batjson2.images[0].url = "none"
+      } catch (e) {
+        console.log("pas d'image")
       }
-      this.batiment_bdd.push(test2)
-
-
-      //mettre le batiment 7 sur l'emplacement 2  au nom de calixte
-      this.emplacement_bdd[7].free = false;
-
-      var test3 = {
-        name: this.batiment[7].name,
-        type: "batiment",
-        position: {x: this.emp[7]["child"].position.x, y: this.batiment[7]["child"].position.y, z: this.emp[7]["child"].position.z},
-        rotation: {x: 0, y: 0, z: 0},
-        name_of_emp: this.emp[7]["child"].name,
+      var test2 = {
+        objet: batjson2,
+        posx: posx2,
+        posy: bat2.position.y,
+        posz: posz2,
         prestataire_id: "calixte",
         status: "waiting"
       }
 
-      this.batiment_bdd.push(test3)
+      await createBat(test2);
 
+      data = {
+        name: emp2.name,
+        posx: test2.posx,
+        posz: test2.posz,
+        batid: this.batiment[6].id,
+      }
+
+      await updateEmpFree(data);
+
+      //mettre le batiment 7 sur l'emplacement 7  au nom de prestataire1
+
+      var emp3 = await this.findObjectByName(this.loaded, this.emp[7])
+      console.log("emp", emp3)
+      var posx3 = emp3.position.x;
+      var posz3 = emp3.position.z;
+      //var empbdd = await getOneEmp({name: emp.name, posx: posx, posz : posz});
+      console.log("batiment", this.batiment)
+      var bat3 = await this.findObjectByName(this.loaded, this.batiment[7].name)
+      var batjson3 = bat3.toJSON()
+      try{
+        batjson3.images[0].url = "none"
+      } catch (e) {
+        console.log("pas d'image")
+      }
+      var test3 = {
+        objet: batjson3,
+        posx: posx3,
+        posy: bat3.position.y,
+        posz: posz3,
+        prestataire_id: "prestataire1",
+        status: "accepted"
+      }
+
+      await createBat(test3);
+
+      data = {
+        name: emp3.name,
+        posx: test3.posx,
+        posz: test3.posz,
+        batid: this.batiment[7].id,
+      }
+
+      await updateEmpFree(data);
 
     },
 
 
-    setup() {
-      this.debugprestafunc()
+    async setup() {
+      //await this.debugprestafunc()
       console.log("setup")
+      const texture_emp = new THREE.TextureLoader().load('map/mapData/tex/tex_emp.png');
+      const texture_bat = new THREE.TextureLoader().load('map/mapData/albedo.jpg');
+      const material_emp = new THREE.MeshPhongMaterial({map: texture_emp});
+      const material_bat = new THREE.MeshPhongMaterial({map: texture_bat});
 
+      this.emplacement_bdd = await getAllEmp();
+      console.log("emplacement_bdd", this.emplacement_bdd)
+      for(let i = 0; i < this.emplacement_bdd.length; i++){
+        for(let j= 0;j < this.emp.length; j++){
+          if(this.emplacement_bdd[i].objet.object.name == this.emp[j]){
+            var emp_found = await this.findObjectByName(this.loaded, this.emp[j])
+            var emp_clone = emp_found.clone();
+            emp_clone.position.set(this.emplacement_bdd[i].posx, this.emplacement_bdd[i].posy, this.emplacement_bdd[i].posz);
+            emp_clone.material = material_emp.clone()
+            emp_clone.material.metalness = 0;
+            emp_clone.castShadow = true;
+            emp_clone.receiveShadow = true;
+            console.log("emp_clone", emp_clone)
+            if(this.emplacement_bdd[i].batid != null){
+              this.nonselectionables.add(emp_clone);
+              emp_clone.material.color.setHex(0x808080);
+            }
+            else{
+              this.selectionables.add(emp_clone);
+            }
+          }
+          }
+        }
 
-      for (var g = 0;g<this.emp.length;g++){
-          let indice_bdd;
-          let found;
-          for(let h = 0;h<this.emplacement_bdd.length;h++){
-            if(this.emplacement_bdd[h].name == this.emp[g]["child"].name){
-                found = true;
-                indice_bdd = h;
-                if(found){
-                  const emp_clone = this.emp[g]["child"].clone();
-                  const pos = this.emplacement_bdd[indice_bdd].position;
-                  emp_clone.position.set(pos.x, pos.y, pos.z);
-                  emp_clone.rotation.x = 0;
-                  emp_clone.rotation.y = 0;
-                  emp_clone.rotation.z = 0;
-                  emp_clone.castShadow = true;
-                  emp_clone.receiveShadow = true;
-                  emp_clone.name = this.emp[g]["child"].name;
-                  emp_clone.material = this.emp[g]["material"];
-                  if(!this.emplacement_bdd[indice_bdd].free){
-                    //mettre en gris
-                    emp_clone.material.color.setHex(0x808080);
-                    this.nonselectionables.add(emp_clone);
-                  }
-
-                     else{
-                    this.selectionables.add(emp_clone);
-
-                  }
+      this.batiment_bdd = await getAllBat();
+      for (let i = 0; i< this.batiment_bdd.length; i++) {
+        for (let j = 0; j < this.batiment.length; j++) {
+          if (this.batiment_bdd[i].objet.object.name == this.batiment[j].name) {
+            var batiment_found = await this.findObjectByName(this.loaded, this.batiment[j].name)
+            var batiment_clone = batiment_found.clone();
+            batiment_clone.position.set(this.batiment_bdd[i].posx, this.batiment_bdd[i].posy, this.batiment_bdd[i].posz);
+            batiment_clone.rotation.x = 0;
+            batiment_clone.rotation.y = 0;
+            batiment_clone.rotation.z = 0;
+            batiment_clone.material = material_bat.clone()
+            batiment_clone.material.metalness = 0;
+            batiment_clone.castShadow = true;
+            batiment_clone.receiveShadow = true;
+            if (this.batiment_bdd[i].prestataire_id != this.prestataire) {
+              this.nonselectionables.add(batiment_clone);
+            } else {
+              if (this.batiment_bdd[i].status == "accepted") {
+                //mettre en vert
+                batiment_clone.material.color.setHex(0x00ff00);
+                this.selectionables.add(batiment_clone);
+              } else {
+                if (this.batiment_bdd[i].status == "waiting") {
+                  //metre en orange
+                  batiment_clone.material.color.setHex(0xffa500);
+                  this.selectionables.add(batiment_clone);
                 }
-
               }
 
             }
           }
-
-      for (let y = 0; y < this.batiment.length; y++) {
-        let indice_bdd;
-        let found;
-        for(let h = 0;h<this.batiment_bdd.length;h++){
-          if(this.batiment_bdd[h].name == this.batiment[y]["child"].name){
-            found = true;
-            indice_bdd = h;
-            if (found) {
-              var batiment_clone = this.batiment[y]["child"].clone();
-              const pos = this.batiment_bdd[indice_bdd].position;
-              batiment_clone.position.set(pos.x, pos.y, pos.z);
-              batiment_clone.rotation.x = 0;
-              batiment_clone.rotation.y = 0;
-              batiment_clone.rotation.z = 0;
-              batiment_clone.castShadow = true;
-              batiment_clone.receiveShadow = true;
-              batiment_clone.name = this.batiment[y]["child"].name;
-              batiment_clone.material = this.batiment[y]["material"];
-              console.log("batiment_clone", this.batiment_bdd[indice_bdd].prestataire_id)
-              if (this.batiment_bdd[indice_bdd].prestataire_id != this.prestataire) {
-                this.nonselectionables.add(batiment_clone);
-              } else {
-                if(this.batiment_bdd[indice_bdd].status == "accepted"){
-                  //mettre en vert
-                  batiment_clone.material.color.setHex(0x00ff00);
-                  this.selectionables.add(batiment_clone);
-                }
-                else{
-                  if(this.batiment_bdd[indice_bdd].status == "waiting"){
-                    //metre en orange
-                    batiment_clone.material.color.setHex(0xffa500);
-                    this.selectionables.add(batiment_clone);
-                  }
-                }
-                this.selectionables.add(batiment_clone);
-              }
-          }
-        }
-
         }
       }
 
       this.camera.rotation.x = -0.5;
       this.camera.position.set(6, 10, 8);
 
-      //todo check use
-      const texture_emp = new THREE.TextureLoader().load('map/mapData/tex_socle.jpg');
-      const texture_bat = new THREE.TextureLoader().load('map/mapData/albedo.jpg');
-      const material_emp = new THREE.MeshPhongMaterial({map: texture_emp});
-      const material_bat = new THREE.MeshPhongMaterial({map: texture_bat});
-      for (var i = 0; i < this.batiment.length; i++) {
-        this.batiment[i].material = material_bat;
-      }
-      for (var j = 0; j < this.emp.length; j++) {
-        this.emp[j].material = material_emp;
-      }
+      console.log("selectionables", this.selectionables)
+      console.log("nonselectionables", this.nonselectionables)
 
 
     },
@@ -685,93 +726,121 @@ export default {
       return new Promise((resolve, reject) => {
 
       const loader = new GLTFLoader();
-      loader.load('map/mapData/map_try4.glb', (gltf) => {
+      loader.load('map/mapData/map_belfo.glb', async (gltf) => {
+
         const loadedGltf = gltf.scene;
+        this.loaded = loadedGltf
 
 
         this.findchild(loadedGltf, this.children);
 
-        var indicebat = 0;
-        var indiceemp = 0;
+        var idbat = -1;
 
         for (var i = 0; i < this.children.length; i++) {
-          if (this.children[i].name.slice(-3) == "bat") {
-            indicebat++;
-            const child = this.children[i];
-            const material = child.material;
-            const positionY = child.position.y;
-
-            // Créez un objet ou un tableau imbriqué pour stocker les informations
-            const buildingInfo = {
-              child: child,
-              material: material,
-              positionY: positionY,
-              name: child.name,
-              id: indicebat
-            };
-
-            // Ajoutez l'objet à votre tableau principal
-            this.batiment.push(buildingInfo);
-
-            console.log("buildinf", buildingInfo);
-
-            this.children[i].castShadow = true;
-            this.children[i].receiveShadow = true;
-          } else {
-            if (this.children[i].name.slice(-3) == "emp") {
-              indiceemp++;
-
-              const child = this.children[i];
-              const material = child.material;
-              const positionY = child.position.y;
-              const free = true;
-              const id = indiceemp;
-
-              // Créez un objet ou un tableau imbriqué pour stocker les informations
-              const empInfo = {
-                child: child,
-                material: material,
-                positionY: positionY,
-                name: child.name,
-                free: free,
-                id: id
-              };
-
-              // Ajoutez l'objet à votre tableau principal
-              this.emp.push(empInfo);
-
-              // ajuter l'objet a la bbd pour test
-              let position1 = {x: child.position.x, y: child.position.y, z: child.position.z}
-              let addbbd = {name: child.name, type: "emplacement", position: position1 , orientation: "test", free: true}
-
-              //mettre en json addbbd
-              this.emplacement_bdd.push(addbbd)
-
-
-
-
-
-              this.children[i].castShadow = true;
+          console.log("child", this.children[i].name)
+          if (this.children[i].name.slice(0,3) == "bat") {
+            idbat++;
+            const info = {
+              id: idbat,
+              name: this.children[i].name,
+            }
+            if(this.children[i].name == "bat_confer"){
+              const texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_conf.png');
+              const mat_bat = new THREE.MeshPhongMaterial({map: texturebat});
+              this.children[i].material = mat_bat;
+              this.children[i].material.metalness = 0;
               this.children[i].receiveShadow = true;
+              this.selectionables.add(this.children[i]);
+            }
+            if(this.children[i].name.includes("wc")){
+              const texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_wc.png');
+              const mat_bat = new THREE.MeshPhongMaterial({map: texturebat});
+              this.children[i].material = mat_bat;
+              this.children[i].material.metalness = 0;
+              this.children[i].receiveShadow = true;
+              this.nonselectionables.add(this.children[i]);
+            }
+            this.batiment.push(info)
+
+          } else {
+            if (this.children[i].name.slice(0, 3) == "emp") {
+              console.log("emp", this.children[i].name)
+              this.emp.push(this.children[i].name)
+              var objetdata = this.children[i].toJSON()
+              try{
+                objetdata.images[0].url = "none"
+              } catch (e) {
+                console.log("pas d'image")
+              }
+              var data = {objet: objetdata ,idModel: this.children[i].id,posx: this.children[i].position.x , posy: this.children[i].position.y, posz: this.children[i].position.z}
+              createEmp(data)
+
 
             } else {
-              const texturesol = new THREE.TextureLoader().load('map/mapData/grass.jpg');
-              texturesol.wrapS = THREE.RepeatWrapping;
-              texturesol.wrapT = THREE.RepeatWrapping;
-              texturesol.repeat.set(2, 2);
-              const material_sol = new THREE.MeshPhongMaterial({ map: texturesol });
-              this.children[i].material = material_sol;
-              this.children[i].receiveShadow = true;
-              this.groupe_sol.add(this.children[i]);
+              if (this.children[i].name.slice(0, 3) == "sol") {
+                if(this.children[i].name == "sol_sol") {
+                  const texturesol = new THREE.TextureLoader().load('map/mapData/tex/tex_solmir.png');
+                  const mat_sol = new THREE.MeshPhongMaterial({map: texturesol});
+                  this.children[i].material = mat_sol;
+                  this.children[i].material.metalness = 0;
+                  this.children[i].receiveShadow = true;
+                  this.groupe_sol.add(this.children[i]);
+                }
+                else{
+                  const texturesol = new THREE.TextureLoader().load('map/mapData/tex/tex_arrsol.png');
+                  texturesol.wrapS = THREE.RepeatWrapping;
+                  texturesol.wrapT = THREE.RepeatWrapping;
+                  texturesol.repeat.set(2, 2);
+                  const material_sol = new THREE.MeshPhongMaterial({map: texturesol});
+                  this.children[i].material = material_sol;
+                  this.children[i].material.metalness = 0;
+                  this.children[i].receiveShadow = true;
+                  this.groupe_sol.add(this.children[i]);
+
+                }
+              }
+              else {
+                if (this.children[i].name.slice(0, 3) == "dec") {
+                  console.log("deco", this.children[i].name)
+                if(this.children[i].name.includes("tree")){
+                  const texturetree = new THREE.TextureLoader().load('map/mapData/tex/tex_tree.png');
+                  const mattree = new THREE.MeshPhongMaterial({map: texturetree});
+                  this.children[i].material = mattree;
+                  this.children[i].material.metalness = 0;
+                  this.children[i].receiveShadow = true;
+                }
+                if(this.children[i].name.includes("bush")){
+                  const texturetree = new THREE.TextureLoader().load('map/mapData/tex/tex_tree.png');
+                  const mattree = new THREE.MeshPhongMaterial({map: texturetree});
+                  this.children[i].material = mattree;
+                  this.children[i].material.metalness = 0;
+                  this.children[i].receiveShadow = true;
+                }
+                if(this.children[i].name == "deco_entree"){
+                  const texturetree = new THREE.TextureLoader().load('map/mapData/tex/tex_entree.png');
+                  const mattree = new THREE.MeshPhongMaterial({map: texturetree});
+                  this.children[i].material = mattree;
+                  this.children[i].material.metalness = 0;
+                  this.children[i].receiveShadow = true;
+
+                }
+                if(this.children[i].name.includes("R2-D2")){
+                  const texturetree = new THREE.TextureLoader().load('map/mapData/tex/tex_r2d2.png');
+                  const mattree = new THREE.MeshPhongMaterial({map: texturetree});
+                  this.children[i].material = mattree;
+                  this.children[i].material.metalness = 0;
+                  this.children[i].receiveShadow = true;
+
+                }
+                this.groupe_sol.add(this.children[i]);
+
+                }
+              }
             }
           }
         }
-        console.log(this.emp)
-        console.log(this.empGroupe)
         // Assurez-vous d'appeler la fonction de résolution (ici, je suppose que vous avez une promesse basée sur votre code précédent)
-        console.log("loadfinalfin");
-        let resuemp = getAllEmp("N");
-        console.log("resuemp", resuemp)
+
         resolve();
       }, undefined, (error) => {
         console.error(error);
@@ -786,7 +855,8 @@ export default {
     async start(){
         this.showLoadingScreen();
         await this.loadfinal();
-        this.setup();
+
+        await this.setup();
         console.log("aftersetup", this.selectionables)
         this.scene.add(this.selectionables);
         this.scene.add(this.nonselectionables);
@@ -795,7 +865,6 @@ export default {
         this.scene.add(this.ambientLight);
         this.renderer.render(this.scene, this.camera);
         this.animate();
-        console.log("setupfin", this.selectionables)
         this.hideLoadingScreen();
 
         const geometry = new THREE.BoxGeometry(0.01, 0.01, 0.01);
@@ -844,6 +913,7 @@ export default {
 
       const scene1Container = this.$refs.scene1Container;
       this.renderer.setSize(window.innerWidth, scene1Container.offsetHeight);
+      this.renderer.outputEncoding = THREE.LinearToneMapping;
     });
 
     this.scene = new THREE.Scene();
@@ -861,8 +931,8 @@ export default {
 
 //const canvasElement = document.querySelector('[data-engine="three.js r156"]');
 
-    this.ambientLight = new THREE.AmbientLight(0x404040); // Couleur en hexadécimal
-    this.ambientLight.intensity = 10; // Intensité de la lumière ambiante
+    this.ambientLight = new THREE.AmbientLight(0xffffff); // Couleur en hexadécimal
+    this.ambientLight.intensity = 2; // Intensité de la lumière ambiante
     this.scene.background = new THREE.Color(0xffffff);
 
     // Add Sky

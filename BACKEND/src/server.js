@@ -8,14 +8,14 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 dotenv.config();
-const port = process.env.PORT || 3000; // process.env.PORT est undefined jcp pk
+const port = process.env.PORT || 3000; // process.env.PORT est undefined jcp pk
 const app = express();
 
-app.use(express.json()); //decode les requete qui contiennent du json
-app.use("/prestataires", prestaRoutes);
-app.use("/admin", adminRoutes);
+app.use(express.json());//decode les requete qui contiennent du json
+
 
 app.use(bodyParser.json());
+
 app.use(cors({
     origin: 'http://localhost:8080', // Remplacez par votre URL front-end
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -23,8 +23,9 @@ app.use(cors({
     
 }));
 
-app.use("/mapPrestataires", mapPrestatairesRoutes)
-
+app.use("/prestataires", prestaRoutes);
+app.use("/admin", adminRoutes);
+app.use("/mapPrestataires", mapPrestatairesRoutes);
 app.use("/login", loginRoutes);
 
 app.listen(port, () => {
