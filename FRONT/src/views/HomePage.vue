@@ -152,14 +152,17 @@
 
       </div>
     </div>
+    <Map2DUser/>
 
   </div>
 </template>
 
 <script>
+import Map2DUser from "@/components/Map2DUser.vue";
+
 export default {
   name: 'HomePage',
-  components: {}
+  components: {Map2DUser}
 }
 </script>
 
@@ -389,10 +392,12 @@ export default {
   font-family: "DM Sans Regular" , Syne , Helvetica , sans-serif;
 
 }
+
 .title{
   width: fit-content;
   font-size: 40px;
 }
+
 .subtitle{
   width: fit-content;
   font-size: 20px;
@@ -404,6 +409,7 @@ export default {
   align-items: center;
   height: 100%;
 }
+
 .list-info li {
   font-size: 20px;
   font-family: "DM Sans Regular" , Syne , Helvetica , sans-serif;
@@ -414,6 +420,7 @@ export default {
   margin: 0 50px 0 100px;
 
 }
+
 .list-container{
   padding-top: 25px;
   display: flex;
@@ -499,15 +506,6 @@ export default {
   border-radius: 10px;
 }
 
-
-
-
-
-
-
-
-
-
 @media all and (max-width: 1160px) {
   .base-image {
     height: 600px;
@@ -580,7 +578,6 @@ export default {
 
 
 }
-
 
 @media screen and (max-width: 1030px) {
 
@@ -657,7 +654,6 @@ export default {
 
 }
 
-
 @media screen and (max-width: 900px){
   .card{
     display: flex;
@@ -690,8 +686,6 @@ export default {
 
 
 }
-
-
 
 @media all and (max-width: 730px) {
 
@@ -740,8 +734,6 @@ export default {
     font-size: 15px;
   }
 }
-
-
 
 @media screen and (max-width: 430px){
   .card{

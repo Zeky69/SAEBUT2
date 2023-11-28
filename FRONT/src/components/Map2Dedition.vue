@@ -7,7 +7,7 @@
   <l-map style="width:100% ; height: 500px ; grid-column: 2" :min-zoom="18" :max-zoom="21" :max-bounds="cartebounds" :center="center" @click="addCoordinates">
     <l-tile-layer :url="url" ></l-tile-layer>
     <l-marker :lat-lng="markerLatLng"></l-marker>
-    <l-image-overlay :url="'carte.jpeg'" :bounds="cartebounds"></l-image-overlay>
+    <l-image-overlay :url="'map2D.bmp'" :bounds="cartebounds"></l-image-overlay>
       <l-polygon
           v-for="(feature , index) in features"
           :key="index"
@@ -176,6 +176,7 @@ export default {
         this.newPolygon.push(this.newPolygon[0])
         this.newfeature.geometry = this.newPolygon
         this.features.push(this.newfeature)
+        console.log(JSON.stringify(this.features))
       }
       this.switchEditor()
       this.couleur = []

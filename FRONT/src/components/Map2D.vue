@@ -6,7 +6,7 @@
 <div class="map-container">
   <l-map style="width:800px ; height: 500px" :min-zoom="18" :max-zoom="21" :max-bounds="cartebounds" :center="center">
     <l-tile-layer :url="url" ></l-tile-layer>
-    <l-image-overlay :url="'carte.jpeg'" :bounds="cartebounds"></l-image-overlay>
+    <l-image-overlay :url="'map2D.bmp'" :bounds="cartebounds"></l-image-overlay>
       <l-polygon
           v-for="(feature , index) in features"
           :key="`polygon-${index}`"
