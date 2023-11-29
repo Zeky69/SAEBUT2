@@ -100,6 +100,16 @@ export default {
   },
   methods: {
 
+    handleResize() {
+      // Logique de gestion du redimensionnement
+      this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.updateProjectionMatrix();
+
+      const scene1Container = this.$refs.scene1Container;
+      this.renderer.setSize(window.innerWidth, scene1Container.offsetHeight);
+      this.renderer.outputEncoding = THREE.LinearToneMapping;
+    },
+
     async findObjectByName(object, name) {
       // Vérifier si l'objet actuel a le nom recherché
       if (object.name === name) {
@@ -526,7 +536,7 @@ export default {
     findchild(obj, childtab) {
       obj.traverse((child) => {
         if (child.isMesh && !childtab.includes(child)) {
-          childtab.push(child);
+            childtab.push(child);
           this.findchild(child, childtab);
         }
       });
@@ -731,8 +741,12 @@ export default {
         const loadedGltf = gltf.scene;
         this.loaded = loadedGltf
 
+        console.log("loaded", this.loaded)
+
 
         this.findchild(loadedGltf, this.children);
+
+
 
         var idbat = -1;
 
@@ -744,21 +758,52 @@ export default {
               id: idbat,
               name: this.children[i].name,
             }
+            var texturebat;
             if(this.children[i].name == "bat_confer"){
-              const texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_conf.png');
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_conf.png');
               const mat_bat = new THREE.MeshPhongMaterial({map: texturebat});
               this.children[i].material = mat_bat;
               this.children[i].material.metalness = 0;
               this.children[i].receiveShadow = true;
               this.selectionables.add(this.children[i]);
+              texturebat = null;
+            }
+            if(this.children[i].name == "bat_rest"){
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/bat_rest.png');
+            }
+            if(this.children[i].name == "bat_resto2"){
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/bato_resto2.png');
+            }
+            if(this.children[i].name == "bat_roue"){
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_roue.png');
+            }
+            if(this.children[i].name == "bat_arcade"){
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_arcade.png');
+            }
+            if(this.children[i].name == "bat_foodtruck"){
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_foodtruck.png');
+            }
+            if(this.children[i].name == "bat_attrfutur"){
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_attrfutur.png');
             }
             if(this.children[i].name.includes("wc")){
-              const texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_wc.png');
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_wc.png');
               const mat_bat = new THREE.MeshPhongMaterial({map: texturebat});
+              //flipY
+              mat_bat.map.flipY = true;
               this.children[i].material = mat_bat;
               this.children[i].material.metalness = 0;
               this.children[i].receiveShadow = true;
               this.nonselectionables.add(this.children[i]);
+              texturebat = null;
+            }
+
+            if(texturebat != null){
+              const mat_bat = new THREE.MeshPhongMaterial({map: texturebat});
+              mat_bat.map.flipY = true;
+              this.children[i].material = mat_bat;
+              this.children[i].material.metalness = 0;
+              this.children[i].receiveShadow = true;
             }
             this.batiment.push(info)
 
@@ -831,6 +876,14 @@ export default {
                   this.children[i].material.metalness = 0;
                   this.children[i].receiveShadow = true;
 
+                }
+                if(this.children[i].name.includes("Lamp")){
+                  const texturetree = new THREE.TextureLoader().load('map/mapData/tex/tex_arcade.png');
+                  const mattree = new THREE.MeshPhongMaterial({map: texturetree});
+                  this.children[i].material = mattree;
+                  this.children[i].material.metalness = 0;
+                  this.children[i].receiveShadow = true;
+                  console.log("lamp", this.children[i])
                 }
                 this.groupe_sol.add(this.children[i]);
 
@@ -907,14 +960,7 @@ export default {
 
   mounted() {
 
-    window.addEventListener('resize', () => {
-      this.camera.aspect = window.innerWidth / window.innerHeight;
-      this.camera.updateProjectionMatrix();
 
-      const scene1Container = this.$refs.scene1Container;
-      this.renderer.setSize(window.innerWidth, scene1Container.offsetHeight);
-      this.renderer.outputEncoding = THREE.LinearToneMapping;
-    });
 
     this.scene = new THREE.Scene();
     //90% de la largueur de l'ecran
@@ -1024,12 +1070,22 @@ export default {
 
     this.renderer.domElement.addEventListener('mousemove', this.onMouseMove);
     this.renderer.domElement.addEventListener('click', this.onMouseClick);
+    this.resizeListener = this.handleResize.bind(this);
+    window.addEventListener('resize', this.resizeListener);
+
 
 
     this.start();
 
 
   },
+  beforeDestroy() {
+    this.renderer.domElement.removeEventListener('mousemove', this.onMouseMove);
+    this.renderer.domElement.removeEventListener('click', this.onMouseClick);
+
+    window.removeEventListener('resize', this.resizeListener);
+  },
+
 };
 </script>
 

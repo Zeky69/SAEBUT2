@@ -1,9 +1,9 @@
 <template>
-  <div class="EspacePrestaire" v-if="group_id===2">
+  <div class="EspacePrestaire" v-if="group_id===1">
     <h1>Espace Prestataire</h1>
     <h1>Espace Prestataire</h1>
     <br><br><br><br><br><br><br><br><br>
-    <h1>Espace Prestataire</h1>
+    <h1>Espace Admin</h1>
     <h1>fname : {{fname}}</h1>
     <h1>lname : {{lname}}</h1>
     <h1>user_id : {{user_id}}</h1>
@@ -22,7 +22,7 @@
 import { mapState,mapActions } from "vuex";
 
 export default {
-  name: 'EspacePrestaire',
+  name: 'EspaceAdmin',
   computed: {
     ...mapState(['token','fname','lname','group_id','user_id','email'])
   },
@@ -34,8 +34,8 @@ export default {
     }
   },
   mounted() {
-    console.log(this.group_id + " groupe")
-    if (this.group_id !== 2) {
+    console.log(this.group_id)
+    if (this.group_id !== 1) {
       this.$router.replace('/login');
     }
   }
