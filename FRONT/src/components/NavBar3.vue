@@ -45,7 +45,9 @@ export default {
   methods: {
     ...mapActions(['logout'])
     ,menuClicked(path) {
+      if (window.innerWidth < 902) {
       this.navOpen=!this.navOpen
+      }
       this.$router.push(path).catch(() => {});
       },
     handleScroll() {
