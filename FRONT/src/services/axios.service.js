@@ -19,7 +19,7 @@ représentant (NB : variable nommée err dans le catch). Il y a 3 cas d'erreurs 
    - impossible d'envoyer la requête
 Ces trois cas sont traités par une unique fonction handleError().
 
- */
+*/
 
 
 // creation d'un agent axios, avec une config. pour atteindre l'API
@@ -123,25 +123,10 @@ async function patchRequest(uri, data, name) {
 }
 
 
-async function fetch(url, options, body) {
-    try {
-        const response = await axiosAgent(url, options, body);
-        if (!response.ok) {
-            // Gérer les erreurs de réponse ici
-            throw new Error(`Erreur HTTP : ${response.status}`);
-        }
-
-        return await response.json(); // ou retournez simplement une indication de succès si aucun corps n'est attendu
-    } catch (error) {
-        console.error('Erreur lors de la création de l\'emplacement :', error.message);
-        throw error; // Vous pouvez choisir de gérer l'erreur ici ou la remonter à l'appelant
-    }
-}
 
 export {
     getRequest,
     postRequest,
-    patchRequest,
-    fetch
+    patchRequest
 }
 
