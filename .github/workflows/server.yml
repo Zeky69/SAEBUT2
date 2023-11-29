@@ -33,6 +33,6 @@ jobs:
           psql -d bddsae -f sae_belfo.sql
           psql -d bddsae -f insert_sae.sql
           cd BACKEND/
-          pm2 restart server.js
+          pm2 restart default
           cd ../FRONT/
           ~/script.sh
