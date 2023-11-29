@@ -92,6 +92,12 @@ export default {
       }
   },
   mounted() {
+    console.log(!this.PrestataireLog)
+    if (!this.PrestataireLog) {
+      this.$store.commit('setLoggedIn', true);
+    } else {
+      this.$store.commit('setLoggedIn', false);
+    }
     if (window.innerWidth > 902) {
       this.navOpen = true;
     }else{

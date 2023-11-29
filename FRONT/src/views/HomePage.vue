@@ -5,7 +5,7 @@
         <source src="../assets/Observation_Wheel.mp4" type="video/mp4">
       </video>
       <div class="contenuHautDePage">
-        <tittle>Explorez l'extraordinaire : là où les<br> rêves prennent vie !</tittle>
+        <h1>Explorez l'extraordinaire : là où les<br> rêves prennent vie !</h1>
         <p>Saisissez l'excitation dès maintenant ! Réservez vos billets pour la fête foraine et<br>
           plongez dans une journée de joie, de rires et de sensations inoubliables !</p>
         <a style="position: relative; z-index: 0" class="boutton">Billetterie</a>
@@ -203,9 +203,10 @@ export default {
   color: #ffffff;
 }
 
-.contenuHautDePage tittle {
+.contenuHautDePage h1 {
   font-size: 55px;
   font-family: 'Syne';
+  font-weight: normal;
 }
 .contenuHautDePage p {
   font-size: 20px;
@@ -395,7 +396,7 @@ export default {
 
 }
 
-.title{
+.h1{
   width: fit-content;
   font-size: 40px;
 }

@@ -1,16 +1,24 @@
-import axios from "axios";
+import {postRequest} from "@/services/axios.service";
 
-const userAPI = 'http://localhost:3000/login';
+async function LoginFromApi(data) {
+    console.log("route front",data)
+    return postRequest('/login', data, 'LOGIN')
+}
+
 
 async function Login(data) {
+    console.log("why")
     try {
-        const response = await axios.post(userAPI, data);
-        return response;
-    } catch (err) {
-        console.log("Impossible de se connecter --> " + err);
-        throw err;
+        let answer = await LoginFromApi(data);
+        console.log("HHAHAHAHHA")
+        console.log(answer)
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors du login', error.message);
+        throw error;
     }
 }
+
 
 export default {
     Login,

@@ -16,11 +16,6 @@
       ...mapState(['token'])
     },
     mounted() {
-      if (this.token) {
-        this.$store.commit('setLoggedIn', true);
-      } else {
-        this.$store.commit('setLoggedIn', false);
-      }
     }
   };
   </script>

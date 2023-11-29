@@ -11,7 +11,6 @@
 
   </div>
   <div v-else>
-    <router-link to="/login" ref="loginLink"></router-link>
   </div>
 </template>
 
@@ -25,7 +24,7 @@ export default {
   },
   mounted() {
     if (!this.token) {
-      this.$refs.loginLink.$router.push('/login');
+      this.$router.push('/login');
     }
   }
 }

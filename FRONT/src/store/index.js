@@ -5,10 +5,14 @@ Vue.use(Vuex)
 
 import userService from '../services/utilisateur'
 
+let tokens = localStorage.getItem('token') || null;
+
+console.log(tokens)
+
 export default new Vuex.Store({
   state: {
-    token: localStorage.getItem('token') || null,
-    PrestataireLog: false,
+    token : tokens,
+    PrestataireLog: tokens === null,
   },
   getters: {
   },
@@ -26,9 +30,9 @@ export default new Vuex.Store({
       console.log(data);
       try {
         let response = await userService.Login(data);
-        if (response.status === 200) {
-          console.log(response)
-          commit('setToken', response.data);
+        console.log(response.error)
+        if (!response.error) {
+          commit('setToken', response);
           commit('setLoggedIn', true);
 
         } else {
