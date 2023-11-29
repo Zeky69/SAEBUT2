@@ -1,16 +1,14 @@
-import {postRequest} from "@/services/axios.service";
+import {postRequest,getRequest} from "@/services/axios.service";
+const url='/login'
 
 async function LoginFromApi(data) {
-    console.log("route front",data)
-    return postRequest('/login', data, 'LOGIN')
+    return postRequest(url, data, 'LOGIN')
 }
 
 
 async function Login(data) {
-    console.log("why")
     try {
         let answer = await LoginFromApi(data);
-        console.log("HHAHAHAHHA")
         console.log(answer)
         return answer;
     } catch (error) {
@@ -19,7 +17,23 @@ async function Login(data) {
     }
 }
 
+async function getInformationFromTokenAPI(token){
+    return getRequest(url+`/${token}`,"GetInformation")
+}
+
+async function getInformationFromToken(token) {
+    try {
+        let information = await getInformationFromTokenAPI(token);
+        console.log(information);
+        return information;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des informations depuis le token', error.message);
+        throw error;
+    }
+}
+
 
 export default {
     Login,
+    getInformationFromToken
 }

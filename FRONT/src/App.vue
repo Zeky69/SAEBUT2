@@ -16,6 +16,9 @@
       ...mapState(['token'])
     },
     mounted() {
+      if(this.token){
+        this.getInformationFromToken(this.token);
+      }
     }
   };
   </script>

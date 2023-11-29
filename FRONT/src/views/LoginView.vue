@@ -54,7 +54,7 @@ import {log} from "three/nodes";
 export default {
   name: "LoginView",
   computed:{
-    ...mapState(['token'])
+    ...mapState(['group_id'])
   },
   data : () => ({
     login:"",
@@ -70,9 +70,10 @@ export default {
           {"login" : this.login,
             "password" :this.password};
       await this.loginUser(data);
-      if(this.token){
-        this.isInvalidCredentials;
+      if(this.group_id===2){
         this.$router.push('/prestataire');
+      }else if(this.group_id===1){
+        this.$router.push('/admin');
       }else{
         this.isInvalidCredentials = true;
         this.login = "";

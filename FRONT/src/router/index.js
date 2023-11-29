@@ -47,6 +47,11 @@ const routes = [
     name: 'EspacePrestaire',
     component: () => import('../views/EspacePrestaire.vue')
 
+  },  {
+    path: '/admin',
+    name: 'EspaceAdmin',
+    component: () => import('../views/EspaceAdmin.vue')
+
   },
     {
       path: '*',
