@@ -13,7 +13,7 @@ exports.login = async (req, res) => {
         if (!user) {
             return res.status(401).send("Utilisateur non trouvé");
         }
-        const token = jwt.sign(user,jwtSecret, {expiresIn: '5s'});
+        const token = jwt.sign(user,jwtSecret, {expiresIn: '24h'});
         console.log(user)
         let oui = {token,'id' : user.user_id, 'fname' : user.first_name, 'lname' :user.last_name, 'email' : user.email, 'group_id' : user.group_id};
         console.log(oui)

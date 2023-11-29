@@ -1,5 +1,5 @@
 <template>
-  <div class="EspacePrestaire" v-if="group_id ===2">
+  <div class="EspacePrestaire" v-if="group_id===2">
     <h1>Espace Prestataire</h1>
     <h1>Espace Prestataire</h1>
     <br><br><br><br><br><br><br><br><br>
@@ -29,13 +29,14 @@ export default {
   methods:{
     ...mapActions(['logout']),
     deconnexion(){
-      this.$router.push('/');
+      this.$router.replace('/login');
       this.logout();
     }
   },
   mounted() {
+    console.log(this.group_id + " groupe")
     if (this.group_id !== 2) {
-      this.$router.push('/login');
+      this.$router.replace('/login');
     }
   }
 }

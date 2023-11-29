@@ -1,23 +1,31 @@
   <template>
     <div id="app">
-      <NavBar/>
+     <span v-if="!token"><NavBar/></span>
       <router-view></router-view>
     </div>
   </template>
 
   <script>
-  import {mapState} from "vuex";
+  import {mapState,mapActions} from "vuex";
   import NavBar from '../src/components/NavBar3.vue';
 
   export default {
     components: {
       NavBar,
     },computed:{
-      ...mapState(['token'])
+      ...mapState(['token','group_id'])
+    },methods: {
+      ...mapActions(['getInformationFromToken']),
+      async getInfo() {
+        console.log("Appel à getInformationFromToken");
+        await this.getInformationFromToken(this.token);
+        console.log("getInformationFromToken terminé, appel de getInfo");
+      }
+
     },
     mounted() {
-      if(this.token){
-        this.getInformationFromToken(this.token);
+      if (this.token) {
+        this.getInfo();
       }
     }
   };

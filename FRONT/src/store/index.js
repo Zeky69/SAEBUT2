@@ -34,6 +34,12 @@ export default new Vuex.Store({
       state.fname = information.fname;
       state.lname = information.lname;
       state.group_id = information.group_id;
+    }, setDefaultValue(state){
+          state.user_id = null;
+          state.email = '';
+          state.fname = '';
+          state.lname = '';
+          state.group_id= 3;
     }
   },
   actions: {
@@ -59,8 +65,10 @@ export default new Vuex.Store({
         if(!response.error){
           commit('setUserInformation',response)
         }else{
+          console.log("Erreur lors de la récupération des informations à partir du token");
           commit('setToken', null);
           commit('setLoggedIn', false);
+          commit('setDefaultValue');
           localStorage.removeItem('token');
         }
       }catch (e){
@@ -70,6 +78,7 @@ export default new Vuex.Store({
     ,logout({ commit }) {
       commit('setToken', null);
       commit('setLoggedIn', false);
+      commit('setDefaultValue');
       localStorage.removeItem('token');
     },
   },

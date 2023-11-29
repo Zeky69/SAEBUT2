@@ -49,7 +49,6 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import {log} from "three/nodes";
 
 export default {
   name: "LoginView",
@@ -60,9 +59,15 @@ export default {
     login:"",
     password:"",
     isInvalidCredentials: false,
-  }),
+  }),mounted() {
+    if(this.group_id===1){
+      this.$router.replace('/admin');
+    }else if(this.group_id===2){
+      this.$router.replace('/prestataire');
+
+    }
+  },
   methods:{
-    log,
     ...mapActions(['loginUser']),
     async connect(){
       console.log(this.login)
