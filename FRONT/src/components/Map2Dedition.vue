@@ -102,6 +102,11 @@ export default {
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     center: [47.74915674062442-((47.74915674062442-47.74737489408103)/2.0) ,6.800086498260499-((6.800086498260499-6.804184913635255)/2.0)],
     cartebounds: [[47.74915674062442, 6.800086498260499],[47.74737489408103 , 6.804184913635255]],
+    //size 0,001781847, 0,004098415
+    //center 47.74826581735272, 6.802135705947877
+    //corner top left 47.74915674062442, 6.800086498260499
+    //corner bottom right 47.74737489408103 , 6.804184913635255
+
     markerLatLng: [51.504, -0.159],
     newPolygon:[],
     newfeature: {
@@ -140,6 +145,18 @@ export default {
     }
 ,
   methods: {
+    prettycoo(coo) {
+      const centerx = 47.74826581735272
+      const centery = 6.802135705947877
+
+      coo[0] = coo[0] - centerx
+      coo[1] = coo[1] - centery
+
+      coo[0] = coo[0] * 10000
+      coo[1] = coo[1] * 10000
+      return coo
+    },
+
     closePanel() {
       document.querySelector('.info-panel').classList.add('info-panel-close');
       this.featureSelected = null;
@@ -219,7 +236,17 @@ export default {
         this.newPolygon.push(this.newPolygon[0])
         this.newfeature.geometry = this.newPolygon
         this.features.push(this.newfeature)
-        const center = this.getLatLngMarker(this.newPolygon)
+        var center = this.getLatLngMarker(this.newPolygon)
+
+        center = this.prettycoo(center)
+        const n = this.newPolygon.length
+        var pretty = []
+        for (let i = 0; i < n; i++) {
+          //ne pas faire le dernier point
+          if (i === (n - 1))
+            break
+          pretty.push(this.prettycoo(this.newPolygon[i]))
+        }
 
         const dataemp= {
               name : this.newfeature.properties.name,
@@ -228,7 +255,7 @@ export default {
               posy : 10,
               posz : center[1],
               rota : 0,
-              matricepoints : this.newPolygon,
+              matricepoints : pretty,
         }
         console.log("before",dataemp)
         await createEmp(dataemp)
