@@ -12,13 +12,29 @@
         <input class="search-input" placeholder="Rechercher événement"  type="text" v-model="filtre.nom" id="nom" name="nom">
         <img class="loupe" :src="require('@/assets/icons/loupe.svg')"  alt="loupe de recherche">
       </div>
+        <div class="selector-container">
+        <bar-select
+          :options="types"
+          :default="'Toutes les catégories'"
+          class="select"
+          @input="updatetype"
+      />
+        </div>
     </div>
+<!--    <div class="selector-container">-->
+<!--      <button class="btn-selector"  @click="filtreOpen=!filtreOpen">{{filtre.type===''?"Toutes les catégories":filtre.type}}</button>-->
+<!--      <div class="option" v-show="filtreOpen">-->
+<!--        <button class="btn-option" @click="filtre.type = ''" >Toutes les catégorie</button>-->
 
-      <select class="type-selector" v-model="filtre.type" name="type" id="type">
-        <option value="" selected>Toutes les catégories</option>
-        <option v-for="(type, index) in types" :key="index" :value="type">{{ type }}</option>
+<!--        <button class="btn-option" v-for="(type, index) in types" :key="index" @click="filtre.type = type" >{{ type }}</button>-->
+<!--      </div>-->
+<!--    </div>-->
 
-      </select>
+
+<!--      <select class="type-selector" v-model="filtre.type" name="type" id="type">-->
+<!--        <option class="option" value="" selected>Toutes les catégories</option>-->
+<!--        <option class="option" v-for="(type, index) in types" :key="index" :value="type">{{ type }}</option>-->
+<!--      </select>-->
 
 
 
@@ -60,6 +76,7 @@ import {
   Icon
 } from 'leaflet';
 import InfoPanelUser from "@/components/infoPanelUser.vue";
+import barSelect from "@/components/barSelect.vue";
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
@@ -72,6 +89,7 @@ export default {
   name: 'Map2DUser',
   components: {
     InfoPanelUser,
+    barSelect,
     LImageOverlay,
     LMap ,
     LIcon,
@@ -112,6 +130,7 @@ export default {
     couleur: [],
     featureSelected: null,
     types: ["forrain" , "scene"],
+    filtreOpen: true,
     filtre: {
       type: '',
       nom:'',
@@ -120,6 +139,9 @@ export default {
 
   }),
   methods: {
+    updatetype(val){
+      this.filtre.type = val;
+    },
     getIconUrl(feature) {
       switch (feature.properties.typeTerrain) {
         case 'forrain':
@@ -130,7 +152,8 @@ export default {
           return 'https://image.flaticon.com/icons/png/512/25/25694.png';
       }
 
-    },
+    }
+  ,
   getColor(f){
       switch (f.properties.typeTerrain){
         case 'forrain':
@@ -227,8 +250,55 @@ export default {
 }
 
 
+option {
+  font-family: "DM Sans Regular" ,Syne, Helvetica , sans-serif ;
+  color: #000000;
+
+}
 
 
+.selector-container{
+  margin: 10px;
+   display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  width: 100%;
+
+}
+
+.btn-selector{
+
+  width: 80%;
+  height: 40px;
+  border: none;
+  color: white;
+  margin: 10px 10% 20px 10%;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.2);
+  text-align-last: center
+
+}
+
+.option{
+
+  position: absolute;
+  z-index: 405;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgba(60, 52, 72, 0.37);
+  backdrop-filter: blur(10px);
+  width: auto;
+  object-fit: cover;
+
+}
+
+.btn-option{
+  background-color: transparent;
+  border: none;
+  color: white;
+}
 
 
 
@@ -349,7 +419,10 @@ export default {
 
 .filtre-head{
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+
 
 }
 .search-input{

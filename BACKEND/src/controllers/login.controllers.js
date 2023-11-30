@@ -32,7 +32,7 @@ exports.getInformationWithToken = async (req,res) => {
     try{
         const information = await loginService.getInformationWithToken(token);
         if(!information){
-            return res.status(401).send("Problème avec la récupération depuis le token");
+            return res.status(401).send("Problème avec la récupération depuis le token (je fais un test)");
         }
         return res.status(200).json(information);
     } catch(error){
