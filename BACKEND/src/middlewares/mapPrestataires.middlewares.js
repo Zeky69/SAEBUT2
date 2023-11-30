@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const filePathEmp = path.join(__dirname, '..','datasource/emp.json');
 const filePathBat = path.join(__dirname, '..','datasource/bat.json');
+const pool = require("../database/db.js");
 
 
 
@@ -10,28 +11,52 @@ exports.validateempFilterInput = (req, res, next) => {
     next();
 }
 
+exports.validatebatFilterInputdebug = (req, res, next) => {
+    console.log("valide bat debug middle");
+    next();
 
-exports.validateAddempInput = (req, res, next) => {
-    const { objet, idModel, posx, posz, batid } = req.body;
+
+}
+
+exports.validateAddbatInputdebug = async (req, res, next) => {
+    console.log("valide add middle");
+    next();
+}
+exports.validateAddempInput = async (req, res, next) => {
+    const { name, emp_uuid , posx, posy, posz, prestataire } = req.body;
+
+    if (!name || !emp_uuid || !posx || !posy || !posz || !prestataire) {
+        return res.status(400).send("Un des champs est nul");
+    }
+    const client = await pool.connect();
 
     try {
-        const data = fs.readFileSync(filePathEmp, 'utf8');
-        const dataObj = JSON.parse(data);
 
-        const emps = dataObj
+        // Vérifier si l'emplacement existe
+        const emplacementExistsQuery = 'SELECT id_emplacement FROM emplacement WHERE id_emplacement = $1';
+        const emplacementExistsValues = [emp_uuid];
+        const emplacementExistsResult = await client.query(emplacementExistsQuery, emplacementExistsValues);
 
-        // Vérifier si un employé existe déjà aux mêmes coordonnées
-        const existingEmp = emps.find(emp => emp.posx === posx && emp.posz === posz);
-
-        if (existingEmp) {
-            return res.status(400).json({error: "l'emp existe deja"});
+        if (emplacementExistsResult.rows.length === 0) {
+            return res.status(400).send("L'emplacement spécifié n'existe pas");
         }
 
-    } catch (errorLecture) {
-            console.log(errorLecture);
+        // Vérifier s'il y a déjà un batiment associé à cet emplacement
+        const batimentExistsQuery = 'SELECT id_batiment FROM batiment WHERE id_emplacement = $1';
+        const batimentExistsValues = [emp_uuid];
+        const batimentExistsResult = await pool.query(batimentExistsQuery, batimentExistsValues);
+
+        if (batimentExistsResult.rows.length > 0) {
+            return res.status(400).send("Il y a déjà un batiment associé à cet emplacement");
+        }
+    } catch (error) {
+        console.error('Erreur lors de la validation de l\'ajout du batiment :', error);
+        return res.status(500).send("Erreur serveur");
+    }finally{
+        client.release();
     }
-    
     next();
+
 };
 
 
@@ -55,24 +80,13 @@ exports.validatebatFilterInput = (req, res, next) => {
 
 //bat =  {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1"}
 exports.validateAddbatInput = (req, res, next) => {
-    const { objet,idModel, posx, posy, posz, prestataire_id, status} = req.body;
+    const { name,emp_uuid, posx, posy, posz,rota, prestataire} = req.body;
 
-    if (!objet || !posx || !posy || !posz || !prestataire_id || !status) {
+    if (!name || !emp_uuid || !posx || !posy || !posz || !prestataire) {
         return res.status(400).send("Un des champs est nul");
     }
     try {
-        const data = fs.readFileSync(filePathBat, 'utf8');
-        const dataObj = JSON.parse(data);
 
-        // Vérifier si le fichier contient un tableau 'bat'
-        const bats = dataObj;
-
-        // Vérifier si l'emp existe déjà à l'emplacement spécifié
-        const existingBat = bats.find(bat => bat.posx === posx && bat.posz === posz);
-
-        if (existingBat) {
-            return res.status(400).json({error: "le batiment existe deja"});
-        }
     } catch (errorLecture) {
         console.log(errorLecture);
     }

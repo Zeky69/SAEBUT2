@@ -3,6 +3,7 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const filePathEmp = path.join(__dirname, '..','datasource/emp.json');
 const filePathBat = path.join(__dirname, '..','datasource/bat.json');
+const pool = require("../database/db.js")
 
 
 
@@ -18,7 +19,30 @@ const getManyEmp = (req) => {
         console.log(errorLecture);
     }
     return emps;
-}
+};
+
+const getBatdebug2 = async (req,res) => {
+    const client = await pool.connect();
+    let result = [];
+    try {
+        // Récupérer tous les batiments
+        const getAllBatimentQuery = 'SELECT * FROM batiment';
+        result = await pool.query(getAllBatimentQuery);
+        console.log("result",result.rows);
+
+        return result.rows
+
+
+    } catch (error) {
+        console.error('Erreur lors de la récupération des batiments :', error);
+
+    } finally {
+        client.release();
+
+    }
+
+};
+
 
 const getAllEmp = (req) => {
     let emps = [];
@@ -138,82 +162,121 @@ const updateEmpFree = (req, callback) => {
     }
 };
 
+const getBatdebug = async () => {
+    const client = await pool.connect();
+    let result = [];
+    try {
+        // Récupérer tous les batiments
+        const getAllBatimentQuery = 'SELECT * FROM batiment';
+        result = await pool.query(getAllBatimentQuery);
+        console.log("result", result.rows);
+    }
+    catch (error) {
+        console.error('Erreur lors de la récupération des batiments :', error);
+    }
+    finally {
+        client.release();
+        return result.rows;
+    }
 
-const getManybat = (req) => {
+};
+
+const getManybat = async (req) => {
     let filtre = req.query.name;
     let bats = [];
+    const client = await pool.connect();
     try {
-        const data = fs.readFileSync(filePathBat, 'utf8');
-        const dataStr = data.toString();
-        let temp = JSON.parse(dataStr);
-        bats = temp.filter(bat => bat.name.includes(filtre));
-    }
-    catch (errorLecture) {
-        console.log(errorLecture);
+
+        const getManyBatimentQuery = 'SELECT * FROM batiment WHERE name LIKE $1';
+        const getManyBatimentValues = ['%' + filtre + '%'];
+
+        bats = await pool.query(getManyBatimentQuery, getManyBatimentValues);
+        console.log("result", bats.rows);
 
     }
-    return bats;
+    catch (error) {
+        console.error('Erreur lors de la récupération des batiments :', error);
+    }
+    finally {
+        client.release();
+        return bats.rows;
+    }
 }
 
 
-const getAllbat = (req) => {
-    let bats = [];
+const getAllBat = async (req) => {
+    const client = await pool.connect();
+    let result = [];
     try {
-        const data = fs.readFileSync(filePathBat, 'utf8');
-        const dataStr = data.toString();
-        temp = JSON.parse(dataStr);
-        bats = temp;
-    } catch (errorLecture) {
-        console.log(errorLecture);
+        // Récupérer tous les batiments
+        const getAllBatimentQuery = 'SELECT * FROM batiment';
+        result = await pool.query(getAllBatimentQuery);
+        console.log("result", result.rows);
     }
-    return bats;
+    catch (error) {
+        console.error('Erreur lors de la récupération des batiments :', error);
+    }
+    finally {
+        client.release();
+        return result.rows;
+    }
+
 }
 
-const getOnebat = (req) => {
+const getOnebat = async (req) => {
     const { name, posx, posz } = req.query;
     let bats = [];
+    const client = await pool.connect();
     try {
-        const data = fs.readFileSync(filePathBat, 'utf8');
-        const dataStr = data.toString();
-        temp = JSON.parse(dataStr);
-        bats = temp.filter((bat) => bat.name.includes(name));
-        bats = temp.filter((bat) => bat.position.x==posx && bat.position.z==posz);
+
+            const getOneBatimentQuery = 'SELECT * FROM batiment WHERE name = $1 AND posx = $2 AND posz = $3';
+            const getOneBatimentValues = [name, posx, posz];
+
+            bats = await pool.query(getOneBatimentQuery, getOneBatimentValues);
+            console.log("result", bats.rows);
+
+
     }
-    catch (errorLecture) {
-        console.log(errorLecture);
+    catch (error) {
+        console.error('Erreur lors de la récupération des batiments :', error);
+
     }
-    return bats;
+    finally {
+        client.release();
+        return bats.rows;
+    }
 }
 
 
 
-const createbat = (req, callback) => {
-    const { objet, idModel, posx, posy, posz, prestataire_id, status } = req.body;
-    let bats;
+const createbat = async (req, callback) => {
 
+    console.log("createbat",req.body);
+    const { name,emp_uuid, posx, posy, posz, rota, prestataire } = req.body;
+    const client = await pool.connect();
+    console.log("connection")
     try {
-        // Lire le contenu actuel du fichier
-        const data = fs.readFileSync(filePathBat, 'utf8');
-        bats = JSON.parse(data);
-    } catch (errorLecture) {
-        console.log(errorLecture);
-        bats = [];
+        // Insérer le nouveau batiment dans la table batiment
+        const insertBatimentQuery = 'INSERT INTO batiment (id_batiment,description, name, id_emplacement, posx, posy, posz, rota, utilisateur) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9) RETURNING *';
+        const uuid_bat = uuidv4();
+        const insertBatimentValues = [uuid_bat ,"",name, emp_uuid, posx, posy, posz, rota, prestataire];
+        const result = await pool.query(insertBatimentQuery, insertBatimentValues);
+
+        // Récupérer le batiment inséré
+        const newBatiment = result.rows[0];
+
+        // Appeler le callback avec le nouveau batiment
+        callback(null, newBatiment);
+    } catch (error) {
+        console.error('Erreur lors de l\'ajout du batiment :', error);
+        // Appeler le callback avec l'erreur
+        callback(error, null);
+    }finally {
+        client.release();
     }
+};
 
-    // Créer le nouvel "bat"
-    const newbat = { objet: objet, idModel :idModel, posx: posx, posy: posy, posz: posz , prestataire_id: prestataire_id, status: status };
 
-    // Ajouter le nouvel "bat" au tableau existant
-    bats.push(newbat);
-
-    // Écrire le tableau 'bats' mis à jour dans le fichier
-    try {
-        fs.writeFileSync(filePathBat, JSON.stringify(bats));
-        callback(null, "success");
-    } catch (errorEcriture) {
-        callback(errorEcriture, null);
-    }
-}
 
 
 const deletebat = (req,callback) => {
@@ -239,13 +302,15 @@ const deletebat = (req,callback) => {
 
 
 module.exports = {
+    getBatdebug2,
+    getBatdebug,
     getManyEmp,
     getAllEmp,
     getoneEmp,
     createEmp,
     deleteEmp,
     updateEmpFree,
-    getAllbat,
+    getAllBat,
     getManybat,
     createbat,
     deletebat

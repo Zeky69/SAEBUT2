@@ -17,12 +17,16 @@ router.delete('/emp', mapPrestatairesMiddlewares.validateDelempInput , mapPresta
 
 router.patch('/emp', mapPrestatairesMiddlewares.validateUpdateempInput , mapPrestatairesControllers.updateEmp);
 
-router.get('/bat', mapPrestatairesMiddlewares.validatebatFilterInput,(req, res) => {
-    res.send(mapPrestatairesControllers.getBat(req,res));
-});
-router.post('/bat', mapPrestatairesMiddlewares.validateAddbatInput , mapPrestatairesControllers.savebat);
+router.get('/bat', mapPrestatairesMiddlewares.validatebatFilterInput, mapPrestatairesControllers.getBat);
+
+
+router.post('/bat', mapPrestatairesMiddlewares.validateAddbatInputdebug , mapPrestatairesControllers.savebat);
 
 router.delete('/bat', mapPrestatairesMiddlewares.validateDelbatInput , mapPrestatairesControllers.deletebat);
+
+//router.get('/bat/debug',mapPrestatairesMiddlewares.validatebatFilterInputdebug, (req,res) =>{res.send(mapPrestatairesControllers.getBatdebug(req,res))});
+
+router.get('/bat/debug',mapPrestatairesMiddlewares.validatebatFilterInputdebug, mapPrestatairesControllers.getBatdebug);
 
 
 

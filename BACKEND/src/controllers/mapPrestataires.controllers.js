@@ -1,5 +1,34 @@
 const mapPrestatairesService =  require('../services/mapPrestataire.service')
 
+// ...
+exports.getBatdebug2 = async (req,res) => {
+    console.log("debug before service");
+    return await mapPrestatairesService.getBatdebug(req,(error, data) => {
+        console.log("debug after service");
+        if (error) {
+            return res.status(500).send("Internal error");
+        }
+        return res.status(200).send("Showing all users");
+    });
+};
+
+exports.getBatdebug= async (req,res) => {
+    try {
+        let info = await mapPrestatairesService.getBatdebug2();
+        console.log("info",info);
+        if(info){
+            return res.status(200).send(info);
+        }else{
+            return res.status(401).send("no info");
+        }
+    }
+    catch (error) {
+        return res.status(500).send("Internal error");
+    }
+};
+
+// ...
+
 
 exports.getEmp = (req,res) => {
     let info = req.query;
@@ -19,8 +48,6 @@ exports.getEmp = (req,res) => {
             return res.status(200).send("Showing all users");
         })
     }
-
-
     return mapPrestatairesService.getAllEmp(req,(error,data)=>{
         if (error) {
             return res.status(500).send("Internal error");
@@ -57,30 +84,29 @@ exports.updateEmp = (req,res) => {
 }
 
 
-exports.getBat = (req,res) => {
+exports.getBat = async (req,res) => {
     let info = req.query;
-    if (info.name) {
-        if(info.posx && info.posz){
-            return mapPrestatairesService.getonebat(req,(error,data)=>{
-                if (error) {
-                    return res.status(500).send("Internal error");
+    let reponse = [];
+        if (info.name) {
+            if(info.posx && info.posz){
+                reponse = await mapPrestatairesService.getoneBat(req);
+                if (reponse) {
+                    return res.status(200).send(reponse);
                 }
-                return res.status(200).send("Showing all users");
-            })
-        }
-        return mapPrestatairesService.getManybat(req,(error,data)=>{
-            if (error) {
-                return res.status(500).send("Internal error");
+                return res.status(401).send("no info");
             }
-            return res.status(200).send("Showing all users");
-        })
-    }
-    return mapPrestatairesService.getAllbat(req,(error,data)=>{
-        if (error) {
-            return res.status(500).send("Internal error");
+            reponse = await mapPrestatairesService.getManybat(req);
+            if (reponse) {
+                return res.status(200).send(reponse);
+            }
+            return res.status(401).send("no info");
         }
-        return res.status(200).send("Showing all users");
-    })
+        reponse = await mapPrestatairesService.getAllBat(req);
+        if (reponse) {
+            return res.status(200).send(reponse);
+        }
+        return res.status(401).send("no info");
+
 };
 
 

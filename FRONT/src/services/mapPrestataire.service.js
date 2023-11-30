@@ -22,6 +22,14 @@ async function getOneEmpFromAPI(data) {
     console.log("one bat",data)
     return getRequest('/mapPrestataires/emp?name=' + data.name + '&posx=' + data.posx + '&posz' + data.posz, 'GETONEEMP')
 }
+async function getBatFromAPIdebug() {
+    return getRequest('/mapPrestataires/bat/debug', 'GETBATDEBUG')
+}
+
+async function getBatdebug() {
+    let answer = await getBatFromAPIdebug()
+    return answer
+}
 
 
 
@@ -158,6 +166,7 @@ async function deleteBat(data) {
 
 
 export {
+    getBatdebug,
     getAllEmp,
     getManyEmp,
     getOneEmp,

@@ -7,11 +7,13 @@ DROP TABLE if exists attraction CASCADE;
 DROP TABLE if exists scene CASCADE;
 DROP TABLE if exists disponibilite CASCADE;
 DROP TABLE if exists taggue CASCADE;
-DROP TABLE if exists emplacement CASCADE;
+
 DROP TABLE if exists prestataire CASCADE;
 DROP TABLE if exists client CASCADE;
 DROP TABLE if exists produit CASCADE;
 DROP TABLE if exists intervenant CASCADE;
+DROP TABLE if exists batiment CASCADE;
+DROP TABLE if exists emplacement CASCADE;
 DROP TABLE if exists type CASCADE;
 DROP TABLE if exists crenaux CASCADE;
 DROP TABLE if exists tags CASCADE;
@@ -112,20 +114,44 @@ CREATE TABLE prestataire(
    id_prestataire VARCHAR(50),
    description VARCHAR(255),
    nom VARCHAR(50),
-   id_type VARCHAR(50) NOT NULL,
    id_user varchar(50) NOT NULL,
    PRIMARY KEY(id_prestataire),
-   FOREIGN KEY(id_type) REFERENCES type(id_type),
    FOREIGN KEY(id_user) REFERENCES UTILISATEURS(User_Id)
 );
 
+
+
 CREATE TABLE emplacement(
-   id_emplacement VARCHAR(50),
-   libelle VARCHAR(50),
-   id_type VARCHAR(50) NOT NULL,
-   PRIMARY KEY(id_emplacement),
-   FOREIGN KEY(id_type) REFERENCES type(id_type)
+    id_emplacement VARCHAR(50),
+    nom VARCHAR(50),
+    description VARCHAR(255),
+    posx DECIMAL(24,17),
+    posy DECIMAL(24,17),
+    posz DECIMAL(24,17),
+    rotationx INT,
+    matricePoints JSON,
+    PRIMARY KEY(id_emplacement)
 );
+
+
+CREATE TABLE batiment(
+     id_batiment VARCHAR(50),
+     description VARCHAR(255),
+     nom VARCHAR(50),
+     name VARCHAR(50),
+     status VARCHAR(50),
+     posx DECIMAL(24,17),
+     posy DECIMAL(24,17),
+     posz DECIMAL(24,17),
+     rota INTEGER,
+     utilisateur VARCHAR(50),
+     PRIMARY KEY(id_batiment),
+     id_emplacement VARCHAR(50) NOT NULL UNIQUE,
+     FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement)
+);
+
+
+
 
 CREATE TABLE reservation(
    id_reservation VARCHAR(50),

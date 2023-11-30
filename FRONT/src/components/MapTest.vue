@@ -11,7 +11,14 @@
           <option value="0" disabled selected>Sélectionnez un bâtiment</option>
           <option v-for="batimentsolo in batiment" :key="batimentsolo.id" :value="batimentsolo.id">{{ batimentsolo.name }}</option>
         </select>
+        <br>
+        <label for="rotationInput">Rotation du bâtiment :</label>
+        <br>
+        <input type="range" id="rotationInput" v-model="rotation" min="0" max="360" step="1"/>
+        <span>{{ this.rotation }}°</span>
+        <br>
         <button id="btn1" @click="refreshcalmyfuncpls(1)" class="custom-btn" :disabled="idbatafficher == -1" :class="{ 'disabled-btn': idbatafficher == -1 }">Place Batiment</button>
+
       </div>
       <div class="remove" id="remove">
         <button id="btn1" @click="refreshcalmyfuncpls(2)" class="custom-btn">remove Batiment</button>
@@ -27,7 +34,7 @@
 import * as THREE from 'three';
 
 //importer service/mapPrestataires.js
-import {createEmp,getAllEmp,getOneEmp,getOneBat, updateEmpFree, createBat, getAllBat} from '../services/mapPrestataire.service.js';
+import {createEmp,getBatdebug, getAllEmp,getOneEmp,getOneBat, updateEmpFree, createBat, getAllBat} from '../services/mapPrestataire.service.js';
 
 /*   getAllEmp,
 getOneEmp
@@ -67,6 +74,9 @@ export default {
     batiment_bdd: [],
     nonselectionables: null,
     selectionables: null,
+    previewgroupe: null,
+    previewbatiewbatiment: null,
+    rotation: null,
     light: null,
     ambientLight: null,
     idbatafficher: -1,
@@ -95,7 +105,11 @@ export default {
 
       // Appeler la fonction batvitrine avec la nouvelle valeur
       this.batvitrine();
+      this.previewbat();
 
+    },
+    rotation(){
+      this.previewbatiewbatiment.rotation.z = this.rotation * Math.PI / 180;
     }
   },
   methods: {
@@ -128,6 +142,33 @@ export default {
 
       // Aucun objet trouvé avec le nom donné dans cette branche
       return null;
+    },
+
+    async previewbat() {
+      console.log("previewbat")
+      if (this.idbatafficher !== -1) {
+        // Retirez tous les enfants de la vitrine
+        while (this.previewgroupe.children.length > 0) {
+          this.previewgroupe.remove(this.previewgroupe.children[0]);
+        }
+
+        // Ajoutez le nouvel objet à la vitrine
+        console.log("batiment", this.batiment)
+        console.log("bat a afficher", this.batiment[this.idbatafficher].name)
+        var objet_model = await this.findObjectByName(this.loaded, this.batiment[this.idbatafficher].name)
+        console.log("objet_model", objet_model)
+        var objet = objet_model.clone();
+        objet.position.set(0, objet.position.y, 0);
+        objet.name = this.batiment[this.idbatafficher].name;
+        this.previewbatiewbatiment = objet;
+        //mettre en gris
+        this.previewbatiewbatiment.material.color.setHex(0x7e7e7e);
+        this.previewgroupe.add(objet);
+        this.rotation;
+        this.previewbatiewbatiment.position.x = this.selectab[0]["obj"].position.x;
+        this.previewbatiewbatiment.position.z = this.selectab[0]["obj"].position.z;
+        console.log("previewgroupe", this.previewgroupe)
+      }
     },
 
 
@@ -194,7 +235,7 @@ export default {
         this.controls3.update();
         this.scene2.add(this.vitrine);
         this.camera2.rotation.x = -0.5;
-        this.camera2.position.set(2.5, 5, 4.5);
+        this.camera2.position.set(25, 50, 45);
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.set(0, 1, 0);
         this.scene2.add(directionalLight);
@@ -374,6 +415,16 @@ export default {
       }
     },
 
+    async clearpreviewbat() {
+      console.log("clearpreviewbat")
+      if (this.idbatafficher !== -1) {
+        // Retirez tous les enfants de la vitrine
+        while (this.previewgroupe.children.length > 0) {
+          this.previewgroupe.remove(this.previewgroupe.children[0]);
+        }
+      }
+    },
+
     async refreshcalmyfuncpls(mode) {
       console.log("refresh")
       if (this.selectab.length == 1 && this.idbatafficher >= 0 && this.idbatafficher <= this.batiment.length) {
@@ -438,14 +489,15 @@ export default {
           var y = batimentadd.position.y;
 
           var databat = {
-            objet: battobdd,
-            idModel: this.batiment[this.idbatafficher].id,
+            name: batimentadd.name,
+            emp_uuid: this.selectab[0]["obj"].name,
             posx: posx,
             posy: y,
             posz: posz,
             prestataire_id: this.prestataire,
-            status: "waiting"
           }
+
+          this.clearpreviewbat();
 
           batimentadd.position.set(posx, y, posz);
           //to do rota
@@ -722,8 +774,8 @@ export default {
         }
       }
 
-      this.camera.rotation.x = -0.5;
-      this.camera.position.set(6, 10, 8);
+      this.camera.rotation.x = -0.7;
+      this.camera.position.set(120, 100, 160);
 
       console.log("selectionables", this.selectionables)
       console.log("nonselectionables", this.nonselectionables)
@@ -734,6 +786,8 @@ export default {
 
     loadfinal() {
       return new Promise((resolve, reject) => {
+
+
 
       const loader = new GLTFLoader();
       loader.load('map/mapData/map_belfo.glb', async (gltf) => {
@@ -769,10 +823,10 @@ export default {
               texturebat = null;
             }
             if(this.children[i].name == "bat_rest"){
-              texturebat = new THREE.TextureLoader().load('map/mapData/tex/bat_rest.png');
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/bat_res_rest.png');
             }
             if(this.children[i].name == "bat_resto2"){
-              texturebat = new THREE.TextureLoader().load('map/mapData/tex/bato_resto2.png');
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/bato_res_resto2.png');
             }
             if(this.children[i].name == "bat_roue"){
               texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_roue.png');
@@ -781,7 +835,7 @@ export default {
               texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_arcade.png');
             }
             if(this.children[i].name == "bat_foodtruck"){
-              texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_foodtruck.png');
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_res_foodtruck.png');
             }
             if(this.children[i].name == "bat_attrfutur"){
               texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_attrfutur.png');
@@ -817,6 +871,7 @@ export default {
               } catch (e) {
                 console.log("pas d'image")
               }
+              console.log("emp check mat", objetdata)
               var data = {objet: objetdata ,idModel: this.children[i].id,posx: this.children[i].position.x , posy: this.children[i].position.y, posz: this.children[i].position.z}
               createEmp(data)
 
@@ -907,12 +962,15 @@ export default {
 
     async start(){
         this.showLoadingScreen();
+        const test = await getBatdebug();
+        console.log("test", test)
         await this.loadfinal();
 
         await this.setup();
         console.log("aftersetup", this.selectionables)
         this.scene.add(this.selectionables);
         this.scene.add(this.nonselectionables);
+        this.scene.add(this.previewgroupe);
         this.scene.add(this.groupe_sol);
         this.scene.add(this.light);
         this.scene.add(this.ambientLight);
@@ -964,11 +1022,12 @@ export default {
 
     this.scene = new THREE.Scene();
     //90% de la largueur de l'ecran
+    const scene1Container = this.$refs.scene1Container;
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.shadowMap.enabled = true;
-    const scene1Container = this.$refs.scene1Container;
+
     this.renderer.setSize(window.innerWidth, scene1Container.offsetHeight);
     scene1Container.appendChild(this.renderer.domElement);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -1017,6 +1076,7 @@ export default {
 
     this.selectionables = new THREE.Group();
     this.nonselectionables = new THREE.Group();
+    this.previewgroupe = new THREE.Group();
     this.raycaster = new THREE.Raycaster();
 
     this.empGroupe = new THREE.Group();

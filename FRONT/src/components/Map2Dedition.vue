@@ -176,6 +176,7 @@ export default {
         this.newPolygon.push(this.newPolygon[0])
         this.newfeature.geometry = this.newPolygon
         this.features.push(this.newfeature)
+        
         console.log(JSON.stringify(this.features))
       }
       this.switchEditor()
