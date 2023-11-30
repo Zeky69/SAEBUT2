@@ -7,9 +7,7 @@ var router = express.Router();
 
 
 //repuperer tout les emplacements
-router.get('/emp', mapPrestatairesMiddlewares.validateempFilterInput,(req, res) => {
-    res.send(mapPrestatairesControllers.getEmp(req,res));
-});
+router.get('/emp', mapPrestatairesMiddlewares.validateempFilterInput,mapPrestatairesControllers.getEmp);
 
 router.post('/emp', mapPrestatairesMiddlewares.validateAddempInput , mapPrestatairesControllers.saveEmp);
 

@@ -7,18 +7,24 @@ const pool = require("../database/db.js")
 
 
 
-const getManyEmp = (req) => {
+const getManyEmp = async (req) => {
+    const client = await pool.connect();
     let filtre = req.query.name;
     let emps = [];
     try {
-        const data = fs.readFileSync(filePathEmp, 'utf8');
-        const dataStr = data.toString();
-        let temp = JSON.parse(dataStr);
-        emps = temp.filter(emp => emp.objet.object.userData.name.includes(filtre));
-    } catch (errorLecture) {
-        console.log(errorLecture);
+        // Récupérer tous les batiments
+        const getAllEmpQuery = 'SELECT * FROM emplacement WHERE nom LIKE $1';
+        const getAllEmpValues = ['%' + filtre + '%'];
+        emps = await pool.query(getAllEmpQuery, getAllEmpValues);
+        console.log("result", emps.rows);
+
+    } catch (error) {
+        console.error('Erreur lors de la récupération des emplacements :', error);
+    } finally {
+        client.release();
+        return emps.rows;
     }
-    return emps;
+
 };
 
 const getBatdebug2 = async (req,res) => {
@@ -44,34 +50,43 @@ const getBatdebug2 = async (req,res) => {
 };
 
 
-const getAllEmp = (req) => {
+const getAllEmp = async (req) => {
+    const client = await pool.connect();
     let emps = [];
     try {
-        const data = fs.readFileSync(filePathEmp, 'utf8');
-        const dataStr = data.toString();
-        temp = JSON.parse(dataStr);
-        emps = temp;
-    } catch (errorLecture) {
-        console.log(errorLecture);
+        // Récupérer tous les batiments
+        const getAllEmpQuery = 'SELECT * FROM emplacement';
+        emps = await pool.query(getAllEmpQuery);
+        console.log("result", emps.rows);
+
+    } catch (error) {
+        console.error('Erreur lors de la récupération des emplacements :', error);
+    } finally {
+        client.release();
+        return emps.rows;
     }
-    return emps;
 }
 
-const getoneEmp = (req) => {
+const getoneEmp = async (req) => {
+    const client = await pool.connect();
     let name = req.query.name;
     let posx = req.query.posx;
     let posz = req.query.posz;
     let emps = [];
     try {
-        const data = fs.readFileSync(filePathEmp, 'utf8');
-        const dataStr = data.toString();
-        temp = JSON.parse(dataStr);
-        emps = temp.filter((emp) => emp.objet.object.userData.name==name);
-        emps = temp.filter((emp) => emp.posx == posx && emp.posz == posz);
-    } catch (errorLecture) {
-        console.log(errorLecture);
+        // Récupérer tous les batiments
+        const getOneEmpQuery = 'SELECT * FROM emplacement WHERE nom = $1 AND posx = $2 AND posz = $3';
+        const getOneEmpValues = [name, posx, posz];
+        emps = await pool.query(getOneEmpQuery, getOneEmpValues);
+        console.log("result", emps.rows);
+
+    } catch (error) {
+        console.error('Erreur lors de la récupération des emplacements :', error);
     }
-    return emps;
+    finally {
+        client.release();
+        return emps.rows;
+    }
 }
 
 

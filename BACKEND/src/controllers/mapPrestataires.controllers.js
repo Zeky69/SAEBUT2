@@ -30,30 +30,27 @@ exports.getBatdebug= async (req,res) => {
 // ...
 
 
-exports.getEmp = (req,res) => {
+exports.getEmp =  async (req,res) => {
     let info = req.query;
     if (info.name) {
-        if(info.posx && info.posz){
-            return mapPrestatairesService.getoneEmp(req,(error,data)=>{
-                if (error) {
-                    return res.status(500).send("Internal error");
-                }
-                return res.status(200).send("Showing all users");
-            })
-        }
-        return mapPrestatairesService.getManyEmp(req,(error,data)=>{
-            if (error) {
-                return res.status(500).send("Internal error");
+        if (info.posx && info.posz) {
+            reponse = await mapPrestatairesService.getoneEmp(req);
+            if (reponse) {
+                return res.status(200).send(reponse);
             }
-            return res.status(200).send("Showing all users");
-        })
-    }
-    return mapPrestatairesService.getAllEmp(req,(error,data)=>{
-        if (error) {
-            return res.status(500).send("Internal error");
+            return res.status(401).send("no info");
         }
-        return res.status(200).send("Showing all users");
-    })
+        reponse = await mapPrestatairesService.getManyEmp(req);
+        if (reponse) {
+            return res.status(200).send(reponse);
+        }
+        return res.status(401).send("no info");
+    }
+    reponse = await mapPrestatairesService.getAllEmp(req);
+    if (reponse) {
+        return res.status(200).send(reponse);
+    }
+    return res.status(401).send("no info");
 }
 
 exports.saveEmp = (req, res) => {
