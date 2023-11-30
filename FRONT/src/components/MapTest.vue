@@ -90,7 +90,8 @@ export default {
     groupe_sol: null,
     ambientLightscene2: null,
     scene2Container: null,
-    prestataire: "calixte"
+    prestataire: "calixte",
+    testshape: [],
 
 
     //style save batiment_bdd[0] = {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1", status: "en cours"}
@@ -718,32 +719,23 @@ export default {
 
       this.emplacement_bdd = await getAllEmp();
       console.log("emplacement_bdd", this.emplacement_bdd)
-      for(let i = 0; i < this.emplacement_bdd.length; i++){
-        for(let j= 0;j < this.emp.length; j++){
-          if(this.emplacement_bdd[i].objet.object.name == this.emp[j]){
-            var emp_found = await this.findObjectByName(this.loaded, this.emp[j])
-            var emp_clone = emp_found.clone();
-            emp_clone.position.set(this.emplacement_bdd[i].posx, this.emplacement_bdd[i].posy, this.emplacement_bdd[i].posz);
-            emp_clone.material = material_emp.clone()
-            emp_clone.material.metalness = 0;
-            emp_clone.castShadow = true;
-            emp_clone.receiveShadow = true;
-            console.log("emp_clone", emp_clone)
-            if(this.emplacement_bdd[i].batid != null){
-              this.nonselectionables.add(emp_clone);
-              emp_clone.material.color.setHex(0x808080);
-            }
-            else{
-              this.selectionables.add(emp_clone);
-            }
+      for (let i = 0; i < this.emplacement_bdd.length; i++) {
+          console.log("emplacement", this.emplacement_bdd[i])
+          var matricepoints = this.emplacement_bdd[i].matricepoints.matricepoints
+          console.log("mat", matricepoints)
+
+        //pour chaque point mettre les coordonné de 2D a 3D
+          for(let j = 0 ; j < matricepoints.length ; j++){
+            let newPoint = this.point2Dto3D(matricepoints[i][0],matricepoints[i][1] )
+            console.log("newpoint", j, " :  ", newPoint)
           }
-          }
-        }
+      }
 
       this.batiment_bdd = await getAllBat();
       for (let i = 0; i< this.batiment_bdd.length; i++) {
         for (let j = 0; j < this.batiment.length; j++) {
-          if (this.batiment_bdd[i].objet.object.name == this.batiment[j].name) {
+          if (this.batiment_bdd[i].name == this.batiment[j].name) {
+
             var batiment_found = await this.findObjectByName(this.loaded, this.batiment[j].name)
             var batiment_clone = batiment_found.clone();
             batiment_clone.position.set(this.batiment_bdd[i].posx, this.batiment_bdd[i].posy, this.batiment_bdd[i].posz);
@@ -795,7 +787,6 @@ export default {
         const loadedGltf = gltf.scene;
         this.loaded = loadedGltf
 
-        console.log("loaded", this.loaded)
 
 
         this.findchild(loadedGltf, this.children);
@@ -820,6 +811,8 @@ export default {
               this.children[i].material.metalness = 0;
               this.children[i].receiveShadow = true;
               this.selectionables.add(this.children[i]);
+              console.log("conf", this.children[i])
+              console.log("position of conf", this.children[i].position.x, " :  y : ",this.children[i].position.y , "  :  z  :", this.children[i].position.z)
               texturebat = null;
             }
             if(this.children[i].name == "bat_rest"){
@@ -863,7 +856,6 @@ export default {
 
           } else {
             if (this.children[i].name.slice(0, 3) == "emp") {
-              console.log("emp", this.children[i].name)
               this.emp.push(this.children[i].name)
               var objetdata = this.children[i].toJSON()
               try{
@@ -871,9 +863,8 @@ export default {
               } catch (e) {
                 console.log("pas d'image")
               }
-              console.log("emp check mat", objetdata)
               var data = {objet: objetdata ,idModel: this.children[i].id,posx: this.children[i].position.x , posy: this.children[i].position.y, posz: this.children[i].position.z}
-              createEmp(data)
+              //createEmp(data)
 
 
             } else {
@@ -884,6 +875,7 @@ export default {
                   this.children[i].material = mat_sol;
                   this.children[i].material.metalness = 0;
                   this.children[i].receiveShadow = true;
+                  console.log("sol",this.children[i])
                   this.groupe_sol.add(this.children[i]);
                 }
                 else{
@@ -901,7 +893,6 @@ export default {
               }
               else {
                 if (this.children[i].name.slice(0, 3) == "dec") {
-                  console.log("deco", this.children[i].name)
                 if(this.children[i].name.includes("tree")){
                   const texturetree = new THREE.TextureLoader().load('map/mapData/tex/tex_tree.png');
                   const mattree = new THREE.MeshPhongMaterial({map: texturetree});
@@ -938,7 +929,6 @@ export default {
                   this.children[i].material = mattree;
                   this.children[i].material.metalness = 0;
                   this.children[i].receiveShadow = true;
-                  console.log("lamp", this.children[i])
                 }
                 this.groupe_sol.add(this.children[i]);
 
@@ -958,14 +948,67 @@ export default {
 
     },
 
+    point2Dto3D(x, z ) {
+    // Bounding box de la map 3D
+    const boundingBox = {
+      min: { x: -0.9983415603637695, y: -1, z: -1.0045995712280273 },
+      max: { x: 1.0016584396362305, y: 1, z: 0.9954003691673279 }
+    };
+
+    // Échelle
+    const scale = { x: 145.51963806152344, y: 1.8496733903884888, z: 151.32655334472656 };
+
+    // Conversion de la bounding box et de l'échelle
+    const adjustedBoundingBox = {
+      min: {
+        x: boundingBox.min.x * scale.x,
+        y: boundingBox.min.y * scale.y,
+        z: boundingBox.min.z * scale.z
+      },
+      max: {
+        x: boundingBox.max.x * scale.x,
+        y: boundingBox.max.y * scale.y,
+        z: boundingBox.max.z * scale.z
+      }
+    };
+    console.log("kjsdkljqskldjklqsjdklqskljd", adjustedBoundingBox)
+
+    // Application de la transformation aux coordonnées 2D
+    const point3D = {
+      x: x * (adjustedBoundingBox.max.x - adjustedBoundingBox.min.x) + adjustedBoundingBox.min.x,
+      y: 10,
+      z: z * (adjustedBoundingBox.max.z - adjustedBoundingBox.min.z) + adjustedBoundingBox.min.z
+    };
+
+    return point3D;
+  },
+
+    async matriceTo3DEmp(matricepoints){
+      const points = matricepoints.map(([x, y]) => new THREE.Vector2(x, y));
+      // Épaisseur de l'objet
+      const depth = 2;
+      const shape = new THREE.Shape(points);
+      const geome = new THREE.ExtrudeGeometry(shape, { depth: depth, bevelEnabled: false });
+
+      const texture_emp = new THREE.TextureLoader().load('map/mapData/tex/tex_emp.png');
+      const material_emp = new THREE.MeshPhongMaterial({map: texture_emp});
+      const mesh = new THREE.Mesh(geome, material_emp);
+      mesh.rotation.x = -Math.PI / 2;
+      mesh.position.y = mesh.position.y + 3;
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      mesh.name = "emptet";
+      return mesh;
+    },
+
 
 
     async start(){
+        this.testshape = [[-119.60863494873047-25,101.35678100585938-25], [-119.60863494873047-25, 101.35678100585938+25], [-119.60863494873047+25,101.35678100585938+25 ], [-119.60863494873047+25, 101.35678100585938-25]]
         this.showLoadingScreen();
-        const test = await getBatdebug();
-        console.log("test", test)
         await this.loadfinal();
-
+        const test = await this.matriceTo3DEmp(this.testshape);
+        this.selectionables.add(test);
         await this.setup();
         console.log("aftersetup", this.selectionables)
         this.scene.add(this.selectionables);
