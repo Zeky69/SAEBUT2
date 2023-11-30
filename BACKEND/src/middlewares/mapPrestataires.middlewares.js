@@ -22,38 +22,12 @@ exports.validateAddbatInputdebug = async (req, res, next) => {
     console.log("valide add middle");
     next();
 }
+
 exports.validateAddempInput = async (req, res, next) => {
-    const { name, emp_uuid , posx, posy, posz, prestataire } = req.body;
-
-    if (!name || !emp_uuid || !posx || !posy || !posz || !prestataire) {
+    const { name, description , posx, posy, posz, rota, matricepoints } = req.body;
+    console.log("valide add emp",req.body);
+    if (!name || !description || !posx || !posy || !posz || rota === undefined || !matricepoints) {
         return res.status(400).send("Un des champs est nul");
-    }
-    const client = await pool.connect();
-
-    try {
-
-        // Vérifier si l'emplacement existe
-        const emplacementExistsQuery = 'SELECT id_emplacement FROM emplacement WHERE id_emplacement = $1';
-        const emplacementExistsValues = [emp_uuid];
-        const emplacementExistsResult = await client.query(emplacementExistsQuery, emplacementExistsValues);
-
-        if (emplacementExistsResult.rows.length === 0) {
-            return res.status(400).send("L'emplacement spécifié n'existe pas");
-        }
-
-        // Vérifier s'il y a déjà un batiment associé à cet emplacement
-        const batimentExistsQuery = 'SELECT id_batiment FROM batiment WHERE id_emplacement = $1';
-        const batimentExistsValues = [emp_uuid];
-        const batimentExistsResult = await pool.query(batimentExistsQuery, batimentExistsValues);
-
-        if (batimentExistsResult.rows.length > 0) {
-            return res.status(400).send("Il y a déjà un batiment associé à cet emplacement");
-        }
-    } catch (error) {
-        console.error('Erreur lors de la validation de l\'ajout du batiment :', error);
-        return res.status(500).send("Erreur serveur");
-    }finally{
-        client.release();
     }
     next();
 

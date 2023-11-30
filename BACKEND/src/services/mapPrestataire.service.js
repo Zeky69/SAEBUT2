@@ -74,40 +74,62 @@ const getoneEmp = (req) => {
     return emps;
 }
 
-const createEmp = (req, callback) => {
-    const { objet , idModel , posx ,posy ,posz , batid } = req.body;
-    console.log(req.body.objet.object.name);
-    let emps;
 
+
+const createbat = async (req, callback) => {
+
+    console.log("createbat",req.body);
+    const { name,emp_uuid, posx, posy, posz, rota, prestataire } = req.body;
+    const client = await pool.connect();
+    console.log("connection")
     try {
-        // Lire le contenu actuel du fichier
-        const data = fs.readFileSync(filePathEmp, 'utf8');
-        emps = JSON.parse(data);
-    } catch (errorLecture) {
-        console.log(errorLecture);
-        emps = [];
-    }
-    // Créer le nouvel "emp"
-    var newEmp = 0;
-    if(batid != null){
-        newEmp = { objet: objet , idModel: idModel , posx: posx, posy: posy,posz: posz , batid: batid };
-    }
-    else{
-        newEmp = { objet: objet , idModel: idModel , posx: posx, posy: posy ,posz: posz , batid: null };
-    }
-    
+        // Insérer le nouveau batiment dans la table batiment
+        const insertBatimentQuery = 'INSERT INTO batiment (id_batiment,description, name, id_emplacement, posx, posy, posz, rota, utilisateur) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9) RETURNING *';
+        const uuid_bat = uuidv4();
+        const insertBatimentValues = [uuid_bat ,"",name, emp_uuid, posx, posy, posz, rota, prestataire];
+        const result = await pool.query(insertBatimentQuery, insertBatimentValues);
 
-    // Ajouter le nouvel "emp" au tableau existant
-    emps.push(newEmp);
+        // Récupérer le batiment inséré
+        const newBatiment = result.rows[0];
 
-    // Écrire le tableau 'emps' mis à jour dans le fichier
+        // Appeler le callback avec le nouveau batiment
+        callback(null, newBatiment);
+    } catch (error) {
+        console.error('Erreur lors de l\'ajout du batiment :', error);
+        // Appeler le callback avec l'erreur
+        callback(error, null);
+    }finally {
+        client.release();
+    }
+};
+
+
+const createEmp = async (req, callback) => {
+    const { name, description , posx, posy, posz, rota, matricepoints } = req.body;
+    const client = await pool.connect();
+    console.log("connection")
     try {
-        fs.writeFileSync(filePathEmp, JSON.stringify(emps));
-        callback(null, "success");
-    }
-    catch (errorEcriture) {
-        callback(errorEcriture, null);
+        const uuid_emp = uuidv4();
+        // Insérer le nouveau batiment dans la table batiment
+        const insertEmpQuery = 'INSERT INTO emplacement (id_emplacement, description ,nom , posx, posy, posz, rotationx, matricepoints) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *';
 
+        console.log("uuid",uuid_emp)
+        const insertEmpValues = [uuid_emp ,description,name, posx, posy, posz, rota, {matricepoints}];
+        const result = await pool.query(insertEmpQuery, insertEmpValues);
+
+        // Récupérer le batiment inséré
+        const newEmp = result.rows[0];
+
+        // Appeler le callback avec le nouveau batiment
+        callback(null, newEmp);
+    }
+    catch (error) {
+        console.error('Erreur lors de l\'ajout du batiment :', error);
+        // Appeler le callback avec l'erreur
+        callback(error, null);
+    }
+    finally {
+        client.release();
     }
 
 };
@@ -248,33 +270,6 @@ const getOnebat = async (req) => {
 }
 
 
-
-const createbat = async (req, callback) => {
-
-    console.log("createbat",req.body);
-    const { name,emp_uuid, posx, posy, posz, rota, prestataire } = req.body;
-    const client = await pool.connect();
-    console.log("connection")
-    try {
-        // Insérer le nouveau batiment dans la table batiment
-        const insertBatimentQuery = 'INSERT INTO batiment (id_batiment,description, name, id_emplacement, posx, posy, posz, rota, utilisateur) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9) RETURNING *';
-        const uuid_bat = uuidv4();
-        const insertBatimentValues = [uuid_bat ,"",name, emp_uuid, posx, posy, posz, rota, prestataire];
-        const result = await pool.query(insertBatimentQuery, insertBatimentValues);
-
-        // Récupérer le batiment inséré
-        const newBatiment = result.rows[0];
-
-        // Appeler le callback avec le nouveau batiment
-        callback(null, newBatiment);
-    } catch (error) {
-        console.error('Erreur lors de l\'ajout du batiment :', error);
-        // Appeler le callback avec l'erreur
-        callback(error, null);
-    }finally {
-        client.release();
-    }
-};
 
 
 

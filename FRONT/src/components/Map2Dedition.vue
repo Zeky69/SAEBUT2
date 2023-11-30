@@ -86,6 +86,7 @@
 import {LImageOverlay, LMap, LMarker, LPolygon, LTileLayer} from "vue2-leaflet";
 import 'leaflet/dist/leaflet.css';
 import InfoPanelEdition from "@/components/infoPanelEdition.vue";
+import { createEmp } from '../services/mapPrestataire.service.js';
 
 export default {
   name: 'Map2D-edition',
@@ -171,12 +172,66 @@ export default {
         }
       }
     },
-    addPolygon() {
+    getLatLngMarker(coordinates){
+      // let area = 0;
+      // let x = 0;
+      // let y = 0;
+      // let prev = coordinates[coordinates.length - 1];
+      //
+      // coordinates.forEach(coord => {
+      //   const cur = coord;
+      //   const f = (prev[0] * cur[1]) - (cur[0] * prev[1]);
+      //   x += (prev[0] + cur[0]) * f;
+      //   y += (prev[1] + cur[1]) * f;
+      //   area += f;
+      //   prev = cur;
+      // });
+      //
+      // area /= 2;
+      // x /= (area * 6);
+      // y /= (area * 6);
+      // return [x, y]; // Les coordonnées sont dans l'ordre [lat, lng]
+
+
+      if (coordinates.length === 0) {
+        return null;
+      }
+
+      // Initialise les sommes des coordonnées en x et en y
+      let sumX = 0;
+      let sumY = 0;
+
+      // Parcours de toutes les coordonnées dans la liste
+      for (let i = 0; i < coordinates.length; i++) {
+        sumX += coordinates[i][0];
+        sumY += coordinates[i][1];
+      }
+
+      // Calcule la moyenne des coordonnées en x et en y
+      const centerX = sumX / coordinates.length;
+      const centerY = sumY / coordinates.length;
+
+      return [centerX, centerY];
+
+    },
+    async addPolygon() {
       if (this.newPolygon.length > 2) {
         this.newPolygon.push(this.newPolygon[0])
         this.newfeature.geometry = this.newPolygon
         this.features.push(this.newfeature)
-        
+        const center = this.getLatLngMarker(this.newPolygon)
+
+        const dataemp= {
+              name : this.newfeature.properties.name,
+              description : this.newfeature.properties.description,
+              posx : center[0],
+              posy : 10,
+              posz : center[1],
+              rota : 0,
+              matricepoints : this.newPolygon,
+        }
+        console.log("before",dataemp)
+        await createEmp(dataemp)
         console.log(JSON.stringify(this.features))
       }
       this.switchEditor()
