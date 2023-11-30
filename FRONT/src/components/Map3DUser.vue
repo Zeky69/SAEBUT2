@@ -124,13 +124,22 @@ export default {
                 texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_attrfutur.png');
               }
               if(this.children[i].name.includes("wc")){
+                console.log("wc", this.children[i])
                 texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_wc.png');
                 const mat_bat = new THREE.MeshPhongMaterial({map: texturebat});
-                //flipY
-                mat_bat.map.flipY = true;
+
+                mat_bat.position = this.children[i].position;
+                mat_bat.rotation = this.children[i].rotation;
+                mat_bat.scale = this.children[i].scale;
                 this.children[i].material = mat_bat;
-                this.children[i].material.metalness = 0;
+                //flipY
+
+                this.children[i].material = mat_bat;
                 this.children[i].receiveShadow = true;
+                this.children[i].material.metalness = 0;
+                this.children[i].material.transparent = true;
+                this.children[i].castShadow = true;
+
                 this.nonselectionables.add(this.children[i]);
                 texturebat = null;
               }
@@ -171,7 +180,8 @@ export default {
                 else {
                   if (this.children[i].name.slice(0, 3) == "dec") {
                     if(this.children[i].name.includes("tree")){
-                      const texturetree = new THREE.TextureLoader().load('map/mapData/tex/tex_tree.png');
+                      var texturetree = new THREE.TextureLoader().load('map/mapData/tex/tex_tree.png');
+                      texturetree.flipY =false;
                       const mattree = new THREE.MeshPhongMaterial({map: texturetree});
                       this.children[i].material = mattree;
                       this.children[i].material.metalness = 0;
@@ -202,6 +212,8 @@ export default {
                     }
                     if(this.children[i].name.includes("Lamp")){
                       const texturetree = new THREE.TextureLoader().load('map/mapData/tex/tex_arcade.png');
+                      texturetree.flipY =false;
+
                       const mattree = new THREE.MeshPhongMaterial({map: texturetree});
                       this.children[i].material = mattree;
                       this.children[i].material.metalness = 0;
@@ -344,6 +356,107 @@ export default {
       mesh.name = "emptet";
       return mesh;
     },
+    onMouseMove(event) {
+      var position = new THREE.Vector2();
+      var domRect = this.renderer.domElement.getBoundingClientRect();
+      position.x = ((event.clientX - domRect.left) / domRect.width) * 2 - 1;
+      position.y = -((event.clientY - domRect.top) / domRect.height) * 2 + 1;
+
+      var temp = this.getSelectionneLePlusProche2(position);
+
+      if (temp == 1) {
+        this.selectedObject = this.getSelectionneLePlusProche(position);
+      } else {
+        this.selectedObject = 0
+      }
+      // Vérifier si l'objet est sélectionnable
+      if (this.selectedObject != 0) {
+        // Changer le curseur en pointeur
+        this.renderer.domElement.style.cursor = 'pointer';
+      } else {
+        // Rétablir le curseur par défaut
+        this.renderer.domElement.style.cursor = 'auto';
+      }
+    },
+
+
+    getSelectionneLePlusProche(position) {
+      // Mise à jour de la position du rayon à lancer.
+      this.raycaster.setFromCamera(position, this.camera);
+      // Obtenir la liste des intersections
+      var selectionnes = this.raycaster.intersectObjects(this.selectionables.children);
+      if (selectionnes.length) {
+        return selectionnes[0].object;
+      } else {
+        return null
+      }
+    },
+
+    getSelectionneLePlusProche2(position) {
+      // Mise à jour de la position du rayon à lancer.
+      this.raycaster.setFromCamera(position, this.camera);
+      // Obtenir la liste des intersections
+      var selectionnes = this.raycaster.intersectObjects(this.selectionables.children);
+      if (selectionnes.length) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+
+
+    async onMouseClick(event) {
+      var position = new THREE.Vector2();
+      var domRect = this.renderer.domElement.getBoundingClientRect();
+      position.x = ((event.clientX - domRect.left) / domRect.width) * 2 - 1;
+      position.y = -((event.clientY - domRect.top) / domRect.height) * 2 + 1;
+      var temp = this.getSelectionneLePlusProche2(position);
+
+      if (temp == 1) {
+        this.selectedObject = this.getSelectionneLePlusProche(position);
+      } else {
+        this.selectedObject = 0
+      }
+      if (this.selectedObject != 0) {
+        if (this.selectedObject.name.slice(0,3) == "bat") {
+          let found;
+          found = await getOneBat({name: this.selectedObject.name, posx: this.selectedObject.position.x, posz: this.selectedObject.position.z});
+          if (found != []){
+            found = true;
+          }
+          else {
+            found = false;
+          }
+          if (this.selectab.length == 0 && found) {
+            // Toggle the 'active' class on the selectmenu div
+            document.getElementById('selectmenu').classList.toggle('closed');
+            document.getElementById('selectmenu').classList.toggle('supr');
+            document.getElementById('info').classList.toggle('active');
+            document.getElementById('scene1').classList.toggle('active');
+
+            var info = {obj: this.selectedObject, type: "bat"}
+            this.selectab.push(info);
+          } else {
+            if (this.selectedObject.uuid == this.selectab[0]["obj"].uuid) {
+              // Toggle the 'active' class on the selectmenu div
+              document.getElementById('selectmenu').classList.toggle('closed');
+
+              document.getElementById('scene1').classList.toggle('active');
+              //wait 300ms
+              setTimeout(() => {
+                document.getElementById('info').classList.toggle('active');
+                document.getElementById('selectmenu').classList.toggle('supr');
+              }, 300);
+              this.selectab.pop(0)
+              this.selectedObject = 0
+            } else {
+              console.log("un objet est deja select")
+              this.selectedObject = 0
+            }
+          }
+        }
+        }
+      },
 
 
     handleResize() {
