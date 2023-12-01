@@ -26,7 +26,6 @@ jobs:
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/githubkey
           cd ~/Documents/SAEBUT2/
-          git reset --hard origin/main
           git pull origin main
           source ~/.nvm/nvm.sh
           nvm use 21.1.0
