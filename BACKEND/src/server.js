@@ -16,12 +16,14 @@ app.use(express.json());//decode les requete qui contiennent du json
 
 app.use(bodyParser.json());
 
-app.use(cors({
-    origin: 'http://localhost:8080', // Remplacez par votre URL front-end
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // Autorise l'envoi de cookies et d'en-têtes d'authentification
-    
-}));
+// app.use(cors({
+//     origin: 'http://localhost:8080', // Remplacez par votre URL front-end
+//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//     credentials: true, // Autorise l'envoi de cookies et d'en-têtes d'authentification
+//
+// }));
+
+app.use(cors());
 
 app.use("/prestataires", prestaRoutes);
 app.use("/admin", adminRoutes);
