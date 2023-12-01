@@ -119,8 +119,8 @@
         </div>
 
         <div class="grosseCard solo">
-          <img class="imageMilieu" src="../assets/pageAccueil/multiple-cards/image2-2.png">
-          <img src="../assets/pageAccueil/multiple-cards/image2-1.png">
+          <img src="../assets/pageAccueil/multiple-cards/image2-2.png">
+          <img class="imageMilieu" src="../assets/pageAccueil/multiple-cards/image2-1.png">
           <div class="mini-card solo">
             <div class="mini-card-header">
               <h3>Découvrez nos aventures !</h3>
@@ -396,7 +396,7 @@ export default {
 
 }
 
-.h1{
+.title-card h1{
   width: fit-content;
   font-size: 40px;
 }
@@ -515,7 +515,7 @@ export default {
     object-fit: cover;
   }
 
-  .contenuHautDePage tittle {
+  .contenuHautDePage h1 {
     font-size: 45px;
   }
 
@@ -697,7 +697,7 @@ export default {
     object-fit: cover;
   }
 
-  .contenuHautDePage tittle {
+  .contenuHautDePage h1 {
     font-size: 25px;
   }
 
