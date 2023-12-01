@@ -829,7 +829,7 @@ export default {
               texturebat = null;
             }
             if(this.children[i].name == "bat_1_rest"){
-              texturebat = new THREE.TextureLoader().load('map/mapData/tex/bat_res_rest.png');
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/bat_rest.png');
               info = {
                 id: idbat,
                 name: this.children[i].name,
@@ -839,7 +839,7 @@ export default {
               }
             }
             if(this.children[i].name == "bat_1_resto2"){
-              texturebat = new THREE.TextureLoader().load('map/mapData/tex/bato_res_resto2.png');
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/bato_resto2.png');
               info = {
                 id: idbat,
                 name: this.children[i].name,
@@ -849,7 +849,7 @@ export default {
               }
             }
             if(this.children[i].name == "bat_1_foodtruck"){
-              texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_res_foodtruck.png');
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_foodtruck.png');
               info = {
                 id: idbat,
                 name: this.children[i].name,
@@ -899,7 +899,6 @@ export default {
             }
             //stand
             if(this.children[i].name == "bat_5_stand"){
-              texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_stand.png');
               info = {
                 id: idbat,
                 name: this.children[i].name,
