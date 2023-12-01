@@ -34,7 +34,7 @@
 import * as THREE from 'three';
 
 //importer service/mapPrestataires.js
-import {createEmp,getBatdebug, getAllEmp,getOneEmp,getOneBat, updateEmpFree, createBat, getAllBat} from '../services/mapPrestataire.service.js';
+import {getAllEmp,getOneEmp,getOneBat, updateEmpFree, createBat, getAllBat} from '../services/mapPrestataire.service.js';
 
 /*   getAllEmp,
 getOneEmp
@@ -712,9 +712,7 @@ export default {
     async setup() {
       //await this.debugprestafunc()
       console.log("setup")
-      const texture_emp = new THREE.TextureLoader().load('map/mapData/tex/tex_emp.png');
       const texture_bat = new THREE.TextureLoader().load('map/mapData/albedo.jpg');
-      const material_emp = new THREE.MeshPhongMaterial({map: texture_emp});
       const material_bat = new THREE.MeshPhongMaterial({map: texture_bat});
 
       this.emplacement_bdd = await getAllEmp();
@@ -863,7 +861,7 @@ export default {
               } catch (e) {
                 console.log("pas d'image")
               }
-              var data = {objet: objetdata ,idModel: this.children[i].id,posx: this.children[i].position.x , posy: this.children[i].position.y, posz: this.children[i].position.z}
+              //var data = {objet: objetdata ,idModel: this.children[i].id,posx: this.children[i].position.x , posy: this.children[i].position.y, posz: this.children[i].position.z}
               //createEmp(data)
 
 

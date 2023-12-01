@@ -21,7 +21,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Sky } from 'three/addons/objects/Sky.js';
 
-import {getBatdebug, getAllEmp,getOneEmp,getOneBat, getAllBat} from '../services/mapPrestataire.service.js';
+import { getAllEmp,getOneBat, getAllBat} from '../services/mapPrestataire.service.js';
 export default {
   name: "Map3DUser.vue",
   data : () => ({
@@ -257,6 +257,7 @@ export default {
       }
       const emp = await this.matriceTo3DEmp(matricepoints);
       emp.position.set(this.emplacement_bdd[i].posx, this.emplacement_bdd[i].posy, this.emplacement_bdd[i].posz);
+      emp.material= material_emp.clone();
       this.nonselectionables.add(emp);
     }
     this.batiment_bdd = await getAllBat();
