@@ -24,7 +24,7 @@ Ces trois cas sont traités par une unique fonction handleError().
 
 // creation d'un agent axios, avec une config. pour atteindre l'API
 const axiosAgent = axios.create({
-    baseURL: 'http://api.codeky.fr'
+    baseURL: 'https://api.codeky.fr'
 });
 
 function handleError(serviceName, err) {
