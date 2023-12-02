@@ -8,8 +8,8 @@
         <div class="scene2" ref="scene2Container" style="height: 30vh; width: 100%; background-color: beige; margin-bottom: 15px;"></div>
         <label for="batidInput">Sélectionnez un bâtiment :</label>
         <select id="batidInput" v-model="idbatafficher">
-          <option value="0" disabled selected>Sélectionnez un bâtiment</option>
-          <option v-for="batimentsolo in batiment" :key="batimentsolo.id" :value="batimentsolo.id">{{ batimentsolo.name }}</option>
+          <option value=-1 disabled selected>Sélectionnez un bâtiment</option>
+          <option v-for="batimentsolo in tabbatlist" :key="batimentsolo.id" :value="batimentsolo.id">{{ batimentsolo.nom }}</option>
         </select>
         <br>
         <label for="rotationInput">Rotation du bâtiment :</label>
@@ -18,6 +18,19 @@
         <span>{{ this.rotation }}°</span>
         <br>
         <button id="btn1" @click="refreshcalmyfuncpls(1)" class="custom-btn" :disabled="idbatafficher == -1" :class="{ 'disabled-btn': idbatafficher == -1 }">Place Batiment</button>
+        <div class="filtre" >
+
+          <div>
+            <div v-for="type in uniqueTypes" :key="type" class="toggle-container">
+              <label class="toggle">
+                <input type="checkbox" v-model="checkedtype" :value="type" @change="checkboxChanged(type)" >
+                <span class="slider"></span>
+              </label>
+              <p>{{ type }}</p>
+            </div>
+          </div>
+
+        </div>
 
       </div>
       <div class="remove" id="remove">
@@ -92,6 +105,8 @@ export default {
     scene2Container: null,
     prestataire: "calixte",
     testshape: [],
+    checkedtype: [],
+    tabbatlist: [],
 
 
     //style save batiment_bdd[0] = {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1", status: "en cours"}
@@ -177,7 +192,7 @@ export default {
       console.log("rentrer dans vitrine")
       console.log("idbat", this.idbatafficher)
       console.log(this.loaded)
-      if (this.idbatafficher !== -1) {
+      if (this.idbatafficher != -1) {
         // Retirez tous les enfants de la vitrine
         while (this.vitrine.children.length > 0) {
           this.vitrine.remove(this.vitrine.children[0]);
@@ -797,12 +812,12 @@ export default {
           console.log("child", this.children[i].name)
           if (this.children[i].name.slice(0,3) == "bat") {
             idbat++;
-            const info = {
+            var info = {
               id: idbat,
               name: this.children[i].name,
             }
             var texturebat;
-            if(this.children[i].name == "bat_confer"){
+            if(this.children[i].name == "bat_3_confer"){
               texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_conf.png');
               const mat_bat = new THREE.MeshPhongMaterial({map: texturebat});
               this.children[i].material = mat_bat;
@@ -813,23 +828,95 @@ export default {
               console.log("position of conf", this.children[i].position.x, " :  y : ",this.children[i].position.y , "  :  z  :", this.children[i].position.z)
               texturebat = null;
             }
-            if(this.children[i].name == "bat_rest"){
-              texturebat = new THREE.TextureLoader().load('map/mapData/tex/bat_res_rest.png');
+            if(this.children[i].name == "bat_1_rest"){
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/bat_rest.png');
+              info = {
+                id: idbat,
+                name: this.children[i].name,
+                nom: "Restaurants 1",
+                type: "Restaurants",
+                selected: true
+              }
             }
-            if(this.children[i].name == "bat_resto2"){
-              texturebat = new THREE.TextureLoader().load('map/mapData/tex/bato_res_resto2.png');
+            if(this.children[i].name == "bat_1_resto2"){
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/bato_resto2.png');
+              info = {
+                id: idbat,
+                name: this.children[i].name,
+                nom: "Restaurants 2",
+                type: "Restaurants",
+                selected: true
+              }
             }
-            if(this.children[i].name == "bat_roue"){
+            if(this.children[i].name == "bat_1_foodtruck"){
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_foodtruck.png');
+              info = {
+                id: idbat,
+                name: this.children[i].name,
+                nom: "Foodtruck",
+                type: "Restaurants",
+                selected: true
+              }
+            }
+            if(this.children[i].name == "bat_2_roue"){
               texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_roue.png');
+              info = {
+                id: idbat,
+                name: this.children[i].name,
+                nom: "Grande roue",
+                type: "Attractions",
+                selected: true
+              }
             }
-            if(this.children[i].name == "bat_arcade"){
+            if(this.children[i].name == "bat_5_arcade"){
               texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_arcade.png');
+              info = {
+                id: idbat,
+                name: this.children[i].name,
+                nom: "Arcade",
+                type: "Attractions",
+                selected: true
+              }
             }
-            if(this.children[i].name == "bat_foodtruck"){
-              texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_res_foodtruck.png');
-            }
-            if(this.children[i].name == "bat_attrfutur"){
+            if(this.children[i].name == "bat_2_attrfutur"){
               texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_attrfutur.png');
+              info = {
+                id: idbat,
+                name: this.children[i].name,
+                nom: "Attraction futuriste",
+                type: "Attractions",
+                selected: true
+              }
+            }
+            if(this.children[i].name == "bat_2_roller"){
+              info = {
+                id: idbat,
+                name: this.children[i].name,
+                nom: "Roller coaster",
+                type: "Attractions",
+                selected: true
+              }
+            }
+            //stand
+            if(this.children[i].name == "bat_5_stand"){
+              info = {
+                id: idbat,
+                name: this.children[i].name,
+                nom: "Stand",
+                type: "stand",
+                selected: true
+              }
+            }
+            //boutique
+            if(this.children[i].name == "bat_4_boutique"){
+              texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_boutique.png');
+              info = {
+                id: idbat,
+                name: this.children[i].name,
+                nom: "Boutique",
+                type: "boutique",
+                selected: true
+              }
             }
             if(this.children[i].name.includes("wc")){
               texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_wc.png');
@@ -850,7 +937,10 @@ export default {
               this.children[i].material.metalness = 0;
               this.children[i].receiveShadow = true;
             }
-            this.batiment.push(info)
+            if(!this.children[i].name.includes("bat_6") && !this.children[i].name.includes("bat_3") ){
+              this.batiment.push(info)
+            }
+
 
           } else {
             if (this.children[i].name.slice(0, 3) == "emp") {
@@ -1000,11 +1090,33 @@ export default {
     },
 
 
+    filteredTypes() {
+      // Utilisez cette propriété calculée pour filtrer le tableau uniqueTypes selon vos besoins
+      // Par exemple, si vous ne voulez afficher que les types qui sont sélectionnés, vous pouvez faire :
+      for(let i = 0; i < this.batiment.length; i++){
+        if(this.batiment[i].selected){
+          this.tabbatlist.push(this.batiment[i]);
+        }
+        let foundinchecklist = false;
+        for(let j = 0; j < this.checkedtype.length; j++){
+          if(this.batiment[i].type == this.checkedtype[j].type){
+            foundinchecklist = true;
+          }
+        }
+        if(!foundinchecklist){
+          this.checkedtype.push(this.batiment[i].type)
+        }
+      }
+
+    },
+
+
 
     async start(){
         this.testshape = [[-119.60863494873047-25,101.35678100585938-25], [-119.60863494873047-25, 101.35678100585938+25], [-119.60863494873047+25,101.35678100585938+25 ], [-119.60863494873047+25, 101.35678100585938-25]]
         this.showLoadingScreen();
         await this.loadfinal();
+        this.filteredTypes();
         const test = await this.matriceTo3DEmp(this.testshape);
         this.selectionables.add(test);
         await this.setup();
@@ -1054,6 +1166,36 @@ export default {
       requestAnimationFrame(this.animate);
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
+    },
+
+    async checkboxChanged(type){
+      for (let i = 0; i < this.batiment.length; i++) {
+        if (this.batiment[i].type == type) {
+          if (this.batiment[i].selected) {
+            this.batiment[i].selected = false;
+            // Enlever de la liste
+            for (let j = 0; j < this.tabbatlist.length; j++) {
+              if (this.tabbatlist[j].name == this.batiment[i].name) {
+                this.tabbatlist.splice(j, 1);
+              }
+            }
+            // Réinitialiser la valeur sélectionnée du menu déroulant à "0"
+            this.idbatafficher = -1;
+          } else {
+            this.batiment[i].selected = true;
+            this.tabbatlist.push(this.batiment[i]);
+            // Vous pouvez choisir de ne pas réinitialiser la valeur ici
+          }
+        }
+      }
+    },
+
+  },
+  computed:{
+    uniqueTypes() {
+      const types = new Set();
+      this.batiment.forEach((bat) => types.add(bat.type));
+      return Array.from(types);
     },
   },
 
@@ -1191,6 +1333,61 @@ export default {
 </script>
 
 <style>
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2196F3;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
 
 
 
