@@ -43,7 +43,8 @@ data: () => ({
     {
       title: "Profil",
       path: "/admin/profil",
-    },
+    }
+
   ]
   }),
   computed: {

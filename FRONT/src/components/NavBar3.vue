@@ -108,6 +108,7 @@ export default {
 }
 
 .navbar {
+  user-select: none;
   margin: 10px 0;
   font-family: "DM Sans Medium", Syne, Helvetica, sans-serif;
   z-index: 1001;

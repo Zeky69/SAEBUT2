@@ -154,16 +154,18 @@
       </div>
     </div>
     <Map2DUser/>
+    <AllCardPrestate/>
 
   </div>
 </template>
 
 <script>
 import Map2DUser from "@/components/Map2DUser.vue";
+import AllCardPrestate from "@/components/AllCardPrestate.vue";
 
 export default {
   name: 'HomePage',
-  components: {Map2DUser},
+  components: {AllCardPrestate, Map2DUser},
 }
 </script>
 
