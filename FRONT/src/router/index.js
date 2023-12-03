@@ -50,7 +50,17 @@ const routes = [
   },  {
     path: '/admin',
     name: 'EspaceAdmin',
-    component: () => import('../views/EspaceAdmin.vue')
+    component: () => import('../views/EspaceAdmin.vue'),
+    children: [
+      {
+        path: '/',
+        component: () => import('../components/AdminInfoTemporaire.vue')
+      },
+      {
+        path:'*',
+        component: () => import('../views/NotFound.vue')
+      }
+    ]
 
   },
     {

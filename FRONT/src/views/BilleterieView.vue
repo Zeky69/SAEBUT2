@@ -1,19 +1,14 @@
 <template>
-  <div class="card">
-    <div class="card-header">
-      <img src="../assets/fete-foraine.jpg" style="border-radius: 10px; width: 100%;height: 100%">
-    </div>
-    <div class="card-text">
-      <p style="font-size: 20px">Rejoignez la Belforaine LAN Fest !</p>
-      <p>Des tournois de jeu inoubliables vous attendent à LAN Fest, le paradis des gamers à Belforaine. Défiez vos amis, mesurez vos compétences et plongez dans l'action multijoueur ultime !</p>
-    </div>
-    <div class="card-bottom">
-      <a class="btn">Je Fonce</a>
-    </div>
-  </div>
+  <p>Hello</p>
 </template>
 
 <script>
+import {defineComponent} from "vue";
+
+export default defineComponent({
+  name: 'BilleterieView',
+
+})
 </script>
 
 <style>
