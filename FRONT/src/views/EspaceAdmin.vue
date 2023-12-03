@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import {mapActions, mapState} from "vuex";
 import MenuVertical from "@/components/menuVertical.vue";
 
 export default {
@@ -46,6 +46,9 @@ data: () => ({
     },
   ]
   }),
+  computed: {
+    ...mapState(['token','fname','lname','group_id','user_id','email'])
+  },
   methods:{
     ...mapActions(['logout']),
     deconnexion(){
