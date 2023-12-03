@@ -78,6 +78,16 @@ export default {
 
 
 
+/* Largeur de la barre de défilement */
+::-webkit-scrollbar {
+  width: 0;
+
+}
+
+
+
+
+
 
 .menu-container {
   width: 100%;
@@ -85,7 +95,9 @@ export default {
   border-radius: 30px 0 0 30px;
 
   z-index: 1000;
-  overflow: scroll;
+  overflow-x:hidden;
+  overflow-y:auto;
+
 }
 
 li {
@@ -198,7 +210,7 @@ li {
   position: absolute;
   top: 49px;
   right: -1px;
-  background-color: #272337;
+  background-color: transparent;
   width: 20px;
   height: 20px;
   box-sizing: border-box;
