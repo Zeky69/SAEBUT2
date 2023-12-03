@@ -178,7 +178,7 @@ export default {
         objet.name = this.batiment[this.idbatafficher].name;
         this.previewbatiewbatiment = objet;
         //mettre en gris
-        this.previewbatiewbatiment.material.color.setHex(0x7e7e7e);
+        //this.previewbatiewbatiment.material.color.setHex(0x7e7e7e);
         this.previewgroupe.add(objet);
         this.rotation;
         this.previewbatiewbatiment.position.x = this.selectab[0]["obj"].position.x;
@@ -983,6 +983,7 @@ export default {
                 if (this.children[i].name.slice(0, 3) == "dec") {
                 if(this.children[i].name.includes("tree")){
                   const texturetree = new THREE.TextureLoader().load('map/mapData/tex/tex_tree.png');
+                  texturetree.flipY = false;
                   const mattree = new THREE.MeshPhongMaterial({map: texturetree});
                   this.children[i].material = mattree;
                   this.children[i].material.metalness = 0;

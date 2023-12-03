@@ -86,7 +86,6 @@ export default {
           var idbat = -1;
 
           for (var i = 0; i < this.children.length; i++) {
-            console.log("child", this.children[i].name)
             if (this.children[i].name.slice(0,3) == "bat") {
               idbat++;
               const info = {
@@ -101,8 +100,6 @@ export default {
                 this.children[i].material.metalness = 0;
                 this.children[i].receiveShadow = true;
                 this.selectionables.add(this.children[i]);
-                console.log("conf", this.children[i])
-                console.log("position of conf", this.children[i].position.x, " :  y : ",this.children[i].position.y , "  :  z  :", this.children[i].position.z)
                 texturebat = null;
               }
               if(this.children[i].name == "bat_rest"){
@@ -124,7 +121,6 @@ export default {
                 texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_attrfutur.png');
               }
               if(this.children[i].name.includes("wc")){
-                console.log("wc", this.children[i])
                 texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_wc.png');
                 const mat_bat = new THREE.MeshPhongMaterial({map: texturebat});
 
@@ -245,17 +241,21 @@ export default {
     const material_bat = new THREE.MeshPhongMaterial({map: texture_bat});
 
     this.emplacement_bdd = await getAllEmp();
+
     console.log("emplacement_bdd", this.emplacement_bdd)
     for (let i = 0; i < this.emplacement_bdd.length; i++) {
       var matricepoints = this.emplacement_bdd[i].matricepoints.matricepoints
       console.log("mat", matricepoints)
 
       //pour chaque point mettre les coordonné de 2D a 3D
-      for(let j = 0 ; j < matricepoints.length ; j++){
-        let newPoint = this.point2Dto3D(matricepoints[i][0],matricepoints[i][1] )
+  /*    for(let j = 0 ; j < matricepoints.length; j++){
+        let newPoint = await this.point2Dto3D(matricepoints[i][0],matricepoints[i][1] )
         console.log("newpoint", j, " :  ", newPoint)
-      }
+        matricepoints[i][0] = newPoint.x;
+        matricepoints[i][1] = newPoint.z;
+      }*/
       const emp = await this.matriceTo3DEmp(matricepoints);
+      console.log("emp3D", emp)
       emp.position.set(this.emplacement_bdd[i].posx, this.emplacement_bdd[i].posy, this.emplacement_bdd[i].posz);
       emp.material= material_emp.clone();
       this.nonselectionables.add(emp);
@@ -305,7 +305,7 @@ export default {
 
     },
 
-    point2Dto3D(x, z ) {
+    async point2Dto3D(x, z ) {
       // Bounding box de la map 3D
       const boundingBox = {
         min: { x: -0.9983415603637695, y: -1, z: -1.0045995712280273 },
@@ -329,19 +329,34 @@ export default {
         }
       };
       console.log("kjsdkljqskldjklqsjdklqskljd", adjustedBoundingBox)
-
+      /*
+      kjsdkljqskldjklqsjdklqskljd max
+          max:
+          x: 145.76097359713458
+          y: 1.8496733903884888
+          z: 150.63050706416016
+          min
+          x-145.2783025259123
+          y-1.8496733903884888
+          z:-152.0225906055275
+       */
       // Application de la transformation aux coordonnées 2D
       const point3D = {
-        x: x * (adjustedBoundingBox.max.x - adjustedBoundingBox.min.x) + adjustedBoundingBox.min.x,
-        y: 10,
-        z: z * (adjustedBoundingBox.max.z - adjustedBoundingBox.min.z) + adjustedBoundingBox.min.z
+        x: x * ((adjustedBoundingBox.max.x - adjustedBoundingBox.min.x) + adjustedBoundingBox.min.x)/9,
+        z: z * ((adjustedBoundingBox.max.z - adjustedBoundingBox.min.z) + adjustedBoundingBox.min.z)/20
       };
-
+      console.log("point3D", point3D)
       return point3D;
     },
 
     async matriceTo3DEmp(matricepoints){
       const points = matricepoints.map(([x, y]) => new THREE.Vector2(x, y));
+      //mettre a l'echelle
+      for(let i = 0; i < points.length; i++){
+          let pointemp = await this.point2Dto3D(points[i].x,points[i].y)
+          points[i].x = pointemp.x;
+          points[i].y = pointemp.z;
+      }
       // Épaisseur de l'objet
       const depth = 2;
       const shape = new THREE.Shape(points);
@@ -355,8 +370,11 @@ export default {
       mesh.castShadow = true;
       mesh.receiveShadow = true;
       mesh.name = "emptet";
+      console.log("mesh", mesh)
       return mesh;
     },
+
+
     onMouseMove(event) {
       var position = new THREE.Vector2();
       var domRect = this.renderer.domElement.getBoundingClientRect();
