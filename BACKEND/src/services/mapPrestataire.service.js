@@ -63,6 +63,7 @@ const getAllEmp = async (req) => {
         console.error('Erreur lors de la récupération des emplacements :', error);
     } finally {
         client.release();
+        console.log("emps",emps.rows)
         return emps.rows;
     }
 }
@@ -89,19 +90,39 @@ const getoneEmp = async (req) => {
     }
 }
 
+const getEmpUUID = async (req) => {
+    const client = await pool.connect();
+    let uuid = req;
+    let emps = [];
+    try {
+        // Récupérer tous les batiments
+        const getOneEmpQuery = 'SELECT * FROM emplacement WHERE id_emplacement = $1';
+        const getOneEmpValues = [uuid];
+        emps = await pool.query(getOneEmpQuery, getOneEmpValues);
+        console.log("result", emps.rows);
+
+    } catch (error) {
+        console.error('Erreur lors de la récupération des emplacements :', error);
+    }
+    finally {
+        client.release();
+        return emps.rows;
+    }
+}
+
 
 
 const createbat = async (req, callback) => {
 
     console.log("createbat",req.body);
-    const { name,emp_uuid, posx, posy, posz, rota, prestataire } = req.body;
+    const { name,emp_uuid, posx, posy, posz,rota, prestataire ,status } = req.body;
     const client = await pool.connect();
     console.log("connection")
     try {
         // Insérer le nouveau batiment dans la table batiment
-        const insertBatimentQuery = 'INSERT INTO batiment (id_batiment,description, name, id_emplacement, posx, posy, posz, rota, utilisateur) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9) RETURNING *';
+        const insertBatimentQuery = 'INSERT INTO batiment (id_batiment,description,nom, name, status, id_emplacement, posx, posy, posz, rota, utilisateur) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9, $10,$11) RETURNING *';
         const uuid_bat = uuidv4();
-        const insertBatimentValues = [uuid_bat ,"",name, emp_uuid, posx, posy, posz, rota, prestataire];
+        const insertBatimentValues = [uuid_bat ,"",name,name,status, emp_uuid, posx, posy, posz, rota, prestataire];
         const result = await pool.query(insertBatimentQuery, insertBatimentValues);
 
         // Récupérer le batiment inséré
@@ -172,32 +193,61 @@ const deleteEmp = (req,callback) => {
 }
 
 
-const updateEmpFree = (req, callback) => {
-    console.log("updateEmpFree",req.body);
-    const { name, posx,posz, batid } = req.body;
-    let emps;
+const updateEmpFree =async  (req) => {
+
+    let uuid = req.uuid;
+    let batid = req.batid;
+    console.log("update service emp",uuid,batid);
+    const client = await pool.connect();
     try {
-        const data = fs.readFileSync(filePathEmp, 'utf8');
-        emps = JSON.parse(data);
-        
-        const existingEmpIndex = emps.findIndex(emp => emp.objet.object.userData.name === name && emp.posx === posx && emp.posz === posz);
-
-        // Mettre à jour le champ 'free' de l'emploi existant
-        if (existingEmpIndex !== -1) {
-            emps[existingEmpIndex].batid = batid;
-
-            // Enregistrer les modifications dans le fichier JSON
-            fs.writeFileSync(filePathEmp, JSON.stringify(emps));
-            callback(null, "success");
-        } else {
-            callback("L'emploi n'existe pas.", null);
-        }
-    } catch (error) {
-        console.log(error);
-        console.log("Erreur lors de la mise à jour de l'emploi.");
-        callback(error, null);
+        const updateEmpQuery = 'UPDATE emplacement SET batiment_id = $1 WHERE id_emplacement = $2';
+        const updateEmpValues = [batid, uuid];
+        await pool.query(updateEmpQuery, updateEmpValues);
+    }catch (error) {
+        console.error('Erreur lors de la mise à jour de l\'emplacement :', error);
+    }
+    finally{
+        client.release();
     }
 };
+
+const getBatempUUID = async (req) => {
+    const uuid = req;
+    const client = await pool.connect();
+    let result = [];
+    try {
+        // Récupérer tous les batiments
+        const getAllBatimentQuery = 'SELECT * FROM batiment WHERE id_emplacement = $1';
+        const getAllBatimentValues = [uuid];
+        result = await pool.query(getAllBatimentQuery, getAllBatimentValues);
+        console.log("result", result.rows);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des batiments :', error);
+    } finally {
+        client.release();
+        return result.rows;
+    }
+}
+
+const getBatUUID = async (req) => {
+    const uuid = req;
+    const client = await pool.connect();
+    let result = [];
+    try {
+        // Récupérer tous les batiments
+        const getAllBatimentQuery = 'SELECT * FROM batiment WHERE id_batiment = $1';
+        const getAllBatimentValues = [uuid];
+        result = await pool.query(getAllBatimentQuery, getAllBatimentValues);
+        console.log("result", result.rows);
+    }
+    catch (error) {
+        console.error('Erreur lors de la récupération des batiments :', error);
+    }
+    finally {
+        client.release();
+        return result.rows;
+    }
+}
 
 const getBatdebug = async () => {
     const client = await pool.connect();
@@ -289,34 +339,33 @@ const getOnebat = async (req) => {
 
 
 
-const deletebat = (req,callback) => {
-    let name = req.body.name;
-    let position = req.body.position;
-    let bats = [];
+const deletebat = async (req) => {
+    let id_batiment = req
+    const client = await pool.connect();
     try {
-        const data = fs.readFileSync(filePathBat, 'utf8');
-        const dataStr = data.toString();
-        temp = JSON.parse(dataStr);
-        bats = temp.filter((bat) => bat.name!=name)
-        bats = temp.filter((bat) => bat.position.x!=position.x && bat.position.y!=position.y && bat.position.z!=position.z)
-    } catch (errorLecture) {
-        console.log(errorLecture);
+        const deleteBatimentQuery = 'DELETE FROM batiment WHERE id_batiment = $1';
+        const deleteBatimentValues = [id_batiment];
+        await pool.query(deleteBatimentQuery, deleteBatimentValues);
     }
-    try {
-        fs.writeFileSync(filePathBat, JSON.stringify(bats));
-        callback(null, "success");
-    } catch (errorEcriture) {
-        callback(errorEcriture, null);
+    catch (error) {
+        console.error('Erreur lors de la suppression du batiment :', error);
+    }
+    finally {
+        client.release();
     }
 }
 
 
 module.exports = {
+    getBatUUID,
+    getBatempUUID,
+    getEmpUUID,
     getBatdebug2,
     getBatdebug,
     getManyEmp,
     getAllEmp,
     getoneEmp,
+    getOnebat,
     createEmp,
     deleteEmp,
     updateEmpFree,

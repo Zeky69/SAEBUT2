@@ -27,6 +27,36 @@ exports.getBatdebug= async (req,res) => {
     }
 };
 
+exports.getEmpUUID = async (req,res) => {
+    let info = req.params.uuid;
+    console.log("info",info);
+    let reponse = await mapPrestatairesService.getEmpUUID(info);
+    if (reponse) {
+        return res.status(200).send(reponse);
+    }
+    return res.status(401).send("no info");
+}
+
+exports.getBatUUID = async (req,res) => {
+    let info = req.params.uuid;
+    console.log("info",info);
+    let reponse = await mapPrestatairesService.getBatUUID(info);
+    if (reponse) {
+        return res.status(200).send(reponse);
+    }
+    return res.status(401).send("no info");
+}
+
+exports.getBatempUUID = async (req,res) => {
+    let info = req.params.uuid;
+    console.log("info",info);
+    let reponse = await mapPrestatairesService.getBatempUUID(info);
+    if (reponse) {
+        return res.status(200).send(reponse);
+    }
+    return res.status(401).send("no info");
+}
+
 // ...
 
 
@@ -72,13 +102,14 @@ exports.deleteEmp = (req,res) => {
     })
 }
 
-exports.updateEmp = (req,res) => {
-    mapPrestatairesService.updateEmpFree(req,(error,data)=>{
-        if (error) {
-            return res.status(500).send("Internal error");
-        }
-        return res.status(200).send("Showing all users");
-    });
+exports.updateEmp = async (req,res) => {
+    let info = req.body;
+    console.log("info update",info);
+    let response = await mapPrestatairesService.updateEmpFree(info);
+    if (response) {
+        return res.status(200).send(response);
+    }
+    return res.status(401).send("no info");
 }
 
 
@@ -87,7 +118,7 @@ exports.getBat = async (req,res) => {
     let reponse = [];
         if (info.name) {
             if(info.posx && info.posz){
-                reponse = await mapPrestatairesService.getoneBat(req);
+                reponse = await mapPrestatairesService.getOneBat(req);
                 if (reponse) {
                     return res.status(200).send(reponse);
                 }
@@ -107,6 +138,16 @@ exports.getBat = async (req,res) => {
 
 };
 
+exports.getBatUUID = async (req,res) => {
+    let info = req.params.uuid;
+    console.log("info",info);
+    let reponse = await mapPrestatairesService.getBatUUID(info);
+    if (reponse) {
+        return res.status(200).send(reponse);
+    }
+    return res.status(401).send("no info");
+}
+
 
 exports.savebat = (req, res) => {
     mapPrestatairesService.createbat(req,(error,data)=>{
@@ -118,10 +159,11 @@ exports.savebat = (req, res) => {
 }
 
 exports.deletebat = (req,res) => {
-    mapPrestatairesService.deletebat(req, (error,data)=> {
-        if (error) {
-            return res.status(500).send("Internal error");
-        }
-        return res.status(200).send("bat deleted successfully");
-    })
+    let info = req.body.uuid;
+    console.log("info",info);
+    let reponse = mapPrestatairesService.deletebat(info);
+    if (reponse) {
+        return res.status(200).send(reponse);
+    }
+    return res.status(401).send("no info");
 }

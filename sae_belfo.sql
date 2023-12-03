@@ -130,6 +130,7 @@ CREATE TABLE emplacement(
     posz DECIMAL(24,17),
     rotationx INT,
     matricePoints JSON,
+    batiment_id VARCHAR(50),
     PRIMARY KEY(id_emplacement)
 );
 
@@ -143,7 +144,7 @@ CREATE TABLE batiment(
      posx DECIMAL(24,17),
      posy DECIMAL(24,17),
      posz DECIMAL(24,17),
-     rota INTEGER,
+     rota DECIMAL(24,17),
      utilisateur VARCHAR(50),
      PRIMARY KEY(id_batiment),
      id_emplacement VARCHAR(50) NOT NULL UNIQUE,

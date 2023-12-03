@@ -9,6 +9,8 @@ var router = express.Router();
 //repuperer tout les emplacements
 router.get('/emp', mapPrestatairesMiddlewares.validateempFilterInput,mapPrestatairesControllers.getEmp);
 
+router.get('/emp/:uuid', mapPrestatairesMiddlewares.validateempUUID,mapPrestatairesControllers.getEmpUUID);
+
 router.post('/emp', mapPrestatairesMiddlewares.validateAddempInput , mapPrestatairesControllers.saveEmp);
 
 router.delete('/emp', mapPrestatairesMiddlewares.validateDelempInput , mapPrestatairesControllers.deleteEmp);
@@ -16,6 +18,10 @@ router.delete('/emp', mapPrestatairesMiddlewares.validateDelempInput , mapPresta
 router.patch('/emp', mapPrestatairesMiddlewares.validateUpdateempInput , mapPrestatairesControllers.updateEmp);
 
 router.get('/bat', mapPrestatairesMiddlewares.validatebatFilterInput, mapPrestatairesControllers.getBat);
+
+router.get('/bat/:uuid', mapPrestatairesMiddlewares.validatebatUUID, mapPrestatairesControllers.getBatUUID);
+
+router.get('/bat/emp/:uuid', mapPrestatairesMiddlewares.validebatempUUID, mapPrestatairesControllers.getBatempUUID);
 
 
 router.post('/bat', mapPrestatairesMiddlewares.validateAddbatInputdebug , mapPrestatairesControllers.savebat);

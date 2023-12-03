@@ -1,11 +1,14 @@
-import {getRequest, postRequest, patchRequest} from "@/services/axios.service"
+import {getRequest, postRequest, patchRequest,deleteRequest} from "@/services/axios.service"
 
 async function getAllEmpFromAPI(){
-    return getRequest('/mapPrestataires/emp', 'GETALLEMP')
+    let answer = await getRequest('/mapPrestataires/emp', 'GETALLEMP')
+    console.log("return front api",answer)
+    return answer
 }
 
 async function getAllEmp() {
     let answer = await getAllEmpFromAPI()
+    console.log("return front",answer)
     return answer
 }
 
@@ -18,8 +21,17 @@ async function getManyEmp(filtre) {
     return answer
 }
 
+async function getOneEmpUUIDFromAPI(uuid) {
+    //uuid en parametre
+    return getRequest('/mapPrestataires/emp' +`/${uuid}`, 'GETONEEMP')
+}
+
+async function getOneEmpUUID(uuid) {
+    let answer = await getOneEmpUUIDFromAPI(uuid)
+    return answer
+}
+
 async function getOneEmpFromAPI(data) {
-    console.log("one bat",data)
     return getRequest('/mapPrestataires/emp?name=' + data.name + '&posx=' + data.posx + '&posz' + data.posz, 'GETONEEMP')
 }
 async function getBatFromAPIdebug() {
@@ -146,12 +158,31 @@ async function createBat(data) {
     }
 }
 
+async function getBatbyEmpUUIDFromAPI(uuid) {
+    return getRequest('/mapPrestataires/bat/emp' +`/${uuid}`, 'GETBATBYEMP')
+}
+
+async function getBatbyEmpUUID(uuid) {
+    let answer = await getBatbyEmpUUIDFromAPI(uuid)
+    return answer
+}
+
+async function getOneBatUUIDFromAPI(uuid) {
+    return getRequest('/mapPrestataires/bat' +`/${uuid}`, 'GETONEBAT')
+}
+
+async function getOneBatUUID(uuid) {
+    let answer = await getOneBatUUIDFromAPI(uuid)
+    return answer
+}
+
 async function deleteBatFromAPI(data) {
-    return postRequest('/mapPrestataires/delbat', data, 'DELETEBAT')
+    return deleteRequest('/mapPrestataires/bat', data, 'DELETEBAT')
 }
 
 async function deleteBat(data) {
     try {
+        console.log("data del front",data)
         let answer = await deleteBatFromAPI(data);
         return answer;
     } catch (error) {
@@ -166,6 +197,9 @@ async function deleteBat(data) {
 
 
 export {
+    getOneBatUUID,
+    getBatbyEmpUUID,
+    getOneEmpUUID,
     getBatdebug,
     getAllEmp,
     getManyEmp,

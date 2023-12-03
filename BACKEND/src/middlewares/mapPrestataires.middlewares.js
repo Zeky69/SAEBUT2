@@ -18,6 +18,11 @@ exports.validatebatFilterInputdebug = (req, res, next) => {
 
 }
 
+exports.validateempUUID = (req, res, next) => {
+    console.log("valide emp uuid middle");
+    next();
+}
+
 exports.validateAddbatInputdebug = async (req, res, next) => {
     console.log("valide add middle");
     next();
@@ -38,10 +43,18 @@ exports.validateDelempInput = (req, res, next) => {
     next();
 }
 
+exports.validebatempUUID = (req, res, next) => {
+    next();
+}
+
+exports.validatebatUUID = (req, res, next) => {
+    next();
+}
+
 exports.validateUpdateempInput = (req, res, next) => {
-    const { name, posx, posz, batid } = req.body;
+    const { uuid, batid } = req.body;
     console.log("valide up",req.body);
-    if (!name || !posx || !posz) {
+    if (!uuid) {
         return res.status(400).send("Un des champs est nul");
     }
     next();
@@ -68,10 +81,6 @@ exports.validateAddbatInput = (req, res, next) => {
 }
 
 exports.validateDelbatInput = (req, res, next) => {
-    const { name , nameofemp, position} = req.body;
-    if (!name, !nameofemp, !position) {
-        return res.status(400).send("Un des champs est nul");
-    }
     next();
 }
 

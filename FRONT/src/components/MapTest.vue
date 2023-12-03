@@ -47,7 +47,7 @@
 import * as THREE from 'three';
 
 //importer service/mapPrestataires.js
-import {getAllEmp,getOneEmp,getOneBat, updateEmpFree, createBat, getAllBat} from '../services/mapPrestataire.service.js';
+import {getAllEmp,getOneBatUUID,getBatbyEmpUUID,getOneEmpUUID,getOneEmp,deleteBat, updateEmpFree, createBat, getAllBat} from '../services/mapPrestataire.service.js';
 
 /*   getAllEmp,
 getOneEmp
@@ -140,6 +140,20 @@ export default {
       this.renderer.outputEncoding = THREE.LinearToneMapping;
     },
 
+    async findobjectByuserUUID(uuid){
+      var found = null;
+      this.scene.traverse((child) => {
+        if (child.isMesh) {
+          if(child.userData.uuid != null || child.userData.uuid != undefined){
+            if(child.userData.uuid == uuid){
+              found = child;
+            }
+          }
+        }
+      });
+      return found;
+    },
+
     async findObjectByName(object, name) {
       // Vérifier si l'objet actuel a le nom recherché
       if (object.name === name) {
@@ -166,11 +180,12 @@ export default {
         // Retirez tous les enfants de la vitrine
         while (this.previewgroupe.children.length > 0) {
           this.previewgroupe.remove(this.previewgroupe.children[0]);
-        }
+      }
 
         // Ajoutez le nouvel objet à la vitrine
         console.log("batiment", this.batiment)
         console.log("bat a afficher", this.batiment[this.idbatafficher].name)
+        console.log("preview select tab",this.selectab)
         var objet_model = await this.findObjectByName(this.loaded, this.batiment[this.idbatafficher].name)
         console.log("objet_model", objet_model)
         var objet = objet_model.clone();
@@ -181,9 +196,19 @@ export default {
         //this.previewbatiewbatiment.material.color.setHex(0x7e7e7e);
         this.previewgroupe.add(objet);
         this.rotation;
+        console.log("selectab obj",this.selectab[0]["obj"])
+        console.log("position ", this.selectab[0]["obj"].position.x)
+        console.log("position ", this.selectab[0]["obj"].position.z)
+        let posx = this.selectab[0]["obj"].position.x;
+        let posz = this.selectab[0]["obj"].position.y;
+        let point = await this.point2Dto3D(posx, posz);
+        posz = point.z;
+        posx = point.x;
+
         this.previewbatiewbatiment.position.x = this.selectab[0]["obj"].position.x;
         this.previewbatiewbatiment.position.z = this.selectab[0]["obj"].position.z;
-        console.log("previewgroupe", this.previewgroupe)
+        this.previewbatiewbatiment.position.y = objet_model.position.y;
+        console.log("previewbatiewbatiment", this.previewbatiewbatiment)
       }
     },
 
@@ -340,7 +365,8 @@ export default {
       if (this.selectedObject != 0) {
         if (this.selectedObject.name.slice(0,3) == "bat") {
           let found;
-          found = await getOneBat({name: this.selectedObject.name, posx: this.selectedObject.position.x, posz: this.selectedObject.position.z});
+          found = await getOneBatUUID(this.selectedObject.userData.uuid);
+          console.log("found", found)
           if (found != []){
             found = true;
           }
@@ -348,8 +374,6 @@ export default {
             found = false;
           }
 
-          console.log("bat");
-          console.log("found", found)
           if (this.selectab.length == 0 && found) {
             // Toggle the 'active' class on the selectmenu div
             document.getElementById('selectmenu').classList.toggle('closed');
@@ -358,6 +382,7 @@ export default {
             document.getElementById('scene1').classList.toggle('active');
 
             this.selectedObject.material.color.setHex(0xff0000);
+
             var info = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "bat"}
             this.selectab.push(info);
           } else {
@@ -400,6 +425,7 @@ export default {
               document.getElementById('scene1').classList.toggle('active');
               this.creationscene2()
                 this.selectedObject.material.color.setHex(0xff0000);
+              console.log("this.selectedObject", this.selectedObject)
                 var info2 = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "emp"}
                 this.selectab.push(info2);
             } else {
@@ -443,7 +469,9 @@ export default {
 
     async refreshcalmyfuncpls(mode) {
       console.log("refresh")
-      if (this.selectab.length == 1 && this.idbatafficher >= 0 && this.idbatafficher <= this.batiment.length) {
+      console.log("this.selectab", this.selectab)
+      console.log("this.idbatafficher", this.idbatafficher)
+      if (this.selectab.length == 1) {
 
         if (mode == 1) {
           this.deletscene2()
@@ -469,13 +497,16 @@ export default {
           }, 300);
 
         }
+        console.log("this.selectab", this.selectab)
         //var uuid = this.selectab[0]["obj"].uuid;
         if (this.selectab[0]["type"] == "emp") {
           let found;
           let empbdd = null;
-          found = await getOneEmp({name: this.selectab[0]["obj"].name, posx: this.selectab[0]["obj"].position.x, posz: this.selectab[0]["obj"].position.z});
+          let uuid = this.selectab[0]["obj"].userData.uuid;
+          found = await getOneEmpUUID(uuid);
           if (found != []){
             empbdd = found[0];
+            console.log("empbdd", empbdd)
             found = true;
 
           }
@@ -500,35 +531,47 @@ export default {
             console.log("pas d'image")
           }
           batimentadd.material = mat;
-          var posx= empbdd.posx;
-          var posz= empbdd.posz;
+          var posx= this.selectab[0]["obj"].position.x;
+          var posz= this.selectab[0]["obj"].position.z;
           var y = batimentadd.position.y;
+
+          console.log("prestat", this.prestataire)
 
           var databat = {
             name: batimentadd.name,
-            emp_uuid: this.selectab[0]["obj"].name,
+            emp_uuid: uuid,
             posx: posx,
             posy: y,
             posz: posz,
-            prestataire_id: this.prestataire,
+            rota: (this.rotation * Math.PI / 180),
+            prestataire: this.prestataire,
+            status: "waiting",
           }
 
           this.clearpreviewbat();
 
           batimentadd.position.set(posx, y, posz);
+          batimentadd.rotation.z = this.rotation * Math.PI / 180
           //to do rota
           batimentadd.castShadow = true;
           batimentadd.receiveShadow = true;
           batimentadd.material.color.setHex(0xffa500);
+          batimentadd.userData = {uuid: 0, emp_uuid: uuid};
           this.selectionables.add(batimentadd);
 
           await createBat(databat);
 
+          const batfrombdd = await getBatbyEmpUUID(uuid);
+          console.log("batfrombdd", batfrombdd)
+
+
+          batimentadd.userData.uuid = batfrombdd[0].id_batiment;
+
+          console.log("batiment uuid", batimentadd.userData.uuid)
+
           let data = {
-            name: this.selectab[0]["obj"].name,
-            posx: databat.posx,
-            posz: databat.posz,
-            batid: this.batiment[2].id,
+            uuid: uuid,
+            batid: batfrombdd[0].id_batiment,
           }
 
           await updateEmpFree(data);
@@ -546,10 +589,8 @@ export default {
           if (this.selectab[0]["type"] == "bat") {
             let found;
             let batbdd = null;
-            var indice_bdd;
-            var xpos = this.selectab[0]["obj"].position.x;
-            var zpos = this.selectab[0]["obj"].position.z;
-            found = await getOneBat({name: this.selectab[0]["obj"].name, posx: this.selectab[0]["obj"].position.x, posz: this.selectab[0]["obj"].position.z});
+            found = await getOneBatUUID(this.selectab[0]["obj"].userData.uuid);
+            console.log("found bat at refresh", found)
             if (found != []){
               batbdd = found[0];
               console.log("batbdd", batbdd)
@@ -560,29 +601,19 @@ export default {
             }
 
             if (found) {
-              let name_emp = this.batiment_bdd[indice_bdd].name_of_emp;
-              for (let h = 0; h < this.emplacement_bdd.length; h++) {
-                if (this.emplacement_bdd[h].name == name_emp) {
-                  if (this.emplacement_bdd[h].position.x == xpos && this.emplacement_bdd[h].position.z == zpos) {
-                    this.emplacement_bdd[h].free = true;
-                    console.log("indice ")
-                    let childRemoved = false;
-                    var emp_to_rmove = null
-                    this.nonselectionables.traverse((child) => {
-                      if (!childRemoved && child.name == name_emp) {
-                        if (child.position.x == xpos && child.position.z == zpos) {
-                          emp_to_rmove = child
-                          childRemoved = true; // Indiquer que l'enfant a été supprimé
-                        }
-                      }
-                    });
-                    break;
-                  }
-                }
-              }
-              this.batiment_bdd.splice(indice_bdd, 1);
-              emp_to_rmove.material.color.setHex(this.emp[0].material.color.getHex());
-              this.selectionables.add(emp_to_rmove)
+              let bat_to_rmove = await getOneBatUUID(this.selectab[0]["obj"].userData.uuid);
+              console.log("bat_to_rmove", bat_to_rmove)
+              console.log("uuid", bat_to_rmove[0].id_batiment)
+              let emp_uuid = bat_to_rmove[0].id_emplacement;
+              await updateEmpFree({uuid:emp_uuid, batid: null});
+              await deleteBat({uuid: bat_to_rmove[0].id_batiment});
+              let empinScene = await this.findobjectByuserUUID(emp_uuid);
+              console.log("empinScene", empinScene)
+              const texture_emp = new THREE.TextureLoader().load('map/mapData/tex/tex_emp.png');
+              const material_emp = new THREE.MeshPhongMaterial({map: texture_emp});
+              let hex = material_emp.color.getHex();
+              empinScene.material.color.setHex(hex);
+              this.selectionables.add(empinScene)
               this.selectionables.remove(this.selectab[0]["obj"]);
 
             }
@@ -725,10 +756,10 @@ export default {
 
 
     async setup() {
-      //await this.debugprestafunc()
       console.log("setup")
-      const texture_bat = new THREE.TextureLoader().load('map/mapData/albedo.jpg');
-      const material_bat = new THREE.MeshPhongMaterial({map: texture_bat});
+      const texture_emp = new THREE.TextureLoader().load('map/mapData/tex/tex_emp.png');
+      const material_emp = new THREE.MeshPhongMaterial({map: texture_emp});
+
 
       this.emplacement_bdd = await getAllEmp();
       console.log("emplacement_bdd", this.emplacement_bdd)
@@ -736,12 +767,15 @@ export default {
           console.log("emplacement", this.emplacement_bdd[i])
           var matricepoints = this.emplacement_bdd[i].matricepoints.matricepoints
           console.log("mat", matricepoints)
-
-        //pour chaque point mettre les coordonné de 2D a 3D
-          for(let j = 0 ; j < matricepoints.length ; j++){
-            let newPoint = this.point2Dto3D(matricepoints[i][0],matricepoints[i][1] )
-            console.log("newpoint", j, " :  ", newPoint)
-          }
+        const emp = await this.matriceTo3DEmp(matricepoints, this.emplacement_bdd[i].nom, this.emplacement_bdd[i].posx, this.emplacement_bdd[i].posz, this.emplacement_bdd[i].id_emplacement);
+        console.log("emp3D", emp)
+        emp.material = material_emp.clone();
+        if(this.emplacement_bdd[i].batiment_id != null){
+          emp.material.color.setHex(0x7e7e7e);
+          this.nonselectionables.add(emp);
+        } else {
+          this.selectionables.add(emp);
+        }
       }
 
       this.batiment_bdd = await getAllBat();
@@ -751,24 +785,26 @@ export default {
 
             var batiment_found = await this.findObjectByName(this.loaded, this.batiment[j].name)
             var batiment_clone = batiment_found.clone();
+            let mat = batiment_clone.material.clone();
             batiment_clone.position.set(this.batiment_bdd[i].posx, this.batiment_bdd[i].posy, this.batiment_bdd[i].posz);
-            batiment_clone.rotation.x = 0;
-            batiment_clone.rotation.y = 0;
-            batiment_clone.rotation.z = 0;
-            batiment_clone.material = material_bat.clone()
             batiment_clone.material.metalness = 0;
+            batiment_clone.material = mat;
             batiment_clone.castShadow = true;
             batiment_clone.receiveShadow = true;
-            if (this.batiment_bdd[i].prestataire_id != this.prestataire) {
+            batiment_clone.rotation.z = this.batiment_bdd[i].rota;
+            batiment_clone.userData = {uuid: this.batiment_bdd[i].id_batiment, emp_uuid: this.batiment_bdd[i].id_emplacement};
+            if (this.batiment_bdd[i].utilisateur != this.prestataire) {
               this.nonselectionables.add(batiment_clone);
             } else {
               if (this.batiment_bdd[i].status == "accepted") {
                 //mettre en vert
+                console.log("vert")
                 batiment_clone.material.color.setHex(0x00ff00);
                 this.selectionables.add(batiment_clone);
               } else {
                 if (this.batiment_bdd[i].status == "waiting") {
                   //metre en orange
+                  console.log("orange")
                   batiment_clone.material.color.setHex(0xffa500);
                   this.selectionables.add(batiment_clone);
                 }
@@ -809,7 +845,6 @@ export default {
         var idbat = -1;
 
         for (var i = 0; i < this.children.length; i++) {
-          console.log("child", this.children[i].name)
           if (this.children[i].name.slice(0,3) == "bat") {
             idbat++;
             var info = {
@@ -1037,58 +1072,86 @@ export default {
 
     },
 
-    point2Dto3D(x, z ) {
-    // Bounding box de la map 3D
-    const boundingBox = {
-      min: { x: -0.9983415603637695, y: -1, z: -1.0045995712280273 },
-      max: { x: 1.0016584396362305, y: 1, z: 0.9954003691673279 }
-    };
+    async point2Dto3D(x, z ) {
+      // Bounding box de la map 3D
+      const boundingBox = {
+        min: { x: -0.9983415603637695, y: -1, z: -1.0045995712280273 },
+        max: { x: 1.0016584396362305, y: 1, z: 0.9954003691673279 }
+      };
 
-    // Échelle
-    const scale = { x: 145.51963806152344, y: 1.8496733903884888, z: 151.32655334472656 };
+      // Échelle
+      const scale = { x: 145.51963806152344, y: 1.8496733903884888, z: 151.32655334472656 };
 
-    // Conversion de la bounding box et de l'échelle
-    const adjustedBoundingBox = {
-      min: {
-        x: boundingBox.min.x * scale.x,
-        y: boundingBox.min.y * scale.y,
-        z: boundingBox.min.z * scale.z
-      },
-      max: {
-        x: boundingBox.max.x * scale.x,
-        y: boundingBox.max.y * scale.y,
-        z: boundingBox.max.z * scale.z
+      // Conversion de la bounding box et de l'échelle
+      const adjustedBoundingBox = {
+        min: {
+          x: boundingBox.min.x * scale.x,
+          y: boundingBox.min.y * scale.y,
+          z: boundingBox.min.z * scale.z
+        },
+        max: {
+          x: boundingBox.max.x * scale.x,
+          y: boundingBox.max.y * scale.y,
+          z: boundingBox.max.z * scale.z
+        }
+      };
+      console.log("kjsdkljqskldjklqsjdklqskljd", adjustedBoundingBox)
+      /*
+      kjsdkljqskldjklqsjdklqskljd max
+          max:
+          x: 145.76097359713458
+          y: 1.8496733903884888
+          z: 150.63050706416016
+          min
+          x-145.2783025259123
+          y-1.8496733903884888
+          z:-152.0225906055275
+       */
+      // Application de la transformation aux coordonnées 2D
+      const point3D = {
+        x: (x * (adjustedBoundingBox.max.x - adjustedBoundingBox.min.x)/(0.001781847*10000)),
+        z: (z * (adjustedBoundingBox.max.z - adjustedBoundingBox.min.z)/(0.004098415*10000))
+      };
+      console.log("point3D", point3D)
+      return point3D;
+    },
+
+    async matriceTo3DEmp(matricepoints, name, posx, posz, emp_uuid) {
+      let center = await this.point2Dto3D(posx, posz);
+      console.log("center", center)
+      const points = matricepoints.map(([x, y]) => new THREE.Vector3(x,y));
+      console.log("matrice", matricepoints)
+      console.log("points", points)
+      // mettre à l'échelle
+      for (let i = 0; i < points.length; i++) {
+        let pointemp = await this.point2Dto3D(points[i].x, points[i].y);
+
+        points[i].x = pointemp.x - center.x;
+        points[i].y = pointemp.z - center.z;
       }
-    };
-    console.log("kjsdkljqskldjklqsjdklqskljd", adjustedBoundingBox)
 
-    // Application de la transformation aux coordonnées 2D
-    const point3D = {
-      x: x * (adjustedBoundingBox.max.x - adjustedBoundingBox.min.x) + adjustedBoundingBox.min.x,
-      y: 10,
-      z: z * (adjustedBoundingBox.max.z - adjustedBoundingBox.min.z) + adjustedBoundingBox.min.z
-    };
 
-    return point3D;
-  },
 
-    async matriceTo3DEmp(matricepoints){
-      const points = matricepoints.map(([x, y]) => new THREE.Vector2(x, y));
       // Épaisseur de l'objet
       const depth = 2;
       const shape = new THREE.Shape(points);
+      console.log("shape", shape)
+
       const geome = new THREE.ExtrudeGeometry(shape, { depth: depth, bevelEnabled: false });
+      geome.rotateX(-Math.PI/2)
 
       const texture_emp = new THREE.TextureLoader().load('map/mapData/tex/tex_emp.png');
-      const material_emp = new THREE.MeshPhongMaterial({map: texture_emp});
+      const material_emp = new THREE.MeshPhongMaterial({ map: texture_emp });
       const mesh = new THREE.Mesh(geome, material_emp);
-      mesh.rotation.x = -Math.PI / 2;
-      mesh.position.y = mesh.position.y + 3;
+      mesh.position.set(center.x, 0, center.z);
       mesh.castShadow = true;
       mesh.receiveShadow = true;
-      mesh.name = "emptet";
+      mesh.name = name;
+      mesh.userData = {uuid: emp_uuid};
+      console.log("mesh", mesh);
       return mesh;
     },
+
 
 
     filteredTypes() {
@@ -1114,12 +1177,9 @@ export default {
 
 
     async start(){
-        this.testshape = [[-119.60863494873047-25,101.35678100585938-25], [-119.60863494873047-25, 101.35678100585938+25], [-119.60863494873047+25,101.35678100585938+25 ], [-119.60863494873047+25, 101.35678100585938-25]]
         this.showLoadingScreen();
         await this.loadfinal();
         this.filteredTypes();
-        const test = await this.matriceTo3DEmp(this.testshape);
-        this.selectionables.add(test);
         await this.setup();
         console.log("aftersetup", this.selectionables)
         this.scene.add(this.selectionables);
