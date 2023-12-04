@@ -1,4 +1,4 @@
-import {getRequest, postRequest, patchRequest,deleteRequest} from "@/services/axios.service"
+import {getRequest, postRequest,deleteRequest, patchRequest} from "@/services/axios.service"
 
 async function getAllEmpFromAPI(){
     let answer = await getRequest('/mapPrestataires/emp', 'GETALLEMP')
@@ -82,6 +82,7 @@ async function deleteEmpFromAPI(data) {
 }
 
 async function deleteEmp(data) {
+    console.log("data del front",data)
     try {
         let answer = await deleteEmpFromAPI(data);
         return answer;
@@ -98,6 +99,7 @@ async function updateEmpFreeFromAPI(data) {
 
 async function updateEmpFree(data) {
     try {
+        console.log("data update front",data)
         let answer = await updateEmpFreeFromAPI(data);
         return answer;
     } catch (error) {
@@ -177,12 +179,11 @@ async function getOneBatUUID(uuid) {
 }
 
 async function deleteBatFromAPI(data) {
-    return deleteRequest('/mapPrestataires/bat', data, 'DELETEBAT')
+    return deleteRequest('/mapPrestataires/bat?uuid='+data, 'DELETEBAT')
 }
 
 async function deleteBat(data) {
     try {
-        console.log("data del front",data)
         let answer = await deleteBatFromAPI(data);
         return answer;
     } catch (error) {

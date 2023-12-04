@@ -193,18 +193,28 @@ const deleteEmp = (req,callback) => {
 }
 
 
-const updateEmpFree =async  (req) => {
-
+const updateEmpFree =async  (req,callback) => {
     let uuid = req.uuid;
     let batid = req.batid;
     console.log("update service emp",uuid,batid);
     const client = await pool.connect();
     try {
-        const updateEmpQuery = 'UPDATE emplacement SET batiment_id = $1 WHERE id_emplacement = $2';
-        const updateEmpValues = [batid, uuid];
-        await pool.query(updateEmpQuery, updateEmpValues);
+        if(batid !== 0){
+            const updateBatQuery = 'UPDATE emplacement SET batiment_id = $1 WHERE id_emplacement = $2';
+            const updateBatValues = [batid, uuid];
+            await pool.query(updateBatQuery, updateBatValues);
+        }
+        else{
+            const updateBatQuery = 'UPDATE emplacement SET batiment_id = $1 WHERE id_emplacement = $2';
+            const updateBatValues = [null,uuid];
+            await pool.query(updateBatQuery, updateBatValues);
+        }
+        return callback(null, "success");
     }catch (error) {
         console.error('Erreur lors de la mise à jour de l\'emplacement :', error);
+        // Appeler le callback avec l'erreur
+        callback(error, null);
+
     }
     finally{
         client.release();
@@ -340,7 +350,8 @@ const getOnebat = async (req) => {
 
 
 const deletebat = async (req) => {
-    let id_batiment = req
+    let id_batiment = req.uuid
+    console.log("deletebat",id_batiment)
     const client = await pool.connect();
     try {
         const deleteBatimentQuery = 'DELETE FROM batiment WHERE id_batiment = $1';

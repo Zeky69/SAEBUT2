@@ -605,8 +605,12 @@ export default {
               console.log("bat_to_rmove", bat_to_rmove)
               console.log("uuid", bat_to_rmove[0].id_batiment)
               let emp_uuid = bat_to_rmove[0].id_emplacement;
-              await updateEmpFree({uuid:emp_uuid, batid: null});
-              await deleteBat({uuid: bat_to_rmove[0].id_batiment});
+              let data = {
+                uuid: emp_uuid,
+                batid: 0,
+              }
+              await updateEmpFree(data);
+              await deleteBat(bat_to_rmove[0].id_batiment);
               let empinScene = await this.findobjectByuserUUID(emp_uuid);
               console.log("empinScene", empinScene)
               const texture_emp = new THREE.TextureLoader().load('map/mapData/tex/tex_emp.png');
@@ -640,120 +644,6 @@ export default {
         }
       });
     },
-
-    async debugprestafunc() {
-      console.log("debugprestafunc")
-      //mettre le batiment 2 sur l'emplacement 4  au nom de calixte
-
-      //style save batiment_bdd[0] = {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1"}
-
-      //style save emplacement_bdd[0] = {name: "emp1", type: "emplacement", position: {x: 0, y: 0, z: 0}, orientation: "none", free: true}
-      var emp = await this.findObjectByName(this.loaded, this.emp[4])
-      console.log("emp", emp)
-      var posx = emp.position.x;
-      var posz = emp.position.z;
-      //var empbdd = await getOneEmp({name: emp.name, posx: posx, posz : posz});
-      console.log("batiment", this.batiment)
-      var bat = await this.findObjectByName(this.loaded, this.batiment[2].name)
-      var batjson = bat.toJSON()
-      try{
-        batjson.images[0].url = "none"
-      } catch (e) {
-        console.log("pas d'image")
-      }
-      var test1 = {
-        objet: batjson,
-        posx: posx,
-        posy: bat.position.y,
-        posz: posz,
-        prestataire_id: "calixte",
-        status: "accepted"
-      }
-
-      await createBat(test1);
-
-      let data = {
-        name: emp.name,
-        posx: test1.posx,
-        posz: test1.posz,
-        batid: this.batiment[2].id,
-      }
-
-      await updateEmpFree(data);
-
-
-      //mettre le batiment 6 sur l'emplacement 1  au nom de prestataire1
-
-      var emp2 = await this.findObjectByName(this.loaded, this.emp[1])
-      console.log("emp", emp2)
-      var posx2 = emp2.position.x;
-      var posz2 = emp2.position.z;
-      //var empbdd = await getOneEmp({name: emp.name, posx: posx, posz : posz});
-      console.log("batiment", this.batiment)
-      var bat2 = await this.findObjectByName(this.loaded, this.batiment[6].name)
-      var batjson2 = bat2.toJSON()
-      try{
-        batjson2.images[0].url = "none"
-      } catch (e) {
-        console.log("pas d'image")
-      }
-      var test2 = {
-        objet: batjson2,
-        posx: posx2,
-        posy: bat2.position.y,
-        posz: posz2,
-        prestataire_id: "calixte",
-        status: "waiting"
-      }
-
-      await createBat(test2);
-
-      data = {
-        name: emp2.name,
-        posx: test2.posx,
-        posz: test2.posz,
-        batid: this.batiment[6].id,
-      }
-
-      await updateEmpFree(data);
-
-      //mettre le batiment 7 sur l'emplacement 7  au nom de prestataire1
-
-      var emp3 = await this.findObjectByName(this.loaded, this.emp[7])
-      console.log("emp", emp3)
-      var posx3 = emp3.position.x;
-      var posz3 = emp3.position.z;
-      //var empbdd = await getOneEmp({name: emp.name, posx: posx, posz : posz});
-      console.log("batiment", this.batiment)
-      var bat3 = await this.findObjectByName(this.loaded, this.batiment[7].name)
-      var batjson3 = bat3.toJSON()
-      try{
-        batjson3.images[0].url = "none"
-      } catch (e) {
-        console.log("pas d'image")
-      }
-      var test3 = {
-        objet: batjson3,
-        posx: posx3,
-        posy: bat3.position.y,
-        posz: posz3,
-        prestataire_id: "prestataire1",
-        status: "accepted"
-      }
-
-      await createBat(test3);
-
-      data = {
-        name: emp3.name,
-        posx: test3.posx,
-        posz: test3.posz,
-        batid: this.batiment[7].id,
-      }
-
-      await updateEmpFree(data);
-
-    },
-
 
     async setup() {
       console.log("setup")

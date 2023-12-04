@@ -104,12 +104,12 @@ exports.deleteEmp = (req,res) => {
 
 exports.updateEmp = async (req,res) => {
     let info = req.body;
-    console.log("info update",info);
-    let response = await mapPrestatairesService.updateEmpFree(info);
-    if (response) {
-        return res.status(200).send(response);
-    }
-    return res.status(401).send("no info");
+    return await mapPrestatairesService.updateEmpFree(info,(error,data)=>{
+        if (error) {
+            return res.status(500).send("Internal error");
+        }
+        return res.status(200).send("emp updated successfully");
+    })
 }
 
 
@@ -159,7 +159,7 @@ exports.savebat = (req, res) => {
 }
 
 exports.deletebat = (req,res) => {
-    let info = req.body.uuid;
+    let info = req.query;
     console.log("info",info);
     let reponse = mapPrestatairesService.deletebat(info);
     if (reponse) {
