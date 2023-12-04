@@ -1,6 +1,6 @@
   <template>
     <div id="app">
-     <span v-if="!token"><NavBar/></span>
+      <span v-if="shouldShowNavBar"><NavBar/></span>
       <router-view></router-view>
     </div>
   </template>
@@ -13,7 +13,10 @@
     components: {
       NavBar,
     },computed:{
-      ...mapState(['token','group_id'])
+      ...mapState(['token','group_id']),
+      shouldShowNavBar() {
+      return !this.token && this.$route.name !== 'login';
+    }
     },methods: {
       ...mapActions(['getInformationFromToken']),
       async getInfo() {
