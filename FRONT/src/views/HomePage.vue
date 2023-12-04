@@ -30,7 +30,7 @@
             inspirantes et divertissement sans fin fusionnent. Plongez dans la magie que nous réserve le futur, le
             tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !
           </p>
-          <a class="boutton">Plus d'information</a>
+          <a class="boutton" >Plus d'information</a>
         </div>
       </div>
       </div>
@@ -446,6 +446,7 @@ export default {
 }
 
 .presentationCards h2{
+  text-align: center;
   font-family: 'Syne';
   font-size: 45px;
 
