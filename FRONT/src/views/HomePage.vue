@@ -6,8 +6,8 @@
       </video>
       <div class="contenuHautDePage">
         <tittle>Explorez l'extraordinaire : là où les<br> rêves prennent vie !</tittle>
-        <p>Saisissez l'excitation dès maintenant ! Réservez vos billets pour la fête foraine et<br>
-          plongez dans une journée de joie, de rires et de sensations inoubliables !</p>
+        <p>N'hésitez plus ! Réservez un vous un moment hors du temps pour LA fête foraine du futur et<br>
+          plongez dans une journée de joie, de découvertes et d'expériences inoubliables !</p>
         <a class="boutton">Billeterie</a>
       </div>
     </div>
@@ -24,7 +24,7 @@
         <div class="textePresentatif">
           <h2>Bienvenue à Belforaine <span style="color:#553C65"><br>le paradis du futur !</span></h2>
           <p>Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences
-            inspirantes et divertissement sans fin fusionnent. Plongez dans l'inconnu avec une pointe de futurisme, le
+            inspirantes et divertissement sans fin fusionnent. Plongez dans la magie que nous réserve le futur, le
             tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !</p>
           <a class="boutton">Plus d'information</a>
         </div>
