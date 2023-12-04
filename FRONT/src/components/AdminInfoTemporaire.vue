@@ -175,6 +175,7 @@ export default {
 }
 
 .Perfomance-text h4{
+  text-align: left;
   color: rgba(255, 255, 255, 0.52);
   font-family: Goldman;
   font-size: 35px;
