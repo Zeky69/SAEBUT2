@@ -108,6 +108,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Goldman&display=swap');
 
 .EffetViolet{
+  text-align: left;
   background: linear-gradient(179deg, #543C64 -58.62%, #868CD1 99.12%);
   background-clip: text;
   -webkit-background-clip: text;
@@ -122,7 +123,7 @@ export default {
 }
 
 .EspaceAdmin h1{
-  text-align: -webkit-left;
+  text-align: left;
   font-family: "DM Sans";
   font-size: 50px;
   font-style: normal;
@@ -147,7 +148,7 @@ export default {
 .Perfomance{
   padding: 2%;
   display: flex;
-  text-align: -webkit-left;
+  text-align: left;
   gap: 7%;
   flex: 2;
   border-radius: 20px;
@@ -238,7 +239,7 @@ export default {
   color: #252336;
   font-family: DM Sans;
   font-size: 35px;
-  text-align: -webkit-left;
+  text-align: left;
 
 
 }
@@ -247,7 +248,7 @@ export default {
   color: #BFB7CC;
   font-family: DM Sans;
   font-size: 20px;
-  text-align: -webkit-left;
+  text-align: left;
 
 }
 
@@ -266,7 +267,7 @@ export default {
 }
 
 .container-bottom h2{
-  text-align: -webkit-left;
+  text-align: left;
   color: #56565C;
   font-size: 30px;
 }
