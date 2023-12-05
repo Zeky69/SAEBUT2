@@ -80,7 +80,7 @@
           <div class="card-head" >
             <div class="title-card">
               <h1 class="title">Billet Premium</h1>
-              <h2 class="subtitle">1 jour</h2>
+              <h2 class="subtitle">2 jours</h2>
             </div>
             <p class="price">59,99€</p>
           </div>
