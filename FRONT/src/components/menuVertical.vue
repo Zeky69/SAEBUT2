@@ -12,7 +12,7 @@
       <div class="profil-container">
         <img src="../assets/menu/stephane.jpg" alt="">
         <div class="profil-info">
-          <span class="profil-info-name">Stephan Bellicaud</span>
+          <span class="profil-info-name">{{lname}} {{fname}}</span>
           <span class="profil-info-role">Organisateur</span>
         </div>
       </div>
@@ -59,7 +59,7 @@
 
 
 <script>
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: 'MenuVertical',
@@ -68,6 +68,9 @@ export default {
       type: Array,
       required: true,
     },
+  },
+  computed :{
+    ...mapState(['lname','fname'])
   },
   data : () =>({
     open: false,
