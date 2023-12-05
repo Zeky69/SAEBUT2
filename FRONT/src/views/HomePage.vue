@@ -365,7 +365,7 @@ export default {
 
 .card {
   font-family: "DM Sans Regular" , Syne , Helvetica , sans-serif;
-  //border-color: rgba(255, 255, 255, 0.2)  ;
+  border-color: rgba(255, 255, 255, 0.2)  ;
   border: solid 1px transparent;
   color: white;
   width: 100%;

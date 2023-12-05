@@ -11,7 +11,7 @@
     <h1>group_id : {{group_id}}</h1>
 
 
-    <button @click="deconnexion">Deconnexion </button>
+    <button @click="deconnexion">Déconnexion </button>
 
   </div>
   <div v-else>
