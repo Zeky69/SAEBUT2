@@ -19,7 +19,7 @@
           <button class="button" @click="scrollToPreviousCard"><svg class="svg-icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M688 224 656 192 336 512 336 512 320 528 656 864 688 832 384 528Z"  /></svg>
           </button>
         </div>
-      <div v-show="true" class="carousel-container">
+      <div class="carousel-container">
         <div class="card-prestate"  v-for="(prestate,index) in filterList" :key="index">
           <div class="card-prestate-container">
             <div class="card-header">
