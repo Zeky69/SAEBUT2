@@ -112,23 +112,25 @@ export default {
 
 .FormulaireLogin::after {
   content: '';
-  position: absolute;
-  top: 45%;
+  position: fixed;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(0, 0, 255, 0), rgba(0, 0, 255, 0.234)); /* Ajustez les couleurs et les opacités selon vos besoins */
+  background: linear-gradient(to bottom, rgba(0, 0, 255, 0), rgba(0, 0, 255, 0.14));
   z-index: -1;
 }
 .background {
   background: url(../assets/fondFeteForaine.png) no-repeat center center fixed;
   background-size: cover;
-  position: absolute;
+  position: fixed;
   width: 100%;
-  height: 50em;
+  height: 100%;
   filter: blur(7px);
   z-index: -1;
+  overflow: hidden; /* Ajoutez cette ligne pour bloquer le défilement du fond */
 }
+
 
 .container {
   position: relative;
