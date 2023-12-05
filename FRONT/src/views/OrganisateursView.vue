@@ -31,7 +31,7 @@
 
     <hr>
 
-    
+
   </div>
 
 
@@ -88,6 +88,7 @@ export default {
   height: 100%;
   z-index: 2;
 }
+
 
 .text {
   position: absolute;
@@ -163,6 +164,16 @@ export default {
   float: left;
   margin-right: 3%;
   line-height: 1;
+}
+
+.gradient-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 10em); /* ajustez la valeur en fonction de votre mise en page */
+  background: linear-gradient(to bottom, #800080, transparent);
+  z-index: 4;
 }
 
 
