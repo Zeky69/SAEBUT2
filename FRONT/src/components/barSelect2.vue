@@ -81,9 +81,9 @@ export default {
 
 .custom-select {
   position: relative;
-  width: 10%;
-  min-width: 150px;
-  max-width: 200px;
+  width: 20%;
+  min-width: 100px;
+  max-width: 170px;
   text-align: left;
   outline: none;
   height: 100%;

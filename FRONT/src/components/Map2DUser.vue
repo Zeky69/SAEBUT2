@@ -3,7 +3,7 @@
 <template>
   <div class="all-container">
     <div class="dotted"></div>
-    <div class="title-container"><h1 class="title">Carte <span>Interactive</span></h1></div>
+    <div class="title-container"><h1 class="title">Carte &nbsp;<span>Interactive</span></h1></div>
     <div style="text-align: center;"><button class="btn" @click="$router.push('/panier')"> Acceder a la map 3D</button></div>
   <div class="map">
     <div class="filtre-container">
@@ -372,7 +372,8 @@ option {
 }
 
 .title-container{
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   background-color: #553C65;
   padding: 5px 5px;
   border-radius: 0 10px 10px 0;
@@ -380,11 +381,10 @@ option {
 }
 .title {
   font-family: "DM Sans";
-  font-size: 50px;
+  font-size: 45px;
   color : white;
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
 }
 
 .title span {
@@ -526,6 +526,81 @@ background-color: transparent;
   width: 15px;
   height: 5px;
   background-color: #d7d7d7;
+
+}
+
+@media screen and (max-width: 350px){
+  .title{
+    flex-direction: column;
+  }
+
+}
+
+@media screen and (max-width: 1180px){
+
+  .title-container{
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0 !important;
+    padding: 5px 0;
+  }
+  .title {
+    font-size: 40px;
+
+  }
+  .map{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+  }
+  .filtre-container{
+    border-radius: 10px 10px 0 0;
+    width: 95%;
+    height: 40vh;
+  }
+
+  .filtre-head{
+    width: 100%;
+    min-height: fit-content;
+
+
+  }
+
+  .map-container{
+    width: 100%;
+    height: 50vh;
+  }
+  .vue2leaflet-map{
+    width: 95% !important;
+    border-radius: 0 0 10px 10px !important;
+    height: 100% !important;
+  }
+
+  .info-panel-user {
+    width: 100%;
+    right: -100%;
+  }
+
+  .info-panel-close{
+    right: -100% !important;
+  }
+
+  .title-container{
+    width: 100%;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .dotted {
+    margin: 0;
+  }
+
+  .search-bar{
+    width: 95%;
+    margin-top: 5px;
+  }
+
+
 
 }
 

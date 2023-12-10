@@ -249,7 +249,7 @@ export default {
         }
 
         const dataemp= {
-              name : "emp_" + this.newfeature.properties.name,
+              name : this.newfeature.properties.name,
               description : this.newfeature.properties.description,
               posx : center[0],
               posy : 10,

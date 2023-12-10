@@ -282,6 +282,10 @@ export default {
   height: 400px;
 }
 
+.card-bottom{
+  text-align: center;
+}
+
 .card-prestate-container{
   box-sizing: content-box;
   padding: 20px;
@@ -475,6 +479,17 @@ align-items: center;
 
 .btn-card:hover{
   background-color: rgba(255, 255, 255, 0.4);
+
+}
+
+
+@media screen and (max-width: 800px ){
+
+  .search-bar{
+    width: 50%;
+    min-width: 200px;
+  }
+
 
 }
 
