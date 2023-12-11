@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="navbar" class="navbar">
-      <div class="navbar-content scrolled">
+      <div class="navbar-content">
         <div class="menu-top">
           <div class="menu-burger">
           <button >
@@ -37,7 +37,7 @@ export default {
     isHomePage: false,
     navOpen: true,
     prevScrollpos : 0,
-    scrolled: true,
+    scrolled: false,
     navBarTitles: {
       'Accueil': '/',
       'Attractions': '/attraction',
@@ -65,7 +65,7 @@ export default {
       document.getElementsByClassName('navbar-content')[0].classList.toggle('scrolled', this.scrolled);
       let currentScrollPos = window.pageYOffset;
 
-      if (this.prevScrollpos > currentScrollPos) {
+      if (this.prevScrollpos > currentScrollPos || currentScrollPos < 100) {
         document.getElementById("navbar").style.top = "0";
       } else {
         document.getElementById("navbar").style.top = "-200px";

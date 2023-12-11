@@ -567,6 +567,10 @@ background-color: transparent;
 
   }
 
+  .resultat{
+    height: 160px;
+  }
+
   .map-container{
     width: 100%;
     height: 50vh;
