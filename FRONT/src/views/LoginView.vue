@@ -1,11 +1,11 @@
 <template>
   <div class="FormulaireLogin">
-    <img class="fond" src="../assets/fondFeteForaine.png">
+    <div class="background"></div>
     <div class="container">
       <div class="gauche">
         <div class="formulaire">
           <div class="formulaire-top">
-            <h2>Connexion <span style="font-weight: normal; color: rgba(90, 50, 50, 0.69);">- Inscription</span></h2>
+            <h2>Connexion <span style="font-weight: normal; color: gray;">- Inscription</span></h2>
           </div>
           <div class="formulaire-contenu">
             <div class="connexion">
@@ -23,7 +23,7 @@
               <a>Mot de passe oublié ?</a>
             </div>
             <div class="boutton">
-            <p @click="connect()">Connexion</p>
+            <p class="connexion_btn" @click="connect()">Connexion</p>
               <hr />
               <p id="Inscription">Inscription</p>
 
@@ -36,7 +36,7 @@
       <div class="droite">
         <img src="../assets/logoWF2W.png" class="logo">
         <div class="reseaux">
-          <img src="../assets/logo/TwitterX.svg">
+            <img src="../assets/logo/TwitterX.svg">
           <img src="../assets/logo/Facebook.svg">
           <img src="../assets/logo/YouTube.svg">
           <img src="../assets/logo/Instagram.svg">
@@ -49,20 +49,29 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import {log} from "three/nodes";
 
 export default {
   name: "LoginView",
   computed:{
-    ...mapState(['token'])
+    ...mapState(['group_id'])
   },
   data : () => ({
     login:"",
     password:"",
     isInvalidCredentials: false,
-  }),
+  }),mounted() {
+    if(this.group_id===1){
+      this.$router.replace('/admin');
+    }else if(this.group_id===2){
+      this.$router.replace('/prestataire');
+    }
+    document.addEventListener("keydown", this.handleEnterKey);
+  },
+
+  beforeDestroy() {
+    document.removeEventListener("keydown", this.handleEnterKey);
+  },
   methods:{
-    log,
     ...mapActions(['loginUser']),
     async connect(){
       console.log(this.login)
@@ -70,9 +79,10 @@ export default {
           {"login" : this.login,
             "password" :this.password};
       await this.loginUser(data);
-      if(this.token){
-        this.isInvalidCredentials;
+      if(this.group_id===2){
         this.$router.push('/prestataire');
+      }else if(this.group_id===1){
+        this.$router.push('/admin');
       }else{
         this.isInvalidCredentials = true;
         this.login = "";
@@ -84,50 +94,74 @@ export default {
 
       }
       console.log(this.token);
+    },
+
+    handleEnterKey(event) {
+      if (event.key === "Enter") {
+        this.connect();
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-* {
-  margin: 0;
-  padding: 0;
+.FormulaireLogin {
+  position: relative;
 }
 
-.fond {
+.FormulaireLogin::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  position: absolute;
-  left: 0;
-  filter: blur(7px);
+  background: linear-gradient(to bottom, rgba(0, 0, 255, 0), rgba(0, 0, 255, 0.14));
+  z-index: -1;
 }
+.background {
+  background: url(../assets/fondFeteForaine.png) no-repeat center center fixed;
+  background-size: cover;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  filter: blur(7px);
+  z-index: -1;
+  overflow: hidden; /* Ajoutez cette ligne pour bloquer le défilement du fond */
+}
+
 
 .container {
   position: relative;
+  z-index: 1;
   justify-content: space-between;
   align-items: center;
   display: flex;
   flex-direction: row;
-  top: 200px;
+  top: 100px;
   margin: 0 7%;
+  
 }
 
 .formulaire {
   padding: 5%;
-  width: 600px;
-  height: 650px;
+  width: 500px; /* Ajustez la largeur selon vos besoins */
+  height: 500px; /* Ajustez la hauteur selon vos besoins */
   position: relative;
   z-index: 10;
-  border-radius: 40px;
+  border-radius: 12px;
   background-color: rgba(34, 29, 29, 0.45);
+  backdrop-filter: blur(8px) saturate(180%);
+  filter: drop-shadow(0px 4px 29px #00000053);
 }
 
 .formulaire-top h2 {
   color: white;
   font-family: "DM Sans";
-  font-size: 40px;
+  font-size: 25px;
+  text-align: center;
+  margin-top: 5%;
 }
 
 .formulaire-contenu{
@@ -159,15 +193,16 @@ export default {
 }
 
 .Login p{
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .connexion a{
-  padding-left: 63%;
+  padding-left: 58%;
+  font-style: italic;
 }
 
 .inputFormulaire{
-  font-size: 20px;
+  font-size: 15px;
   color: white;
   border: none;
   width: 100%;
@@ -188,7 +223,7 @@ export default {
 .connexion a{
   text-decoration: underline;
   font-family: "DM Sans";
-  font-size: 17px;
+  font-size: 13px;
 }
 .boutton{
   align-items: center;
@@ -196,11 +231,12 @@ export default {
   flex-direction: column;
   height: 150px;
   justify-content: space-between;
+  margin-top: 10px;
 }
 
 .boutton p{
   font-family: "DM Sans";
-  font-size: 25px;
+  font-size: 20px;
   width: 350px;
   height: 50px;
   border-radius: 20px;
@@ -209,7 +245,17 @@ export default {
   justify-content: center;
   border : 1px solid #ffffff;
   cursor: pointer;
+}
 
+.boutton .connexion_btn:hover {
+  background-color: #ffffff;
+  color: #000000;
+  transition: 0.2s;
+}
+
+.boutton .connexion_btn:active {
+  background-color: #ffffff;
+  color: #000000;
 }
 
 .boutton hr{
@@ -222,9 +268,12 @@ export default {
 }
 
 .boutton hr {
-  border-top: 0.05px solid #ffffff;
   width: 100%;
-  margin: 0 auto;
+  margin: 0;
+  margin-bottom: 10px;
+  border: 0;
+  height: 2px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(255, 255, 255, 0.75), rgba(0, 0, 0, 0));
 }
 
 #Inscription{
@@ -240,13 +289,15 @@ export default {
 }
 
 .logo{
-  width: 100%;
+  width: 80%;
   height: auto;
   max-width: 322px;
+  filter: drop-shadow(0px 4px 29px #000000);
 }
 
 .reseaux img{
-  fill: red;
+  width: 50px;
+  filter: invert(100%) sepia(0%) saturate(7498%) hue-rotate(184deg) brightness(100%) contrast(100%);
 }
 
 @media all and (max-width:1300px) {

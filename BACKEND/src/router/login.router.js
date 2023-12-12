@@ -9,5 +9,7 @@ var router = express.Router();
 //router.get('/', loginMiddlewares.validateLoginInput,loginController.login);
 
 router.post('/',loginController.login);
+router.get('/:token',loginController.getInformationWithToken);
+
 
 module.exports = router;

@@ -7,14 +7,31 @@ var router = express.Router();
 
 
 //repuperer tout les emplacements
-router.get('/emp', mapPrestatairesMiddlewares.validateFilterInput,(req, res) => {
-    res.send(mapPrestatairesControllers.getAllEmp(req,res));
-});
+router.get('/emp', mapPrestatairesMiddlewares.validateempFilterInput,mapPrestatairesControllers.getEmp);
+
+router.get('/emp/:uuid', mapPrestatairesMiddlewares.validateempUUID,mapPrestatairesControllers.getEmpUUID);
+
+router.post('/emp', mapPrestatairesMiddlewares.validateAddempInput , mapPrestatairesControllers.saveEmp);
+
+router.delete('/emp', mapPrestatairesMiddlewares.validateDelempInput , mapPrestatairesControllers.deleteEmp);
+
+router.patch('/emp', mapPrestatairesMiddlewares.validateUpdateempInput , mapPrestatairesControllers.updateEmp);
+
+router.get('/bat', mapPrestatairesMiddlewares.validatebatFilterInput, mapPrestatairesControllers.getBat);
+
+router.get('/bat/:uuid', mapPrestatairesMiddlewares.validatebatUUID, mapPrestatairesControllers.getBatUUID);
+
+router.get('/bat/emp/:uuid', mapPrestatairesMiddlewares.validebatempUUID, mapPrestatairesControllers.getBatempUUID);
 
 
-router.post('/addemp', mapPrestatairesMiddlewares.validateAddempInput , mapPrestatairesControllers.saveEmp);
+router.post('/bat', mapPrestatairesMiddlewares.validateAddbatInputdebug , mapPrestatairesControllers.savebat);
 
-router.post('/delemp', mapPrestatairesMiddlewares.validateDelempInput , mapPrestatairesControllers.deleteEmp);
+router.delete('/bat', mapPrestatairesMiddlewares.validateDelbatInput , mapPrestatairesControllers.deletebat);
+
+//router.get('/bat/debug',mapPrestatairesMiddlewares.validatebatFilterInputdebug, (req,res) =>{res.send(mapPrestatairesControllers.getBatdebug(req,res))});
+
+router.get('/bat/debug',mapPrestatairesMiddlewares.validatebatFilterInputdebug, mapPrestatairesControllers.getBatdebug);
+
 
 
 

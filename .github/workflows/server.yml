@@ -26,9 +26,12 @@ jobs:
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/githubkey
           cd ~/Documents/SAEBUT2/
-          git reset --hard origin/main
           git pull origin main
-          cd FRONT/
           source ~/.nvm/nvm.sh
           nvm use 21.1.0
+          psql -d bddsae -f sae_belfo.sql
+          psql -d bddsae -f insert_sae.sql
+          cd BACKEND/
+          pm2 restart default
+          cd ../FRONT/
           ~/script.sh

@@ -1,1 +1,7 @@
 .idea
+
+
+/BACKEND/src/node_modules/
+BACKEND/src/.env
+
+FRONT/src/services/axios.service.js

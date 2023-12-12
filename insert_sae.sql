@@ -18,9 +18,6 @@ INSERT INTO mots_de_passe_utilisateurs VALUES(1, '1','mdpAdmin'),
 
 INSERT INTO prestataire VALUES ('1', 'prestataire qui prestate','prestatata','3','3');
 
-INSERT INTO emplacement VALUES ('1', 'emplacement 1', '1'),
-                                ('2', 'emplacement 2', '2'),
-                                ('3', 'emplacement 3', '3');
 
 INSERT INTO tags VALUES ('1', 'accessible handicapé'),
                         ('2', 'wifi'),

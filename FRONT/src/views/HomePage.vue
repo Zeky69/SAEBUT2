@@ -5,10 +5,12 @@
         <source src="../assets/Observation_Wheel.mp4" type="video/mp4">
       </video>
       <div class="contenuHautDePage">
-        <tittle>Explorez l'extraordinaire : là où les<br> rêves prennent vie !</tittle>
-        <p>N'hésitez plus ! Réservez un vous un moment hors du temps pour LA fête foraine du futur et<br>
-          plongez dans une journée de joie, de découvertes et d'expériences inoubliables !</p>
-        <a class="boutton">Billeterie</a>
+        <h1>Explorez l'extraordinaire : là où les<br> rêves prennent vie !</h1>
+        <p>
+          N'hésitez plus ! Laissez vous tenter pour un moment hors du temps pour LA fête foraine du futur et<br>
+          plongez dans une journée de joie, de découvertes et d'expériences inoubliables !
+        </p>
+        <a style="position: relative; z-index: 0" class="boutton">Billetterie</a>
       </div>
     </div>
     <img src="../assets/overlay.svg" class="overlay-image">
@@ -23,10 +25,12 @@
       <div class="droite">
         <div class="textePresentatif">
           <h2>Bienvenue à Belforaine <span style="color:#553C65"><br>le paradis du futur !</span></h2>
-          <p>Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences
+          <p>
+            Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences
             inspirantes et divertissement sans fin fusionnent. Plongez dans la magie que nous réserve le futur, le
-            tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !</p>
-          <a class="boutton">Plus d'information</a>
+            tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !
+          </p>
+          <a class="boutton" >Plus d'information</a>
         </div>
       </div>
       </div>
@@ -76,7 +80,7 @@
           <div class="card-head" >
             <div class="title-card">
               <h1 class="title">Billet Premium</h1>
-              <h2 class="subtitle">1 jour</h2>
+              <h2 class="subtitle">2 jours</h2>
             </div>
             <p class="price">59,99€</p>
           </div>
@@ -96,13 +100,76 @@
       </div>
     </div>
 
+    <div class="presentationCards">
+      <br>
+      <h2>Plus que des manèges, une expérience<br>
+        <span style="color: #553C65">qui tourne la magie à l'infini !</span></h2>
+      <div class="cards-multiple">
+
+        <div class="grosseCard">
+          <img src="../assets/pageAccueil/multiple-cards/image1-1.png">
+          <img class="imageMilieu" src="../assets/pageAccueil/multiple-cards/image1-2.png">
+          <div class="mini-card">
+            <div class="mini-card-header">
+              <h3>Rejoignez la Belforaine LAN Fest !</h3>
+            </div>
+            <div class="mini-card-content">
+              <p> Des tournois de jeu inoubliables vous attendent à LAN Fest,<br>
+                le paradis des gamers à Belforaine. Défiez vos amis, mesurez<br>
+                vos compétences et plongez dans l'action multijoueur ultime !</p>
+            </div>
+            <p class="btns">Je fonce !</p>
+          </div>
+        </div>
+
+        <div class="grosseCard solo">
+          <img src="../assets/pageAccueil/multiple-cards/image2-2.png">
+          <img class="imageMilieu" src="../assets/pageAccueil/multiple-cards/image2-1.png">
+          <div class="mini-card solo">
+            <div class="mini-card-header">
+              <h3>Découvrez nos aventures !</h3>
+            </div>
+            <div class="mini-card-content">
+              <p>Nos attractions sont en constante évolution. Des montagnes russes<br>
+                trépidantes aux spectacles surprenants, plongez dans un univers en <br>
+                perpétuelle transformation.</p>
+            </div>
+            <p class="btns"> Je veux essayer !</p>
+          </div>
+        </div>
+
+        <div class="grosseCard">
+          <img src="../assets/pageAccueil/multiple-cards/image3-1.png">
+          <img class="imageMilieu" src="../assets/pageAccueil/multiple-cards/image3-2.png">
+          <div class="mini-card">
+            <div class="mini-card-header">
+              <h3>Goûtez aux Saveurs du Futur</h3>
+            </div>
+            <div class="mini-card-content">
+              <p>Nos restaurants vous transportent dans le futur culinaire<br>
+                avec des plats innovants, des saveurs exotiques et des <br>
+                expériences de restauration uniques.</p>
+            </div>
+            <p class="btns">Réserver une table</p>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+    <Map2DUser/>
+    <AllCardPrestate/>
+
   </div>
 </template>
 
 <script>
+import Map2DUser from "@/components/Map2DUser.vue";
+import AllCardPrestate from "@/components/AllCardPrestate.vue";
+
 export default {
   name: 'HomePage',
-  components: {}
+  components: {AllCardPrestate, Map2DUser},
 }
 </script>
 
@@ -119,6 +186,7 @@ export default {
 .fullscreen-video {
   width: 100%;
   position: relative;
+  z-index: -10;
   object-fit: cover;
   background-color: transparent;
 }
@@ -141,9 +209,10 @@ export default {
   color: #ffffff;
 }
 
-.contenuHautDePage tittle {
+.contenuHautDePage h1 {
   font-size: 55px;
   font-family: 'Syne';
+  font-weight: normal;
 }
 .contenuHautDePage p {
   font-size: 20px;
@@ -296,7 +365,7 @@ export default {
 
 .card {
   font-family: "DM Sans Regular" , Syne , Helvetica , sans-serif;
-  //border-color: rgba(255, 255, 255, 0.2)  ;
+  border-color: rgba(255, 255, 255, 0.2)  ;
   border: solid 1px transparent;
   color: white;
   width: 100%;
@@ -332,10 +401,12 @@ export default {
   font-family: "DM Sans Regular" , Syne , Helvetica , sans-serif;
 
 }
-.title{
+
+.title-card h1{
   width: fit-content;
   font-size: 40px;
 }
+
 .subtitle{
   width: fit-content;
   font-size: 20px;
@@ -347,6 +418,7 @@ export default {
   align-items: center;
   height: 100%;
 }
+
 .list-info li {
   font-size: 20px;
   font-family: "DM Sans Regular" , Syne , Helvetica , sans-serif;
@@ -357,6 +429,7 @@ export default {
   margin: 0 50px 0 100px;
 
 }
+
 .list-container{
   padding-top: 25px;
   display: flex;
@@ -366,14 +439,82 @@ export default {
 
 }
 
+.presentationCards{
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.presentationCards h2{
+  text-align: center;
+  font-family: 'Syne';
+  font-size: 45px;
+
+}
+
+.cards-multiple{
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.grosseCard{
+  display: flex;
+  padding-left: 4%;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+.grosseCard.solo{
+  display: flex;
+  flex-direction: row-reverse;
+  padding-right:4%;
+
+}
+
+.mini-card{
+  justify-content: space-evenly;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 700px;
+  height: 240px;
+  border-radius: 0 40px 40px 0;
+  background-color: #553C65;
+  color: white;
+  font-family: "DM Sans";
+  padding: 2%;
+}
+
+.mini-card.solo{
+  background-color: #2c3e50;
+  border-radius: 40px 0 0 40px;
 
 
 
+}
 
+.mini-card-header{
+  font-size: 25px;
+}
 
+.mini-card-content{
+  text-align: justify;
+  font-size: 20px;
+}
 
+.grosseCard img{
+  width: 200px;
+}
 
-
+.btns {
+  width: 30%;
+  font-size: 22px;
+  background-color: white;
+  padding: 1% 2%;
+  color: #553C65;
+  border-radius: 10px;
+}
 
 @media all and (max-width: 1160px) {
   .base-image {
@@ -381,7 +522,7 @@ export default {
     object-fit: cover;
   }
 
-  .contenuHautDePage tittle {
+  .contenuHautDePage h1 {
     font-size: 45px;
   }
 
@@ -420,9 +561,33 @@ export default {
     height: 100%;
   }
 
+  .presentationCards h2{
+    font-size: 37px;
+  }
+
+  .mini-card{
+    width: 600px;
+    height: 200px;
+    padding: 2%;
+  }
+
+
+  .btns {
+    width: 20%;
+    font-size: 18px;
+  }
+
+  .mini-card-header{
+    font-size: 20px;
+  }
+
+  .mini-card-content{
+    text-align: justify;
+    font-size: 17px;
+  }
+
 
 }
-
 
 @media screen and (max-width: 1030px) {
 
@@ -471,8 +636,33 @@ export default {
   }
 
 
-}
+  .presentationCards h2{
+    font-size: 34px;
+  }
 
+  .mini-card{
+    width: 550px;
+    height: 180px;
+  }
+
+
+  .btns {
+    width: 20%;
+    font-size: 14px;
+  }
+
+  .mini-card-header{
+    font-size: 16px;
+  }
+
+  .mini-card-content{
+    text-align: justify;
+    font-size: 13px;
+  }
+
+
+
+}
 
 @media screen and (max-width: 900px){
   .card{
@@ -500,9 +690,12 @@ export default {
     margin: 20px 0;
   }
 
+  .imageMilieu{
+    display: none;
+  }
+
+
 }
-
-
 
 @media all and (max-width: 730px) {
 
@@ -511,7 +704,7 @@ export default {
     object-fit: cover;
   }
 
-  .contenuHautDePage tittle {
+  .contenuHautDePage h1 {
     font-size: 25px;
   }
 
@@ -552,8 +745,6 @@ export default {
   }
 }
 
-
-
 @media screen and (max-width: 430px){
   .card{
     width: 99%;
@@ -569,6 +760,34 @@ export default {
   .title-card{
     width: fit-content;
     margin-left: 5%;
+  }
+
+  .presentationCards h2{
+    font-size: 20px;
+  }
+
+  .mini-card{
+    width: 600px;
+    height: 180px;
+  }
+
+
+  .btns {
+    width: 40%;
+    font-size: 10px;
+  }
+
+  .mini-card-header{
+    font-size: 12px;
+  }
+
+  .mini-card-content{
+    text-align: justify;
+    font-size: 8px;
+  }
+
+  .grosseCard img{
+    width: 150px;
   }
 
 

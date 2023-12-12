@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="navbar">
+    <div id="navbar" class="navbar">
       <div class="navbar-content">
         <div class="menu-top">
           <div class="menu-burger">
@@ -13,12 +13,16 @@
             <h1>BELFORAINE</h1>
           </div>
           <div class="icons">
-            <img v-if="!PrestataireLog" :src="require('@/assets/icons/panier.svg')" @click="menuClicked('/panier')"   class="i" alt="">
-            <img v-if="PrestataireLog" :src="require('@/assets/icons/prestataire.png')" @click="deconnexion()"   class="i" alt="">
+            <img :src="require('@/assets/icons/panier.svg')" @click="menuClicked('/panier')"   class="i" alt="">
           </div>
         </div>
-        <div class="menu-text" v-show="navOpen">
-          <a v-for="(text, index) in Object.entries(navBarTitles)" :key="index" @click="menuClicked(text[1])">{{ text[0] }}</a>
+        <div class="menu-text--wrapper" v-show="navOpen">
+          <div class="menu-text">
+            <a v-for="(text, index) in Object.entries(navBarTitles)" :key="index" @click="menuClicked(text[1])">{{ text[0] }}</a>
+          </div>
+          <div class="scrolled-icons">
+            <img :src="require('@/assets/icons/panier.svg')" @click="menuClicked('/panier')"   class="i" alt="">
+          </div>
         </div>
       </div>
     </div>
@@ -26,87 +30,78 @@
 </template>
 
 <script>
-import {mapState,mapActions} from "vuex";
-
 export default {
   name: 'NavBar',
   data: () => ({
     isTransparent: false,
     isHomePage: false,
     navOpen: true,
+    prevScrollpos : 0,
+    scrolled: false,
     navBarTitles: {
-      'Accueil': '/', 'Attractions' : '/attraction', 'Restauration' : '/restauration', 'Boutique' : '/boutique', 'Billetterie' : '/billetterie', 'Organisateurs' : '/organisateurs'}
-  })
-,computed:{
-    ...mapState(['PrestataireLog'])
-  },
+      'Accueil': '/',
+      'Attractions': '/attraction',
+      'Restauration': '/restauration',
+      'Boutique': '/boutique',
+      'Billetterie': '/billetterie',
+      'Organisateurs': '/organisateurs'
+    }
+  }),
   methods: {
-    ...mapActions(['logout'])
-    ,menuClicked(path) {
-      this.$router.push(path).catch(() => {});
-      },
-    handleScroll() {
-      this.isTransparent = window.scrollY <= 200  ;
-    },deconnexion(){
-      if(confirm("Etes vous sur de vouloir vous déconnecter ?")){
-        this.$router.push('/');
-        this.logout();
+    menuClicked(path) {
+      if (window.innerWidth < 902) {
+        this.navOpen = !this.navOpen
       }
+      this.$router.push(path).catch(() => {
+      });
     },
-    AffecterValeur(){
-      let navBar = document.getElementsByClassName("navbar-content")[0];
-      if (this.PrestataireLog) {
-      this.navBarTitles = {
-        'Gestion': '/',
-        'Gestions': '/attraction',
-        'Restauration': '/restauration',
-        'Boutique': '/boutique',
-        'Billetterie': '/billetterie',
-        'Organisateurs': '/organisateurs'
-      };
-        navBar.style.backgroundColor = 'rgba(255, 0, 0, 0.5)';
-    } else {
-      this.navBarTitles = {
-        'Accueil': '/',
-        'Attractions': '/attraction',
-        'Restauration': '/restauration',
-        'Boutique': '/boutique',
-        'Billetterie': '/billetterie',
-        'Organisateurs': '/organisateurs'};
-        navBar.style.backgroundColor = 'rgba(23, 35, 49, 0.8)';
-
+    handleScroll() {
+      if ((!this.scrolled && window.innerWidth > 902) || (this.scrolled && window.innerWidth > 1100 )) {
+        this.navOpen = true;
+      } else {
+        this.navOpen = false;
       }
+      this.scrolled = window.scrollY >= 100;
+      document.getElementsByClassName('navbar-content')[0].classList.toggle('scrolled', this.scrolled);
+      let currentScrollPos = window.pageYOffset;
+
+      if (this.prevScrollpos > currentScrollPos || currentScrollPos < 100) {
+        document.getElementById("navbar").style.top = "0";
+      } else {
+        document.getElementById("navbar").style.top = "-200px";
+        this.navOpen = false;
+      }
+
+      this.prevScrollpos = currentScrollPos;
+
+
     }
   },
   watch: {
     '$route'() {
       this.isHomePage = this.$route.path === '/attraction';
       this.isTransparent = this.isHomePage;
-    },'PrestataireLog'() {
-      this.AffecterValeur();
-      }
+    }
   },
   mounted() {
-    if (window.innerWidth > 902) {
+    if ((!this.scrolled && window.innerWidth > 902) || (this.scrolled && window.innerWidth > 1100 )) {
       this.navOpen = true;
-    }else{
+    } else {
       this.navOpen = false;
     }
 
     window.addEventListener('scroll', this.handleScroll);
     window.addEventListener('resize', () => {
-      if (window.innerWidth > 902) {
+      if ((!this.scrolled && window.innerWidth > 902) || (this.scrolled && window.innerWidth > 1100 )) {
         this.navOpen = true;
-      }else{
+      } else {
         this.navOpen = false;
       }
-
     });
+
     // Vérifiez également le chemin de la route lors du montage initial
     this.isHomePage = this.$route.path === '/attraction';
     this.isTransparent = this.isHomePage;
-
-    this.AffecterValeur();
   }
 }
 </script>
@@ -121,13 +116,25 @@ export default {
   font-family: 'DM Sans Regular';
   src: url('../assets/fonts/DM_Sans/static/DMSans-Regular.ttf') format('truetype');
 }
+@keyframes menuSlideDown {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 200px;
+  }
+}
 
 * {
   margin: 0;
   padding: 0;
 }
+.scrolled-icons{
+  display: none;
+}
 
 .navbar {
+  user-select: none;
   margin: 10px 0;
   font-family: "DM Sans Medium", Syne, Helvetica, sans-serif;
   z-index: 1001;
@@ -137,6 +144,7 @@ export default {
   background-color: rgba(255, 255, 255, 0);
   position: fixed;
   color: white;
+  transition: all 0.3s;
 
 }
 .navbar-content {
@@ -146,6 +154,10 @@ export default {
   width: 80%;
   background-color: rgba(23, 35, 49, 0.8);
   backdrop-filter: blur(20px);
+}
+
+.menu-text--wrapper {
+  overflow: hidden;
 }
 
 .menu-text{
@@ -213,18 +225,128 @@ export default {
   height: 30px;
   cursor: pointer;
 }
+
+
+
+
+@media screen and (min-width: 1101px){
+  .scrolled .menu-text a {
+    text-align: center;
+  }
+
+
+
+  .scrolled {
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .scrolled .scrolled-icons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  .scrolled .menu-top{
+    display: flex;
+    width: fit-content;
+  }
+
+  .scrolled a {
+    height: fit-content;
+  }
+  .scrolled .menu-text{
+    display: flex;
+    width: fit-content;
+  }
+
+  .scrolled .menu-text--wrapper{
+    display: flex;
+    width: 85%;
+    justify-content: space-between;
+  }
+
+  .scrolled .title h1{
+    display: none;
+  }
+  .scrolled .icons{
+    display: none;
+  }
+
+
+}
+
+
 @media screen and (min-width: 902px) {
 
   .menu-burger{
     display: none;
   }
+  .menu-text a {
+    text-align: center;
+  }
 }
 
-@media screen and (max-width: 902px) and (min-width: 600px) {
-  .menu-text{
+@media screen and (min-width: 902px) and (max-width: 1100px) {
+
+  .scrolled .menu-burger{
+    display: flex;
+  }
+  .scrolled .menu-text{
     animation: 5s forwards;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+  }
+
+  .scrolled .navbar-content{
+    width: 100%;
+  }
+  .scrolled .title h1{
+    display: none
+  }
+
+}
+
+
+@media screen and (max-width: 902px) and (min-width: 600px) {
+  .menu-text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+  }
+  .menu-text a {
+    text-align: center;
+  }
+
+  .logo{
+    max-width: 100px;
+  }
+
+
+
+
+  .scrolled .menu-burger{
+    display: flex;
+  }
+  .scrolled .menu-text{
+    animation: 5s forwards;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+
+  }
+
+  .scrolled .navbar-content{
+    width: 100%;
+  }
+  .scrolled .title h1{
+    display: none
   }
 
 
@@ -237,6 +359,14 @@ export default {
     animation: 5s forwards;
     display: flex;
     flex-direction: column;
+  }
+
+  .menu-text a {
+    text-align: center;
+  }
+
+  .logo{
+    max-width: 80px;
   }
 
   .navbar-content{
