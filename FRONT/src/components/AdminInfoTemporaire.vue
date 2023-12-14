@@ -64,7 +64,7 @@
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
-import {Chart} from "chart.js/auto";
+import {Chart} from 'vue-chartjs';
 
 export default {
   name: 'AdminInfoTemporaire',

@@ -1,8 +1,9 @@
-INSERT INTO type VALUES('1', 'Stand'),
-                      ('2', 'Scene'),
-                      ('3', 'Attraction'),
-                      ('4', 'Parking'),
-                      ('5', 'Toilettes');
+INSERT INTO type VALUES('1', 'Restaurant'),
+                       ('2', 'Attraction'),
+                      ('3', 'Scene'),
+                        ('4', 'Stand'),
+                      ('5', 'Boutique'),
+                      ('6', 'Toilettes');
 
 INSERT INTO groupes VALUES  (1, 'groupe admin'),
                             (2, 'groupe prestataire'),

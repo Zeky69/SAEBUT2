@@ -4,22 +4,25 @@
 
     <div class="selectmenu closed" id="selectmenu" >
       <div class="add" id="add">
-        <h2>previsualisation du batiment</h2>
-        <div class="scene2" ref="scene2Container" style="height: 30vh; width: 100%; background-color: beige; margin-bottom: 15px;"></div>
-        <label for="batidInput">Sélectionnez un bâtiment :</label>
-        <select id="batidInput" v-model="idbatafficher">
-          <option value=-1 disabled selected>Sélectionnez un bâtiment</option>
-          <option v-for="batimentsolo in tabbatlist" :key="batimentsolo.id" :value="batimentsolo.id">{{ batimentsolo.nom }}</option>
-        </select>
-        <br>
-        <label for="rotationInput">Rotation du bâtiment :</label>
-        <br>
-        <input type="range" id="rotationInput" v-model="rotation" min="0" max="360" step="1"/>
-        <span>{{ this.rotation }}°</span>
-        <br>
-        <button id="btn1" @click="refreshcalmyfuncpls(1)" class="custom-btn" :disabled="idbatafficher == -1" :class="{ 'disabled-btn': idbatafficher == -1 }">Place Batiment</button>
-        <div class="filtre" >
+        <div class="topmenu">
 
+          <h2>previsualisation du batiment</h2>
+          <div class="closepreview">
+            <button id="btn1" @click="closepreview(1)" ><img class="croix" src="../../public/croix.svg"> </button>
+          </div>
+        </div>
+
+        <div class="previsual">
+
+          <div class="scene2" ref="scene2Container" style="height: 30vh; width: 100%; background-color: beige; margin-bottom: 15px;"></div>
+          <label for="batidInput">Sélectionnez un bâtiment :</label>
+          <select id="batidInput" v-model="idbatafficher">
+            <option value=-1 disabled selected>Sélectionnez un bâtiment</option>
+            <option v-for="batimentsolo in tabbatlist" :key="batimentsolo.id" :value="batimentsolo.id">{{ batimentsolo.nom }}</option>
+          </select>
+        </div>
+
+        <div class="filtre" style="margin-left: 20px">
           <div>
             <div v-for="type in uniqueTypes" :key="type" class="toggle-container">
               <label class="toggle">
@@ -29,12 +32,44 @@
               <p>{{ type }}</p>
             </div>
           </div>
+        </div>
 
+        <div class="optionBatiment">
+          <h2> Options </h2>
+          <div class="rotation">
+            <label for="rotationInput">Rotation du bâtiment :</label>
+            <br>
+            <input type="range" id="rotationInput" v-model="rotation" min="0" max="360" step="1"/>
+            <span>{{ this.rotation }}°</span>
+          </div>
+          <div class="description">
+            <h2>Description</h2>
+            <label class="descri">
+              <input classe="nomarb" type="text" placeholder="Veulliez donné un nom" v-model="nom_batiment" >
+              <textarea id="batdescri" v-model="description_batiment" placeholder="Veuillez décrire votre batiment"></textarea>
+            </label>
+
+          </div>
+
+        </div>
+        <div class="placeButton" style="height: 10%; width: 95%; margin-right: 5%;">
+          <button id="btn2" @click="refreshcalmyfuncpls(1)" class="custom-btn" :disabled="idbatafficher == -1" :class="{ 'disabled-btn': idbatafficher == -1 }"> Placer le Batiment</button>
         </div>
 
       </div>
       <div class="remove" id="remove">
-        <button id="btn1" @click="refreshcalmyfuncpls(2)" class="custom-btn">remove Batiment</button>
+        <div class="topmenu">
+
+          <h2>Enlever le batiment</h2>
+          <div class="closepreview">
+            <button id="btn1" @click="closepreview(2)" class="custom-btn"><img class="croix" src="../../public/croix.svg"> </button>
+          </div>
+        </div>
+
+
+        <div class="placeButton" style="height: 10%; width: 90%; margin-left: 5%; margin-right: 5%;">
+        <button id="btn2" @click="refreshcalmyfuncpls(2)" class="custom-btn">remove Batiment</button>
+        </div>
       </div>
     </div>
     <div id="loadingScreen" class="loading-screen">
@@ -64,6 +99,8 @@ import { Sky } from 'three/addons/objects/Sky.js';
 export default {
   name: 'TestMap',
   data : () => ({
+    description_batiment: "",
+    nom_batiment: "",
     loaded: null,
     sky: null,
     sun: null,
@@ -466,6 +503,38 @@ export default {
         }
       }
     },
+    async closepreview(mode){
+  if (mode == 1) {
+    this.deletscene2()
+    document.getElementById('selectmenu').classList.toggle('closed');
+
+    document.getElementById('scene1').classList.toggle('active');
+    //wait 300ms
+    setTimeout(() => {
+      document.getElementById('add').classList.toggle('active');
+      document.getElementById('selectmenu').classList.toggle('supr');
+    }, 300);
+
+
+  }
+  if (mode == 2) {
+    document.getElementById('selectmenu').classList.toggle('closed');
+
+    document.getElementById('scene1').classList.toggle('active');
+    //wait 300ms
+    setTimeout(() => {
+      document.getElementById('remove').classList.toggle('active');
+      document.getElementById('selectmenu').classList.toggle('supr');
+    }, 300);
+
+  }
+  if(this.selectab.length == 1){
+    this.selectab[0]["obj"].material = this.selectab[0]["mat"]
+    this.selectab[0]["obj"].material.color.setHex(this.selectab[0]["col"])
+    this.selectab.pop(0)
+    this.selectedObject = 0
+  }
+},
 
     async refreshcalmyfuncpls(mode) {
       console.log("refresh")
@@ -536,17 +605,28 @@ export default {
           var y = batimentadd.position.y;
 
           console.log("prestat", this.prestataire)
+          console.log("je suis dans refresh et je check la description", this.description_batiment)
+          console.log("nom", this.nom_batiment)
+          let descriptionsave = this.description_batiment
+          let nombat = this.nom_batiment
+          let id_type = batimentadd.name.slice(4,5)
+          console.log("id_type", id_type)
 
           var databat = {
             name: batimentadd.name,
+            nom: nombat,
             emp_uuid: uuid,
             posx: posx,
             posy: y,
             posz: posz,
             rota: (this.rotation * Math.PI / 180),
             prestataire: this.prestataire,
+            description: this.description_batiment,
+            type: id_type,
             status: "waiting",
           }
+          this.description_batiment = "";
+          this.nom_batiment = "";
 
           this.clearpreviewbat();
 
@@ -556,7 +636,7 @@ export default {
           batimentadd.castShadow = true;
           batimentadd.receiveShadow = true;
           batimentadd.material.color.setHex(0xffa500);
-          batimentadd.userData = {uuid: 0, emp_uuid: uuid};
+          batimentadd.userData = {uuid: 0, emp_uuid: uuid, description: descriptionsave};
           this.selectionables.add(batimentadd);
 
           await createBat(databat);
@@ -682,7 +762,7 @@ export default {
             batiment_clone.castShadow = true;
             batiment_clone.receiveShadow = true;
             batiment_clone.rotation.z = this.batiment_bdd[i].rota;
-            batiment_clone.userData = {uuid: this.batiment_bdd[i].id_batiment, emp_uuid: this.batiment_bdd[i].id_emplacement};
+            batiment_clone.userData = {uuid: this.batiment_bdd[i].id_batiment, emp_uuid: this.batiment_bdd[i].id_emplacement, description: this.batiment_bdd[i].description};
             if (this.batiment_bdd[i].utilisateur != this.prestataire) {
               this.nonselectionables.add(batiment_clone);
             } else {
@@ -1285,6 +1365,52 @@ export default {
 
 <style>
 
+#btn2{
+  width: 100%;
+  margin-right: 5%;
+}
+
+
+.topmenu{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.croix{
+  with: 30px;
+  height: 30px;
+}
+
+.previsual{
+  text-align: center;
+  justify-items: center;
+  justify-content: center;
+}
+
+.optionBatiment{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#batdescri {
+  width: 70%;
+  height: 100%;
+  padding-bottom: 20px;
+  max-width: 23vw;
+}
+
+.descri{
+  margin-top: 15px;
+  width: 80%;
+  min-height: 30px;
+  height: auto;
+  padding-bottom: 15px;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
 .toggle-container {
   display: flex;
   align-items: center;
@@ -1428,7 +1554,10 @@ input:checked + .slider:before {
 }
 
 .add.active{
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 100%;
 }
 
 .remove{
@@ -1437,6 +1566,10 @@ input:checked + .slider:before {
 
 .remove.active{
   display: block;
+}
+
+#btn1{
+  all: unset;
 }
 
 </style>

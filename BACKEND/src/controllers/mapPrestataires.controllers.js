@@ -12,10 +12,19 @@ exports.getBatdebug2 = async (req,res) => {
     });
 };
 
+exports.getBatType = async (req,res) => {
+    let reponse = await mapPrestatairesService.getBatType(req);
+    console.log("reponse controller",reponse);
+    if (reponse) {
+        return res.status(200).send(reponse);
+    }
+    return res.status(401).send("no info");
+}
+
 exports.getBatdebug= async (req,res) => {
     try {
         let info = await mapPrestatairesService.getBatdebug2();
-        console.log("info",info);
+        console.log("infodeb",info);
         if(info){
             return res.status(200).send(info);
         }else{
@@ -39,7 +48,7 @@ exports.getEmpUUID = async (req,res) => {
 
 exports.getBatUUID = async (req,res) => {
     let info = req.params.uuid;
-    console.log("info",info);
+    console.log("infouuid",info);
     let reponse = await mapPrestatairesService.getBatUUID(info);
     if (reponse) {
         return res.status(200).send(reponse);
@@ -49,7 +58,7 @@ exports.getBatUUID = async (req,res) => {
 
 exports.getBatempUUID = async (req,res) => {
     let info = req.params.uuid;
-    console.log("info",info);
+    console.log("infoempuuid",info);
     let reponse = await mapPrestatairesService.getBatempUUID(info);
     if (reponse) {
         return res.status(200).send(reponse);

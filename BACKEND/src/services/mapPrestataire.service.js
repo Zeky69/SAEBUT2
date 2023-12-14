@@ -111,18 +111,36 @@ const getEmpUUID = async (req) => {
 }
 
 
+const getBatType = async (req) => {
+    const client = await pool.connect();
+    let result = [];
+    console.log("getbattype je suis la ")
+    try {
+        // Récupérer tous les batiments
+        const getAllBatimentQuery = 'SELECT * from type';
+        result = await pool.query(getAllBatimentQuery);
+        console.log("resulsmdslqdkmlqt", result.rows);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des batiments :', error);
+    } finally {
+        client.release();
+        return result.rows;
+    }
+}
+
+
 
 const createbat = async (req, callback) => {
 
     console.log("createbat",req.body);
-    const { name,emp_uuid, posx, posy, posz,rota, prestataire ,status } = req.body;
+    const {nom, name,emp_uuid, posx, posy, posz,rota, prestataire, description ,status, type } = req.body;
     const client = await pool.connect();
     console.log("connection")
     try {
         // Insérer le nouveau batiment dans la table batiment
-        const insertBatimentQuery = 'INSERT INTO batiment (id_batiment,description,nom, name, status, id_emplacement, posx, posy, posz, rota, utilisateur) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9, $10,$11) RETURNING *';
+        const insertBatimentQuery = 'INSERT INTO batiment (id_batiment,description,nom, name, status, id_emplacement, posx, posy, posz, rota, utilisateur, type_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9, $10,$11 ,$12) RETURNING *';
         const uuid_bat = uuidv4();
-        const insertBatimentValues = [uuid_bat ,"",name,name,status, emp_uuid, posx, posy, posz, rota, prestataire];
+        const insertBatimentValues = [uuid_bat ,description,nom,name,status, emp_uuid, posx, posy, posz, rota, prestataire, type];
         const result = await pool.query(insertBatimentQuery, insertBatimentValues);
 
         // Récupérer le batiment inséré
@@ -367,6 +385,9 @@ const deletebat = async (req) => {
 }
 
 
+
+
+
 module.exports = {
     getBatUUID,
     getBatempUUID,
@@ -383,6 +404,7 @@ module.exports = {
     getAllBat,
     getManybat,
     createbat,
-    deletebat
+    deletebat,
+    getBatType
 }
 

@@ -146,9 +146,11 @@ CREATE TABLE batiment(
      posz DECIMAL(24,17),
      rota DECIMAL(24,17),
      utilisateur VARCHAR(50),
+     type_id VARCHAR(50),
      PRIMARY KEY(id_batiment),
      id_emplacement VARCHAR(50) NOT NULL UNIQUE,
-     FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement)
+     FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
+     FOREIGN KEY(type_id) REFERENCES type(id_type)
 );
 
 

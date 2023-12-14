@@ -19,6 +19,8 @@ router.patch('/emp', mapPrestatairesMiddlewares.validateUpdateempInput , mapPres
 
 router.get('/bat', mapPrestatairesMiddlewares.validatebatFilterInput, mapPrestatairesControllers.getBat);
 
+router.get('/bat/type',mapPrestatairesMiddlewares.validatebatTypeFilterInput, mapPrestatairesControllers.getBatType);
+
 router.get('/bat/:uuid', mapPrestatairesMiddlewares.validatebatUUID, mapPrestatairesControllers.getBatUUID);
 
 router.get('/bat/emp/:uuid', mapPrestatairesMiddlewares.validebatempUUID, mapPrestatairesControllers.getBatempUUID);
@@ -30,7 +32,11 @@ router.delete('/bat', mapPrestatairesMiddlewares.validateDelbatInput , mapPresta
 
 //router.get('/bat/debug',mapPrestatairesMiddlewares.validatebatFilterInputdebug, (req,res) =>{res.send(mapPrestatairesControllers.getBatdebug(req,res))});
 
+
+
 router.get('/bat/debug',mapPrestatairesMiddlewares.validatebatFilterInputdebug, mapPrestatairesControllers.getBatdebug);
+
+
 
 
 

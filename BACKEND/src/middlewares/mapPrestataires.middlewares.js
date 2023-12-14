@@ -11,6 +11,11 @@ exports.validateempFilterInput = (req, res, next) => {
     next();
 }
 
+exports.validatebatTypeFilterInput = (req, res, next) => {
+    console.log("valide bat type middle");
+    next();
+}
+
 exports.validatebatFilterInputdebug = (req, res, next) => {
     console.log("valide bat debug middle");
     next();

@@ -33,7 +33,10 @@ const routes = [
     path: '/panier',
     name: 'panier',
     component: () => import(/* webpackChunkName: "about" */ '../views/PanierView.vue')
-  },  {
+  }, {path: '/testMap',
+    name: 'testMap',
+    component: () => import(/* webpackChunkName: "about" */ '../views/TestMap.vue')
+  }, {
     path: '/restauration',
     name: 'restauration',
     component: () => import(/* webpackChunkName: "about" */ '../views/RestaurationView.vue')

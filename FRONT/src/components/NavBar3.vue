@@ -44,7 +44,8 @@ export default {
       'Restauration': '/restauration',
       'Boutique': '/boutique',
       'Billetterie': '/billetterie',
-      'Organisateurs': '/organisateurs'
+      'Organisateurs': '/organisateurs',
+      'TestMap': '/testMap',
     }
   }),
   methods: {

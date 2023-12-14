@@ -169,6 +169,18 @@ async function getBatbyEmpUUID(uuid) {
     return answer
 }
 
+
+async function getBatTypeFromAPI() {
+    return getRequest('/mapPrestataires/bat/type', 'GETBATTYPE')
+}
+
+
+async function getBatType() {
+    let answer = await getBatTypeFromAPI()
+    return answer
+}
+
+
 async function getOneBatUUIDFromAPI(uuid) {
     return getRequest('/mapPrestataires/bat' +`/${uuid}`, 'GETONEBAT')
 }
@@ -212,5 +224,6 @@ export {
     getOneBat,
     getAllBat,
     getManyBat,
-    deleteBat
+    deleteBat,
+    getBatType
 }
