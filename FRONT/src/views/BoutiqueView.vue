@@ -1,7 +1,7 @@
 <template>
   <div>
   <h1>Hello</h1>
-
+  <div style="height: 20vh;width: 100%"></div>
   <Map2Dedition/>
   </div>
 </template>
