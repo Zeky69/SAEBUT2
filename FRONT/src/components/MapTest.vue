@@ -1,8 +1,9 @@
 <template>
   <div id="container" style="background-color: #D9D9D9; width: 90vw; height: 900px; max-width: 90vw; margin: 5vw; overflow: hidden; display: flex; user-select: none;" >
+
       <div class="scene1" id="scene1" ref="scene1Container">      </div>
 
-    <div class="selectmenu closed" id="selectmenu" >
+    <div class="selectmenu" id="selectmenu" >
       <div class="add" id="add">
         <div class="topmenu">
 
@@ -57,6 +58,9 @@
         </div>
 
       </div>
+      <div class="scene active" id="scene">
+        <FullCalendar :options="calendarOptions"/>
+      </div>
       <div class="remove" id="remove">
         <div class="topmenu">
 
@@ -80,6 +84,19 @@
 
 <script>
 import * as THREE from 'three';
+import FullCalendar from "@fullcalendar/vue";
+
+
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+//import listPlugin from "@fullcalendar/list";
+
+//importer les style depuis une url
+//import 'https://unpkg.com/@fullcalendar/list@6.1.10/index.global.min.js'
+
+
+
 
 //importer service/mapPrestataires.js
 import {getAllEmp,getOneBatUUID,getBatbyEmpUUID,getOneEmpUUID,getOneEmp,deleteBat, updateEmpFree, createBat, getAllBat} from '../services/mapPrestataire.service.js';
@@ -97,8 +114,61 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Sky } from 'three/addons/objects/Sky.js';
 export default {
+  components: {
+    FullCalendar,
+  },
   name: 'TestMap',
   data : () => ({
+    calendarOptions: {
+      plugins: [
+        dayGridPlugin,
+        timeGridPlugin,
+        interactionPlugin, // needed for dateClick,
+      ],
+      headerToolbar: {
+        left: "prev,next",
+        center: "title",
+        right: "timeGridFourDay,timeGridDay",
+      },
+      initialView: "timeGridFourDay",
+      // alternatively, use the `events` setting to fetch from a feed
+      /* you can update a remote database when these fire:
+      eventAdd:
+      eventChange:
+      eventRemove:
+      */
+      slotLabelFormat: [
+        {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12:false
+        }
+      ],
+      //faire un event de 8h a 14h
+      initialDate: '2024-06-01',
+      slotDuration: '00:30',
+      views: {
+        timeGridFourDay: {
+          type: 'timeGrid',
+          duration: { days: 4 },
+          buttonText: '4 day',
+          allDaySlot: false,
+          dayHeaderFormat: { weekday: "long", month: "numeric", day: "numeric", omitCommas: true },
+          slotDuration: '00:30',
+        },
+        timeGridDay: { // Assurez-vous que cette configuration est correcte pour la vue timeGridDay
+          type: 'timeGrid',
+          duration: { days: 1 },
+          buttonText: '1 day',
+          allDaySlot: false,
+          dayHeaderFormat: { weekday: "long", month: "numeric", day: "numeric", omitCommas: true },
+          slotDuration: '00:30',
+        },
+      },
+
+    },
+    currentEvents: [],
+
     description_batiment: "",
     nom_batiment: "",
     loaded: null,
@@ -165,7 +235,10 @@ export default {
       this.previewbatiewbatiment.rotation.z = this.rotation * Math.PI / 180;
     }
   },
+
   methods: {
+
+
 
     handleResize() {
       // Logique de gestion du redimensionnement
@@ -376,6 +449,83 @@ export default {
       }
     },
 
+    async refreshcalendare(name, uuid) {
+      //attendre 700ms
+      setTimeout(() => {
+        this.calendarOptions = {
+          plugins: [
+            dayGridPlugin,
+            timeGridPlugin,
+            interactionPlugin, // needed for dateClick,
+          ],
+          headerToolbar: {
+            left: "prev,next",
+            center: "title",
+            right: " timeGridFourDay,timeGridDay",
+          },
+          initialView: "timeGridFourDay",
+          // alternatively, use the `events` setting to fetch from a feed
+          /* you can update a remote database when these fire:
+          eventAdd:
+          eventChange:
+          eventRemove:
+          */
+          slotLabelFormat: [
+            {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12:false
+            }
+          ],
+          events: {
+            id: 1,
+            title: 'event 1',
+            start: '2023-06-01T08:00:00',
+            end: '2023-06-01T14:00:00',
+            color: 'red'},
+          slotMinTime: '08:00:00',
+          slotMaxTime: '18:00:00',
+          slotDuration: '00:30',
+          views: {
+            timeGridFourDay: {
+              type: 'timeGrid',
+              duration: { days: 4 },
+              buttonText: '4 day',
+              allDaySlot: false,
+              dayHeaderFormat: { weekday: "long", month: "numeric", day: "numeric", omitCommas: true },
+              slotDuration: '00:30',
+            },
+            timeGridDay: { // Assurez-vous que cette configuration est correcte pour la vue timeGridDay
+              type: 'timeGrid',
+              duration: { days: 1 },
+              buttonText: '1 day',
+              allDaySlot: false,
+              dayHeaderFormat: { weekday: "long", month: "numeric", day: "numeric", omitCommas: true },
+              slotDuration: '00:30',
+            },
+          },
+
+        };
+
+      }, 700);
+      // Récupérer la date de début de la première semaine de juin 2024
+
+      //2024-06-01
+
+
+
+
+      // Remettre le calendrier avec ses options
+
+
+
+      console.log("refreshcalendare");
+      console.log("name", name);
+      console.log("uuid", uuid);
+    },
+
+
+
 
     async onMouseClick(event) {
       var position = new THREE.Vector2();
@@ -401,47 +551,69 @@ export default {
 
       if (this.selectedObject != 0) {
         if (this.selectedObject.name.slice(0,3) == "bat") {
-          let found;
-          found = await getOneBatUUID(this.selectedObject.userData.uuid);
-          console.log("found", found)
-          if (found != []){
-            found = true;
-          }
-          else {
-            found = false;
-          }
+          console.log("batiment", this.selectedObject.name)
+          console.log("batiment", this.selectedObject.name.slice(4,5))
+          if(this.selectedObject.name.slice(4,5) == "3" || this.selectedObject.name.slice(4,5) == "6"){
+            if (this.selectedObject.name.slice(4,5) == "3"){
+              console.log("batiment salle de conf")
+              document.getElementById('selectmenu').classList.toggle('closed');
+              document.getElementById('selectmenu').classList.toggle('supr');
+              document.getElementById('scene').classList.toggle('active');
+              document.getElementById('scene1').classList.toggle('active');
+              //this.refreshcalendare(this.selectedObject.name, this.selectedObject.userData.uuid);
 
-          if (this.selectab.length == 0 && found) {
-            // Toggle the 'active' class on the selectmenu div
-            document.getElementById('selectmenu').classList.toggle('closed');
-            document.getElementById('selectmenu').classList.toggle('supr');
-            document.getElementById('remove').classList.toggle('active');
-            document.getElementById('scene1').classList.toggle('active');
+            }else{
+              console.log("batiment toilette")
+            }
 
-            this.selectedObject.material.color.setHex(0xff0000);
+            }
+          else{
+            let found;
+            found = await getOneBatUUID(this.selectedObject.userData.uuid);
+            console.log("found", found)
+            if (found != []){
+              found = true;
+            }
+            else {
+              found = false;
+            }
 
-            var info = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "bat"}
-            this.selectab.push(info);
-          } else {
-            if (this.selectedObject.uuid == this.selectab[0]["obj"].uuid) {
+            if (this.selectab.length == 0 && found) {
               // Toggle the 'active' class on the selectmenu div
               document.getElementById('selectmenu').classList.toggle('closed');
-
+              document.getElementById('selectmenu').classList.toggle('supr');
+              document.getElementById('remove').classList.toggle('active');
               document.getElementById('scene1').classList.toggle('active');
-              //wait 300ms
-              setTimeout(() => {
-                document.getElementById('remove').classList.toggle('active');
-                document.getElementById('selectmenu').classList.toggle('supr');
-              }, 300);
-              this.selectedObject.material = this.selectab[0]["mat"].clone()
-              this.selectedObject.material.color.setHex(this.selectab[0]["col"])
-              this.selectab.pop(0)
-              this.selectedObject = 0
+
+              this.selectedObject.material.color.setHex(0xff0000);
+
+              var info = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "bat"}
+              this.selectab.push(info);
             } else {
-              console.log("un objet est deja select")
-              this.selectedObject = 0
+              if (this.selectedObject.uuid == this.selectab[0]["obj"].uuid) {
+                // Toggle the 'active' class on the selectmenu div
+                document.getElementById('selectmenu').classList.toggle('closed');
+
+                document.getElementById('scene1').classList.toggle('active');
+                //wait 300ms
+                setTimeout(() => {
+                  document.getElementById('remove').classList.toggle('active');
+                  document.getElementById('selectmenu').classList.toggle('supr');
+                }, 300);
+                this.selectedObject.material = this.selectab[0]["mat"].clone()
+                this.selectedObject.material.color.setHex(this.selectab[0]["col"])
+                this.selectab.pop(0)
+                this.selectedObject = 0
+              } else {
+                console.log("un objet est deja select")
+                this.selectedObject = 0
+              }
             }
+
           }
+
+
+
         } else {
           if (this.selectedObject.name.slice(0,3) == "emp") {
             let found;
@@ -734,6 +906,9 @@ export default {
       this.emplacement_bdd = await getAllEmp();
       console.log("emplacement_bdd", this.emplacement_bdd)
       for (let i = 0; i < this.emplacement_bdd.length; i++) {
+        if(this.emplacement_bdd[i].id_emplacement == 0){
+          break;
+        }
           console.log("emplacement", this.emplacement_bdd[i])
           var matricepoints = this.emplacement_bdd[i].matricepoints.matricepoints
           console.log("mat", matricepoints)
@@ -1176,13 +1351,19 @@ export default {
     showLoadingScreen() {
       document.getElementById('loadingScreen').style.display = 'flex';
       document.getElementById('scene1').style.display = 'none';
-      document.getElementById('selectmenu').style.display = 'none';
+      //document.getElementById('selectmenu').style.display = 'none';
+      //mettre en hidden
+      document.getElementById('selectmenu').style.visibility = 'hidden';
     },
 
     hideLoadingScreen() {
       document.getElementById('loadingScreen').style.display = 'none';
       document.getElementById('scene1').style.display = 'flex';
-      document.getElementById('selectmenu').style.display = 'block';
+      //document.getElementById('selectmenu').style.display = 'block';
+      //mettre en visible
+      document.getElementById('selectmenu').style.visibility = 'visible';
+      document.getElementById('selectmenu').classList.toggle('closed');
+      document.getElementById('scene').classList.toggle('active');
     },
 
 
@@ -1549,6 +1730,17 @@ input:checked + .slider:before {
   width: 70%;
 }
 
+
+.scene{
+  display: none;
+
+}
+
+.scene.active{
+  display: block;
+  height: 100%;
+}
+
 .add{
   display: none;
 }
@@ -1571,5 +1763,13 @@ input:checked + .slider:before {
 #btn1{
   all: unset;
 }
+
+.fc-time-grid.fc-content-skeleton {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%; }
 
 </style>

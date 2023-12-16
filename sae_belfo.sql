@@ -179,10 +179,20 @@ CREATE TABLE stand(
 CREATE TABLE scene(
    id_scene VARCHAR(50),
    description VARCHAR(50),
-   id_emplacement VARCHAR(50) NOT NULL,
    PRIMARY KEY(id_scene),
-   UNIQUE(id_emplacement),
-   FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement)
+   type_id VARCHAR(50) NOT NULL,
+   FOREIGN KEY(type_id) REFERENCES type(id_type)
+);
+
+
+CREATE TABLE horaire (
+     id_horaire INT AUTO_INCREMENT,
+     id_scene VARCHAR(50),
+     date_horaire DATETIME,
+     PRIMARY KEY(id_horaire),
+     FOREIGN KEY(id_scene) REFERENCES scene(id_scene)
+);
+
 );
 
 CREATE TABLE attraction(
