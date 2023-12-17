@@ -4,6 +4,8 @@ const prestaRoutes = require('./router/prestataires.router');
 const adminRoutes = require('./router/admin.router');
 const loginRoutes = require('./router/login.router');
 const mapPrestatairesRoutes = require('./router/mapPrestataires.router')
+const sceneRoutes = require('./router/scnene.router');
+const toiletteRoutes = require('./router/toilette.router');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -28,6 +30,8 @@ app.use(cors());
 app.use("/prestataires", prestaRoutes);
 app.use("/admin", adminRoutes);
 app.use("/mapPrestataires", mapPrestatairesRoutes);
+app.use("/scene", sceneRoutes);
+app.use("/toilette", toiletteRoutes);
 app.use("/login", loginRoutes);
 
 app.listen(port, () => {

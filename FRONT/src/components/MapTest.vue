@@ -59,7 +59,26 @@
 
       </div>
       <div class="scene active" id="scene">
-        <FullCalendar :options="calendarOptions"/>
+        <FullCalendar :options="calendarOptions"  ref="fullCalendarRef"/>
+        <div class="addEventFrom">
+          <h2>Ajouter un événement</h2>
+            <label for="fname">Nom de l'événement:</label><br>
+            <input type="text" id="fname" name="fname"><br>
+            <label for="lname">Description de l'événement:</label><br>
+            <textarea id="eventdescri" v-model="description_event" placeholder="Veuillez décrire votre event" name="lname" ></textarea>
+            <br>
+            <label for="lname">Date de début:</label><br>
+            <input type="datetime-local" id="start" name="event-start"
+                   value="2024-06-01T12:00"
+                   min="2024-06-01T00:00" max="2024-06-14T00:00"><br>
+            <label for="lname">Date de fin:</label><br>
+            <input type="datetime-local" id="end" name="event-start"
+                   value="2024-06-01T12:00"
+                   min="2024-06-01T00:00" max="2024-06-14T00:00"><br><br>
+            <button id="btn3" @click="askAddEvent"> Demander un crenaux</button>
+
+
+        </div>
       </div>
       <div class="remove" id="remove">
         <div class="topmenu">
@@ -92,14 +111,17 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 //import listPlugin from "@fullcalendar/list";
 
-//importer les style depuis une url
-//import 'https://unpkg.com/@fullcalendar/list@6.1.10/index.global.min.js'
+import tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
+
 
 
 
 
 //importer service/mapPrestataires.js
 import {getAllEmp,getOneBatUUID,getBatbyEmpUUID,getOneEmpUUID,getOneEmp,deleteBat, updateEmpFree, createBat, getAllBat} from '../services/mapPrestataire.service.js';
+import {getAllScene} from '../services/scene.service.js';
+import {getAllToilettes} from '../services/toilette.servie.js';
 
 /*   getAllEmp,
 getOneEmp
@@ -118,111 +140,126 @@ export default {
     FullCalendar,
   },
   name: 'TestMap',
-  data : () => ({
-    calendarOptions: {
-      plugins: [
-        dayGridPlugin,
-        timeGridPlugin,
-        interactionPlugin, // needed for dateClick,
-      ],
-      headerToolbar: {
-        left: "prev,next",
-        center: "title",
-        right: "timeGridFourDay,timeGridDay",
-      },
-      initialView: "timeGridFourDay",
-      // alternatively, use the `events` setting to fetch from a feed
-      /* you can update a remote database when these fire:
+  data() {
+
+    return {
+      nom_Event: "",
+      currentEvents: [],
+      calendarOptions: {
+        height: '70%',
+        plugins: [
+          dayGridPlugin,
+          timeGridPlugin,
+          interactionPlugin, // needed for dateClick,
+        ],
+        headerToolbar: {
+          left: "prev,next",
+          center: "title",
+          right: "timeGridFourDay,timeGridDay",
+        },
+        initialView: "timeGridFourDay",
+        // alternatively, use the `events` setting to fetch from a feed
+        /* you can update a remote database when these fire:
       eventAdd:
       eventChange:
       eventRemove:
       */
-      slotLabelFormat: [
-        {
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12:false
-        }
-      ],
-      //faire un event de 8h a 14h
-      initialDate: '2024-06-01',
-      slotDuration: '00:30',
-      views: {
-        timeGridFourDay: {
-          type: 'timeGrid',
-          duration: { days: 4 },
-          buttonText: '4 day',
-          allDaySlot: false,
-          dayHeaderFormat: { weekday: "long", month: "numeric", day: "numeric", omitCommas: true },
-          slotDuration: '00:30',
+        slotLabelFormat: [
+          {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          }
+        ],
+        //faire un event de 8h a 14h
+        initialDate: '2024-06-01',
+        slotDuration: '00:30',
+        events: this.currentEvents,
+        //show description on click
+        eventClick: function (info) {
+          tippy(info.el, {
+            content: info.event.extendedProps.description,
+          });
         },
-        timeGridDay: { // Assurez-vous que cette configuration est correcte pour la vue timeGridDay
-          type: 'timeGrid',
-          duration: { days: 1 },
-          buttonText: '1 day',
-          allDaySlot: false,
-          dayHeaderFormat: { weekday: "long", month: "numeric", day: "numeric", omitCommas: true },
-          slotDuration: '00:30',
+        views: {
+          timeGridFourDay: {
+            type: 'timeGrid',
+            duration: {days: 4},
+            buttonText: '4 day',
+            dayHeaderFormat: {weekday: "long", month: "numeric", day: "numeric", omitCommas: true},
+            slotDuration: '00:30',
+          },
+          timeGridDay: { // Assurez-vous que cette configuration est correcte pour la vue timeGridDay
+            type: 'timeGrid',
+            duration: {days: 1},
+            buttonText: '1 day',
+            allDaySlot: false,
+            dayHeaderFormat: {weekday: "long", month: "numeric", day: "numeric", omitCommas: true},
+            slotDuration: '00:30',
+          },
         },
+
       },
+      uuidsceneSelect: 0,
 
-    },
-    currentEvents: [],
-
-    description_batiment: "",
-    nom_batiment: "",
-    loaded: null,
-    sky: null,
-    sun: null,
-    sky2: null,
-    sun2: null,
-    currentIndex:0,
-    isLoading: true,
-    idbat: 0,
-    scene: null,
-    camera: null,
-    renderer: null,
-    controls: null,
-    raycaster: null,
-    selectedObject: 0,
-    asset: [],
-    selectab: [],
-    children: [],
-    batiment: [],
-    emp: [],
-    emplacement_bdd: [],
-    batiment_bdd: [],
-    nonselectionables: null,
-    selectionables: null,
-    previewgroupe: null,
-    previewbatiewbatiment: null,
-    rotation: null,
-    light: null,
-    ambientLight: null,
-    idbatafficher: -1,
-    vitrine: null,
-    scene2: null,
-    camera2: null,
-    renderer2: null,
-    controls3: null,
-    texture_emp: null,
-    empGroupe: null,
-    groupe_sol: null,
-    ambientLightscene2: null,
-    scene2Container: null,
-    prestataire: "calixte",
-    testshape: [],
-    checkedtype: [],
-    tabbatlist: [],
-
-
-    //style save batiment_bdd[0] = {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1", status: "en cours"}
-
-    //style save emplacement_bdd[0] = {name: "emp1", type: "emplacement", position: {x: 0, y: 0, z: 0}, orientation: "none", free: true}
+      eventScene: [],
+      description_event: "",
+      description_batiment: "",
+      nom_batiment: "",
+      loaded: null,
+      sky: null,
+      sun: null,
+      sky2: null,
+      sun2: null,
+      currentIndex: 0,
+      isLoading: true,
+      idbat: 0,
+      scene: null,
+      camera: null,
+      renderer: null,
+      controls: null,
+      raycaster: null,
+      selectedObject: 0,
+      asset: [],
+      selectab: [],
+      children: [],
+      batiment: [],
+      emp: [],
+      emplacement_bdd: [],
+      batiment_bdd: [],
+      batScene: [],
+      toilettes_bdd: [],
+      nonselectionables: null,
+      selectionables: null,
+      previewgroupe: null,
+      previewbatiewbatiment: null,
+      rotation: null,
+      light: null,
+      ambientLight: null,
+      idbatafficher: -1,
+      vitrine: null,
+      scene2: null,
+      camera2: null,
+      renderer2: null,
+      controls3: null,
+      texture_emp: null,
+      empGroupe: null,
+      groupe_sol: null,
+      ambientLightscene2: null,
+      scene2Container: null,
+      prestataire: "calixte",
+      testshape: [],
+      checkedtype: [],
+      tabbatlist: [],
 
 
+      //style save batiment_bdd[0] = {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1", status: "en cours"}
 
-  }),
+      //style save emplacement_bdd[0] = {name: "emp1", type: "emplacement", position: {x: 0, y: 0, z: 0}, orientation: "none", free: true}
+
+
+    }
+  },
   watch: {
     idbatafficher() {
 
@@ -237,6 +274,54 @@ export default {
   },
 
   methods: {
+
+
+    async askAddEvent() {
+      console.log("askAddEvent")
+
+      let start = document.getElementById("start").value;
+      let end = document.getElementById("end").value;
+      let name = document.getElementById("fname").value;
+      let description = document.getElementById("eventdescri").value;
+      console.log("start", start)
+      console.log("end", end)
+      console.log("name", name)
+      console.log("description", description)
+
+      console.log("this.selectab", this.selectab)
+
+      let uuid = this.selectedObject.userData.uuid;
+
+      let databdd = {
+        uuid: uuid,
+        start: start,
+        end: end,
+        name: name,
+        description: description,
+        status: "waiting",
+      }
+      console.log("databdd", databdd)
+      //await addevent(databdd);
+
+      let data = {
+        title: name,
+        start: start,
+        end: end,
+        color: 'red',
+        description: description,
+      }
+
+
+      //add event au calendrier
+      this.currentEvents.push(data);
+
+      console.log("this.currentEvents", this.currentEvents)
+
+      this.$refs.fullCalendarRef.getApi().setOption('events', this.currentEvents);
+
+
+    },
+
 
 
 
@@ -450,74 +535,15 @@ export default {
     },
 
     async refreshcalendare(name, uuid) {
-      //attendre 700ms
-      setTimeout(() => {
-        this.calendarOptions = {
-          plugins: [
-            dayGridPlugin,
-            timeGridPlugin,
-            interactionPlugin, // needed for dateClick,
-          ],
-          headerToolbar: {
-            left: "prev,next",
-            center: "title",
-            right: " timeGridFourDay,timeGridDay",
-          },
-          initialView: "timeGridFourDay",
-          // alternatively, use the `events` setting to fetch from a feed
-          /* you can update a remote database when these fire:
-          eventAdd:
-          eventChange:
-          eventRemove:
-          */
-          slotLabelFormat: [
-            {
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12:false
-            }
-          ],
-          events: {
-            id: 1,
-            title: 'event 1',
-            start: '2023-06-01T08:00:00',
-            end: '2023-06-01T14:00:00',
-            color: 'red'},
-          slotMinTime: '08:00:00',
-          slotMaxTime: '18:00:00',
-          slotDuration: '00:30',
-          views: {
-            timeGridFourDay: {
-              type: 'timeGrid',
-              duration: { days: 4 },
-              buttonText: '4 day',
-              allDaySlot: false,
-              dayHeaderFormat: { weekday: "long", month: "numeric", day: "numeric", omitCommas: true },
-              slotDuration: '00:30',
-            },
-            timeGridDay: { // Assurez-vous que cette configuration est correcte pour la vue timeGridDay
-              type: 'timeGrid',
-              duration: { days: 1 },
-              buttonText: '1 day',
-              allDaySlot: false,
-              dayHeaderFormat: { weekday: "long", month: "numeric", day: "numeric", omitCommas: true },
-              slotDuration: '00:30',
-            },
-          },
-
-        };
-
-      }, 700);
-      // Récupérer la date de début de la première semaine de juin 2024
-
-      //2024-06-01
+      this.eventScene = [
+        { title: 'event 1', start: '2024-06-01T12:30:00', end: '2024-06-01T14:30:00', color: 'red', description: 'Description de l\'événement 1' },
+        { title: 'event 2', start: '2024-06-01T22:00:00', end: '2024-06-02T12:00:00', color: 'blue', description: 'Description de l\'événement 2' },
+        { title: 'event 3', start: '2024-06-03T14:00:00', end: '2024-06-03T16:00:00', color: 'green', description: 'Description de l\'événement 3' }
+      ]
+      this.currentEvents = this.eventScene;
 
 
-
-
-      // Remettre le calendrier avec ses options
-
-
+      this.$refs.fullCalendarRef.getApi().setOption('events', this.currentEvents);
 
       console.log("refreshcalendare");
       console.log("name", name);
@@ -560,7 +586,8 @@ export default {
               document.getElementById('selectmenu').classList.toggle('supr');
               document.getElementById('scene').classList.toggle('active');
               document.getElementById('scene1').classList.toggle('active');
-              //this.refreshcalendare(this.selectedObject.name, this.selectedObject.userData.uuid);
+              this.uuidsceneSelect = this.selectedObject.userData.uuid;
+              this.refreshcalendare(this.selectedObject.name, this.selectedObject.userData.uuid)
 
             }else{
               console.log("batiment toilette")
@@ -960,6 +987,48 @@ export default {
         }
       }
 
+      this.batScene = await getAllScene();
+      console.log("batScene", this.batScene)
+      for (let i = 0; i < this.batScene.length; i++) {
+        if(this.batScene[i].id_batiment == 0){
+          break;
+        }
+        console.log("batScene", this.batScene[i])
+        var scene_found = await this.findObjectByName(this.loaded, this.batScene[i].name)
+        var scene_clone = scene_found.clone();
+        let mat = scene_clone.material.clone();
+        scene_clone.position.set(this.batScene[i].posx, this.batScene[i].posy, this.batScene[i].posz);
+        scene_clone.material.metalness = 0;
+        scene_clone.material = mat;
+        scene_clone.castShadow = true;
+        scene_clone.receiveShadow = true;
+        scene_clone.rotation.z = this.batScene[i].rota;
+        scene_clone.userData = {uuid: this.batScene[i].id_batiment, description: this.batScene[i].description};
+        this.selectionables.add(scene_clone);
+      }
+
+      this.toilettes_bdd = await getAllToilettes();
+      console.log("toilettes_bdd", this.toilettes_bdd)
+      for (let i = 0; i< this.toilettes_bdd.length; i++) {
+        if (this.toilettes_bdd[i].id_batiment == 0) {
+          break;
+        }
+        console.log("toilettes", this.toilettes_bdd[i])
+        var toilettes_found = await this.findObjectByName(this.loaded, this.toilettes_bdd[i].name)
+        var toilettes_clone = toilettes_found.clone();
+        let mat = toilettes_clone.material.clone();
+        toilettes_clone.position.set(this.toilettes_bdd[i].posx, this.toilettes_bdd[i].posy, this.toilettes_bdd[i].posz);
+        toilettes_clone.material.metalness = 0;
+        toilettes_clone.material = mat;
+        toilettes_clone.castShadow = true;
+        toilettes_clone.receiveShadow = true;
+        toilettes_clone.rotation.z = this.toilettes_bdd[i].rota;
+        toilettes_clone.userData = {uuid: this.toilettes_bdd[i].id_batiment, description: this.toilettes_bdd[i].description};
+        this.nonselectionables.add(toilettes_clone);
+      }
+
+
+
       this.camera.rotation.x = -0.7;
       this.camera.position.set(120, 100, 160);
 
@@ -999,14 +1068,17 @@ export default {
             var texturebat;
             if(this.children[i].name == "bat_3_confer"){
               texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_conf.png');
-              const mat_bat = new THREE.MeshPhongMaterial({map: texturebat});
-              this.children[i].material = mat_bat;
-              this.children[i].material.metalness = 0;
-              this.children[i].receiveShadow = true;
-              this.selectionables.add(this.children[i]);
-              console.log("conf", this.children[i])
-              console.log("position of conf", this.children[i].position.x, " :  y : ",this.children[i].position.y , "  :  z  :", this.children[i].position.z)
-              texturebat = null;
+              info = {
+                id: idbat,
+                name: this.children[i].name,
+                nom: "Salle de conférence",
+                type: "Salle de conférence",
+                selected: true
+              }
+
+
+
+
             }
             if(this.children[i].name == "bat_1_rest"){
               texturebat = new THREE.TextureLoader().load('map/mapData/tex/bat_rest.png');
@@ -1100,14 +1172,13 @@ export default {
             }
             if(this.children[i].name.includes("wc")){
               texturebat = new THREE.TextureLoader().load('map/mapData/tex/tex_wc.png');
-              const mat_bat = new THREE.MeshPhongMaterial({map: texturebat});
-              //flipY
-              mat_bat.map.flipY = true;
-              this.children[i].material = mat_bat;
-              this.children[i].material.metalness = 0;
-              this.children[i].receiveShadow = true;
-              this.nonselectionables.add(this.children[i]);
-              texturebat = null;
+              info = {
+                id: idbat,
+                name: this.children[i].name,
+                nom: "Toilettes",
+                type: "toilettes",
+                selected: true
+              }
             }
 
             if(texturebat != null){
@@ -1737,7 +1808,11 @@ input:checked + .slider:before {
 }
 
 .scene.active{
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  justify-items: center;
   height: 100%;
 }
 

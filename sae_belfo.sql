@@ -5,8 +5,13 @@ DROP TABLE if exists reservation CASCADE;
 DROP TABLE if exists stand CASCADE;
 DROP TABLE if exists attraction CASCADE;
 DROP TABLE if exists scene CASCADE;
+DROP TABLE if exists event CASCADE;
+DROP TABLE if exists toilette CASCADE;
+
 DROP TABLE if exists disponibilite CASCADE;
 DROP TABLE if exists taggue CASCADE;
+
+
 
 DROP TABLE if exists prestataire CASCADE;
 DROP TABLE if exists client CASCADE;
@@ -176,22 +181,41 @@ CREATE TABLE stand(
    FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement)
 );
 
+CREATE TABLE toilette(
+   id_toilette VARCHAR(50),
+   description VARCHAR(255),
+   nom VARCHAR(50),
+   name VARCHAR(50),
+   posx DECIMAL(24,17),
+   posy DECIMAL(24,17),
+   posz DECIMAL(24,17),
+   rota DECIMAL(24,17),
+   PRIMARY KEY(id_toilette)
+);
+
 CREATE TABLE scene(
    id_scene VARCHAR(50),
    description VARCHAR(50),
-   PRIMARY KEY(id_scene),
-   type_id VARCHAR(50) NOT NULL,
-   FOREIGN KEY(type_id) REFERENCES type(id_type)
+   nom VARCHAR(50),
+   name VARCHAR(50),
+   posx DECIMAL(24,17),
+   posy DECIMAL(24,17),
+   posz DECIMAL(24,17),
+   rota DECIMAL(24,17),
+   PRIMARY KEY(id_scene)
 );
 
 
-CREATE TABLE horaire (
-     id_horaire INT AUTO_INCREMENT,
-     id_scene VARCHAR(50),
-     date_horaire DATETIME,
-     PRIMARY KEY(id_horaire),
-     FOREIGN KEY(id_scene) REFERENCES scene(id_scene)
-);
+CREATE TABLE event(
+   id_event VARCHAR(50),
+   description VARCHAR(255),
+   id_scene VARCHAR(50) NOT NULL,
+   status VARCHAR(50),
+   start_date timestamp,
+   end_date timestamp,
+   PRIMARY KEY(id_event),
+   UNIQUE(id_scene),
+   FOREIGN KEY(id_scene) REFERENCES scene(id_scene)
 
 );
 

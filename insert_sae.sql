@@ -5,6 +5,40 @@ INSERT INTO type VALUES('1', 'Restaurant'),
                       ('5', 'Boutique'),
                       ('6', 'Toilettes');
 
+
+/*
+    CREATE TABLE toilette(
+   id_toilette VARCHAR(50),
+   description VARCHAR(255),
+   nom VARCHAR(50),
+   name VARCHAR(50),
+   posx DECIMAL(24,17),
+   posy DECIMAL(24,17),
+   posz DECIMAL(24,17),
+   rota DECIMAL(24,17),
+   PRIMARY KEY(id_toilette),
+
+x
+:
+114.55597686767578
+y
+:
+6.462428092956543
+z
+:
+40.598480224609375
+ */
+
+INSERT INTO toilette VALUES ( 'c8511a54-441b-43b1-b888-5d261f853924',
+                             'descriptiion toillette 1: 2 toilette Femme, 1 toilette Personne mobilité réduite', 'toilette 1', 'bat_6_wc',-126.34925842285156, 6.462428092956543, 49.19313430786133, 0 ),
+                            ('f281672c-c7c8-4ad2-808f-dfd67138c701', 'description toilette 2', 'toilette 2', 'bat_6_wc1', -116.06807708740234, 6.462428092956543, -32.968910217285156, 0),
+                            ('e4abaf9f-e1bf-4f76-8cd8-0cfbee71e486','description toilette 3', 'toilette 3', 'bat_6_wc2', 27.999588012695312, 6.462428092956543 , -32.968910217285156, 0),
+                            ('fa35a778-6f57-44f2-8915-cea39caa1f33', 'description toilette 4', 'toilette 4', 'bat_6_wc3', 114.55597686767578, 6.462428092956543, 40.598480224609375, 0);
+
+
+INSERT INTO scene VALUES ('9fcbe75a-2918-4fbd-a558-dc994100f656', 'description scene', 'stadium 1', 'bat_3_confer', -119.60863494873047, 11.881292343139648, 101.35678100585938, 1.570796461153735);
+
+
 INSERT INTO groupes VALUES  (1, 'groupe admin'),
                             (2, 'groupe prestataire'),
                             (3, 'groupe user');
