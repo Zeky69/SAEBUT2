@@ -30,47 +30,43 @@ export default {
 
 <style scoped>
 
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-th, td {
-  text-align: left;
-  padding: 8px;
-}
-
-
-tr:nth-child(odd) {
-  background-color: #f2f2f2;}
-
-.description{
-  padding-top: 10px;
-  padding-bottom: 10px;
+.infoPanel-header {
+  font-family: Syne, Helvetica, sans-serif;
   font-size: 15px;
+  width: 100%;
+  text-align: center;
+}
 
+.infoPanel-content {
+  font-family: "DM Sans Medium", Syne, Helvetica, sans-serif;
+  width: 100%;
+
+  margin-top: 10px;
 }
 
 button {
-  background-color: #FEB42D;
-  color: white;
-  font-weight: bold;
-  border-radius: 50px;
-  padding: 4% 20%;
+  background-color: #786385;
+  backdrop-filter: blur(10px);
   border: none;
-  cursor: pointer;
-  margin: 5px 0;
-}
-button:disabled {
-  background-color: #d0d0d0;
   color: white;
-  font-weight: bold;
-  border-radius: 50px;
-  padding: 4% 20%;
-  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-family: "DM Sans Medium", Syne, Helvetica, sans-serif;
+  font-size: 1rem;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
 }
 
+button:hover {
+  background-color: #584169;
+}
+
+.infoPanel-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
 
 
 

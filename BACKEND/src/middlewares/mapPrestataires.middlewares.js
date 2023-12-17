@@ -65,6 +65,14 @@ exports.validateUpdateempInput = (req, res, next) => {
     next();
 }
 
+exports.validateUpdateempInfoInput = (req, res, next) => {
+    const { uuid, nom , description } = req.body;
+    if (!uuid || !nom || !description) {
+        return res.status(400).send("Un des champs est nul");
+    }
+    next();
+}
+
 
 exports.validatebatFilterInput = (req, res, next) => {
     next();

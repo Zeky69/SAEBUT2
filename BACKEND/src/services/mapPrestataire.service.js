@@ -189,24 +189,42 @@ const createEmp = async (req, callback) => {
 };
 
 
-const deleteEmp = (req,callback) => {
-    let name = req.body.name;
-    let position = req.body.position;
-    let emps = [];
+const deleteEmp = async (id) => {
+    const client = await pool.connect();
+    console.log("deleteEmp",id)
     try {
-        const data = fs.readFileSync(filePathEmp, 'utf8');
-        const dataStr = data.toString();
-        temp = JSON.parse(dataStr);
-        emps = temp.filter((emp) => emp.name!=name)
-        emps = temp.filter((emp) => emp.position.x!=position.x && emp.position.y!=position.y && emp.position.z!=position.z)
-    } catch (errorLecture) {
-        console.log(errorLecture);
+        let res;
+        let sql = "DELETE FROM emplacement WHERE id_emplacement = $1 RETURNING *";
+        res = await pool.query(sql, [id]);
+        console.log("Suppression réussie de l'emplacement avec id" + id );
+        return res.rows;
+    } catch (err) {
+        console.log(err);
+        return err;
+
+    }finally {
+        client.release();
     }
+
+}
+
+
+const updateEmp = async (req) => {
+    const client = await pool.connect();
+    let { uuid, description, nom } = req.body;
+
     try {
-        fs.writeFileSync(filePathEmp, JSON.stringify(emps));
-        callback(null, "success");
-    } catch (errorEcriture) {
-        callback(errorEcriture, null);
+        let res;
+        let sql = "UPDATE emplacement SET description = $1, nom = $2 WHERE id_emplacement = $3 RETURNING *";
+        res = await pool.query(sql, [description, nom, uuid]);
+        console.log("Modification réussie de l'emplacement avec id" + uuid);
+        return res.rows;
+    } catch (err) {
+        console.log(err);
+        return err;
+
+    }finally {
+        client.release();
     }
 }
 
@@ -405,6 +423,7 @@ module.exports = {
     getManybat,
     createbat,
     deletebat,
-    getBatType
+    getBatType,
+    updateEmp,
 }
 

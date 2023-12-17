@@ -7,6 +7,9 @@
     <div style="text-align: center;"><button class="btn" @click="$router.push('/panier')"> Acceder a la map 3D</button></div>
   <div class="map">
     <div class="filtre-container">
+      <div class="info-panel-user info-panel-close">
+      <info-panel-user v-if="featureSelected" :feature="featureSelected" @close-panel="closePanel"></info-panel-user>
+      </div>
       <div class="filtre-head">
       <div class="search-bar">
         <input class="search-input" placeholder="Rechercher événement"  type="text" v-model="filtre.nom" id="nom" name="nom">
@@ -56,9 +59,7 @@
               :icon-url="getIconUrl(feature)"
           />
         </l-marker>
-        <div class="info-panel-user info-panel-close">
-        <info-panel-user v-if="featureSelected" :feature="featureSelected" @close-panel="closePanel"></info-panel-user>
-        </div>
+
       </l-map>
     </div>
 
@@ -472,6 +473,8 @@ background-color: transparent;
   background-color: rgba(85, 60, 101, 1);
   border-radius: 50px 0 0 50px;
   width: 350px;
+  overflow: hidden;
+  position: relative;
 
 
 }
@@ -502,23 +505,24 @@ background-color: transparent;
 }
 
 .info-panel-close{
-  right: -33% !important;
+  left: -100% !important;
 }
 
 
 .info-panel-user {
-  opacity: 1;
   position: absolute;
-  right: 0;
-  top: 0;
-  width: 33%;
-  max-width: 700px;
-  height: 100%;
-  background-color: #e7e7e7;
-  color: #041676;
   z-index: 1000;
-  transition: all 0.5s;
+  transition: all 0.3s;
   cursor: default;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  backdrop-filter: blur(15px);
+  padding: 20px;
+  box-sizing: border-box;
+  color : white;
+  background-color: rgba(85, 60, 101, 0.3);
+
 }
 
 

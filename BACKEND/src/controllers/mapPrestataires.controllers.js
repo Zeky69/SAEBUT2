@@ -1,4 +1,5 @@
 const mapPrestatairesService =  require('../services/mapPrestataire.service')
+const {response} = require("express");
 
 // ...
 exports.getBatdebug2 = async (req,res) => {
@@ -94,7 +95,7 @@ exports.getEmp =  async (req,res) => {
 
 exports.saveEmp = (req, res) => {
     
-    mapPrestatairesService.createEmp(req,(error,data)=>{
+       mapPrestatairesService.createEmp(req,(error,data)=>{
         if (error) {
             return res.status(500).send("Internal error");
         }
@@ -102,13 +103,19 @@ exports.saveEmp = (req, res) => {
     })
 };
 
-exports.deleteEmp = (req,res) => {
-    mapPrestatairesService.deleteEmp(req, (error,data)=> {
-        if (error) {
-            return res.status(500).send("Internal error");
+exports.deleteEmp = async (req,res) => {
+    let id = req.params.id;
+    try {
+        let reponse = await mapPrestatairesService.deleteEmp(id);
+        if (reponse) {
+            return res.status(200).send(reponse);
         }
-        return res.status(200).send("emp deleted successfully");
-    })
+        return res.status(401).send("pas de reponse delete");
+    }
+     catch (error) {
+          return res.status(500).send(error.message || "Internal error");
+     }
+
 }
 
 exports.updateEmp = async (req,res) => {
@@ -119,6 +126,19 @@ exports.updateEmp = async (req,res) => {
         }
         return res.status(200).send("emp updated successfully");
     })
+}
+
+
+exports.updateEmpInfo = async (req,res) => {
+    try {
+        let reponse = await mapPrestatairesService.updateEmp(req);
+        if (reponse) {
+            return res.status(200).send(reponse);
+        }
+        return res.status(401).send("pas de reponse update");
+    }catch (error) {
+        return res.status(500).send(error.message || "Internal error");
+    }
 }
 
 

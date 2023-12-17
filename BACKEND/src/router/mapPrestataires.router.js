@@ -13,9 +13,10 @@ router.get('/emp/:uuid', mapPrestatairesMiddlewares.validateempUUID,mapPrestatai
 
 router.post('/emp', mapPrestatairesMiddlewares.validateAddempInput , mapPrestatairesControllers.saveEmp);
 
-router.delete('/emp', mapPrestatairesMiddlewares.validateDelempInput , mapPrestatairesControllers.deleteEmp);
+router.delete('/emp/:id', mapPrestatairesMiddlewares.validateDelempInput , mapPrestatairesControllers.deleteEmp);
 
 router.patch('/emp', mapPrestatairesMiddlewares.validateUpdateempInput , mapPrestatairesControllers.updateEmp);
+router.patch('/emp/info', mapPrestatairesMiddlewares.validateUpdateempInfoInput , mapPrestatairesControllers.updateEmpInfo);
 
 router.get('/bat', mapPrestatairesMiddlewares.validatebatFilterInput, mapPrestatairesControllers.getBat);
 

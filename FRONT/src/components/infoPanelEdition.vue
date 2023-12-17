@@ -14,28 +14,28 @@
           <th>Description</th>
           <td><input v-model=newfeature.properties.description type="text" name="description" id="description"></td>
         </tr>
-        <tr>
+<!--        <tr>-->
 
-          <th>Type terrain</th>
-          <td>
-          <select v-model=newfeature.properties.typeTerrain name="types" id="types">
-            <option v-for="(type , index) in types"  :key="index" :value=type :selected="type === feature.properties.typeTerrain">{{type}}</option>
-          </select>
-          </td>
-        </tr>
-        <tr>
-          <th>Propriétaire</th>
-          <td>
-          <select v-model=newfeature.properties.apartient name="providers" id="providers">
-            <option value=null :selected="feature.properties.apartient === null">Libre</option>
-            <option v-for="(provider , index) in filteredProvider" :key="index" :value=provider :selected="provider ===feature.properties.apartient" >{{provider}}</option>
-          </select>
-          </td>
-        </tr>
-        <tr>
-          <th>Surface</th>
-          <td>{{calculatePolygonArea(convertCoordinatesToMeters(feature.geometry))}} m²</td>
-        </tr>
+<!--          <th>Type terrain</th>-->
+<!--          <td>-->
+<!--          <select v-model=newfeature.properties.typeTerrain name="types" id="types">-->
+<!--            <option v-for="(type , index) in types"  :key="index" :value=type :selected="type === feature.properties.typeTerrain">{{type}}</option>-->
+<!--          </select>-->
+<!--          </td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--          <th>Propriétaire</th>-->
+<!--          <td>-->
+<!--          <select v-model=newfeature.properties.apartient name="providers" id="providers">-->
+<!--            <option value=null :selected="feature.properties.apartient === null">Libre</option>-->
+<!--            <option v-for="(provider , index) in filteredProvider" :key="index" :value=provider :selected="provider ===feature.properties.apartient" >{{provider}}</option>-->
+<!--          </select>-->
+<!--          </td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--          <th>Surface</th>-->
+<!--          <td>{{calculatePolygonArea(convertCoordinatesToMeters(feature.geometry))}} m²</td>-->
+<!--        </tr>-->
         </tbody>
       </table>
 
@@ -60,8 +60,8 @@ export default {
       "id": this.feature.properties.id,
       "name": this.feature.properties.name,
       "description": this.feature.properties.description,
-      "typeTerrain": this.feature.properties.typeTerrain,
-      "apartient": this.feature.properties.apartient,
+      // "typeTerrain": this.feature.properties.typeTerrain,
+      // "apartient": this.feature.properties.apartient,
     }
   }
   }
@@ -74,8 +74,8 @@ export default {
         "id": null,
         "name": null,
         "description": null,
-        "typeTerrain": null,
-        "apartient": null,
+        // "typeTerrain": null,
+        // "apartient": null,
       }
     },
     filteredProvider: []
@@ -83,11 +83,11 @@ export default {
 
 ,
   watch: {
-    'newfeature.properties.typeTerrain': function () {
-      // Watch for changes in newfeature.properties.typeTerrain
-      // and update filteredProvider accordingly
-      this.filterProvider();
-    },
+    // 'newfeature.properties.typeTerrain': function () {
+    //   // Watch for changes in newfeature.properties.typeTerrain
+    //   // and update filteredProvider accordingly
+    //   this.filterProvider();
+    // },
     'feature': function (){
       this.newfeature ={
         "geometry": this.feature.geometry,
@@ -95,8 +95,8 @@ export default {
           "id": this.feature.properties.id,
           "name": this.feature.properties.name,
           "description": this.feature.properties.description,
-          "typeTerrain": this.feature.properties.typeTerrain,
-          "apartient": this.feature.properties.apartient,
+          // "typeTerrain": this.feature.properties.typeTerrain,
+          // "apartient": this.feature.properties.apartient,
         }
       }
 

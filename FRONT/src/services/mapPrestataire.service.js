@@ -78,7 +78,7 @@ async function createEmp(data) {
 
 
 async function deleteEmpFromAPI(data) {
-    return getRequest('/mapPrestataires/emp', data, 'DELETEEMP')
+    return deleteRequest('/mapPrestataires/emp/'+data, 'DELETEEMP')
 }
 
 async function deleteEmp(data) {
@@ -109,6 +109,21 @@ async function updateEmpFree(data) {
     }
 }
 
+
+async function updateEmpInfoFromAPI(data){
+    return patchRequest('/mapPrestataires/emp/info', data, 'UPDATEEMPINFO')
+}
+
+async function updateEmpInfo(data) {
+    try {
+        console.log("data update front",data)
+        let answer = await updateEmpInfoFromAPI(data);
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour de l\'emplacement :', error.message);
+        throw error;
+    }
+}
 
 
 async function getAllBatFromAPI() {
@@ -225,5 +240,6 @@ export {
     getAllBat,
     getManyBat,
     deleteBat,
-    getBatType
+    getBatType,
+    updateEmpInfo
 }

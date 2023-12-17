@@ -52,24 +52,24 @@
                   <th>Description</th>
                   <td><input type="text" v-model="newfeature.properties.description"></td>
                 </tr>
-                <tr>
-                  <th>Type</th>
-                  <td>
-                    <select v-model="newfeature.properties.typeTerrain">
-                      <option value=null selected>Choisir un type</option>
-                      <option v-for="(type , index) in types" :key="index" :value=type >{{type}}</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <th>Appartient à</th>
-                  <td>
-                    <select v-model="newfeature.properties.apartient">
-                      <option value=null selected>Libre</option>
-                      <option v-for="(provider , index) in filteredProvider" :key="index" :value=provider >{{provider}}</option>
-                    </select>
-                  </td>
-                </tr>
+<!--                <tr>-->
+<!--                  <th>Type</th>-->
+<!--                  <td>-->
+<!--                    <select v-model="newfeature.properties.typeTerrain">-->
+<!--                      <option value=null selected>Choisir un type</option>-->
+<!--                      <option v-for="(type , index) in types" :key="index" :value=type >{{type}}</option>-->
+<!--                    </select>-->
+<!--                  </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                  <th>Appartient à</th>-->
+<!--                  <td>-->
+<!--                    <select v-model="newfeature.properties.apartient">-->
+<!--                      <option value=null selected>Libre</option>-->
+<!--                      <option v-for="(provider , index) in filteredProvider" :key="index" :value=provider >{{provider}}</option>-->
+<!--                    </select>-->
+<!--                  </td>-->
+<!--                </tr>-->
 
               </tbody>
 
@@ -86,7 +86,7 @@
 import {LImageOverlay, LMap, LMarker, LPolygon, LTileLayer} from "vue2-leaflet";
 import 'leaflet/dist/leaflet.css';
 import InfoPanelEdition from "@/components/infoPanelEdition.vue";
-import {createEmp, getAllEmp} from '../services/mapPrestataire.service.js';
+import {createEmp, deleteEmp, getAllEmp, updateEmpInfo} from '../services/mapPrestataire.service.js';
 
 export default {
   name: 'Map2D-edition',
@@ -109,22 +109,29 @@ export default {
 
     markerLatLng: [51.504, -0.159],
     newPolygon:[],
+    // newfeature: {
+    //     "geometry": [],
+    //     "properties": {
+    //       "id": null,
+    //       "name": null,
+    //       "description": null,
+    //       "typeTerrain": null,
+    //       "apartient": null,
+    //     }
+    //   },
     newfeature: {
-        "geometry": [],
-        "properties": {
-          "id": null,
-          "name": null,
-          "description": null,
-          "typeTerrain": null,
-          "apartient": null,
-        }
-      },
+      "geometry": [],
+      "properties": {
+        "id": null,
+        "name": null,
+        "description": null,
+      }
+    },
     modeEditor:false,
     couleurOption:["yellow","orange","blue","yellow"],
     types: ["forrain" , "scene"],
     filteredProvider: [],
     providers:[["Calixte","Raclette","Zekeriya"],["Mhammed","Enzo","Dalia","Merguez"]],
-    provider : {id:"Zekeriya", type:"forrain"},
     features:[],
     featureSelected : null,
     couleur: [],
@@ -147,8 +154,6 @@ export default {
             "id": emp.id_emplacement,
             "name": emp.nom,
             "description": emp.description,
-            "typeTerrain": emp.type,
-            "apartient": emp.prestataire,
           }
         }
         this.features.push(data)
@@ -162,9 +167,9 @@ export default {
   }
   ,
   watch: {
-    'newfeature.properties.typeTerrain': function () {
-      this.filterProvider();
-    }
+    // 'newfeature.properties.typeTerrain': function () {
+    //   this.filterProvider();
+    // }
     }
 ,
   methods: {
@@ -347,6 +352,7 @@ export default {
       return 'black'; // Remplacez 'couleur par défaut' par la valeur souhaitée
     },
     delFeature(feature) {
+      deleteEmp(feature.properties.id)
       this.features.splice(this.features.indexOf(feature), 1)
       this.couleur = []
       this.features.forEach((feature) => {
@@ -355,6 +361,11 @@ export default {
       this.closePanel()
     },
     editFeature(feature, newfeature) {
+      updateEmpInfo({
+        uuid: feature.properties.id,
+        nom: newfeature.properties.name,
+        description: newfeature.properties.description,
+      })
       this.features.splice(this.features.indexOf(feature), 1)
       this.features.push(newfeature)
       this.couleur = []
