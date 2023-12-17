@@ -401,6 +401,9 @@ export default {
       this.emplacement_bdd = await getAllEmp();
       console.log("emplacement_bdd", this.emplacement_bdd)
       for (let i = 0; i < this.emplacement_bdd.length; i++) {
+        if(this.emplacement_bdd[i].id_emplacement == 0){
+          break;
+        }
         console.log("emplacement", this.emplacement_bdd[i])
         var matricepoints = this.emplacement_bdd[i].matricepoints.matricepoints
         console.log("mat", matricepoints)
@@ -630,61 +633,73 @@ export default {
       }
       if (this.selectedObject != 0) {
         if (this.selectedObject.name.slice(0,3) == "bat") {
-          let found;
-          found = await getOneBatUUID(this.selectedObject.userData.uuid);
-          if (found != []){
-            found = true;
+          if(this.selectedObject.name.slice(4,5) == "3" || this.selectedObject.name.slice(4,5) == "6"){
+            if (this.selectedObject.name.slice(4,5) == "3"){
+              console.log("batiment scene")
+            }
+            else{
+              console.log("batiment toilette")
+            }
           }
-          else {
-            found = false;
-          }
-          if (this.selectab.length == 0 && found) {
-            // Toggle the 'active' class on the selectmenu div
-            document.getElementById('selectmenu').classList.toggle('closed');
-            document.getElementById('selectmenu').classList.toggle('supr');
-            document.getElementById('info').classList.toggle('active');
-            document.getElementById('scene1').classList.toggle('active');
+          else{
+            let found;
+            found = await getOneBatUUID(this.selectedObject.userData.uuid);
+            if (found != []){
+              found = true;
+            }
+            else {
+              found = false;
+            }
+            if (this.selectab.length == 0 && found) {
+              // Toggle the 'active' class on the selectmenu div
+              document.getElementById('selectmenu').classList.toggle('closed');
+              document.getElementById('selectmenu').classList.toggle('supr');
+              document.getElementById('info').classList.toggle('active');
+              document.getElementById('scene1').classList.toggle('active');
 
-            var info = {obj: this.selectedObject, type: "bat"}
-            console.log("infojdfklsdlfjklsdmflqksdmlfkqsdmfkml", info)
-            this.selectab.push(info);
-            let batiment = await getOneBatUUID(this.selectedObject.userData.uuid);
+              var info = {obj: this.selectedObject, type: "bat"}
+              console.log("infojdfklsdlfjklsdmflqksdmlfkqsdmfkml", info)
+              this.selectab.push(info);
+              let batiment = await getOneBatUUID(this.selectedObject.userData.uuid);
 
-            batiment = batiment[0]
-            let types = await getBatType()
+              batiment = batiment[0]
+              let types = await getBatType()
 
-            for (let i = 0; i < types.length; i++) {
-              if (types[i].id_type == batiment.type_id) {
-                var typebat = types[i]
+              for (let i = 0; i < types.length; i++) {
+                if (types[i].id_type == batiment.type_id) {
+                  var typebat = types[i]
+                }
+              }
+
+              console.log("batiment klzfmlsmldkzmlkdmlzkdzmldmklsdo sd osd osd osd oosd ",batiment )
+              this.nomBatiment = batiment.nom;
+              this.typeBatiment = typebat.libelle;
+              this.descriptionBatiment = batiment.description;
+
+
+              console.log("nom", this.nomBatiment)
+              console.log("desc",this.descriptionBatiment)
+            } else {
+              if (this.selectedObject.uuid == this.selectab[0]["obj"].uuid) {
+                // Toggle the 'active' class on the selectmenu div
+                document.getElementById('selectmenu').classList.toggle('closed');
+
+                document.getElementById('scene1').classList.toggle('active');
+                //wait 300ms
+                setTimeout(() => {
+                  document.getElementById('info').classList.toggle('active');
+                  document.getElementById('selectmenu').classList.toggle('supr');
+                }, 300);
+                this.selectab.pop(0)
+                this.selectedObject = 0
+              } else {
+                console.log("un objet est deja select")
+                this.selectedObject = 0
               }
             }
 
-            console.log("batiment klzfmlsmldkzmlkdmlzkdzmldmklsdo sd osd osd osd oosd ",batiment )
-            this.nomBatiment = batiment.nom;
-            this.typeBatiment = typebat.libelle;
-            this.descriptionBatiment = batiment.description;
-
-
-            console.log("nom", this.nomBatiment)
-            console.log("desc",this.descriptionBatiment)
-          } else {
-            if (this.selectedObject.uuid == this.selectab[0]["obj"].uuid) {
-              // Toggle the 'active' class on the selectmenu div
-              document.getElementById('selectmenu').classList.toggle('closed');
-
-              document.getElementById('scene1').classList.toggle('active');
-              //wait 300ms
-              setTimeout(() => {
-                document.getElementById('info').classList.toggle('active');
-                document.getElementById('selectmenu').classList.toggle('supr');
-              }, 300);
-              this.selectab.pop(0)
-              this.selectedObject = 0
-            } else {
-              console.log("un objet est deja select")
-              this.selectedObject = 0
-            }
           }
+
         }
         }
       },
@@ -898,7 +913,10 @@ export default {
 
 .filtre{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 80%;
+  margin-left: 10%;
 }
 
 .toggle-container {
