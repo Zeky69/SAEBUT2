@@ -23,3 +23,22 @@ exports.validateDelInput = (req, res, next) => {
     next();
 }
 
+
+
+
+exports.validateEvent = (req, res, next) => {
+    next();
+}
+
+exports.validateEventUUID = (req, res, next) => {
+    next();
+}
+
+exports.validateAddEventInput = async (req, res, next) => {
+    console.log("validateAddEventInput");
+    next();
+}
+
+exports.validateDelEventInput = (req, res, next) => {
+    next();
+}

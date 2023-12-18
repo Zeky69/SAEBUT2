@@ -52,4 +52,49 @@ exports.deleteScene = (req, res) => {
 };
 
 
+exports.getEvent = async (req,res) => {
+    let reponse = await scneneService.getEvent(req);
+    console.log("reponse controller",reponse);
+    if (reponse) {
+        return res.status(200).send(reponse);
+    }
+    return res.status(401).send("no info");
+
+};
+
+exports.getEventUUID = async (req,res) => {
+    let info = req.params.uuidEvent;
+    console.log("info",info);
+    let reponse = await scneneService.getEventUUID(info);
+    if (reponse) {
+        return res.status(200).send(reponse);
+    }
+    return res.status(401).send("no info");
+}
+
+exports.saveEvent = async (req,res) => {
+    try {
+        let info = await scneneService.saveEvent(req);
+        if(info){
+            return res.status(200).send(info);
+        }else{
+            return res.status(401).send("no info");
+        }
+    }
+    catch (error) {
+        return res.status(500).send("Internal error");
+    }
+};
+
+exports.deleteEvent = (req, res) => {
+    let info = req.params.uuidEvent;
+    console.log("info",info);
+    let reponse = scneneService.deleteEvent(info);
+    if (reponse) {
+        return res.status(200).send(reponse);
+    }
+    return res.status(401).send("no info");
+}
+
+
 // ...

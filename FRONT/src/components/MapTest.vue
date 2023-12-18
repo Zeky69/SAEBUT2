@@ -60,25 +60,44 @@
       </div>
       <div class="scene active" id="scene">
         <FullCalendar :options="calendarOptions"  ref="fullCalendarRef"/>
-        <div class="addEventFrom">
-          <h2>Ajouter un événement</h2>
+        <div class="eventOptions">
+          <div class="eventAction" id="eventAction">
+            <button class="addEventBut custom-btn" id="addEventBut" @click="showAddEvent()">Ajouter un Evenement</button>
+            <button class="removeEventBut custom-btn" id="removeEventBut" @click="showDelEvent()">Remove un Evenement</button>
+          </div>
+          <div class="addEventFrom" id="addEventFrom">
+            <h2>Ajouter un événement</h2>
             <label for="fname">Nom de l'événement:</label><br>
-            <input type="text" id="fname" name="fname"><br>
+            <input type="text" id="fname" name="fname" style="width: 86%;"><br>
             <label for="lname">Description de l'événement:</label><br>
-            <textarea id="eventdescri" v-model="description_event" placeholder="Veuillez décrire votre event" name="lname" ></textarea>
+            <textarea id="eventdescri" v-model="description_event" placeholder="Veuillez décrire votre event" name="lname" style="width: 86%;"></textarea>
             <br>
             <label for="lname">Date de début:</label><br>
             <input type="datetime-local" id="start" name="event-start"
                    value="2024-06-01T12:00"
-                   min="2024-06-01T00:00" max="2024-06-14T00:00"><br>
+                   min="2024-06-01T00:00" max="2024-06-14T00:00" style="width: 86%;"><br>
             <label for="lname">Date de fin:</label><br>
             <input type="datetime-local" id="end" name="event-start"
                    value="2024-06-01T12:00"
-                   min="2024-06-01T00:00" max="2024-06-14T00:00"><br><br>
-            <button id="btn3" @click="askAddEvent"> Demander un crenaux</button>
+                   min="2024-06-01T00:00" max="2024-06-14T00:00" style="width: 86%;"><br><br>
+            <button id="btn3" class="custom-btn" @click="askAddEvent"> Demander un crenaux</button>
 
 
+          </div>
+          <div class="removeEvent" id="removeEvent">
+            <h2>Event selectionné</h2>
+            <div class="eventSelected" v-show="selectedEvent">
+              <p>{{ selectedEvent.nom }}</p>
+              <p>{{ selectedEvent.description }}</p>
+              <!-- Ajoutez d'autres détails de l'événement ici -->
+              <button id="btn4" class="custom-btn" @click="deleteEventfunc"> Supprimer l'événement</button>
+            </div>
+            <div v-show="!selectedEvent">
+              <p>Aucun événement sélectionné</p>
+            </div>
+          </div>
         </div>
+
       </div>
       <div class="remove" id="remove">
         <div class="topmenu">
@@ -120,7 +139,7 @@ import 'tippy.js/dist/tippy.css';
 
 //importer service/mapPrestataires.js
 import {getAllEmp,getOneBatUUID,getBatbyEmpUUID,getOneEmpUUID,getOneEmp,deleteBat, updateEmpFree, createBat, getAllBat} from '../services/mapPrestataire.service.js';
-import {getAllScene} from '../services/scene.service.js';
+import {getAllScene,getEvent,createEvent,getEventUUID,deleteEvent} from '../services/scene.service.js';
 import {getAllToilettes} from '../services/toilette.servie.js';
 
 /*   getAllEmp,
@@ -144,6 +163,7 @@ export default {
 
     return {
       nom_Event: "",
+      selectedEvent: 0,
       currentEvents: [],
       calendarOptions: {
         height: '70%',
@@ -174,12 +194,41 @@ export default {
         //faire un event de 8h a 14h
         initialDate: '2024-06-01',
         slotDuration: '00:30',
-        events: this.currentEvents,
+        events: this.currentEvents ? this.currentEvents.map(event => ({
+          title: event.nom,
+          start: event.start,
+          end: event.end,
+          color: event.color,
+          description: event.description,
+        })) : [],
         //show description on click
-        eventClick: function (info) {
+        eventClick: async (info) => {
           tippy(info.el, {
             content: info.event.extendedProps.description,
-          });
+          })
+          console.log("thisslertedEvent", this.selectedEvent.id_prestataire)
+          console.log("thisprestat", this.prestataire)
+            if (info.event._def.publicId == this.selectedEvent.id_event) {
+              let id = this.selectedEvent.id_scene;
+              this.selectedEvent = 0;
+              await this.refreshcalendare(id);
+
+              this.uuidsceneSelect = 0;
+            } else {
+              const event = await getEventUUID(info.event._def.publicId);
+              this.selectedEvent = event;
+              this.uuidsceneSelect = event.id_scene;
+              if (this.selectedEvent.id_prestataire == this.prestataire) {
+                await this.refreshcalendare(this.selectedEvent.id_scene);
+              }else{
+                this.selectedEvent = 0;
+                this.uuidsceneSelect = 0;
+              }
+
+            }
+
+            console.log("this.selectedEvent", this.selectedEvent);
+
         },
         views: {
           timeGridFourDay: {
@@ -275,35 +324,66 @@ export default {
 
   methods: {
 
+    async deleteEventfunc(){
+      console.log("deleteEvent")
+      console.log("this.selectedEvent", this.selectedEvent)
+      let id = this.selectedEvent.id_event;
+      let uuid = this.uuidsceneSelect;
+      console.log("id", id)
+      console.log("uuid", uuid)
+      await deleteEvent(id);
+
+
+
+
+      this.refreshcalendare(uuid);
+      this.showDelEvent()
+      this.uuidsceneSelect = 0;
+      this.selectedEvent = 0;
+    },
+
+
+
 
     async askAddEvent() {
       console.log("askAddEvent")
 
       let start = document.getElementById("start").value;
       let end = document.getElementById("end").value;
+      //mettre au bon format : 2024-06-01T10:30:00.000Z
+                            //"2024-06-01T16:00:00.000Z"
+      start = start + ":00.000Z";
+      end = end + ":00.000Z";
       let name = document.getElementById("fname").value;
       let description = document.getElementById("eventdescri").value;
       console.log("start", start)
       console.log("end", end)
       console.log("name", name)
       console.log("description", description)
+      let uuid = this.uuidsceneSelect;
 
-      console.log("this.selectab", this.selectab)
+      console.log("uuid", uuid)
 
-      let uuid = this.selectedObject.userData.uuid;
+      //[uuid, info.description, info.nom, info.id_scene, info.couleur, info.etat, info.date_debut, info.date_fin]);
 
       let databdd = {
-        uuid: uuid,
-        start: start,
-        end: end,
-        name: name,
+        id_scene: uuid,
+        date_debut: start,
+        date_fin: end,
+        nom: name,
         description: description,
-        status: "waiting",
+        etat: "waiting",
+        couleur: "red",
+        id_prestataire: "calixte",
       }
       console.log("databdd", databdd)
-      //await addevent(databdd);
+      let eventcreated = await createEvent(databdd, uuid);
+
+
+
 
       let data = {
+        id : eventcreated.id_event,
         title: name,
         start: start,
         end: end,
@@ -315,11 +395,12 @@ export default {
       //add event au calendrier
       this.currentEvents.push(data);
 
-      console.log("this.currentEvents", this.currentEvents)
-
-      this.$refs.fullCalendarRef.getApi().setOption('events', this.currentEvents);
 
 
+      console.log("this.currentEvents bef refresh", this.currentEvents)
+
+      this.refreshcalendare(uuid);
+      this.showAddEvent()
     },
 
 
@@ -534,20 +615,76 @@ export default {
       }
     },
 
-    async refreshcalendare(name, uuid) {
-      this.eventScene = [
-        { title: 'event 1', start: '2024-06-01T12:30:00', end: '2024-06-01T14:30:00', color: 'red', description: 'Description de l\'événement 1' },
-        { title: 'event 2', start: '2024-06-01T22:00:00', end: '2024-06-02T12:00:00', color: 'blue', description: 'Description de l\'événement 2' },
-        { title: 'event 3', start: '2024-06-03T14:00:00', end: '2024-06-03T16:00:00', color: 'green', description: 'Description de l\'événement 3' }
-      ]
-      this.currentEvents = this.eventScene;
+    async eventParser(event){
+      console.log("event", event)
+
+
+      if(event.id_prestataire == this.prestataire){
+        if(event.status == "acepted"){
+          event.color = "green";
+        }
+        else{
+          event.color = "orange";
+        }
+      }
+      else {
+        event.color = "red";
+      }
+      if(this.selectedEvent != 0) {
+        if (event.id_event == this.selectedEvent.id_event) {
+          event.color = "blue";
+        }
+      }
+
+
+
+
+
+      let data = {
+        id : event.id_event,
+        title: event.nom,
+        start: event.start_date,
+        end: event.end_date,
+        color: event.color,
+        description: event.description,
+      }
+      return data;
+    },
+
+
+    async refreshcalendare( uuid) {
+      this.currentEvents = [];
+      this.eventScene = await getEvent(uuid);
+      console.log("eventScene", this.eventScene)
+      for (let i = 0; i < this.eventScene.length; i++) {
+        let data = await this.eventParser(this.eventScene[i]);
+        this.currentEvents.push(data);
+      }
+
+      console.log("this.currentEvents", this.currentEvents)
 
 
       this.$refs.fullCalendarRef.getApi().setOption('events', this.currentEvents);
 
       console.log("refreshcalendare");
-      console.log("name", name);
       console.log("uuid", uuid);
+    },
+
+    showAddEvent(){
+      document.getElementById('addEventFrom').classList.toggle('active');
+      //si remove event est active
+      if(document.getElementById('removeEvent').classList.contains('active')){
+        document.getElementById('removeEvent').classList.toggle('active');
+      }
+
+    },
+
+    showDelEvent(){
+      document.getElementById('removeEvent').classList.toggle('active');
+      //si add event est active
+      if(document.getElementById('addEventFrom').classList.contains('active')){
+        document.getElementById('addEventFrom').classList.toggle('active');
+      }
     },
 
 
@@ -587,7 +724,8 @@ export default {
               document.getElementById('scene').classList.toggle('active');
               document.getElementById('scene1').classList.toggle('active');
               this.uuidsceneSelect = this.selectedObject.userData.uuid;
-              this.refreshcalendare(this.selectedObject.name, this.selectedObject.userData.uuid)
+              this.refreshcalendare(this.selectedObject.userData.uuid)
+              console.log("this.uuidsceneSelect", this.selectedObject)
 
             }else{
               console.log("batiment toilette")
@@ -1003,7 +1141,8 @@ export default {
         scene_clone.castShadow = true;
         scene_clone.receiveShadow = true;
         scene_clone.rotation.z = this.batScene[i].rota;
-        scene_clone.userData = {uuid: this.batScene[i].id_batiment, description: this.batScene[i].description};
+        scene_clone.userData = {uuid: this.batScene[i].id_scene, description: this.batScene[i].description};
+        console.log("scene_clone", scene_clone.userData)
         this.selectionables.add(scene_clone);
       }
 
@@ -1775,6 +1914,33 @@ input:checked + .slider:before {
   background-color: #6c757d; /* Gardez la couleur grise au survol pour le bouton désactivé */
 }
 
+.eventAction{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 10px;
+}
+
+
+
+.addEventFrom{
+  display: none;
+}
+
+.addEventFrom.active{
+  display: block;
+  width: 100%;
+}
+
+.removeEvent{
+  display: none;
+  margin-bottom: 20px;
+}
+
+.removeEvent.active{
+  display: block;
+}
 
 .selectmenu {
   width: 30%;
@@ -1787,6 +1953,14 @@ input:checked + .slider:before {
 
 .selectmenu.closed{
   right: -30%;
+}
+
+.eventOptions{
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  width: 100%;
+  height: 40%;
 }
 
 
@@ -1815,6 +1989,9 @@ input:checked + .slider:before {
   justify-items: center;
   height: 100%;
 }
+
+
+
 
 .add{
   display: none;

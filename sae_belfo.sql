@@ -209,15 +209,17 @@ CREATE TABLE scene(
 CREATE TABLE event(
    id_event VARCHAR(50),
    description VARCHAR(255),
+   nom VARCHAR(50),
    id_scene VARCHAR(50) NOT NULL,
+   color VARCHAR(50),
    status VARCHAR(50),
    start_date timestamp,
    end_date timestamp,
+   id_prestataire VARCHAR(50) NOT NULL,
    PRIMARY KEY(id_event),
-   UNIQUE(id_scene),
    FOREIGN KEY(id_scene) REFERENCES scene(id_scene)
-
 );
+
 
 CREATE TABLE attraction(
    id_attraction VARCHAR(50),

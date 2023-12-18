@@ -25,6 +25,7 @@ async function getOneSceneUUID(uuid) {
 }
 
 async function createSceneFromAPI(data) {
+    ///:uuid/event',
     return postRequest('/scene/', data, 'CREATESCENE')
 }
 
@@ -43,10 +44,56 @@ async function deleteScene(uuid) {
 }
 
 
+async function getEventFromAPI(uuid) {
+    return getRequest('/scene/' +`${uuid}/event`, 'GETEVENT')
+}
+
+async function getEvent(uuid) {
+    let answer = await getEventFromAPI(uuid)
+    return answer
+}
+
+async function getEventUUIDFromAPI(uuidEvent) {
+    return getRequest('/scene/event/' +  `${uuidEvent}`, 'GETEVENTUUID')
+}
+
+async function getEventUUID( uuidEvent) {
+    let answer = await getEventUUIDFromAPI(uuidEvent)
+    return answer
+}
+
+
+async function createEventFromAPI(data,uuid) {
+    console.log("createvent front api")
+    let response = await postRequest('/scene' +`/${uuid}/event`, data, 'CREATEEVENT')
+    console.log("response create event",response)
+    return response
+}
+
+async function createEvent(data,uuid) {
+    console.log("createvent front")
+    let answer = await createEventFromAPI(data,uuid)
+    return answer
+}
+
+
+async function deleteEventFromAPI( uuidEvent) {
+    return deleteRequest('/scene/event/'+`${uuidEvent}`, 'DELETEEVENT')
+}
+
+async function deleteEvent(uuidEvent) {
+    let answer = await deleteEventFromAPI( uuidEvent)
+    return answer
+}
 
 export {
     getAllScene,
     getOneSceneUUID,
     createScene,
-    deleteScene
+    deleteScene,
+    getEvent,
+    getEventUUID,
+    createEvent,
+    deleteEvent
 }
+

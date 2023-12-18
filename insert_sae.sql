@@ -6,28 +6,6 @@ INSERT INTO type VALUES('1', 'Restaurant'),
                       ('6', 'Toilettes');
 
 
-/*
-    CREATE TABLE toilette(
-   id_toilette VARCHAR(50),
-   description VARCHAR(255),
-   nom VARCHAR(50),
-   name VARCHAR(50),
-   posx DECIMAL(24,17),
-   posy DECIMAL(24,17),
-   posz DECIMAL(24,17),
-   rota DECIMAL(24,17),
-   PRIMARY KEY(id_toilette),
-
-x
-:
-114.55597686767578
-y
-:
-6.462428092956543
-z
-:
-40.598480224609375
- */
 
 INSERT INTO toilette VALUES ( 'c8511a54-441b-43b1-b888-5d261f853924',
                              'descriptiion toillette 1: 2 toilette Femme, 1 toilette Personne mobilité réduite', 'toilette 1', 'bat_6_wc',-126.34925842285156, 6.462428092956543, 49.19313430786133, 0 ),
@@ -38,6 +16,10 @@ INSERT INTO toilette VALUES ( 'c8511a54-441b-43b1-b888-5d261f853924',
 
 INSERT INTO scene VALUES ('9fcbe75a-2918-4fbd-a558-dc994100f656', 'description scene', 'stadium 1', 'bat_3_confer', -119.60863494873047, 11.881292343139648, 101.35678100585938, 1.570796461153735);
 
+
+INSERT INTO event VALUES ('1', 'premier concert', 'description event 1','9fcbe75a-2918-4fbd-a558-dc994100f656', 'red', 'acepted', '2024-06-01T12:30:00', '2024-06-01T14:30:00','calixte'),
+                         ('2',  'Premiere lan', 'description event 2', '9fcbe75a-2918-4fbd-a558-dc994100f656', 'blue', 'acepted', '2024-06-01T22:00:00', '2024-06-02T12:00:00','calixte'),
+                         ('3', 'deuxieme concert', 'description event 3',  '9fcbe75a-2918-4fbd-a558-dc994100f656', 'green', 'acepted', '2024-06-03T14:00:00', '2024-06-03T16:00:00', 'calixte');
 
 INSERT INTO groupes VALUES  (1, 'groupe admin'),
                             (2, 'groupe prestataire'),
