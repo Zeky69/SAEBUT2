@@ -49,7 +49,7 @@
     </div>
 
     <div class="map-container">
-      <l-map style="width:1000px ; height: 800px" :min-zoom="19" :max-zoom="21" :zoom="zoom" :max-bounds="cartebounds" :center="center">
+      <l-map style="width:1000px ; height: 800px" :min-zoom="19" :max-zoom="21" :zoom="zoom" :max-bounds="cartebounds" :center="center" ref="map">
         <l-tile-layer :url="url" ></l-tile-layer>
         <l-image-overlay :url="'map2D.png'" :bounds="cartebounds"></l-image-overlay>
         <l-marker v-for="(feature,index) in filteredFeature" :key="index"  :lat-lng="getLatLngMarker(feature.geometry)" @click="openPanel(feature)" @close-panel="closePanel">
@@ -191,7 +191,7 @@ export default {
       this.filtre.type = val.value;
     },
     getIconUrl(f) {
-    return 'icons/' + f.properties.marker;
+    return require(`@/assets/map2D/icons/${f.properties.marker}`);
     },
     uglycoo(coo) {
       const centerx = 47.74826581735272
@@ -218,59 +218,28 @@ export default {
       }
   }
   ,
-    getLatLngMarker(coordinates){
-        // let area = 0;
-        // let x = 0;
-        // let y = 0;
-        // let prev = coordinates[coordinates.length - 1];
-        //
-        // coordinates.forEach(coord => {
-        //   const cur = coord;
-        //   const f = (prev[0] * cur[1]) - (cur[0] * prev[1]);
-        //   x += (prev[0] + cur[0]) * f;
-        //   y += (prev[1] + cur[1]) * f;
-        //   area += f;
-        //   prev = cur;
-        // });
-        //
-        // area /= 2;
-        // x /= (area * 6);
-        // y /= (area * 6);
-        // return [x, y]; // Les coordonnées sont dans l'ordre [lat, lng]
-
-
-      if (coordinates.length === 0) {
-        return null;
+    getLatLngMarker(coordinates) {
+      if (coordinates && coordinates.length > 0) {
+        const sumLat = coordinates.reduce((sum, coord) => sum + coord[0], 0);
+        const sumLng = coordinates.reduce((sum, coord) => sum + coord[1], 0);
+        const avgLat = sumLat / coordinates.length;
+        const avgLng = sumLng / coordinates.length;
+        return [avgLat, avgLng];
       }
-
-      // Initialise les sommes des coordonnées en x et en y
-      let sumX = 0;
-      let sumY = 0;
-
-      // Parcours de toutes les coordonnées dans la liste
-      for (let i = 0; i < coordinates.length; i++) {
-        sumX += coordinates[i][0];
-        sumY += coordinates[i][1];
-      }
-
-      // Calcule la moyenne des coordonnées en x et en y
-      const centerX = sumX / coordinates.length;
-      const centerY = sumY / coordinates.length;
-
-      return [centerX, centerY];
-
+      return null;
     },
     closePanel() {
       document.querySelector('.info-panel-user').classList.add('info-panel-close');
       this.featureSelected = null;
       this.zoom = 19;
+      this.$refs.map.mapObject.setView(this.center, 19);
 
     },
     openPanel(feature) {
       document.querySelector('.info-panel-user').classList.remove('info-panel-close');
       this.featureSelected = feature;
       this.center = this.getLatLngMarker(feature.geometry);
-      this.zoom =20;
+      this.$refs.map.mapObject.setView(this.getLatLngMarker(feature.geometry), 21);
 
     }
 
