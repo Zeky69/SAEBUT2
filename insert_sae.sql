@@ -1,9 +1,10 @@
-INSERT INTO type VALUES('1', 'Restaurant'),
-                       ('2', 'Attraction'),
-                      ('3', 'Scene'),
-                        ('4', 'Stand'),
-                      ('5', 'Boutique'),
-                      ('6', 'Toilettes');
+INSERT INTO type VALUES('1', 'Restaurant' ,'restaurant.png'),
+                       ('2', 'Attraction','coaster.png'),
+                      ('3', 'Scene','stadium.png'),
+                       ('4', 'Stand' , 'tent.png'),
+                      ('5', 'Boutique' ,'tent.png'),
+                      ('6', 'Toilettes','toilets.png');
+
 
 
 
@@ -39,8 +40,6 @@ INSERT INTO prestataire VALUES ('1', 'prestataire qui prestate','prestatata','3'
 INSERT INTO tags VALUES ('1', 'accessible handicapé'),
                         ('2', 'wifi'),
                         ('3', 'point d eau'),
-
-                        /* tags pour gérer l'affluence (s'attribuent automatiquement en fct du nombre de réservation*/
                         ('4', 'surchargé'),
                         ('5', 'modéré'),
                         ('6', 'libre');

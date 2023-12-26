@@ -6,6 +6,7 @@ const loginRoutes = require('./router/login.router');
 const mapPrestatairesRoutes = require('./router/mapPrestataires.router')
 const sceneRoutes = require('./router/scnene.router');
 const toiletteRoutes = require('./router/toilette.router');
+const map2DRoutes = require('./router/map2D.router');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -28,6 +29,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use("/prestataires", prestaRoutes);
+app.use("/map2D", map2DRoutes);
 app.use("/admin", adminRoutes);
 app.use("/mapPrestataires", mapPrestatairesRoutes);
 app.use("/scene", sceneRoutes);

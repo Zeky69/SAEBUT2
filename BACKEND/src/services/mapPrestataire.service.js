@@ -1,8 +1,4 @@
-const fs = require('fs');
-const path = require('path');
 const { v4: uuidv4 } = require('uuid');
-const filePathEmp = path.join(__dirname, '..','datasource/emp.json');
-const filePathBat = path.join(__dirname, '..','datasource/bat.json');
 const pool = require("../database/db.js")
 
 
