@@ -18,7 +18,8 @@
   </div>
 
     <div class="mini-panier">
-      <mini-panier :items="items"></mini-panier>
+
+      <mini-panier :items="items" @delete-item="deleteItem"></mini-panier>
     </div>
     </div>
   </div>
@@ -31,6 +32,7 @@
   import lignePanier from "@/components/lignePanier.vue";
   import MiniPanier from "@/components/panier.vue";
   import StepPanier from "@/components/Step.vue";
+  import Cookies from "js-cookie";
 
   export default {
     components: {
@@ -41,82 +43,104 @@
 
     data: () => ({
       elements: [],
-      items: [
-          {
-        id: '1',
-        quantity: 2,
-        price: 19.99,
-        expiration: '9/11/2024',
-        creation: '10/11/2023',
-        header: {
-          title: 'BelforPass Entire Day',
-          age : 'Adulte',
-          description: 'Profitez de la magie de Belforaine toute une journée.',
-          link: 'panier',
-          path: require('@/assets/Panier/image-pass.png'),
-          type: "billet"
-        }
-      },{
-          id: '1',
-          quantity: 2,
-          price: 29.99,
-          expiration: '9/11/2024',
-          creation: '10/11/2023',
-          header: {
-            title: 'BelforPass Entire Day',
-            age : 'Enfant',
-            description: 'Profitez de la magie de Belforaine toute une journée.',
-            link: 'panier',
-            path: require('@/assets/Panier/image-pass.png'),
-            type: "billet"
-          }
-        },
-        {
-          id: '2',
-          quantity: 2,
-          price: 29.99,
-          expiration: '9/11/2024',
-          creation: '10/11/2023',
-          header: {
-            title: 'BelforPass Entire Day',
-            age : 'Adulte',
-            description: 'Profitez de la magie de Belforaine toute une journée.',
-            link: 'panier',
-            path: require('@/assets/Panier/image-pass.png'),
-            type: "billet"
-          }
-        },{
-          id: '3',
-          quantity: 2,
-          price: 29.99,
-          expiration: '9/11/2024',
-          creation: '10/11/2023',
-          header: {
-            title: 'BelforPass Entire Day',
-            age : 'Adulte',
-            description: 'Profitez de la magie de Belforaine toute une journée.',
-            link: 'panier',
-            path: require('@/assets/Panier/image-pass.png'),
-            type: "billet"
-          }
-        }
-      ]
+      // items: [
+      //     {
+      //   id: '1',
+      //   quantity: 2,
+      //   price: 19.99,
+      //   date: ['2024-11-10','2024-11-11'],
+      //   header: {
+      //     title: 'BelforPass Entire Day',
+      //     age : 'Adulte',
+      //     description: 'Profitez de la magie de Belforaine toute une journée.',
+      //     link: 'panier',
+      //     path: require('@/assets/Panier/image-pass.png'),
+      //     type: "billet"
+      //   }
+      // },{
+      //     id: '1',
+      //     quantity: 2,
+      //     price: 29.99,
+      //     date: ['2024-11-10','2024-11-11'],
+      //     header: {
+      //       title: 'BelforPass Entire Day',
+      //       age : 'Enfant',
+      //       description: 'Profitez de la magie de Belforaine toute une journée.',
+      //       link: 'panier',
+      //       path: require('@/assets/Panier/image-pass.png'),
+      //       type: "billet"
+      //     }
+      //   },
+      //   {
+      //     id: '2',
+      //     quantity: 2,
+      //     price: 29.99,
+      //     date: ['2024-11-10','2024-11-11'],
+      //     header: {
+      //       title: 'BelforPass Entire Day',
+      //       age : 'Adulte',
+      //       description: 'Profitez de la magie de Belforaine toute une journée.',
+      //       link: 'panier',
+      //       path: require('@/assets/Panier/image-pass.png'),
+      //       type: "billet"
+      //     }
+      //   },{
+      //     id: '3',
+      //     quantity: 2,
+      //     price: 29.99,
+      //     date: ['2024-11-10','2024-11-11'],
+      //     header: {
+      //       title: 'BelforPass Entire Day',
+      //       age : 'Adulte',
+      //       description: 'Profitez de la magie de Belforaine toute une journée.',
+      //       link: 'panier',
+      //       path: require('@/assets/Panier/image-pass.png'),
+      //       type: "billet"
+      //     }
+      //   }
+      // ]
+      items:[]
     }),
+
     methods: {
-      deleteItem(id) {
-        console.log("deleteItem");
-        console.log(id);
+      deleteItem(elm) {
+        this.items = this.items.filter((item) => item.id !== elm.id || JSON.stringify(item.date) !== JSON.stringify(elm.date));
+        this.elements = this.items.reduce((acc, item) => {
+          const index = acc.findIndex((element) => element.id === item.id);
+          if (index === -1) {
+            acc.push({
+              id: item.id,
+              donnees: [item],
+            });
+          } else {
+            acc[index].donnees.push(item);
+          }
+          return acc;
+        }, []);
+        Cookies.set('panier', JSON.stringify(this.items));
       },
     },
 
     created() {
       //fair une liste de liste des element avec le meme id
 
+      let storedPanier = Cookies.get('panier');
+      if (storedPanier) {
+        this.items = JSON.parse(storedPanier);
+        console.log(this.items);
+
+
+
+
       this.elements = this.items.reduce((acc, item) => {
-        const index = acc.findIndex((element) => element.id === item.id);
+        console.log("--------------------");
+        console.log(item);
+        console.log(acc);
+        const index = acc.findIndex((element) => element.id === item.id && JSON.stringify(element.date) === JSON.stringify(item.date));
         if (index === -1) {
           acc.push({
             id: item.id,
+            date: item.date,
             donnees: [item],
           });
         } else {
@@ -124,6 +148,7 @@
         }
         return acc;
       }, []);
+      }
 
     }
   }
@@ -139,6 +164,9 @@
   background-image: url("@/assets/Panier/background-blur.png"); ;
   background-repeat: no-repeat;
   background-size: cover;
+  min-height: 100vh;
+  width: 100%;
+  height: 100%;
 }
 
 .navbar-height{

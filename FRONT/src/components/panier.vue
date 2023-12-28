@@ -13,7 +13,7 @@
       <div class="line"></div>
       <div class="total">
         <span class="total-text">Montant Total</span>
-        <span class="total-price">{{total}}€</span>
+        <span class="total-price">{{total.toFixed(2)}}€</span>
       </div>
     </div>
     <div class="information-container">
@@ -43,6 +43,11 @@ export default {
   data: () =>  ({
     total: 0,
   }),
+  watch: {
+    items: function () {
+      this.total = this.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    },
+  },
   computed: {
   },
   methods: {
@@ -56,7 +61,7 @@ export default {
       }
     },
     gotoShop(){
-      this.$router.push('/boutique').catch(() => {
+      this.$router.push('/billetterie').catch(() => {
       });
     },
 
