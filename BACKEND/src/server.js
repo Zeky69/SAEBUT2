@@ -8,6 +8,7 @@ const sceneRoutes = require('./router/scnene.router');
 const toiletteRoutes = require('./router/toilette.router');
 const map2DRoutes = require('./router/map2D.router');
 const bodyParser = require('body-parser');
+const resaRoutes = require('./router/reservation.router')
 const cors = require('cors');
 
 dotenv.config();
