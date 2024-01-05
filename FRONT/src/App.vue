@@ -12,19 +12,20 @@
   export default {
     components: {
       NavBar,
-    },computed:{
+    },
+    computed:{
       ...mapState(['token','group_id']),
       shouldShowNavBar() {
-      return !this.token && this.$route.name !== 'login';
-    }
-    },methods: {
+        return !this.token && this.$route.name !== 'login';
+      }
+    },
+    methods: {
       ...mapActions(['getInformationFromToken']),
       async getInfo() {
         console.log("Appel à getInformationFromToken");
         await this.getInformationFromToken(this.token);
         console.log("getInformationFromToken terminé, appel de getInfo");
       }
-
     },
     mounted() {
       if (this.token) {

@@ -39,7 +39,7 @@ const routes = [
   }, {
     path: '/restauration',
     name: 'restauration',
-    component: () => import(/* webpackChunkName: "about" */ '../views/RestaurationView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/ReservationView.vue')
   },{
     path: '/search',
     name: 'search',

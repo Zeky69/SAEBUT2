@@ -35,6 +35,7 @@ app.use("/mapPrestataires", mapPrestatairesRoutes);
 app.use("/scene", sceneRoutes);
 app.use("/toilette", toiletteRoutes);
 app.use("/login", loginRoutes);
+app.use("/reservation", resaRoutes);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);

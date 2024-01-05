@@ -11,31 +11,29 @@
     DROP TABLE if exists disponibilite CASCADE;
     DROP TABLE if exists taggue CASCADE;
 
+DROP TABLE if exists prestataire CASCADE;
+DROP TABLE if exists client CASCADE;
+DROP TABLE if exists produit CASCADE;
+DROP TABLE if exists intervenant CASCADE;
+DROP TABLE if exists batiment CASCADE;
+DROP TABLE if exists emplacement CASCADE;
+DROP TABLE if exists type CASCADE;
+DROP TABLE if exists crenaux CASCADE;
+DROP TABLE if exists tags CASCADE;
+drop table IF EXISTS droits_de_menus cascade;
+DROP TABLE IF EXISTS ELEMENTS_DE_MENU CASCADE;
+DROP TABLE IF EXISTS MENUS CASCADE;
+DROP TABLE IF EXISTS DROITS_DE_GROUPES CASCADE;
+DROP TABLE IF EXISTS DROITS CASCADE;
+drop table IF EXISTS mots_de_passe_utilisateurs cascade;
+DROP TABLE IF EXISTS JOURNAUX_UTILISATEURS CASCADE;
+drop table if exists utilisateurs cascade;
+drop table IF EXISTS groupes cascade;
 
-
-    DROP TABLE if exists prestataire CASCADE;
-    DROP TABLE if exists client CASCADE;
-    DROP TABLE if exists produit CASCADE;
-    DROP TABLE if exists intervenant CASCADE;
-    DROP TABLE if exists batiment CASCADE;
-    DROP TABLE if exists emplacement CASCADE;
-    DROP TABLE if exists type CASCADE;
-    DROP TABLE if exists crenaux CASCADE;
-    DROP TABLE if exists tags CASCADE;
-    drop table IF EXISTS droits_de_menus cascade;
-    DROP TABLE IF EXISTS ELEMENTS_DE_MENU CASCADE;
-    DROP TABLE IF EXISTS MENUS CASCADE;
-    DROP TABLE IF EXISTS DROITS_DE_GROUPES CASCADE;
-    DROP TABLE IF EXISTS DROITS CASCADE;
-    drop table IF EXISTS mots_de_passe_utilisateurs cascade;
-    DROP TABLE IF EXISTS JOURNAUX_UTILISATEURS CASCADE;
-    drop table if exists utilisateurs cascade;
-    drop table IF EXISTS groupes cascade;
-
-    CREATE TABLE GROUPES(
-        Id SERIAL PRIMARY KEY,
-        Groupe VARCHAR(255)
-    );
+CREATE TABLE GROUPES(
+    Id SERIAL PRIMARY KEY,
+    libelle VARCHAR(255)
+);
 
     CREATE TABLE UTILISATEURS (
         User_Id varchar(50) PRIMARY KEY,
@@ -64,31 +62,12 @@
         Right_Name VARCHAR(255)
     );
 
-    CREATE TABLE DROITS_DE_GROUPES(
-        Id SERIAL PRIMARY KEY,
-        Group_Id INTEGER REFERENCES GROUPES(Id),
-        Right_Id INTEGER REFERENCES DROITS(Id)
-    ); -- On peut avoir plusieurs droits pour un element (ex : le menu accueil visible par tous)
+CREATE TABLE DROITS_DE_GROUPES(
+    Group_Id INTEGER REFERENCES GROUPES(Id),
+    Right_Id INTEGER REFERENCES DROITS(Id),
+    PRIMARY KEY (Group_Id,Right_Id)
+); -- On peut avoir plusieurs droits pour un element (ex : le menu accueil visible par tous)
 
-    CREATE TABLE MENUS(
-        Id SERIAL PRIMARY KEY,
-        Nom_Menu VARCHAR(255) NOT NULL,
-        Ordre_Affichage INTEGER NOT NULL
-    );
-
-    CREATE TABLE ELEMENTS_DE_MENU(
-        Id SERIAL PRIMARY KEY,
-        Nom_Element VARCHAR(255) NOT NULL,
-        Ordre_Affichage INTEGER NOT NULL,
-        Lien VARCHAR(255) NOT NULL,
-        Menu_ID INTEGER REFERENCES MENUS(Id) ON DELETE CASCADE
-    );
-
-    CREATE TABLE DROITS_DE_MENUS(
-        Id SERIAL PRIMARY KEY,
-        Group_Id INTEGER NOT NULL REFERENCES GROUPES(Id),
-        Menu_ID INTEGER REFERENCES MENUS(Id) ON DELETE CASCADE
-    );
 
     CREATE TABLE produit(
        id_produit VARCHAR(50),
@@ -105,10 +84,6 @@
        PRIMARY KEY(id_type)
     );
 
-    CREATE TABLE crenaux(
-       date_reservation timestamp,
-       PRIMARY KEY(date_reservation)
-    );
 
     CREATE TABLE tags(
        id_tag VARCHAR(50),
@@ -163,14 +138,14 @@
 
 
     CREATE TABLE reservation(
-       id_reservation VARCHAR(50),
-       id_emplacement VARCHAR(50) NOT NULL,
-       date_reservation timestamp NOT NULL,
-       id_client VARCHAR(50) NOT NULL,
-       PRIMARY KEY(id_reservation),
-       FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
-       FOREIGN KEY(date_reservation) REFERENCES crenaux(date_reservation),
-       FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)
+        id_reservation SERIAL,
+        id_emplacement VARCHAR(50),
+        ouverture timestamp,
+        duree varchar(50),
+        id_client VARCHAR(50),
+        PRIMARY KEY(id_reservation),
+        FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
+        FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)
     );
 
     CREATE TABLE stand(
@@ -254,14 +229,6 @@
        PRIMARY KEY(id_scene, id_intervenant),
        FOREIGN KEY(id_scene) REFERENCES scene(id_scene),
        FOREIGN KEY(id_intervenant) REFERENCES UTILISATEURS(User_Id)
-    );
-
-    CREATE TABLE disponibilite(
-       id_emplacement VARCHAR(50),
-       date_reservation timestamp,
-       PRIMARY KEY(id_emplacement, date_reservation),
-       FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
-       FOREIGN KEY(date_reservation) REFERENCES crenaux(date_reservation)
     );
 
     CREATE TABLE taggue(

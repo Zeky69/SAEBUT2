@@ -1,0 +1,97 @@
+const resaService = require('../services/reservations.service');
+
+exports.test = (req, res) => {
+    console.log("test controller");
+    return resaService.test(req,(error,data)=>{
+        if (error) {
+            console.log(error)
+            return res.status(500).send("Internal error");
+        }
+        return res.status(200).send(data);
+    });
+}
+
+exports.getAllResa = (req, res) => {
+    if (req.query.user_id) {
+        return resaService.getAllResaById(req,(error,data)=>{
+            if (error) {
+                console.log(error)
+                return res.status(500).send("Internal error");
+            }
+            return res.status(200).send(data);
+        });
+    }
+    return resaService.getAllResa(req,(error,data)=>{
+        if (error) {
+            console.log(error)
+            return res.status(500).send("Internal error");
+        }
+        return res.status(200).send(data);
+    });
+}
+
+exports.getAllDispoById = (req, res) => {
+    return resaService.getAllDispoById(req,(error,data)=>{
+        if (error) {
+            console.log(error)
+            return res.status(500).send("Internal error");
+        }
+        return res.status(200).send(data);
+    });
+}
+
+exports.getAuth = (req, res) => {
+    return resaService.getAuth(req,(error,data)=>{
+        if (error) {
+            console.log(error)
+            return res.status(500).send("Internal error");
+        }
+        return res.status(200).send(data);
+    });
+}
+
+exports.createDispo = (req, res) => {
+    return resaService.createDispo(req,(error,data)=>{
+        if (error) {
+            console.log(error)
+            return res.status(500).send("Internal error");
+        }
+        console.log(data);
+        return res.status(200).send("dispo created");
+    });
+}
+
+exports.reserver = (req, res) => {
+    return resaService.reserver(req,(error,data)=>{
+        if (error) {
+            console.log(error)
+            return res.status(500).send("Internal error");
+        }
+        return res.status(200).send("reservation created");
+    });
+}
+
+exports.deleteDispoById = (req, res) => {
+    return resaService.deleteDispoById(req,(error,data)=>{
+        if (error) {
+            console.log(error)
+            return res.status(500).send("Internal error");
+        }
+        console.log(data);
+        return res.status(200).send("dispo deleted");
+    });
+}
+
+exports.deleteResaById = (req, res) => {
+    console.log("deleteResaById");
+    console.log(req);
+    return resaService.deleteResaById(req,(error,data)=>{
+        if (error) {
+            console.log(error)
+            return res.status(500).send("Internal error");
+        }
+        console.log(data);
+        return res.status(200).send("resa deleted");
+    });
+}
+
