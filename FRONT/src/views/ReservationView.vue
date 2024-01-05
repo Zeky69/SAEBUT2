@@ -35,7 +35,7 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
 .main {
   margin: 150px;
   font-family: Arial, Helvetica, sans-serif;
