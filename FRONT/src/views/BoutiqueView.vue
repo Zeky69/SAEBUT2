@@ -185,7 +185,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: url(../assets/fondFeteForaine.png) no-repeat center center fixed;
+  background: url(../assets/fondFeteForaine.png) no-repeat center center;
   background-size: cover;
   filter: brightness(30%);
 }
