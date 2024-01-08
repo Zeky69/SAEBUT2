@@ -168,7 +168,7 @@ export default {
 .categorie-content {
   position: relative;
   flex: 0 0 calc(400px - 30px);
-  height: 500px;
+  height: 400px;
   border-radius: 20px;
   margin-bottom: 10px;
   overflow: hidden;
@@ -185,7 +185,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: url(../assets/fondFeteForaine.png) no-repeat center center;
+  background: url(../assets/fondFeteForaine.png) no-repeat center;
   background-size: cover;
   filter: brightness(30%);
 }

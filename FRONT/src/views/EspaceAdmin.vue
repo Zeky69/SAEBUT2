@@ -59,9 +59,6 @@ data: () => ({
   },
   mounted() {
     console.log(this.group_id)
-    if (this.group_id !== 1) {
-      this.$router.replace('/login');
-    }
   }
 }
 </script>

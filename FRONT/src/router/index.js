@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from "@/store";
 
 Vue.use(VueRouter)
 
@@ -85,5 +86,19 @@ const router = new VueRouter({
     }
   }
 })
+
+router.beforeEach((to, from, next) => {
+
+  if (to.path.startsWith('admin') && store.state.group_id !== 1 ) {
+    console.log('Redirecting to /');
+    next('/');
+  } else {
+    console.log('Allowing access');
+    next();
+  }
+});
+
+
+
 
 export default router
