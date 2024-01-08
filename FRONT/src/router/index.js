@@ -87,15 +87,18 @@ const router = new VueRouter({
   }
 })
 
-router.beforeEach((to, from, next) => {
-
-  if (to.path.startsWith('admin') && store.state.group_id !== 1 ) {
-    console.log('Redirecting to /');
-    next('/');
-  } else {
-    console.log('Allowing access');
-    next();
+router.beforeEach(async (to, from, next) => {
+  if ((to.path.startsWith('/admin'))) {
+    await store.dispatch('getInformationFromToken', store.state.token);
+    if(store.state.group_id===1){
+      next()
+    }else {
+      next('/');
+    }
   }
+  next();
+
+
 });
 
 

@@ -27,7 +27,7 @@
         console.log("getInformationFromToken terminé, appel de getInfo");
       }
     },
-    mounted() {
+    created() {
       if (this.token) {
         this.getInfo();
       }
