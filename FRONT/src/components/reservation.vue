@@ -17,6 +17,7 @@
       <li> Créer une disponibilité:
         <form @submit="checkForm">
           <div>
+            <div>
             <label for="newDispo">Choisir le début: </label>
             <input
                 id="newDispo"
@@ -27,6 +28,8 @@
                 max="2024-06-4T23:30"
                 required />
             <span class="validity"></span>
+            </div>
+            <div>
             <label for="appt">Choisir la durée: </label>
             <input
                 type="time"
@@ -35,6 +38,7 @@
                 min="00:00"
                 required />
             <span class="validity"></span>
+            </div>
           </div>
           <div>
             <input type="submit" value="Ajouter" @click="checkForm" />
@@ -169,7 +173,7 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
 
 .main {
   margin: 150px;
@@ -190,7 +194,7 @@ export default defineComponent({
   padding: 20px 50px;
 }
 
-button {
+button, input[type=button], input[type=submit], input[type=reset] {
   background-color: #2c3e50;
   padding: 10px 20px;
   width: fit-content;
@@ -199,9 +203,14 @@ button {
   color: white;
 }
 
-label {
-  display: inline-block;
-  width: 300px;
+button:hover, input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
+  background-color: #3a536c;
+}
+
+input[type=datetime-local], input[type=time] {
+  border-radius: 10px;
+  padding: 5px;
+  border: #1b1b1b solid 1px;
 }
 
 input:invalid + span:after {
