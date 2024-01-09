@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import TestMap from '../components/Map3DUser.vue';
+import TestMap from '../components/Map3D/Map3DUser.vue';
 
 export default {
   components: {

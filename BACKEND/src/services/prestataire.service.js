@@ -1,49 +1,52 @@
 //prestataire.services.js
-
-const fs = require('fs');
-const path = require('path');
 const { v4: uuidv4 } = require('uuid');
-const filePath = path.join(__dirname, '..','prestataires.json');
+const pool = require("../database/db.js")
 
-const createUser = (prenom,nom,callback) => {
-    let users = [];
-    try {
-        const data = fs.readFileSync(filePath, 'utf8');
-        const dataStr = data.toString();
-        users = JSON.parse(dataStr);
-    } catch (errorLecture) {
-        console.log(errorLecture);
-    }
-    const newUser = {id: uuidv4(), nom: nom , prenom: prenom};
-    users.push(newUser);
-    try {
-        fs.writeFileSync(filePath, JSON.stringify(users));
-        callback(null, "success");
-    } catch (errorEcriture) {
-        callback(errorEcriture, null);
-    }
-};
 
-const getAllUsers = (req) => {
-    let users = [];
-    let filtre = req.body.filtre;
+
+const getPrestataireById = async (id) => {
+    let resultat = null;
+    const client = await pool.connect();
     try {
-        const data = fs.readFileSync(filePath, 'utf8');
-        const dataStr = data.toString();
-        temp = JSON.parse(dataStr);
-        for (let i = 0; i < temp.length; i++) {
-            if (temp[i].nom.includes(filtre) ){
-                users.push(temp[i]);
-            }
-        }
-    } catch (errorLecture) {
-        console.log(errorLecture);
+        let sql = 'select * from prestataire WHERE id_prestataire = $1';
+        let values = [id];
+        resultat = await client.query(sql, values);
+        console.log("resultat",resultat.rows);
+        return resultat.rows;
     }
-    return users;
+    catch (error) {
+        console.log("error",error);
+        return error;
+    }
+    finally {
+        client.release();
+    }
 }
 
+
+const updatePrestatairePage = async (prestataire) => {
+
+    const client = await pool.connect();
+    try {
+        let sql = 'UPDATE prestataire SET page_info = $1 WHERE id_prestataire = $2';
+        let values = [prestataire.page_info,prestataire.id_prestataire];
+        await client.query(sql, values);
+        return true;
+    }
+    catch (error) {
+        console.log(error);
+        return false;
+    }
+    finally {
+        client.release();
+    }
+
+}
+
+
+
 module.exports = {
-    createUser : createUser,
-    getAllUsers : getAllUsers
+    getPrestataireById : getPrestataireById,
+    updatePrestatairePage :updatePrestatairePage
 }
 

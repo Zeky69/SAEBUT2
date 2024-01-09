@@ -1,5 +1,6 @@
     DROP TABLE if exists accueil CASCADE;
     DROP TABLE if exists possède CASCADE;
+        DROP TABLE if exists possede CASCADE;
     DROP TABLE if exists vend CASCADE;
     DROP TABLE if exists reservation CASCADE;
     DROP TABLE if exists stand CASCADE;
@@ -103,6 +104,8 @@ CREATE TABLE DROITS_DE_GROUPES(
        nom VARCHAR(50),
        id_user INT NOT NULL,
        etat_id INT,
+       page_info TEXT,
+       photo_profil TEXT,
        PRIMARY KEY(id_prestataire),
        FOREIGN KEY(id_user) REFERENCES UTILISATEURS(User_Id),
        FOREIGN KEY(etat_id) REFERENCES ETAT(etat_id)
@@ -134,12 +137,14 @@ CREATE TABLE DROITS_DE_GROUPES(
          posy DECIMAL(24,17),
          posz DECIMAL(24,17),
          rota DECIMAL(24,17),
-         utilisateur VARCHAR(50),
+         prestataire_id SERIAL,
+         image_path TEXT,
          type_id VARCHAR(50),
          PRIMARY KEY(id_batiment),
          id_emplacement VARCHAR(50) NOT NULL UNIQUE,
          FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
-         FOREIGN KEY(type_id) REFERENCES type(id_type)
+         FOREIGN KEY(type_id) REFERENCES type(id_type),
+         FOREIGN KEY(prestataire_id) REFERENCES prestataire(id_prestataire)
     );
 
 
@@ -222,14 +227,6 @@ CREATE TABLE DROITS_DE_GROUPES(
        FOREIGN KEY(id_produit) REFERENCES produit(id_produit)
     );
 
-    CREATE TABLE possède(
-       id_prestataire INT,
-       id_emplacement VARCHAR(50),
-       PRIMARY KEY(id_prestataire, id_emplacement),
-       FOREIGN KEY(id_prestataire) REFERENCES prestataire(id_prestataire),
-       FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement)
-    );
-
     CREATE TABLE accueil(
        id_scene VARCHAR(50),
        id_intervenant INT,
@@ -246,13 +243,3 @@ CREATE TABLE DROITS_DE_GROUPES(
        FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
        FOREIGN KEY(id_tag) REFERENCES tags(id_tag)
     );
-
-
-
-
-
-
-
-
-
-

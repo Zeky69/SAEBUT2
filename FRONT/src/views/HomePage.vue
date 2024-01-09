@@ -1,7 +1,7 @@
 <template>
   <div class="HomePage">
     <div class="fullscreen-video">
-      <video autoplay muted playsinline loop class="base-image" style="filter: brightness(50%)">
+      <video  autoplay muted playsinline loop class="base-image video" style="filter: brightness(50%)">
         <source src="../assets/Observation_Wheel.mp4" type="video/mp4">
       </video>
       <div class="contenuHautDePage">
@@ -10,7 +10,7 @@
           N'hésitez plus ! Laissez vous tenter pour un moment hors du temps pour LA fête foraine du futur et<br>
           plongez dans une journée de joie, de découvertes et d'expériences inoubliables !
         </p>
-        <a style="position: relative; z-index: 0" class="boutton">Billetterie</a>
+        <a style="position: relative;" class="boutton" @click="goto">Billetterie</a>
       </div>
     </div>
     <img src="../assets/overlay.svg" class="overlay-image">
@@ -36,70 +36,7 @@
       </div>
     </div>
 
-    <div class="passBillet">
-      <img class="fondFeteForraine" src="../assets/pageAccueil/fond-roue.png" alt="fond roue">
-      <div class="card-wrap">
-        <div class="card">
-          <div class="card-head" >
-            <div class="title-card">
-              <h1 class="title">Billet Basic</h1>
-              <h2 class="subtitle">1 jour</h2>
-            </div>
-            <p class="price">24,99€</p>
-          </div>
-          <hr>
-          <div class="card-body">
-            <div class="list-container">
-              <ul class="list-info">
-                <li>Accès au parc</li>
-              </ul>
-            </div>
-            <a class="btn-card">Ajouter au panier</a>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-head" >
-            <div class="title-card">
-              <h1 class="title">Billet Fast</h1>
-              <h2 class="subtitle">1 jour</h2>
-            </div>
-            <p class="price">34,99€</p>
-          </div>
-          <hr>
-          <div class="card-body">
-            <div class="list-container">
-              <ul class="list-info">
-                <li>Accès au parc</li>
-                <li>Accès sans attente aux attractions</li>
-              </ul>
-            </div>
-            <a class="btn-card">Ajouter au panier</a>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-head" >
-            <div class="title-card">
-              <h1 class="title">Billet Premium</h1>
-              <h2 class="subtitle">2 jours</h2>
-            </div>
-            <p class="price">59,99€</p>
-          </div>
-          <hr>
-          <div class="card-body">
-            <div class="list-container">
-              <ul class="list-info">
-                <li>Accès au parc</li>
-                <li>Accès sans attente aux attractions</li>
-                <li>Des goodies offerts</li>
-              </ul>
-            </div>
-            <a class="btn-card">Ajouter au panier</a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
+    <pass-billet></pass-billet>
     <div class="presentationCards">
       <br>
       <h2>Plus que des manèges, une expérience<br>
@@ -113,13 +50,19 @@
 </template>
 
 <script>
-import Map2DUser from "@/components/Map2DUser.vue";
+import Map2DUser from "@/components/Map2D/Map2DUser.vue";
 import AllCardPrestate from "@/components/AllCardPrestate.vue";
 import MultipleCards from "@/views/MultipleCards.vue";
+import PassBillet from "@/components/Billeterie/passBillet.vue";
 
 export default {
   name: 'HomePage',
-  components: {AllCardPrestate, Map2DUser,MultipleCards},
+  components: {PassBillet, AllCardPrestate, Map2DUser,MultipleCards},
+  methods: {
+    goto(){
+      this.$router.push('/billetterie');
+    }
+  }
 }
 </script>
 
@@ -133,10 +76,14 @@ export default {
   background-color: transparent;
 }
 
+.video{
+  z-index: -1;
+}
+
 .fullscreen-video {
   width: 100%;
   position: relative;
-  z-index: -10;
+  z-index: 0;
   object-fit: cover;
   background-color: transparent;
 }
@@ -144,6 +91,7 @@ export default {
 .overlay-image {
   width: 100%;
   margin-top: -10%;
+  z-index: 0;
   position: relative;
 }
 
@@ -153,9 +101,9 @@ export default {
   gap: 25px;
   align-items: center;
   position: absolute;
-  z-index: 2;
+  z-index: 1000;
   text-align: center;
-  top: 50%;
+  top: 45%;
   color: #ffffff;
 }
 
@@ -171,13 +119,20 @@ export default {
 
 .boutton {
   position: relative;
-  z-index: 3;
   font-size: 20px;
   background-color: #2B4256;
   width: 180px;
   padding: 15px 10px;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.boutton:hover{
+  background-color: #34495e;
+}
+
+.boutton:active{
+  background-color: #293a4b;
 }
 
 .introduction {
@@ -247,147 +202,6 @@ export default {
   font-size: 20px;
 }
 
-@font-face {
-  font-family: 'DM Sans Medium';
-  src: url('../assets/fonts/DM_Sans/static/DMSans-Medium.ttf') format('truetype');
-}
-@font-face {
-  font-family: 'DM Sans Regular';
-  src: url('../assets/fonts/DM_Sans/static/DMSans-Regular.ttf') format('truetype');
-}
-
-.passBillet {
-  position: relative;
-  display: inline-block; /* or display: block; depending on your layout */
-
-}
-
-.fondFeteForraine {
-  width: 100%;
-  min-width: 100%;
-  height: 1000px;
-  object-fit: cover;
-  filter: blur(2px);
-}
-
-
-.card-wrap {
-  display: grid;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  grid-template-columns: repeat(3, 1fr);
-  border-radius: 60px;
-  backdrop-filter: blur(10px);
-  background-color: rgba(23, 35, 49, 0.4);
-  border: solid 1px  rgba(255, 255, 255, 0.2)  ;
-
-  width: 80%;
-  min-width: 1000px;
-  height: 100%;
-  min-height: 400px;
-  max-height: 600px;
-
-}
-
-.btn-card{
-  background-color: #2c3e50;
-  padding: 10px 20px;
-  width: fit-content;
-  height: fit-content;
-  border-radius: 10px;
-}
-
-.card:nth-child(1) {
-  border-radius: 60px 0 0 60px ;
-  border-right-color: rgba(255, 255, 255, 0.5) ;
-}
-.card:nth-child(3) {
-  border-left-color: rgba(255, 255, 255, 0.5)  ;
-
-  border-radius: 0 60px 60px 0  ;
-}
-
-.card:nth-child(2){
-  border-color: transparent rgba(255, 255, 255, 0.5) transparent rgba(255, 255, 255, 0.5)  ;
-}
-
-.card {
-  font-family: "DM Sans Regular" , Syne , Helvetica , sans-serif;
-  border-color: rgba(255, 255, 255, 0.2)  ;
-  border: solid 1px transparent;
-  color: white;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-rows: 1fr 1px 1fr;
-
-}
-
-
-.card hr {
-  width: 80%;
-  margin: 0 auto;
-  border-top: solid 1px rgb(255, 255, 255);
-
-}
-
-.price {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 60px;
-  font-family: "DM Sans Medium" , Syne , Helvetica , sans-serif;
-  text-align: center;
-  height: 30%;
-}
-
-.title-card {
-  margin: 50px ;
-  display: flex;
-  flex-direction: column;
-  justify-content: left;
-  font-family: "DM Sans Regular" , Syne , Helvetica , sans-serif;
-
-}
-
-.title-card h1{
-  width: fit-content;
-  font-size: 40px;
-}
-
-.subtitle{
-  width: fit-content;
-  font-size: 20px;
-}
-
-.card-body{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-}
-
-.list-info li {
-  font-size: 20px;
-  font-family: "DM Sans Regular" , Syne , Helvetica , sans-serif;
-  width: fit-content;
-}
-.list-info{
-  width: fit-content;
-  margin: 0 50px 0 100px;
-
-}
-
-.list-container{
-  padding-top: 25px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  height: 60%;
-
-}
 
 .presentationCards{
   display: flex;
@@ -457,45 +271,6 @@ export default {
 
 @media screen and (max-width: 1030px) {
 
-  .title-card {
-    margin: 25px 0 20px 50px;
-  }
-  .list-info{
-    margin: 0;
-  }
-
-  .card-wrap{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-  }
-
-  .card{
-    width: 90%;
-    height: auto;
-    display: flex;
-    border: solid 1px rgba(255, 255, 255, 0.2) !important;
-    border-radius: 30px !important;
-    backdrop-filter: blur(10px);
-    background-color: rgba(23, 35, 49, 0.4);
-    margin-top: 10px;
-  }
-
-  .card-wrap{
-    max-width: none;
-    min-width: 0;
-    max-height: none;
-    width: 100%;
-    height: 100%;
-    background-color: transparent;
-    backdrop-filter: none;
-    border-radius: 0;
-    border: none;
-  }
-
-
 
   .card hr{
     display: none;
@@ -510,30 +285,12 @@ export default {
 }
 
 @media screen and (max-width: 900px){
-  .card{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
 
+  .imageMilieu{
+    display: none;
   }
 
-  .title-card{
-    width: fit-content;
-  }
 
-  .fondFeteForraine{
-    height: 1200px;
-  }
-
-  .list-container{
-    margin: 0 0 0 100px;
-    width: fit-content;
-
-  }
-  .btn-card{
-    margin: 20px 0;
-  }
 }
 
 @media all and (max-width: 730px) {
@@ -555,6 +312,7 @@ export default {
     font-size: 12px;
     width: 140px;
     padding: 8px 0px;
+    cursor: pointer;
   }
 
   .droite {
@@ -585,21 +343,6 @@ export default {
 }
 
 @media screen and (max-width: 430px){
-  .card{
-    width: 99%;
-    border-radius: 0 !important;
-
-  }
-
-  .list-container{
-    margin: 0;
-
-  }
-
-  .title-card{
-    width: fit-content;
-    margin-left: 5%;
-  }
 
   .presentationCards h2{
     font-size: 20px;

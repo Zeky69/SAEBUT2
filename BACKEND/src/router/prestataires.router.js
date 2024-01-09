@@ -9,4 +9,12 @@ router.get('/', (req, res) => {
     res.send('Hello world');
 });
 
+
+
+
+router.put('/updatePage', prestaController.updatePrestatairePage);
+
+
+router.get('/:id', prestaController.getPrestataireById);
+
 module.exports = router;

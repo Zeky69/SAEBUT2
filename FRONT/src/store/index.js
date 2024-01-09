@@ -18,8 +18,21 @@ export default new Vuex.Store({
     fname : '',
     lname : '',
     group_id: 3,
+    stepPanier: 1,
   },
   getters: {
+    isLoggedIn(state) {
+      return state.PrestataireLog;
+    },
+    getToken(state) {
+      return state.token;
+    },
+    getUserInformation(state){
+      return state;
+    },
+    getStepPanier(state){
+      return state.stepPanier;
+    }
   },
   mutations: {
     setLoggedIn(state, value) {
@@ -42,6 +55,9 @@ export default new Vuex.Store({
           state.fname = '';
           state.lname = '';
           state.group_id= 3;
+    },
+    setStepPanier(state, step){
+      state.stepPanier = step;
     }
   },
   actions: {
@@ -86,6 +102,9 @@ export default new Vuex.Store({
       commit('setDefaultValue');
       localStorage.removeItem('token');
     },
+    setStepPanier({commit}, step){
+      commit('setStepPanier', step);
+    }
   },
   modules: {
   }
