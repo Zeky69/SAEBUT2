@@ -1,4 +1,4 @@
-import {getRequest} from "@/services/axios.service";
+import {getRequest,patchRequest} from "@/services/axios.service";
 const url='/admin'
 
 async function getAllUserFromAPI() {
@@ -16,9 +16,22 @@ async function getAllUsers() {
 }
 
 
+async function managePrestaFromAPI(data, prestataire_id){
+    return patchRequest(url+`/manage-prestataire/${prestataire_id}`,data,'ManagePresta');
+}
+async function managePresta(data, prestataire_id) {
+    try {
+        const response = await managePrestaFromAPI(data, prestataire_id);
+        return response;
+    } catch (error) {
+        console.error("Error managing prestataire:", error);
+        throw error;
+    }
+}
 
 
 
 export default {
     getAllUsers,
+    managePresta
 }

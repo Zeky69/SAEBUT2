@@ -2,6 +2,14 @@
   <div class="admin-presta">
     <h1 id="tittle">Gestion des prestataires</h1>
     <div>
+      <label for="filter">Filtrer par état:</label>
+      <select id="filter" v-model="selectedState" @change="filterUsers">
+        <option value="all">Tous</option>
+        <option value="accepte">Accepté</option>
+        <option value="refuse">Refusé</option>
+        <option value="attente">En attente</option>
+      </select>
+
       <table>
         <thead>
         <tr>
@@ -10,19 +18,35 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, index) in tablePresta" :key="index">
+        <tr v-for="(item, index) in filteredUsers" :key="index">
           <td v-for="(value, key) in item" :key="key">{{ value }}</td>
           <td>
-            <button>Edit</button>
-            <button>Delete</button>
-            <!-- You can add more buttons or actions here -->
+            <template v-if="item.etat_id === 2">
+              <!-- État: Accepté -->
+              <button>Edit</button>
+            </template>
+
+            <template v-else-if="item.etat_id === 3">
+              <!-- État: Refusé -->
+              <button @click="reAcceptUser(item)">Ré-Accepter</button>
+            </template>
+
+            <template v-else-if="item.etat_id === 1">
+              <!-- État: En attente -->
+              <button @click="manageUser(item.id_user, item.id_prestataire, 2)">Accepter</button>
+              <button @click="manageUser(item.id_user, item.id_prestataire, 3)">Refuser</button>
+            </template>
+
           </td>
         </tr>
         </tbody>
       </table>
+
+      <div v-if="tablePresta.length === 0">Aucun prestataire</div>
     </div>
   </div>
 </template>
+
 <script>
 import adminService from "@/services/admin.service";
 
@@ -30,15 +54,24 @@ export default {
   name: "AdminPrestataire",
   data: () => ({
     tablePresta: [],
+    selectedState: "all",
   }),
   computed: {
-    getAdmin() {
-      return this.tablePresta;
+    filteredUsers() {
+      if (this.selectedState === "all") {
+        return this.tablePresta;
+      } else {
+        const filteredStateId = this.getStateIdByName(this.selectedState);
+        return this.tablePresta.filter(
+            (user) => user.etat_id === filteredStateId
+        );
+      }
     },
   },
   methods: {
     fetchUsers() {
-      adminService.getAllUsers()
+      adminService
+          .getAllUsers()
           .then((response) => {
             this.tablePresta = response;
           })
@@ -46,9 +79,38 @@ export default {
             console.error("Error fetching users:", error);
           });
     },
+    filterUsers() {
+
+      console.log("Filtering users by state:", this.selectedState);
+    },
+    getStateIdByName(stateName) {
+      const stateMapping = {
+        accepte: 2,
+        refuse: 3,
+        attente: 1,
+      };
+      return stateMapping[stateName] || null;
+    },
+    async manageUser(user_id, prestataire_id, etat_id) {
+      const data = {
+        etat_id: etat_id,
+        user_id: user_id,
+      };
+
+
+      try {
+        await adminService.managePresta(data, prestataire_id);
+        this.fetchUsers();
+      } catch (error) {
+        console.error("Error managing user:", error);
+      }
+    },
+    reAcceptUser(user) {
+      console.log("Re-accepting user:", user);
+    },
   },
   created() {
-    this.fetchUsers(); // Fetch users when the component is created
+    this.fetchUsers();
   },
 };
 </script>
@@ -75,8 +137,8 @@ export default {
   font-style: normal;
 }
 
-thead{
-  border-radius: 20px;
+thead {
+  font-size: 20px;
 }
 
 table {
@@ -86,24 +148,20 @@ table {
   border-radius: 20px;
 }
 
-th, td {
+th,
+td {
   padding: 8px;
   text-align: left;
 }
 
-th {
-  background-color: #f2f2f2;
+td {
+  border-bottom: #a5a4a4 1px solid;
 }
 
-table:first-of-type{
+table:first-of-type {
   margin: 15px 2px;
-  background: #ffffff !important;
 }
-table:last-of-type{
+table:last-of-type {
   margin: 15px 2px;
-  background: #fdfdef !important;
 }
-
-tr:nth-child(even){background-color: #f2f2f2;}
-
 </style>

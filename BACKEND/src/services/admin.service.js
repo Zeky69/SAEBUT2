@@ -10,7 +10,7 @@ const pool = require('../database/db');
 async function getAllUsers(){
     const client = await pool.connect();
     try{
-        const res=await client.query(`SELECT u.FIRST_NAME, u.LAST_NAME, prestataire.description, u.email, u.date_created, etat_libelle
+        const res=await client.query(`SELECT u.FIRST_NAME, u.LAST_NAME, prestataire.description, u.email, u.date_created, etat_libelle,prestataire.etat_id, id_prestataire, prestataire.id_user
         from prestataire
         INNER JOIN ETAT e on e.etat_id = prestataire.etat_id
         INNER JOIN UTILISATEURS u on u.user_id = prestataire.id_user
