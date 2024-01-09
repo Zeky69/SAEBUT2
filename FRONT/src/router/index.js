@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from "@/store";
 
 Vue.use(VueRouter)
 
@@ -42,7 +43,7 @@ const routes = [
   }, {
     path: '/restauration',
     name: 'restauration',
-    component: () => import(/* webpackChunkName: "about" */ '../views/RestaurationView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/ReservationView.vue')
   },{
     path: '/search',
     name: 'search',
@@ -88,5 +89,22 @@ const router = new VueRouter({
     }
   }
 })
+
+router.beforeEach(async (to, from, next) => {
+  if ((to.path.startsWith('/admin'))) {
+    await store.dispatch('getInformationFromToken', store.state.token);
+    if(store.state.group_id===1){
+      next()
+    }else {
+      next('/');
+    }
+  }
+  next();
+
+
+});
+
+
+
 
 export default router

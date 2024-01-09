@@ -12,21 +12,22 @@
   export default {
     components: {
       NavBar,
-    },computed:{
+    },
+    computed:{
       ...mapState(['token','group_id']),
       shouldShowNavBar() {
-      return !this.token && this.$route.name !== 'login';
-    }
-    },methods: {
+        return !this.token && this.$route.name !== 'login';
+      }
+    },
+    methods: {
       ...mapActions(['getInformationFromToken']),
       async getInfo() {
         console.log("Appel à getInformationFromToken");
         await this.getInformationFromToken(this.token);
         console.log("getInformationFromToken terminé, appel de getInfo");
       }
-
     },
-    mounted() {
+    created() {
       if (this.token) {
         this.getInfo();
       }
@@ -57,7 +58,7 @@
 }
 
   #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+    font-family: "DM Sans Medium", Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;

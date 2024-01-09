@@ -236,17 +236,17 @@ export default {
 
 .card-container{
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
- height: 80%;
+  top: 10%;
+  left: 5%;
+  height: 80%;
   width: 90%;
   background: rgba(43, 66, 86, 0.30);
-  backdrop-filter: blur(10px);
   box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.50) inset;
   border-radius: 30px;
   z-index: 10;
   user-select: none;
+  backdrop-filter: blur(10px);
+
 }
 
 .img-background{
@@ -271,6 +271,13 @@ export default {
   -ms-overflow-style: none;
   gap: 20px;
 }
+
+
+.carousel-container::-webkit-scrollbar {
+  display: none;
+}
+
+
 
 .card-prestate {
   display: flex;

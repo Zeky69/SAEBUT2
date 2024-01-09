@@ -6,7 +6,9 @@ const loginRoutes = require('./router/login.router');
 const mapPrestatairesRoutes = require('./router/mapPrestataires.router')
 const sceneRoutes = require('./router/scnene.router');
 const toiletteRoutes = require('./router/toilette.router');
+const map2DRoutes = require('./router/map2D.router');
 const bodyParser = require('body-parser');
+const resaRoutes = require('./router/reservation.router')
 const cors = require('cors');
 
 dotenv.config();
@@ -28,11 +30,13 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use("/prestataires", prestaRoutes);
+app.use("/map2D", map2DRoutes);
 app.use("/admin", adminRoutes);
 app.use("/mapPrestataires", mapPrestatairesRoutes);
 app.use("/scene", sceneRoutes);
 app.use("/toilette", toiletteRoutes);
 app.use("/login", loginRoutes);
+app.use("/reservation", resaRoutes);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);

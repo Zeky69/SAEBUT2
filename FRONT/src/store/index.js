@@ -28,13 +28,15 @@ export default new Vuex.Store({
     setToken(state, token) {
       state.token = token;
       localStorage.setItem('token', token); // Enregistrez le token dans le stockage local
-    }, setUserInformation(state, information){
+    },
+    setUserInformation(state, information){
       state.user_id = information.id;
       state.email = information.email;
       state.fname = information.fname;
       state.lname = information.lname;
       state.group_id = information.group_id;
-    }, setDefaultValue(state){
+    },
+    setDefaultValue(state){
           state.user_id = null;
           state.email = '';
           state.fname = '';
@@ -43,7 +45,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async loginUser({ commit }, data) {
+    async loginUser({commit}, data) {
       console.log(data);
       try {
         let response = await userService.Login(data);
@@ -59,23 +61,26 @@ export default new Vuex.Store({
       } catch (error) {
         console.error("An error occurred:", error);
       }
-    },async getInformationFromToken({commit},data){
-      try{
+    },
+
+    async getInformationFromToken({commit}, data) {
+      try {
         let response = await userService.getInformationFromToken(data)
-        if(!response.error){
-          commit('setUserInformation',response)
-        }else{
+        if (!response.error) {
+          commit('setUserInformation', response)
+        } else {
           console.log("Erreur lors de la récupération des informations à partir du token");
           commit('setToken', null);
           commit('setLoggedIn', false);
           commit('setDefaultValue');
           localStorage.removeItem('token');
         }
-      }catch (e){
+      } catch (e) {
         console.error("An error occurred:", e);
       }
-    }
-    ,logout({ commit }) {
+    },
+
+    logout({commit}) {
       commit('setToken', null);
       commit('setLoggedIn', false);
       commit('setDefaultValue');

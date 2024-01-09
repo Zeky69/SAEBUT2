@@ -1,13 +1,11 @@
 
 
 <template>
-<!--  <div id="map" style="width: 50%; height: 500px; display: block">-->
-<!--  </div>-->
 <div class="map-container">
-  <l-map style="width:100% ; height: 500px ; grid-column: 2" :min-zoom="18" :max-zoom="21" :max-bounds="cartebounds" :center="center" @click="addCoordinates">
+  <l-map style="width:1000px ; height: 800px;" :min-zoom="19" :max-zoom="21" :max-bounds="cartebounds" :center="center" @click="addCoordinates">
     <l-tile-layer :url="url" ></l-tile-layer>
     <l-marker :lat-lng="markerLatLng"></l-marker>
-    <l-image-overlay :url="'map2D.bmp'" :bounds="cartebounds"></l-image-overlay>
+    <l-image-overlay :url="'map2D.png'" :bounds="cartebounds"></l-image-overlay>
       <l-polygon
           v-for="(feature , index) in features"
           :key="index"
@@ -36,7 +34,6 @@
 
         </div>
   </l-map>
-    <div class="column-3">
       <div class="menu">
         <button v-if="!modeEditor" @click="switchEditor">Ajouter une zone </button>
 
@@ -78,8 +75,7 @@
           <button @click="addPolygon"> Valider</button>
         </div>
       </div>
-    </div>
-  </div>
+</div>
 </template>
 
 <script>
@@ -404,23 +400,15 @@ export default {
   cursor: crosshair;
 }
 
-.column-3{
-  grid-column: 3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-}
 
 .map-container{
   margin: 20px;
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
 .info-panel-close{
@@ -433,10 +421,13 @@ export default {
   justify-content: center;
   align-items: center;
   background: #dcdcdc;
-  width: 80%;
-  height: 80%;
   overflow: hidden;
   border-radius: 45px;
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  max-width: 300px;
+  max-height: 300px;
 
 }
 .menu button{
