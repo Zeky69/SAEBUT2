@@ -55,10 +55,9 @@ export default {
   data: () => ({
     tablePresta: [],
     selectedState: "all",
-    filteredUsers:[]
   }),
   computed: {
-    filteredUserss() {
+    filteredUsers() {
       if (this.selectedState === "all") {
         return this.tablePresta;
       } else {
