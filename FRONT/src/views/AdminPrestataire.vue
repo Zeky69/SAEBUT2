@@ -10,7 +10,7 @@
         <option value="attente">En attente</option>
       </select>
 
-      <table>
+      <table v-if="filteredUsers.length!==0">
         <thead>
         <tr>
           <th v-for="(value, key) in tablePresta[0]" :key="key">{{ key }}</th>
@@ -42,7 +42,7 @@
         </tbody>
       </table>
 
-      <div v-if="tablePresta.length === 0">Aucun prestataire</div>
+      <div style="text-align: center;margin-top:5%;font-size: 20px;" v-if="filteredUsers.length === 0">Aucun prestataire</div>
     </div>
   </div>
 </template>
@@ -55,9 +55,10 @@ export default {
   data: () => ({
     tablePresta: [],
     selectedState: "all",
+    filteredUsers:[]
   }),
   computed: {
-    filteredUsers() {
+    filteredUserss() {
       if (this.selectedState === "all") {
         return this.tablePresta;
       } else {
