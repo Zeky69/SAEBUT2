@@ -88,7 +88,7 @@ CREATE TABLE DROITS_DE_GROUPES(
 CREATE TABLE tags(
    id_tag VARCHAR(50),
    libelle VARCHAR(50),
-   id_batiment VARCHAR(50)
+   id_batiment VARCHAR(50),
    PRIMARY KEY(id_tag)
 );
 
@@ -149,7 +149,7 @@ CREATE TABLE emplacement(
 
 CREATE TABLE toilette(
    id_toilette VARCHAR(50),
-   PRIMARY KEY(id_toilette)
+   PRIMARY KEY(id_toilette),
    id_batiment VARCHAR(50) NOT NULL UNIQUE,
    FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment)
 );
@@ -157,7 +157,7 @@ CREATE TABLE toilette(
 CREATE TABLE scene(
    id_scene VARCHAR(50),
    description VARCHAR(50),
-   PRIMARY KEY(id_scene)
+   PRIMARY KEY(id_scene),
    id_batiment VARCHAR(50) NOT NULL UNIQUE,
    FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment)
     );
@@ -187,13 +187,6 @@ CREATE TABLE scene(
        FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement)
     );
 
-    CREATE TABLE vend(
-       id_stand VARCHAR(50),
-       id_produit VARCHAR(50),
-       PRIMARY KEY(id_stand, id_produit),
-       FOREIGN KEY(id_stand) REFERENCES stand(id_stand),
-       FOREIGN KEY(id_produit) REFERENCES produit(id_produit)
-    );
 
     CREATE TABLE possède(
        id_prestataire VARCHAR(50),

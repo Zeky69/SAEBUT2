@@ -1568,19 +1568,20 @@ Array [ -8.909232716902693, -20.492076873779297 ]
 
 
       //botom right pretty coo [ 8.909232717044802, -20.492076873779297 ]
-      /*
+
       let botrghtpretty = [8.909232717044802, -20.492076873779297]
       let botrght3D = [145.76097359713458, 1.8496733903884888, 150.63050706416016]
       point3D2 = {
         x: (botrght3D[0] * x) / botrghtpretty[0],
         z: (botrght3D[2] * z) / botrghtpretty[1]
       }
-
-       */
+/*
       point3D2={
         x: x*1,
         z: z*1
       }
+
+ */
       console.log("point3D", point3D)
       console.log("point3D2", point3D2)
       return point3D2;
@@ -1702,6 +1703,7 @@ Array [ -8.909232716902693, -20.492076873779297 ]
     animate() {
       requestAnimationFrame(this.animate);
       this.controls.update();
+      this.updateCameraPosition();
       this.renderer.render(this.scene, this.camera);
     },
 
@@ -1727,6 +1729,24 @@ Array [ -8.909232716902693, -20.492076873779297 ]
       }
     },
 
+    updateCameraPosition() {
+      if (this.controls.target.y < 0) {
+        this.controls.target.y = 0;
+      }
+      if(this.controls.target.x >150){
+        this.controls.target.x = 150;
+      }
+      if(this.controls.target.x < -150){
+        this.controls.target.x = -150;
+      }
+      if(this.controls.target.z >150){
+        this.controls.target.z = 150;
+      }
+      if(this.controls.target.z < -150){
+        this.controls.target.z = -150;
+      }
+    }
+
   },
   computed:{
     uniqueTypes() {
@@ -1751,6 +1771,16 @@ Array [ -8.909232716902693, -20.492076873779297 ]
     this.renderer.setSize(window.innerWidth, scene1Container.offsetHeight);
     scene1Container.appendChild(this.renderer.domElement);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+
+    this.controls.target.set(0, 10, 0);
+
+    this.controls.maxPolarAngle = Math.PI / 2.1;
+
+    this.controls.minPolarAngle = -Math.PI / 1.9
+
+    this.controls.mixZoom = 50;
+
+    this.controls.maxDistance = 250;
 
 
 

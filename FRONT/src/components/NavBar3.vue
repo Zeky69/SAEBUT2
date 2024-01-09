@@ -47,6 +47,7 @@ export default {
       'Organisateurs': '/organisateurs',
       'TestMap': '/testMap',
       'MapPresta': '/MapPresta',
+      'Map2DAdmin': '/Map2DAdmin',
     }
   }),
   methods: {

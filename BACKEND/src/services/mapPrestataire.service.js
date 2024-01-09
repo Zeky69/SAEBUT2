@@ -338,7 +338,7 @@ const getAllBat = async (req) => {
     let result = [];
     try {
         // Récupérer tous les batiments
-        const getAllBatimentQuery = 'SELECT * FROM batiment JOIN toillette ON batiment.id_batiment = toillette.id_batiment JOIN scene ON batiment.id_batiment = scene.id_batiment';
+        const getAllBatimentQuery = 'SELECT * FROM batiment JOIN toilette ON batiment.id_batiment = toilette.id_batiment JOIN scene ON batiment.id_batiment = scene.id_batiment';
         result = await pool.query(getAllBatimentQuery);
         console.log("result", result.rows);
     }
