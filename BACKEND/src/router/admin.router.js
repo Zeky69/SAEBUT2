@@ -6,9 +6,11 @@ const adminMiddlewares = require('../middlewares/admin.middlewares');
 var router = express.Router();
 
 //affiche tous les utilisateurs
-router.get('/', adminMiddlewares.validateFilterInput,(req, res) => {
-    res.send(adminController.getAllUsers(req,res));
-});
+router.get('/', adminController.getAllUsers );
+
+//gere prestataire
+router.patch('/manage-prestataire/:prestataire_id', adminController.updatePrestataireStatus);
+
 
 //enregistre un utilisateur
 router.post('/add', adminMiddlewares.validateUserToAddInput,adminController.saveUser);

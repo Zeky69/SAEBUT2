@@ -54,7 +54,8 @@ CREATE TABLE ETAT(
     CREATE TABLE MOTS_DE_PASSE_UTILISATEURS (
         Id SERIAL PRIMARY KEY,
         User_Id INT REFERENCES UTILISATEURS(User_Id),
-        Password VARCHAR(255)
+        Password VARCHAR(255),
+        Unique(user_id,Password)
     );
 
     CREATE TABLE JOURNAUX_UTILISATEURS (
