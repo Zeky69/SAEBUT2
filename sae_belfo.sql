@@ -29,10 +29,16 @@ drop table IF EXISTS mots_de_passe_utilisateurs cascade;
 DROP TABLE IF EXISTS JOURNAUX_UTILISATEURS CASCADE;
 drop table if exists utilisateurs cascade;
 drop table IF EXISTS groupes cascade;
+drop table IF EXISTS ETAT cascade;
 
 CREATE TABLE GROUPES(
     Id SERIAL PRIMARY KEY,
     libelle VARCHAR(255)
+);
+
+CREATE TABLE ETAT(
+	Etat_id SERIAL PRIMARY KEY,
+	Etat_libelle VARCHAR(50)
 );
 
     CREATE TABLE UTILISATEURS (
@@ -96,8 +102,10 @@ CREATE TABLE DROITS_DE_GROUPES(
        description VARCHAR(255),
        nom VARCHAR(50),
        id_user varchar(50) NOT NULL,
+       etat_id INT,
        PRIMARY KEY(id_prestataire),
-       FOREIGN KEY(id_user) REFERENCES UTILISATEURS(User_Id)
+       FOREIGN KEY(id_user) REFERENCES UTILISATEURS(User_Id),
+       FOREIGN KEY(etat_id) REFERENCES ETAT(etat_id)
     );
 
 

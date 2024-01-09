@@ -5,6 +5,9 @@ INSERT INTO type VALUES('1', 'Restaurant' ,'restaurant.png'),
                       ('5', 'Boutique' ,'tent.png'),
                       ('6', 'Toilettes','toilets.png');
 
+INSERT INTO ETAT (Etat_libelle) VALUES ('en attente'), ('accepté'), ('refusé');
+
+
 
 
 
@@ -34,7 +37,7 @@ INSERT INTO mots_de_passe_utilisateurs VALUES(1, '1','mdpAdmin'),
                                              (2, '2','mdpUser'),
                                              (3, '3','mdpUser2');
 
-INSERT INTO prestataire VALUES ('1', 'prestataire qui prestate','prestatata','3','3');
+INSERT INTO prestataire VALUES ('1', 'prestataire qui prestate','prestatata','3',2);
 
 
 INSERT INTO tags VALUES ('1', 'accessible handicapé'),
@@ -49,13 +52,13 @@ INSERT INTO droits VALUES   ('1', 'base'),
                             ('3', 'gestion de tout'),
                             ('4', 'affichage user');
 
-INSERT INTO droits_de_groupes VALUES(1, 1, '1'),
-                                    (2,1,'3'),
-                                    (3, 2, '1'),
-                                    (4,2,'2'),
-                                    (5, 3, '1'),
-                                    (6,3,'4'),
-                                    (9, 1, 8),
-                                    (10, 1, 1);
+INSERT INTO droits_de_groupes VALUES(1, 1),
+                                    (2,1),
+                                    (3, 2),
+                                    (4,2),
+                                    (5, 3),
+                                    (6,3),
+                                    (9, 1),
+                                    (10, 1);
 
 
