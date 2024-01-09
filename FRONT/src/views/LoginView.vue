@@ -25,7 +25,7 @@
             <div class="boutton">
             <p class="connexion_btn" @click="connect()">Connexion</p>
               <hr />
-              <p id="Inscription">Inscription</p>
+              <p id="Inscription" @click="$router.push('/register')">Inscription</p>
 
 
             </div>

@@ -14,7 +14,7 @@
 
           <span v-else>
             <div class="formulaire-top">
-              <h2>Inscription</h2>
+              <h2>Inscription Prestataire</h2>
             </div>
 
             <div class="formulaire-contenu">
@@ -215,7 +215,7 @@ export default {
 .formulaire-top h2 {
   color: white;
   font-family: "DM Sans";
-  font-size: 25px;
+  font-size: 30px;
   text-align: center;
   margin-top: 5%;
 }
