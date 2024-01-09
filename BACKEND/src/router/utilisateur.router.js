@@ -8,7 +8,8 @@ var router = express.Router();
 //se connecter
 //router.get('/', loginMiddlewares.validateLoginInput,loginController.login);
 
-router.post('/login',userController.login);
+router.post('/login',userMiddlewares.validateLoginInput,userController.login);
+router.post('/register',userMiddlewares.validateRegistrationInput,userController.register)
 router.get('/:token',userController.getInformationWithToken);
 
 

@@ -76,7 +76,7 @@ export default {
     async connect(){
       console.log(this.login)
       var data =
-          {"login" : this.login,
+          {"email" : this.login,
             "password" :this.password};
       await this.loginUser(data);
       if(this.group_id===2){
