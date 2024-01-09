@@ -21,23 +21,23 @@ INSERT INTO toilette VALUES ( 'c8511a54-441b-43b1-b888-5d261f853924',
 INSERT INTO scene VALUES ('9fcbe75a-2918-4fbd-a558-dc994100f656', 'description scene', 'stadium 1', 'bat_3_confer', -119.60863494873047, 11.881292343139648, 101.35678100585938, 1.570796461153735);
 
 
-INSERT INTO event VALUES ('1', 'premier concert', 'description event 1','9fcbe75a-2918-4fbd-a558-dc994100f656', 'red', 'acepted', '2024-06-01T12:30:00', '2024-06-01T14:30:00','calixte'),
-                         ('2',  'Premiere lan', 'description event 2', '9fcbe75a-2918-4fbd-a558-dc994100f656', 'blue', 'acepted', '2024-06-01T22:00:00', '2024-06-02T12:00:00','calixte'),
-                         ('3', 'deuxieme concert', 'description event 3',  '9fcbe75a-2918-4fbd-a558-dc994100f656', 'green', 'acepted', '2024-06-03T14:00:00', '2024-06-03T16:00:00', 'calixte');
+INSERT INTO event VALUES ('1', 'premier concert', 'description event 1','9fcbe75a-2918-4fbd-a558-dc994100f656', 'red', 'acepted', '2024-06-01T12:30:00', '2024-06-01T14:30:00',2),
+                         ('2',  'Premiere lan', 'description event 2', '9fcbe75a-2918-4fbd-a558-dc994100f656', 'blue', 'acepted', '2024-06-01T22:00:00', '2024-06-02T12:00:00',2),
+                         ('3', 'deuxieme concert', 'description event 3',  '9fcbe75a-2918-4fbd-a558-dc994100f656', 'green', 'acepted', '2024-06-03T14:00:00', '2024-06-03T16:00:00',2);
 
 INSERT INTO groupes VALUES  (1, 'groupe admin'),
                             (2, 'groupe prestataire'),
                             (3, 'groupe user');
 
-INSERT INTO UTILISATEURS VALUES('1', 'fnAdmin', 'lnAdmin', 'admin@admin.com',now(),1),
-                              ('2', 'fnUser', 'lnUser', 'test@test.com',now(),3),
-                              ('3','fnPresta', 'lnPresta', 'test2@test2.com' ,now(),2);
+INSERT INTO UTILISATEURS(FIRST_NAME,LAST_NAME,email,Date_Created,Group_Id) VALUES('fnAdmin', 'lnAdmin', 'admin@admin.com',now(),1),
+                              ( 'fnUser', 'lnUser', 'test@test.com',now(),3),
+                              ('fnPresta', 'lnPresta', 'test2@test2.com' ,now(),2);
 
-INSERT INTO mots_de_passe_utilisateurs VALUES(1, '1','mdpAdmin'),
-                                             (2, '2','mdpUser'),
-                                             (3, '3','mdpUser2');
+INSERT INTO mots_de_passe_utilisateurs(User_Id,Password) VALUES(1,'mdpAdmin'),
+                                             (2,'mdpUser'),
+                                             (3,'mdpUser2');
 
-INSERT INTO prestataire VALUES ('1', 'prestataire qui prestate','prestatata','3',2);
+INSERT INTO prestataire( description, nom, id_user, etat_id) VALUES ('prestataire qui prestate','prestatata','3',2);
 
 
 INSERT INTO tags VALUES ('1', 'accessible handicapé'),
@@ -51,14 +51,23 @@ INSERT INTO droits VALUES   ('1', 'base'),
                             ('2', 'gestion dune page'),
                             ('3', 'gestion de tout'),
                             ('4', 'affichage user');
+       
+                                    
+INSERT INTO UTILISATEURS (FIRST_NAME, LAST_NAME, email, Date_Created, Group_Id)
+VALUES (
+    'John',
+    'Doe',
+    'john.doe@example.com',
+    CURRENT_TIMESTAMP,
+    2
+);
 
-INSERT INTO droits_de_groupes VALUES(1, 1),
-                                    (2,1),
-                                    (3, 2),
-                                    (4,2),
-                                    (5, 3),
-                                    (6,3),
-                                    (9, 1),
-                                    (10, 1);
+INSERT INTO prestataire ( description, nom, id_user, etat_id)
+VALUES (
+    'Prestataire Description',
+    'Prestataire Name',
+    (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'),
+    1
+);
 
 

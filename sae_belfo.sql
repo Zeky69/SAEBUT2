@@ -42,7 +42,7 @@ CREATE TABLE ETAT(
 );
 
     CREATE TABLE UTILISATEURS (
-        User_Id varchar(50) PRIMARY KEY,
+        User_Id SERIAL PRIMARY KEY,
         FIRST_NAME VARCHAR(255),
         LAST_NAME VARCHAR(255),
         email VARCHAR(255),
@@ -52,13 +52,13 @@ CREATE TABLE ETAT(
 
     CREATE TABLE MOTS_DE_PASSE_UTILISATEURS (
         Id SERIAL PRIMARY KEY,
-        User_Id varchar(50) REFERENCES UTILISATEURS(User_Id),
+        User_Id INT REFERENCES UTILISATEURS(User_Id),
         Password VARCHAR(255)
     );
 
     CREATE TABLE JOURNAUX_UTILISATEURS (
         Id SERIAL PRIMARY KEY,
-        User_Id varchar(50) REFERENCES UTILISATEURS(User_Id),
+        User_Id INT REFERENCES UTILISATEURS(User_Id),
         Date_Time TIMESTAMP,
         Event VARCHAR(255)
     );
@@ -98,10 +98,10 @@ CREATE TABLE DROITS_DE_GROUPES(
     );
 
     CREATE TABLE prestataire(
-       id_prestataire VARCHAR(50),
+       id_prestataire SERIAL,
        description VARCHAR(255),
        nom VARCHAR(50),
-       id_user varchar(50) NOT NULL,
+       id_user INT NOT NULL,
        etat_id INT,
        PRIMARY KEY(id_prestataire),
        FOREIGN KEY(id_user) REFERENCES UTILISATEURS(User_Id),
@@ -150,7 +150,7 @@ CREATE TABLE DROITS_DE_GROUPES(
         id_emplacement VARCHAR(50),
         ouverture timestamp,
         duree varchar(50),
-        id_client VARCHAR(50),
+        id_client INT,
         PRIMARY KEY(id_reservation),
         FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
         FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)
@@ -199,7 +199,7 @@ CREATE TABLE DROITS_DE_GROUPES(
        status VARCHAR(50),
        start_date timestamp,
        end_date timestamp,
-       id_prestataire VARCHAR(50) NOT NULL,
+       id_prestataire INT NOT NULL,
        PRIMARY KEY(id_event),
        FOREIGN KEY(id_scene) REFERENCES scene(id_scene)
     );
@@ -223,7 +223,7 @@ CREATE TABLE DROITS_DE_GROUPES(
     );
 
     CREATE TABLE possède(
-       id_prestataire VARCHAR(50),
+       id_prestataire INT,
        id_emplacement VARCHAR(50),
        PRIMARY KEY(id_prestataire, id_emplacement),
        FOREIGN KEY(id_prestataire) REFERENCES prestataire(id_prestataire),
@@ -232,7 +232,7 @@ CREATE TABLE DROITS_DE_GROUPES(
 
     CREATE TABLE accueil(
        id_scene VARCHAR(50),
-       id_intervenant VARCHAR(50),
+       id_intervenant INT,
        horaire timestamp,
        PRIMARY KEY(id_scene, id_intervenant),
        FOREIGN KEY(id_scene) REFERENCES scene(id_scene),
