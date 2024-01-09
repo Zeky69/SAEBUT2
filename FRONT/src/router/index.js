@@ -36,6 +36,9 @@ const routes = [
   }, {path: '/testMap',
     name: 'testMap',
     component: () => import(/* webpackChunkName: "about" */ '../views/TestMap.vue')
+  }, {path: '/MapPresta',
+    name: 'MapPresta',
+    component: () => import(/* webpackChunkName: "about" */ '../views/TempMapPresta.vue')
   }, {
     path: '/restauration',
     name: 'restauration',

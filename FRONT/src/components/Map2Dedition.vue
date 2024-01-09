@@ -106,6 +106,8 @@ export default {
     //center 47.74826581735272, 6.802135705947877
     //corner top left 47.74915674062442, 6.800086498260499
     //corner bottom right 47.74737489408103 , 6.804184913635255
+    //corner top right 47.74915674062442, 6.804184913635255
+    //corner bottom left 47.74737489408103 , 6.800086498260499
 
     markerLatLng: [51.504, -0.159],
     newPolygon:[],
@@ -294,8 +296,18 @@ export default {
           pretty.push(this.prettycoo(this.newPolygon[i]))
         }
 
+        //corner top left 47.74915674062442, 6.800086498260499
+        //corner bottom right 47.74737489408103 , 6.804184913635255
+        //corner top right 47.74915674062442, 6.804184913635255
+        //corner bottom left 47.74737489408103 , 6.800086498260499
+
+        console.log("top  left" , this.prettycoo([47.74915674062442, 6.800086498260499]))
+        console.log("bottom right" , this.prettycoo([47.74737489408103 , 6.804184913635255]))
+        console.log("top right" , this.prettycoo([47.74915674062442, 6.804184913635255]))
+        console.log("bottom left" , this.prettycoo([47.74737489408103 , 6.800086498260499]))
+
         const dataemp= {
-              name : this.newfeature.properties.name,
+              name : "emp_" + this.newfeature.properties.name,
               description : this.newfeature.properties.description,
               posx : center[0],
               posy : 10,

@@ -87,8 +87,18 @@
           <div class="removeEvent" id="removeEvent">
             <h2>Event selectionné</h2>
             <div class="eventSelected" v-show="selectedEvent">
+              <h3>Nom</h3>
               <p>{{ selectedEvent.nom }}</p>
+              <h3>Description</h3>
               <p>{{ selectedEvent.description }}</p>
+
+              <h3>Status de l'envenement</h3>
+              <p>
+                {{ selectedEvent.status === 'waiting'
+                  ? "La demande pour cet événement est en train d'être analysée par les administrateurs"
+                  : "L'événement a été accepté" }}
+              </p>
+
               <!-- Ajoutez d'autres détails de l'événement ici -->
               <button id="btn4" class="custom-btn" @click="deleteEventfunc"> Supprimer l'événement</button>
             </div>
@@ -139,8 +149,7 @@ import 'tippy.js/dist/tippy.css';
 
 //importer service/mapPrestataires.js
 import {getAllEmp,getOneBatUUID,getBatbyEmpUUID,getOneEmpUUID,getOneEmp,deleteBat, updateEmpFree, createBat, getAllBat} from '../services/mapPrestataire.service.js';
-import {getAllScene,getEvent,createEvent,getEventUUID,deleteEvent} from '../services/scene.service.js';
-import {getAllToilettes} from '../services/toilette.servie.js';
+import {getEvent,createEvent,getEventUUID,deleteEvent} from '../services/scene.service.js';
 
 /*   getAllEmp,
 getOneEmp
@@ -1102,71 +1111,37 @@ export default {
             batiment_clone.castShadow = true;
             batiment_clone.receiveShadow = true;
             batiment_clone.rotation.z = this.batiment_bdd[i].rota;
-            batiment_clone.userData = {uuid: this.batiment_bdd[i].id_batiment, emp_uuid: this.batiment_bdd[i].id_emplacement, description: this.batiment_bdd[i].description};
-            if (this.batiment_bdd[i].utilisateur != this.prestataire) {
+            batiment_clone.userData = {uuid: this.batiment_bdd[i].id_batiment, emp_uuid: this.batiment_bdd[i].id_emplacement ,description: this.batiment_bdd[i].description};
+            if(this.batiment.type == "toilette"){
               this.nonselectionables.add(batiment_clone);
-            } else {
-              if (this.batiment_bdd[i].status == "accepted") {
-                //mettre en vert
-                console.log("vert")
-                batiment_clone.material.color.setHex(0x00ff00);
-                this.selectionables.add(batiment_clone);
+            }
+            else if(this.batiment.type == "salle de conférence"){
+              this.selectionables.add(batiment_clone);
+            }
+            else {
+              console.log("batiment", this.batiment_bdd[i])
+              if (this.batiment_bdd[i].utilisateur != this.prestataire) {
+                this.nonselectionables.add(batiment_clone);
               } else {
-                if (this.batiment_bdd[i].status == "waiting") {
-                  //metre en orange
-                  console.log("orange")
-                  batiment_clone.material.color.setHex(0xffa500);
+                if (this.batiment_bdd[i].status == "accepted") {
+                  //mettre en vert
+                  console.log("vert")
+                  batiment_clone.material.color.setHex(0x00ff00);
                   this.selectionables.add(batiment_clone);
+                } else {
+                  if (this.batiment_bdd[i].status == "waiting") {
+                    //metre en orange
+                    console.log("orange")
+                    batiment_clone.material.color.setHex(0xffa500);
+                    this.selectionables.add(batiment_clone);
+                  }
                 }
-              }
 
+              }
             }
           }
         }
       }
-
-      this.batScene = await getAllScene();
-      console.log("batScene", this.batScene)
-      for (let i = 0; i < this.batScene.length; i++) {
-        if(this.batScene[i].id_batiment == 0){
-          break;
-        }
-        console.log("batScene", this.batScene[i])
-        var scene_found = await this.findObjectByName(this.loaded, this.batScene[i].name)
-        var scene_clone = scene_found.clone();
-        let mat = scene_clone.material.clone();
-        scene_clone.position.set(this.batScene[i].posx, this.batScene[i].posy, this.batScene[i].posz);
-        scene_clone.material.metalness = 0;
-        scene_clone.material = mat;
-        scene_clone.castShadow = true;
-        scene_clone.receiveShadow = true;
-        scene_clone.rotation.z = this.batScene[i].rota;
-        scene_clone.userData = {uuid: this.batScene[i].id_scene, description: this.batScene[i].description};
-        console.log("scene_clone", scene_clone.userData)
-        this.selectionables.add(scene_clone);
-      }
-
-      this.toilettes_bdd = await getAllToilettes();
-      console.log("toilettes_bdd", this.toilettes_bdd)
-      for (let i = 0; i< this.toilettes_bdd.length; i++) {
-        if (this.toilettes_bdd[i].id_batiment == 0) {
-          break;
-        }
-        console.log("toilettes", this.toilettes_bdd[i])
-        var toilettes_found = await this.findObjectByName(this.loaded, this.toilettes_bdd[i].name)
-        var toilettes_clone = toilettes_found.clone();
-        let mat = toilettes_clone.material.clone();
-        toilettes_clone.position.set(this.toilettes_bdd[i].posx, this.toilettes_bdd[i].posy, this.toilettes_bdd[i].posz);
-        toilettes_clone.material.metalness = 0;
-        toilettes_clone.material = mat;
-        toilettes_clone.castShadow = true;
-        toilettes_clone.receiveShadow = true;
-        toilettes_clone.rotation.z = this.toilettes_bdd[i].rota;
-        toilettes_clone.userData = {uuid: this.toilettes_bdd[i].id_batiment, description: this.toilettes_bdd[i].description};
-        this.nonselectionables.add(toilettes_clone);
-      }
-
-
 
       this.camera.rotation.x = -0.7;
       this.camera.position.set(120, 100, 160);
@@ -1214,10 +1189,6 @@ export default {
                 type: "Salle de conférence",
                 selected: true
               }
-
-
-
-
             }
             if(this.children[i].name == "bat_1_rest"){
               texturebat = new THREE.TextureLoader().load('map/mapData/tex/bat_rest.png');
@@ -1450,7 +1421,69 @@ export default {
           z: boundingBox.max.z * scale.z
         }
       };
-      console.log("kjsdkljqskldjklqsjdklqskljd", adjustedBoundingBox)
+
+      let coinHautGauche3D = {
+        x: adjustedBoundingBox.min.x,
+        z: adjustedBoundingBox.max.z
+      };
+      let coinHautDroit3D = {
+        x: adjustedBoundingBox.max.x,
+        z: adjustedBoundingBox.max.z
+      };
+      let coinBasGauche = {
+        x: adjustedBoundingBox.min.x,
+        z: adjustedBoundingBox.min.z
+      };
+      let coinBasDroite= {
+        x: adjustedBoundingBox.max.x,
+        z: adjustedBoundingBox.min.z
+      };
+
+      console.log("pontmap3Dlfjdklsdkljf", coinHautDroit3D, coinHautGauche3D,coinBasGauche,coinBasDroite)
+
+      /*
+      cooextreme3D
+      Object { x: 145.76097359713458, z: 150.63050706416016 }
+
+Object { x: -145.2783025259123, z: 150.63050706416016 }
+
+Object { x: -145.2783025259123, z: -152.0225906055275 }
+
+Object { x: 145.76097359713458, z: -152.0225906055275 }
+       */
+
+
+/*
+cooppretty
+top  left
+Array [ 8.909232717044802, -20.492076873779297 ]
+Map2Dedition.vue:304
+bottom right
+Array [ -8.909232716902693, 20.492076873779297 ]
+Map2Dedition.vue:305
+top right
+Array [ 8.909232717044802, 20.492076873779297 ]
+Map2Dedition.vue:306
+bottom left
+Array [ -8.909232716902693, -20.492076873779297 ]
+ */
+      let coinHautGauchePretty = {
+        x: 8.909232717044802,
+        z: -20.492076873779297
+      };
+      let coinHautDroitPretty = {
+        x: 8.909232717044802,
+        z:  20.492076873779297
+      };
+      let coinBasGauchePretty = {
+        x: -8.909232716902693,
+        z: -20.492076873779297
+      };
+      let coinBasDroitePretty = {
+        x: -8.909232716902693,
+        z: 20.492076873779297
+      };
+      console.log("prettyuseless",coinHautGauchePretty,coinHautDroitPretty,coinBasGauchePretty,coinBasDroitePretty)
       /*
       kjsdkljqskldjklqsjdklqskljd max
           max:
@@ -1463,12 +1496,94 @@ export default {
           z:-152.0225906055275
        */
       // Application de la transformation aux coordonnées 2D
+      let point3D2;
+      if(x > 0){
+        if(z > 0){
+          point3D2 = {
+            //x: (coinHautDroitPretty.x * x) / coinHautDroit3D.x,
+            //z: (coinHautDroitPretty.z * z) / coinHautDroit3D.z
+
+            //x: ((coinHautDroit3D.x * x)/ coinHautDroitPretty.x),
+            //z: ((coinHautDroit3D.z * z)/ coinHautDroitPretty.z)
+
+
+            x: (coinHautDroit3D.x * x)/ coinHautDroitPretty.x,
+            z: (coinHautDroit3D.z * z)/ coinHautDroitPretty.z
+          }
+        }
+        else{
+          point3D2 = {
+            //x: (coinHautGauchePretty.x * x) / coinBasDroite.x,
+            //z: (coinHautGauchePretty.z * z) / coinBasDroite.z
+
+            //x: ((coinBasDroite.x * x)/ coinHautGauchePretty.x),
+            //z: ((coinBasDroite.z * z)/ coinHautGauchePretty.z)
+
+            x: ((coinBasDroite.x * x)/ coinBasDroitePretty.x),
+            z: ((coinBasDroite.z * z)/ coinBasDroitePretty.z)
+
+
+          }
+        }
+      }
+      else{
+        if(z > 0){
+          point3D2 = {
+            //x: (coinBasDroitePretty.x * x) / coinHautGauche3D.x,
+            //z: (coinBasDroitePretty.z * z) / coinHautGauche3D.z
+
+            //x: ((coinHautGauche3D.x * x)/ coinBasDroitePretty.x),
+            //z: ((coinHautGauche3D.z * z)/ coinBasDroitePretty.z)
+
+            x: ((coinHautGauche3D.x * x)/ coinHautGauchePretty.x),
+            z: ((coinHautGauche3D.z * z)/ coinHautGauchePretty.z)
+          }
+        }
+        else{
+          point3D2 = {
+            //x: (coinBasGauchePretty.x * x) / coinBasGauche.x,
+            //z: (coinBasGauchePretty.z * z) / coinBasGauche.z
+
+            //x: ((coinBasGauche.x * x)/ coinBasGauchePretty.x),
+            //z: ((coinBasGauche.z * z)/ coinBasGauchePretty.z)
+
+            x: ((coinBasGauche.x * x)/ coinBasGauchePretty.x),
+            z: ((coinBasGauche.z * z)/ coinBasGauchePretty.z)
+          }
+        }
+      }
+
+
+
+
+
+
       const point3D = {
         x: (x * (adjustedBoundingBox.max.x - adjustedBoundingBox.min.x)/(0.001781847*10000)),
         z: (z * (adjustedBoundingBox.max.z - adjustedBoundingBox.min.z)/(0.004098415*10000))
       };
+
+
+
+
+
+      //botom right pretty coo [ 8.909232717044802, -20.492076873779297 ]
+      /*
+      let botrghtpretty = [8.909232717044802, -20.492076873779297]
+      let botrght3D = [145.76097359713458, 1.8496733903884888, 150.63050706416016]
+      point3D2 = {
+        x: (botrght3D[0] * x) / botrghtpretty[0],
+        z: (botrght3D[2] * z) / botrghtpretty[1]
+      }
+
+       */
+      point3D2={
+        x: x*1,
+        z: z*1
+      }
       console.log("point3D", point3D)
-      return point3D;
+      console.log("point3D2", point3D2)
+      return point3D2;
     },
 
     async matriceTo3DEmp(matricepoints, name, posx, posz, emp_uuid) {

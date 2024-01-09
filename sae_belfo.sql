@@ -98,20 +98,10 @@ CREATE TABLE produit(
    PRIMARY KEY(id_produit)
 );
 
-CREATE TABLE type(
-   id_type VARCHAR(50),
-   libelle VARCHAR(50),
-   PRIMARY KEY(id_type)
-);
-
-CREATE TABLE crenaux(
-   date_reservation timestamp,
-   PRIMARY KEY(date_reservation)
-);
-
 CREATE TABLE tags(
    id_tag VARCHAR(50),
    libelle VARCHAR(50),
+   id_batiment VARCHAR(50)
    PRIMARY KEY(id_tag)
 );
 
@@ -123,8 +113,6 @@ CREATE TABLE prestataire(
    PRIMARY KEY(id_prestataire),
    FOREIGN KEY(id_user) REFERENCES UTILISATEURS(User_Id)
 );
-
-
 
 CREATE TABLE emplacement(
     id_emplacement VARCHAR(50),
@@ -172,38 +160,20 @@ CREATE TABLE reservation(
    FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)
 );
 
-CREATE TABLE stand(
-   id_stand VARCHAR(50),
-   description VARCHAR(50),
-   id_emplacement VARCHAR(50) NOT NULL,
-   PRIMARY KEY(id_stand),
-   UNIQUE(id_emplacement),
-   FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement)
-);
-
 CREATE TABLE toilette(
    id_toilette VARCHAR(50),
-   description VARCHAR(255),
-   nom VARCHAR(50),
-   name VARCHAR(50),
-   posx DECIMAL(24,17),
-   posy DECIMAL(24,17),
-   posz DECIMAL(24,17),
-   rota DECIMAL(24,17),
    PRIMARY KEY(id_toilette)
+   id_batiment VARCHAR(50) NOT NULL UNIQUE,
+   FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment)
 );
 
 CREATE TABLE scene(
    id_scene VARCHAR(50),
    description VARCHAR(50),
-   nom VARCHAR(50),
-   name VARCHAR(50),
-   posx DECIMAL(24,17),
-   posy DECIMAL(24,17),
-   posz DECIMAL(24,17),
-   rota DECIMAL(24,17),
    PRIMARY KEY(id_scene)
-);
+   id_batiment VARCHAR(50) NOT NULL UNIQUE,
+   FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment)
+    );
 
 
 CREATE TABLE event(
