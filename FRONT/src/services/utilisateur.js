@@ -1,8 +1,8 @@
 import {postRequest,getRequest} from "@/services/axios.service";
-const url='/login'
+const url='/user'
 
 async function LoginFromApi(data) {
-    return postRequest(url, data, 'LOGIN')
+    return postRequest(url+'/login', data, 'LOGIN')
 }
 
 

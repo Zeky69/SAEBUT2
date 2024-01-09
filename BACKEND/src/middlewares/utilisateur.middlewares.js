@@ -1,4 +1,4 @@
-//login.middlewares.js
+//utilisateur.middlewares.js
 const validator = require('validator');
 
 const authenticateToken = (req, res, next) => {

@@ -2,7 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const prestaRoutes = require('./router/prestataires.router');
 const adminRoutes = require('./router/admin.router');
-const loginRoutes = require('./router/login.router');
+const userRoutes = require('./router/utilisateur.router');
 const mapPrestatairesRoutes = require('./router/mapPrestataires.router')
 const sceneRoutes = require('./router/scnene.router');
 const toiletteRoutes = require('./router/toilette.router');
@@ -35,7 +35,7 @@ app.use("/admin", adminRoutes);
 app.use("/mapPrestataires", mapPrestatairesRoutes);
 app.use("/scene", sceneRoutes);
 app.use("/toilette", toiletteRoutes);
-app.use("/login", loginRoutes);
+app.use("/user", userRoutes);
 app.use("/reservation", resaRoutes);
 
 app.listen(port, () => {
