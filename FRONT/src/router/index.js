@@ -65,6 +65,10 @@ const routes = [
         component: () => import('../components/AdminInfoTemporaire.vue')
       },
       {
+        path: 'prestataires',
+        component: ()=>import ('../views/AdminPrestataire.vue')
+      },
+      {
         path:'*',
         component: () => import('../views/NotFound.vue')
       }
