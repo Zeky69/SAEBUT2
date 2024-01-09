@@ -13,13 +13,20 @@
       <table v-if="filteredUsers.length!==0">
         <thead>
         <tr>
-          <th v-for="(value, key) in tablePresta[0]" :key="key">{{ key }}</th>
+          <th v-for="(value, key) in rubriques" :key="key">{{ value }}</th>
           <th>Operations</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="(item, index) in filteredUsers" :key="index">
-          <td v-for="(value, key) in item" :key="key">{{ value }}</td>
+<!--          <td v-for="(value, key) in item" :key="key">{{ value }}</td>-->
+          <td>{{item.first_name}}</td>
+          <td>{{item.last_name}}</td>
+          <td>{{item.description}}</td>
+          <td>{{item.email}}</td>
+          <td>{{item.etat_libelle}}</td>
+
+
           <td>
             <template v-if="item.etat_id === 2">
               <!-- État: Accepté -->
@@ -28,7 +35,7 @@
 
             <template v-else-if="item.etat_id === 3">
               <!-- État: Refusé -->
-              <button @click="reAcceptUser(item)">Ré-Accepter</button>
+              <button @click="reAcceptUser(item)">Re-Accepter</button>
             </template>
 
             <template v-else-if="item.etat_id === 1">
@@ -55,6 +62,7 @@ export default {
   data: () => ({
     tablePresta: [],
     selectedState: "all",
+    rubriques:['Prenom','Nom','Description','Email','Etat']
   }),
   computed: {
     filteredUsers() {
