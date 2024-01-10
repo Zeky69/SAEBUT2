@@ -87,8 +87,18 @@
           <div class="removeEvent" id="removeEvent">
             <h2>Event selectionné</h2>
             <div class="eventSelected" v-show="selectedEvent">
+              <h3>Nom</h3>
               <p>{{ selectedEvent.nom }}</p>
+              <h3>Description</h3>
               <p>{{ selectedEvent.description }}</p>
+
+              <h3>Status de l'envenement</h3>
+              <p>
+                {{ selectedEvent.status === 'waiting'
+                  ? "La demande pour cet événement est en train d'être analysée par les administrateurs"
+                  : "L'événement a été accepté" }}
+              </p>
+
               <!-- Ajoutez d'autres détails de l'événement ici -->
               <button id="btn4" class="custom-btn" @click="deleteEventfunc"> Supprimer l'événement</button>
             </div>
@@ -139,8 +149,7 @@ import 'tippy.js/dist/tippy.css';
 
 //importer service/mapPrestataires.js
 import {getAllEmp,getOneBatUUID,getBatbyEmpUUID,getOneEmpUUID,getOneEmp,deleteBat, updateEmpFree, createBat, getAllBat} from '../../services/mapPrestataire.service.js';
-import {getAllScene,getEvent,createEvent,getEventUUID,deleteEvent} from '../../services/scene.service.js';
-import {getAllToilettes} from '../../services/toilette.servie.js';
+import {getEvent,createEvent,getEventUUID,deleteEvent} from '../../services/scene.service.js';
 
 /*   getAllEmp,
 getOneEmp
@@ -209,6 +218,7 @@ export default {
           console.log("thisslertedEvent", this.selectedEvent.id_prestataire)
           console.log("thisprestat", this.prestataire)
             if (info.event._def.publicId == this.selectedEvent.id_event) {
+              console.log("jklsfjcklsdvnc,kqsdcvnk,qsdnc qsd,k n,qsdn jkqsnjkdvnqkdklalllo")
               let id = this.selectedEvent.id_scene;
               this.selectedEvent = 0;
               await this.refreshcalendare(id);
@@ -216,10 +226,15 @@ export default {
               this.uuidsceneSelect = 0;
             } else {
               const event = await getEventUUID(info.event._def.publicId);
+              console.log(event)
               this.selectedEvent = event;
               this.uuidsceneSelect = event.id_scene;
+              console.log("this.prestatnorselect",this.prestataire)
+              console.log("this.selectedEvent notselect",this.selectedEvent)
               if (this.selectedEvent.id_prestataire == this.prestataire) {
-                await this.refreshcalendare(this.selectedEvent.id_scene);
+                let idscenestring = this.selectedEvent.id_scene
+                console.log("id scene jdklsqjfkljsqlmfjqskljfqskl id", idscenestring)
+                await this.refreshcalendare(idscenestring)
               }else{
                 this.selectedEvent = 0;
                 this.uuidsceneSelect = 0;
@@ -250,7 +265,7 @@ export default {
 
       },
       uuidsceneSelect: 0,
-
+      uuidbat: 0,
       eventScene: [],
       description_event: "",
       description_batiment: "",
@@ -296,7 +311,7 @@ export default {
       groupe_sol: null,
       ambientLightscene2: null,
       scene2Container: null,
-      prestataire: "calixte",
+      prestataire: 1,
       testshape: [],
       checkedtype: [],
       tabbatlist: [],
@@ -360,24 +375,35 @@ export default {
       console.log("end", end)
       console.log("name", name)
       console.log("description", description)
-      let uuid = this.uuidsceneSelect;
 
-      console.log("uuid", uuid)
+      console.log("selectab", this.selectab[0])
+      let batuuid = this.selectab[0]["obj"].userData.uuid
+
+
+      console.log("kdklsdq bat", batuuid)
+
+
+      let bat = await getOneBatUUID(batuuid);
+
+      console.log("bat", bat)
+
+      let sceneuuid = bat[0].id_scene;
+
 
       //[uuid, info.description, info.nom, info.id_scene, info.couleur, info.etat, info.date_debut, info.date_fin]);
 
       let databdd = {
-        id_scene: uuid,
+        id_scene: sceneuuid,
         date_debut: start,
         date_fin: end,
         nom: name,
         description: description,
         etat: "waiting",
         couleur: "red",
-        id_prestataire: "calixte",
+        id_prestataire: 1,
       }
       console.log("databdd", databdd)
-      let eventcreated = await createEvent(databdd, uuid);
+      let eventcreated = await createEvent(databdd, sceneuuid);
 
 
 
@@ -399,7 +425,7 @@ export default {
 
       console.log("this.currentEvents bef refresh", this.currentEvents)
 
-      this.refreshcalendare(uuid);
+      this.refreshcalendare(sceneuuid);
       this.showAddEvent()
     },
 
@@ -654,8 +680,8 @@ export default {
 
     async refreshcalendare( uuid) {
       this.currentEvents = [];
+
       this.eventScene = await getEvent(uuid);
-      console.log("eventScene", this.eventScene)
       for (let i = 0; i < this.eventScene.length; i++) {
         let data = await this.eventParser(this.eventScene[i]);
         this.currentEvents.push(data);
@@ -716,73 +742,78 @@ export default {
         if (this.selectedObject.name.slice(0,3) == "bat") {
           console.log("batiment", this.selectedObject.name)
           console.log("batiment", this.selectedObject.name.slice(4,5))
-          if(this.selectedObject.name.slice(4,5) == "3" || this.selectedObject.name.slice(4,5) == "6"){
-            if (this.selectedObject.name.slice(4,5) == "3"){
+
+
+          let found;
+          let batiment;
+          found = await getOneBatUUID(this.selectedObject.userData.uuid);
+          console.log("found batiment click", found)
+          if (found != []){
+            batiment = found
+            found = true;
+          }
+          else {
+            found = false;
+          }
+
+          if (this.selectab.length == 0 && found) {
+            // Toggle the 'active' class on the selectmenu div
+
+
+            this.selectedObject.material.color.setHex(0xff0000);
+            var info
+
+            if(batiment[0].type_id == 3){
               console.log("batiment salle de conf")
               document.getElementById('selectmenu').classList.toggle('closed');
               document.getElementById('selectmenu').classList.toggle('supr');
               document.getElementById('scene').classList.toggle('active');
               document.getElementById('scene1').classList.toggle('active');
-              this.uuidsceneSelect = this.selectedObject.userData.uuid;
-              this.refreshcalendare(this.selectedObject.userData.uuid)
-              console.log("this.uuidsceneSelect", this.selectedObject)
 
-            }else{
-              console.log("batiment toilette")
-            }
 
-            }
-          else{
-            let found;
-            found = await getOneBatUUID(this.selectedObject.userData.uuid);
-            console.log("found", found)
-            if (found != []){
-              found = true;
-            }
-            else {
-              found = false;
-            }
 
-            if (this.selectab.length == 0 && found) {
-              // Toggle the 'active' class on the selectmenu div
+
+              let uuidScene = batiment[0].id_scene
+              console.log(uuidScene)
+              this.uuidsceneSelect = uuidScene
+              this.refreshcalendare(uuidScene)
+              info = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "conf"}
+            }
+            if(batiment[0].type_id != 6 && batiment[0].type_id != 3){
+              info = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "bat"}
               document.getElementById('selectmenu').classList.toggle('closed');
               document.getElementById('selectmenu').classList.toggle('supr');
               document.getElementById('remove').classList.toggle('active');
               document.getElementById('scene1').classList.toggle('active');
+            }
+            this.selectab.push(info);
+          } else {
+            if (this.selectedObject.uuid == this.selectab[0]["obj"].uuid) {
+              // Toggle the 'active' class on the selectmenu div
+              document.getElementById('selectmenu').classList.toggle('closed');
 
-              this.selectedObject.material.color.setHex(0xff0000);
-
-              var info = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "bat"}
-              this.selectab.push(info);
+              document.getElementById('scene1').classList.toggle('active');
+              //wait 300ms
+              setTimeout(() => {
+                document.getElementById('remove').classList.toggle('active');
+                document.getElementById('selectmenu').classList.toggle('supr');
+              }, 300);
+              this.selectedObject.material = this.selectab[0]["mat"].clone()
+              this.selectedObject.material.color.setHex(this.selectab[0]["col"])
+              this.selectab.pop(0)
+              this.selectedObject = 0
             } else {
-              if (this.selectedObject.uuid == this.selectab[0]["obj"].uuid) {
-                // Toggle the 'active' class on the selectmenu div
-                document.getElementById('selectmenu').classList.toggle('closed');
-
-                document.getElementById('scene1').classList.toggle('active');
-                //wait 300ms
-                setTimeout(() => {
-                  document.getElementById('remove').classList.toggle('active');
-                  document.getElementById('selectmenu').classList.toggle('supr');
-                }, 300);
-                this.selectedObject.material = this.selectab[0]["mat"].clone()
-                this.selectedObject.material.color.setHex(this.selectab[0]["col"])
-                this.selectab.pop(0)
-                this.selectedObject = 0
-              } else {
-                console.log("un objet est deja select")
-                this.selectedObject = 0
-              }
+              console.log("un objet est deja select")
+              this.selectedObject = 0
             }
 
           }
-
-
 
         } else {
           if (this.selectedObject.name.slice(0,3) == "emp") {
             let found;
             found = await getOneEmp({name: this.selectedObject.name, posx: this.selectedObject.position.x, posz: this.selectedObject.position.z});
+            console.log("found emp", found)
             if (found != []){
               found = true;
             }
@@ -802,6 +833,7 @@ export default {
               console.log("this.selectedObject", this.selectedObject)
                 var info2 = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "emp"}
                 this.selectab.push(info2);
+                console.log("this.selectab push", this.selectab)
             } else {
               if (this.selectedObject.name == this.selectab[0]["obj"].name) {
                 // Toggle the 'active' class on the selectmenu div
@@ -903,7 +935,7 @@ export default {
           }, 300);
 
         }
-        console.log("this.selectab", this.selectab)
+        console.log("this.selectabbefortype", this.selectab)
         //var uuid = this.selectab[0]["obj"].uuid;
         if (this.selectab[0]["type"] == "emp") {
           let found;
@@ -928,6 +960,8 @@ export default {
           console.log(this.batiment[this.idbatafficher].name)
           console.log("load", this.loaded)
           var batiment_bdd_found = await this.findObjectByName(this.loaded, this.batiment[this.idbatafficher].name)
+          console.log("batiment_bdd_found", batiment_bdd_found)
+          console.log("selectab", this.selectab)
           var batimentadd = batiment_bdd_found.clone();
           var mat = batimentadd.material.clone();
           var battobdd = batimentadd.toJSON()
@@ -957,7 +991,7 @@ export default {
             posy: y,
             posz: posz,
             rota: (this.rotation * Math.PI / 180),
-            prestataire: this.prestataire,
+            prestataire: 1,
             description: this.description_batiment,
             type: id_type,
             status: "waiting",
@@ -1069,16 +1103,12 @@ export default {
 
 
       this.emplacement_bdd = await getAllEmp();
-      console.log("emplacement_bdd", this.emplacement_bdd)
       for (let i = 0; i < this.emplacement_bdd.length; i++) {
         if(this.emplacement_bdd[i].id_emplacement == 0){
           break;
         }
-          console.log("emplacement", this.emplacement_bdd[i])
           var matricepoints = this.emplacement_bdd[i].matricepoints.matricepoints
-          console.log("mat", matricepoints)
         const emp = await this.matriceTo3DEmp(matricepoints, this.emplacement_bdd[i].nom, this.emplacement_bdd[i].posx, this.emplacement_bdd[i].posz, this.emplacement_bdd[i].id_emplacement);
-        console.log("emp3D", emp)
         emp.material = material_emp.clone();
         if(this.emplacement_bdd[i].batiment_id != null){
           emp.material.color.setHex(0x7e7e7e);
@@ -1089,84 +1119,62 @@ export default {
       }
 
       this.batiment_bdd = await getAllBat();
+      console.log("batiments", this.batiment_bdd)
+      console.log("batiments", this.batiment)
       for (let i = 0; i< this.batiment_bdd.length; i++) {
         for (let j = 0; j < this.batiment.length; j++) {
+
           if (this.batiment_bdd[i].name == this.batiment[j].name) {
+            console.log("batiment", this.batiment_bdd[i])
+            console.log(this.batiment[j].type)
+            console.log(this.batiment[j].type === "Salle de conférence")
 
             var batiment_found = await this.findObjectByName(this.loaded, this.batiment[j].name)
+            console.log(batiment_found)
             var batiment_clone = batiment_found.clone();
             let mat = batiment_clone.material.clone();
+            let point3D = this.point2Dto3D(this.batiment_bdd[i].posx,this.batiment_bdd[i].posz)
+            console.log("point", point3D)
+
             batiment_clone.position.set(this.batiment_bdd[i].posx, this.batiment_bdd[i].posy, this.batiment_bdd[i].posz);
             batiment_clone.material.metalness = 0;
             batiment_clone.material = mat;
             batiment_clone.castShadow = true;
             batiment_clone.receiveShadow = true;
             batiment_clone.rotation.z = this.batiment_bdd[i].rota;
-            batiment_clone.userData = {uuid: this.batiment_bdd[i].id_batiment, emp_uuid: this.batiment_bdd[i].id_emplacement, description: this.batiment_bdd[i].description};
-            if (this.batiment_bdd[i].utilisateur != this.prestataire) {
-              this.nonselectionables.add(batiment_clone);
-            } else {
-              if (this.batiment_bdd[i].status == "accepted") {
-                //mettre en vert
-                console.log("vert")
-                batiment_clone.material.color.setHex(0x00ff00);
-                this.selectionables.add(batiment_clone);
-              } else {
-                if (this.batiment_bdd[i].status == "waiting") {
-                  //metre en orange
-                  console.log("orange")
-                  batiment_clone.material.color.setHex(0xffa500);
-                  this.selectionables.add(batiment_clone);
-                }
-              }
+            batiment_clone.userData = {uuid: this.batiment_bdd[i].id_batiment, emp_uuid: this.batiment_bdd[i].id_emplacement ,description: this.batiment_bdd[i].description};
 
+            console.log("clone" , batiment_clone)
+            if(this.batiment[j].type == "toilette"){
+              this.nonselectionables.add(batiment_clone);
+            }
+            else if(this.batiment[j].type === "Salle de conférence"){
+              this.selectionables.add(batiment_clone);
+            }
+            else {
+              console.log("batiment", this.batiment_bdd[i])
+              if (this.batiment_bdd[i].utilisateur != this.prestataire) {
+                this.nonselectionables.add(batiment_clone);
+              } else {
+                if (this.batiment_bdd[i].status == "accepted") {
+                  //mettre en vert
+                  console.log("vert")
+                  batiment_clone.material.color.setHex(0x00ff00);
+                  this.selectionables.add(batiment_clone);
+                } else {
+                  if (this.batiment_bdd[i].status == "waiting") {
+                    //metre en orange
+                    console.log("orange")
+                    batiment_clone.material.color.setHex(0xffa500);
+                    this.selectionables.add(batiment_clone);
+                  }
+                }
+
+              }
             }
           }
         }
       }
-
-      this.batScene = await getAllScene();
-      console.log("batScene", this.batScene)
-      for (let i = 0; i < this.batScene.length; i++) {
-        if(this.batScene[i].id_batiment == 0){
-          break;
-        }
-        console.log("batScene", this.batScene[i])
-        var scene_found = await this.findObjectByName(this.loaded, this.batScene[i].name)
-        var scene_clone = scene_found.clone();
-        let mat = scene_clone.material.clone();
-        scene_clone.position.set(this.batScene[i].posx, this.batScene[i].posy, this.batScene[i].posz);
-        scene_clone.material.metalness = 0;
-        scene_clone.material = mat;
-        scene_clone.castShadow = true;
-        scene_clone.receiveShadow = true;
-        scene_clone.rotation.z = this.batScene[i].rota;
-        scene_clone.userData = {uuid: this.batScene[i].id_scene, description: this.batScene[i].description};
-        console.log("scene_clone", scene_clone.userData)
-        this.selectionables.add(scene_clone);
-      }
-
-      this.toilettes_bdd = await getAllToilettes();
-      console.log("toilettes_bdd", this.toilettes_bdd)
-      for (let i = 0; i< this.toilettes_bdd.length; i++) {
-        if (this.toilettes_bdd[i].id_batiment == 0) {
-          break;
-        }
-        console.log("toilettes", this.toilettes_bdd[i])
-        var toilettes_found = await this.findObjectByName(this.loaded, this.toilettes_bdd[i].name)
-        var toilettes_clone = toilettes_found.clone();
-        let mat = toilettes_clone.material.clone();
-        toilettes_clone.position.set(this.toilettes_bdd[i].posx, this.toilettes_bdd[i].posy, this.toilettes_bdd[i].posz);
-        toilettes_clone.material.metalness = 0;
-        toilettes_clone.material = mat;
-        toilettes_clone.castShadow = true;
-        toilettes_clone.receiveShadow = true;
-        toilettes_clone.rotation.z = this.toilettes_bdd[i].rota;
-        toilettes_clone.userData = {uuid: this.toilettes_bdd[i].id_batiment, description: this.toilettes_bdd[i].description};
-        this.nonselectionables.add(toilettes_clone);
-      }
-
-
 
       this.camera.rotation.x = -0.7;
       this.camera.position.set(120, 100, 160);
@@ -1214,10 +1222,6 @@ export default {
                 type: "Salle de conférence",
                 selected: true
               }
-
-
-
-
             }
             if(this.children[i].name == "bat_1_rest"){
               texturebat = new THREE.TextureLoader().load('map/mapData/tex/bat_rest.png');
@@ -1327,9 +1331,8 @@ export default {
               this.children[i].material.metalness = 0;
               this.children[i].receiveShadow = true;
             }
-            if(!this.children[i].name.includes("bat_6") && !this.children[i].name.includes("bat_3") ){
-              this.batiment.push(info)
-            }
+            this.batiment.push(info)
+
 
 
           } else {
@@ -1348,7 +1351,8 @@ export default {
             } else {
               if (this.children[i].name.slice(0, 3) == "sol") {
                 if(this.children[i].name == "sol_sol") {
-                  const texturesol = new THREE.TextureLoader().load('map/mapData/tex/tex_solmir.png');
+                  const texturesol = new THREE.TextureLoader().load('map/mapData/tex/tex_sol.png');
+                  texturesol.flipY = false;
                   const mat_sol = new THREE.MeshPhongMaterial({map: texturesol});
                   this.children[i].material = mat_sol;
                   this.children[i].material.metalness = 0;
@@ -1358,6 +1362,7 @@ export default {
                 }
                 else{
                   const texturesol = new THREE.TextureLoader().load('map/mapData/tex/tex_arrsol.png');
+                  texturesol.flipY = false;
                   texturesol.wrapS = THREE.RepeatWrapping;
                   texturesol.wrapT = THREE.RepeatWrapping;
                   texturesol.repeat.set(2, 2);
@@ -1371,7 +1376,8 @@ export default {
               }
               else {
                 if (this.children[i].name.slice(0, 3) == "dec") {
-                if(this.children[i].name.includes("tree")){
+                if(this.children[i].name.includes("sapins")){
+                  console.log("sapin")
                   const texturetree = new THREE.TextureLoader().load('map/mapData/tex/tex_tree.png');
                   texturetree.flipY = false;
                   const mattree = new THREE.MeshPhongMaterial({map: texturetree});
@@ -1450,7 +1456,69 @@ export default {
           z: boundingBox.max.z * scale.z
         }
       };
-      console.log("kjsdkljqskldjklqsjdklqskljd", adjustedBoundingBox)
+
+      let coinHautGauche3D = {
+        x: adjustedBoundingBox.min.x,
+        z: adjustedBoundingBox.max.z
+      };
+      let coinHautDroit3D = {
+        x: adjustedBoundingBox.max.x,
+        z: adjustedBoundingBox.max.z
+      };
+      let coinBasGauche = {
+        x: adjustedBoundingBox.min.x,
+        z: adjustedBoundingBox.min.z
+      };
+      let coinBasDroite= {
+        x: adjustedBoundingBox.max.x,
+        z: adjustedBoundingBox.min.z
+      };
+
+      //console.log("pontmap3Dlfjdklsdkljf", coinHautDroit3D, coinHautGauche3D,coinBasGauche,coinBasDroite)
+
+      /*
+      cooextreme3D
+      Object { x: 145.76097359713458, z: 150.63050706416016 }
+
+Object { x: -145.2783025259123, z: 150.63050706416016 }
+
+Object { x: -145.2783025259123, z: -152.0225906055275 }
+
+Object { x: 145.76097359713458, z: -152.0225906055275 }
+       */
+
+
+/*
+cooppretty
+top  left
+Array [ 8.909232717044802, -20.492076873779297 ]
+Map2Dedition.vue:304
+bottom right
+Array [ -8.909232716902693, 20.492076873779297 ]
+Map2Dedition.vue:305
+top right
+Array [ 8.909232717044802, 20.492076873779297 ]
+Map2Dedition.vue:306
+bottom left
+Array [ -8.909232716902693, -20.492076873779297 ]
+ */
+      let coinHautGauchePretty = {
+        x: 8.909232717044802,
+        z: -20.492076873779297
+      };
+      let coinHautDroitPretty = {
+        x: 8.909232717044802,
+        z:  20.492076873779297
+      };
+      let coinBasGauchePretty = {
+        x: -8.909232716902693,
+        z: -20.492076873779297
+      };
+      let coinBasDroitePretty = {
+        x: -8.909232716902693,
+        z: 20.492076873779297
+      };
+      //console.log("prettyuseless",coinHautGauchePretty,coinHautDroitPretty,coinBasGauchePretty,coinBasDroitePretty)
       /*
       kjsdkljqskldjklqsjdklqskljd max
           max:
@@ -1463,21 +1531,44 @@ export default {
           z:-152.0225906055275
        */
       // Application de la transformation aux coordonnées 2D
-      const point3D = {
-        x: (x * (adjustedBoundingBox.max.x - adjustedBoundingBox.min.x)/(0.001781847*10000)),
-        z: (z * (adjustedBoundingBox.max.z - adjustedBoundingBox.min.z)/(0.004098415*10000))
-      };
-      console.log("point3D", point3D)
-      return point3D;
+
+
+
+
+      //botom right pretty coo [ 8.909232717044802, -20.492076873779297 ]
+
+      let botrghtpretty = [8.909232717044802, -20.492076873779297]
+      //2 -145.2783025259123, z: 150.63050706416016
+      //3 -145.2783025259123, z: -152.0225906055275
+     //hd -152.0225906055275
+      let botrght3D = [145.2783025259123, 1.8496733903884888,150.63050706416016]
+
+      let point3D2 = {
+        x: (botrght3D[0] * x) / botrghtpretty[0],
+        z: (botrght3D[2] * z) / botrghtpretty[1]
+      }
+/*
+      point3D2={
+        x: x*1,
+        z: z*1
+      }
+
+ */
+      return point3D2;
     },
 
     async matriceTo3DEmp(matricepoints, name, posx, posz, emp_uuid) {
-      let center = await this.point2Dto3D(posx, posz);
-      console.log("center", center)
-      const points = matricepoints.map(([x, y]) => new THREE.Vector3(x,y));
-      console.log("matrice", matricepoints)
-      console.log("points", points)
-      // mettre à l'échelle
+      let center = await this.point2Dto3D(posz, posx);
+      console.log("center", center);
+
+      // Inversion (flip) des coordonnées y dans la matrice
+      const flippedMatrice = matricepoints.map(([x, y]) => [y, -x]);
+      //console.log("flippedMatrice", flippedMatrice);
+
+      const points = flippedMatrice.map(([x, y]) => new THREE.Vector3(x, y));
+      //console.log("points", points);
+
+      // Mise à l'échell
       for (let i = 0; i < points.length; i++) {
         let pointemp = await this.point2Dto3D(points[i].x, points[i].y);
 
@@ -1485,12 +1576,13 @@ export default {
         points[i].y = pointemp.z - center.z;
       }
 
+      // Le reste de votre code...
+
 
 
       // Épaisseur de l'objet
       const depth = 2;
       const shape = new THREE.Shape(points);
-      console.log("shape", shape)
 
       const geome = new THREE.ExtrudeGeometry(shape, { depth: depth, bevelEnabled: false });
       geome.rotateX(-Math.PI/2)
@@ -1503,7 +1595,6 @@ export default {
       mesh.receiveShadow = true;
       mesh.name = name;
       mesh.userData = {uuid: emp_uuid};
-      console.log("mesh", mesh);
       return mesh;
     },
 
@@ -1587,6 +1678,7 @@ export default {
     animate() {
       requestAnimationFrame(this.animate);
       this.controls.update();
+      this.updateCameraPosition();
       this.renderer.render(this.scene, this.camera);
     },
 
@@ -1612,6 +1704,24 @@ export default {
       }
     },
 
+    updateCameraPosition() {
+      if (this.controls.target.y < 0) {
+        this.controls.target.y = 0;
+      }
+      if(this.controls.target.x >150){
+        this.controls.target.x = 150;
+      }
+      if(this.controls.target.x < -150){
+        this.controls.target.x = -150;
+      }
+      if(this.controls.target.z >150){
+        this.controls.target.z = 150;
+      }
+      if(this.controls.target.z < -150){
+        this.controls.target.z = -150;
+      }
+    }
+
   },
   computed:{
     uniqueTypes() {
@@ -1636,6 +1746,16 @@ export default {
     this.renderer.setSize(window.innerWidth, scene1Container.offsetHeight);
     scene1Container.appendChild(this.renderer.domElement);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+
+    this.controls.target.set(0, 10, 0);
+
+    this.controls.maxPolarAngle = Math.PI / 2.1;
+
+    this.controls.minPolarAngle = -Math.PI / 1.9
+
+    this.controls.mixZoom = 50;
+
+    this.controls.maxDistance = 250;
 
 
 
@@ -1886,6 +2006,8 @@ input:checked + .slider:before {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+
 
 
 .custom-btn {

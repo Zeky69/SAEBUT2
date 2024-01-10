@@ -93,11 +93,12 @@ CREATE TABLE DROITS_DE_GROUPES(
     );
 
 
-    CREATE TABLE tags(
-       id_tag VARCHAR(50),
-       libelle VARCHAR(50),
-       PRIMARY KEY(id_tag)
-    );
+CREATE TABLE tags(
+   id_tag VARCHAR(50),
+   libelle VARCHAR(50),
+   id_batiment VARCHAR(50),
+   PRIMARY KEY(id_tag)
+);
 
     CREATE TABLE prestataire(
        id_prestataire SERIAL,
@@ -112,20 +113,18 @@ CREATE TABLE DROITS_DE_GROUPES(
        FOREIGN KEY(etat_id) REFERENCES ETAT(etat_id)
     );
 
-
-
-    CREATE TABLE emplacement(
-        id_emplacement VARCHAR(50),
-        nom VARCHAR(50),
-        description VARCHAR(255),
-        posx DECIMAL(24,17),
-        posy DECIMAL(24,17),
-        posz DECIMAL(24,17),
-        rotationx INT,
-        matricePoints JSON,
-        batiment_id VARCHAR(50),
-        PRIMARY KEY(id_emplacement)
-    );
+CREATE TABLE emplacement(
+    id_emplacement VARCHAR(50),
+    nom VARCHAR(50),
+    description VARCHAR(255),
+    posx DECIMAL(24,17),
+    posy DECIMAL(24,17),
+    posz DECIMAL(24,17),
+    rotationx INT,
+    matricePoints JSON,
+    batiment_id VARCHAR(50),
+    PRIMARY KEY(id_emplacement)
+);
 
 
     CREATE TABLE batiment(
@@ -138,7 +137,7 @@ CREATE TABLE DROITS_DE_GROUPES(
          posy DECIMAL(24,17),
          posz DECIMAL(24,17),
          rota DECIMAL(24,17),
-         prestataire_id INT,
+         prestataire_id INT NOT NULL,
          image_path TEXT,
          type_id VARCHAR(50),
          PRIMARY KEY(id_batiment),
@@ -162,37 +161,19 @@ CREATE TABLE DROITS_DE_GROUPES(
         FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)
     );
 
-    CREATE TABLE stand(
-       id_stand VARCHAR(50),
-       description VARCHAR(50),
-       id_emplacement VARCHAR(50) NOT NULL,
-       PRIMARY KEY(id_stand),
-       UNIQUE(id_emplacement),
-       FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement)
-    );
+CREATE TABLE toilette(
+   id_toilette VARCHAR(50),
+   PRIMARY KEY(id_toilette),
+   id_batiment VARCHAR(50) NOT NULL UNIQUE,
+   FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment)
+);
 
-    CREATE TABLE toilette(
-       id_toilette VARCHAR(50),
-       description VARCHAR(255),
-       nom VARCHAR(50),
-       name VARCHAR(50),
-       posx DECIMAL(24,17),
-       posy DECIMAL(24,17),
-       posz DECIMAL(24,17),
-       rota DECIMAL(24,17),
-       PRIMARY KEY(id_toilette)
-    );
-
-    CREATE TABLE scene(
-       id_scene VARCHAR(50),
-       description VARCHAR(50),
-       nom VARCHAR(50),
-       name VARCHAR(50),
-       posx DECIMAL(24,17),
-       posy DECIMAL(24,17),
-       posz DECIMAL(24,17),
-       rota DECIMAL(24,17),
-       PRIMARY KEY(id_scene)
+CREATE TABLE scene(
+   id_scene VARCHAR(50),
+   description VARCHAR(50),
+   PRIMARY KEY(id_scene),
+   id_batiment VARCHAR(50) NOT NULL UNIQUE,
+   FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment)
     );
 
 
@@ -220,13 +201,6 @@ CREATE TABLE DROITS_DE_GROUPES(
        FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement)
     );
 
-    CREATE TABLE vend(
-       id_stand VARCHAR(50),
-       id_produit VARCHAR(50),
-       PRIMARY KEY(id_stand, id_produit),
-       FOREIGN KEY(id_stand) REFERENCES stand(id_stand),
-       FOREIGN KEY(id_produit) REFERENCES produit(id_produit)
-    );
 
     CREATE TABLE accueil(
        id_scene VARCHAR(50),

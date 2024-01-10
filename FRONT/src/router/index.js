@@ -50,7 +50,15 @@ const routes = [
   }, {path: '/testMap',
     name: 'testMap',
     component: () => import(/* webpackChunkName: "about" */ '../views/TestMap.vue')
-  }, {
+  }, {path: '/MapPresta',
+    name: 'MapPresta',
+    component: () => import(/* webpackChunkName: "about" */ '../views/TempMapPresta.vue')
+  },
+  {path: '/Map2DAdmin',
+    name: 'Map2DAdmin',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Map2DAdmin.vue')
+  },
+  {
     path: '/restauration',
     name: 'restauration',
     component: () => import(/* webpackChunkName: "about" */ '../views/ReservationView.vue')
