@@ -65,7 +65,7 @@ INSERT INTO mots_de_passe_utilisateurs(User_Id, Password) VALUES
 
 INSERT INTO prestataire ( description, nom, id_user, etat_id,page_info ,photo_profil) VALUES
 ('admin','belforaine', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'fnAdmin' AND LAST_NAME = 'lnAdmin'),2,NULL),
-('Prestataire Description de macdonald', 'Mcdonald', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'), 2,'<p>Ca marche de zinzin</p>','macdo.jpeg'),
+('Prestataire Description de mcdonald', 'Mcdonald', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'), 2,'<p>Ca marche de zinzin</p>','macdo.jpeg'),
 ('Prestataire Description de pixar', 'Pixar', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Jane' AND LAST_NAME = 'Smith'), 2,NULL,'Disnet.jpeg'),
 ('Prestataire Description de disney', 'Disney', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Bob' AND LAST_NAME = 'Johnson'), 2,NULL,'pixar.jpg');
 
