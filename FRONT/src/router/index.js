@@ -72,6 +72,10 @@ const routes = [
         component: ()=>import ('../views/PrestataireProfile.vue')
       },
       {
+        path: 'mypage',
+        component: ()=>import ('../views/PrestateView.vue')
+      },
+      {
         path:'*',
         name: 'admin.notFound,',
         component: () => import('../views/NotFound.vue')

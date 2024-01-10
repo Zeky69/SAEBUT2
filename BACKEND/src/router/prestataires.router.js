@@ -5,9 +5,7 @@ const prestaController = require('../controllers/prestataires.controllers');
 const prestaMiddlewares = require('../middlewares/prestataire.middlewares');
 var router = express.Router();
 
-router.get('/', (req, res) => {
-    res.send('Hello world');
-});
+router.get('/', prestaController.getPrestatairesEtatAccepte);
 
 
 

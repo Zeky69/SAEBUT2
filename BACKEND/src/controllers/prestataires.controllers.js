@@ -30,3 +30,16 @@ exports.updatePrestatairePage = async (req,res) => {
         return res.status(500).send(error.message || "Internal error");
     }
 }
+
+exports.getPrestatairesEtatAccepte = async (req,res) => {
+    try {
+        let reponse = await prestataireService.getPrestatairesEtatAccepte();
+        if (reponse) {
+            return res.status(200).send(reponse);
+        }
+        return res.status(401).send("Pas d'information trouvé");
+    }
+    catch (error) {
+        return res.status(500).send(error.message || "Internal error");
+    }
+}

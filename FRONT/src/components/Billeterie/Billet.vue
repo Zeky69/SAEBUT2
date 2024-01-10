@@ -47,6 +47,7 @@ export default {
         {
           type: String,
           required: false,
+
         },
   },
   data: () =>  ({
@@ -58,15 +59,17 @@ export default {
   mounted() {
     if (this.idselect !== null){
       this.selected = this.items.find((item) => item.id === this.idselect);
-    }
+    }else
+      this.selected = null;
+    console.log(this.selected);
   }
   ,
   methods: {
     selection(item){
-      if (this.selected === null){
+      if (!this.selected || this.idselect === null){
         this.selected = item;
       }
-      else if (this.selected.id === item.id){
+      else if (this.selected && this.selected.id === item.id){
         this.selected = null;
       }
       else{

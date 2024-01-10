@@ -4,6 +4,24 @@ const pool = require("../database/db.js")
 
 
 
+
+const getPrestatairesEtatAccepte = async () => {
+    let resultat = null;
+    const client = await pool.connect();
+    try {
+        let sql = 'select * from prestataire WHERE etat_id = 2 ORDER BY id_prestataire ASC';
+        resultat = await client.query(sql);
+        return resultat.rows;
+    }
+    catch (error) {
+        console.log(error);
+        return error;
+    }
+    finally {
+        client.release();
+    }
+}
+
 const getPrestataireById = async (id) => {
     let resultat = null;
     const client = await pool.connect();
@@ -45,8 +63,11 @@ const updatePrestatairePage = async (prestataire) => {
 
 
 
+
+
 module.exports = {
     getPrestataireById : getPrestataireById,
-    updatePrestatairePage :updatePrestatairePage
+    updatePrestatairePage :updatePrestatairePage,
+    getPrestatairesEtatAccepte :getPrestatairesEtatAccepte
 }
 

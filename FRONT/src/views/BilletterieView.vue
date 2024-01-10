@@ -29,7 +29,7 @@ export default defineComponent({
 
   created() {
     this.idselect = this.$route.params.idselect;
-    if (this.idselect !== null){
+    if (this.idselect !== undefined){
       this.selected = this.items.find((item) => item.id === this.idselect);
     }
   },
