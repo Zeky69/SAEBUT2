@@ -23,17 +23,17 @@
         <div class="card-prestate"  v-for="(prestate,index) in filterList" :key="index">
           <div class="card-prestate-container">
             <div class="card-header">
-              <img  :src="prestate.image" alt="stephan">
+              <img  :src="prestate.photo_profil ? prestate.photo_profil : defaultImagePath" :alt="prestate.photo_profil ? prestate.photo_profil : defaultImagePath" >
             </div>
             <div class="card-text">
-              <h3>{{prestate.name}}</h3>
+              <h3>{{prestate.nom}}</h3>
             </div>
             <div class="card-type" :class="getColorBackground(prestate.type)">
               <span class="cerlce" :class="getColorCercle(prestate.type)" ></span>
               <p>{{prestate.type}}</p>
             </div>
             <div class="card-bottom">
-              <router-link :to="{ name: 'prestate', params: { id: prestate.id } }">
+              <router-link :to="{ name: 'prestate', params: { id: prestate.id_prestataire } }">
                   <button class="btn-card">Voir le profil</button>
               </router-link>
             </div>
@@ -58,77 +58,81 @@
 
 <script>
 import BarSelect2 from "@/components/barSelect2.vue";
+import {getPrestataires} from "@/services/prestataire.service";
 
 export default {
   name: 'AllCardPrestate',
   components: {BarSelect2},
+
   data: () => ({
       filtre: {
       nom: '',
       type: '',
     },
-    ListPresate: [
-        {
-      id: 1,
-      name: "Zekeriya Maxime",
-      type: "Animateur",
-      image: "stephane.jpg"
-    },
-      {
-        id: 2,
-        name: "Mhammed Djilsi",
-        type: "Attraction",
-        image: "stephane.jpg"
-      },
-      {
-        id: 3,
-        name: "Stephane Stefan",
-        type: "Restaurateur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 4,
-        name: "Joseph Sansèphe",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 5,
-        name: "Stephan",
-        type: "Attraction",
-        image: "stephane.jpg"
-      },
-      {
-        id: 6,
-        name: "Stephan",
-        type: "Animateur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 7,
-        name: "Stephan",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 8,
-        name: "Stephan",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 9,
-        name: "Stephan",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 10,
-        name: "Stephan",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      }],
+    // ListPresate: [
+    //     {
+    //   id: 1,
+    //   name: "Zekeriya Maxime",
+    //   type: "Animateur",
+    //   image: "stephane.jpg"
+    // },
+    //   {
+    //     id: 2,
+    //     name: "Mhammed Djilsi",
+    //     type: "Attraction",
+    //     image: "stephane.jpg"
+    //   },
+    //   {
+    //     id: 3,
+    //     name: "Stephane Stefan",
+    //     type: "Restaurateur",
+    //     image: "stephane.jpg"
+    //   },
+    //   {
+    //     id: 4,
+    //     name: "Joseph Sansèphe",
+    //     type: "Traiteur",
+    //     image: "stephane.jpg"
+    //   },
+    //   {
+    //     id: 5,
+    //     name: "Stephan",
+    //     type: "Attraction",
+    //     image: "stephane.jpg"
+    //   },
+    //   {
+    //     id: 6,
+    //     name: "Stephan",
+    //     type: "Animateur",
+    //     image: "stephane.jpg"
+    //   },
+    //   {
+    //     id: 7,
+    //     name: "Stephan",
+    //     type: "Traiteur",
+    //     image: "stephane.jpg"
+    //   },
+    //   {
+    //     id: 8,
+    //     name: "Stephan",
+    //     type: "Traiteur",
+    //     image: "stephane.jpg"
+    //   },
+    //   {
+    //     id: 9,
+    //     name: "Stephan",
+    //     type: "Traiteur",
+    //     image: "stephane.jpg"
+    //   },
+    //   {
+    //     id: 10,
+    //     name: "Stephan",
+    //     type: "Traiteur",
+    //     image: "stephane.jpg"
+    //   }],
+    ListPresate : null,
     filterList: [],
+    defaultImagePath: 'stephane.jpg'
   }),
   methods: {
     goToPrestate(id){
@@ -186,6 +190,13 @@ export default {
   }
 ,
   mounted() {
+
+    getPrestataires().then((response) => {
+      this.ListPresate = response;
+      this.filterList = this.ListPresate;
+      console.log(this.ListPresate);
+    })
+
     document.addEventListener('dragstart', function (event) {
       event.preventDefault();
     }, false)

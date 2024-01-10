@@ -26,19 +26,19 @@ export default {
       },
       {
         title: "Commandes",
-        path: "/admin/commandes",
+        path: "/prestataire/mypage",
       },
       {
         title: "Produits",
-        path: "/admin/produits",
+        path: "/prestataire/produits",
       },
       {
         title: "Prestataires",
-        path: "/admin/prestataires",
+        path: "/prestataire/prestataires",
       },
       {
         title: "Mes reservations",
-        path: "/admin/statistiques",
+        path: "/prestataire/statistiques",
       },
       {
         title: "Profil",
