@@ -61,11 +61,46 @@ const updatePrestatairePage = async (prestataire) => {
 
 }
 
+async function updateUserProfile(user_id, nomEntreprise, description,photoDeProfil,prenom,nom,motDePasse){
+    const client = await pool.connect();
+
+    try {
+        await client.query('BEGIN');
+
+        let query = `UPDATE prestataire 
+        SET nom =$1, description=$2, photo_profil=$3 
+        WHERE id_user=$4;`;
+
+        let res = await client.query(query, [nomEntreprise, description, photoDeProfil,user_id]);
+
+        query = `UPDATE utilisateurs
+        SET LAST_NAME=$1, FIRST_NAME=$2
+        WHERE user_id=$3;`;
+
+        res = await client.query(query, [nom, prenom, user_id]);
+
+        if(motDePasse){
+            query = `UPDATE MOTS_DE_PASSE_UTILISATEURS 
+            SET Password=$1 where user_id=$2;`;
+    
+            res = await client.query(query, [motDePasse, user_id]);
+            await client.query('COMMIT');
+        }
+
+        console.log("Insertion réussit !")
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.log(err);
+    } finally {
+        client.release();
+    }
+}
 
 
 
 
 module.exports = {
+    updateUserProfile,
     getPrestataireById : getPrestataireById,
     updatePrestatairePage :updatePrestatairePage,
     getPrestatairesEtatAccepte :getPrestatairesEtatAccepte
