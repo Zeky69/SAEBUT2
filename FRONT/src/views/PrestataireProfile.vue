@@ -4,7 +4,7 @@
 
     <div class="modification">
       <div class="edit-image card">
-        <img :src="photoDeProfilChoisi" id="photo-profil">
+        <img :src="photoDeProfilChoisi" id="photo-profil" >
         <label for="images" class="drop-container" id="dropcontainer">
           <span class="drop-title">Déposez votre photo ici !</span>
           or
@@ -112,6 +112,7 @@ export default {
 
       this.nomEntreprise = presta.nom;
       this.description = presta.description;
+      if(presta.photo_profil)
       presta.photo_profil.replace('/','')
       this.photoDeProfil = '/' + presta.photo_profil;
       this.photoDeProfilChoisi = this.photoDeProfil;
@@ -199,6 +200,7 @@ export default {
   border-radius: 1000px;
   object-fit: cover;
   object-position: center;
+  background-color: #cacaca;
 }
 
 input[type=file]{
