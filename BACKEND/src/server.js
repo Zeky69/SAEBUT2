@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const fileUpload = require('express-fileupload');
 const prestaRoutes = require('./router/prestataires.router');
 const adminRoutes = require('./router/admin.router');
 const userRoutes = require('./router/utilisateur.router');
@@ -8,7 +9,10 @@ const sceneRoutes = require('./router/scnene.router');
 const map2DRoutes = require('./router/map2D.router');
 const bodyParser = require('body-parser');
 const resaRoutes = require('./router/reservation.router')
+const imageRoutes = require('./router/image.router')
+
 const cors = require('cors');
+const path = require("path");
 
 dotenv.config();
 const port = process.env.PORT || 3000; // process.env.PORT est undefined jcp pk
@@ -18,6 +22,7 @@ app.use(express.json());//decode les requete qui contiennent du json
 
 
 app.use(bodyParser.json());
+app.use(fileUpload());
 
 // app.use(cors({
 //     origin: 'http://localhost:8080', // Remplacez par votre URL front-end
@@ -35,6 +40,16 @@ app.use("/mapPrestataires", mapPrestatairesRoutes);
 app.use("/scene", sceneRoutes);
 app.use("/user", userRoutes);
 app.use("/reservation", resaRoutes);
+
+app.use('/image', imageRoutes);
+
+
+
+
+
+
+
+
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);

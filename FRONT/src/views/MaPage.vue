@@ -4,6 +4,7 @@
   <div class="prestate-container">
     <prestate-component :prestate="prestataire" :mode="mode" p ref="prestate"  @change-mode="changeMode"  @valide="valide"/>
     </div>
+
   </div>
 </template>
 
@@ -17,7 +18,8 @@ export default {
   props: [],
   data: () => ({
     mode: '1',
-    prestataire: null
+    prestataire: null,
+    selectedFile: null,
 
   }),
   computed: { },
@@ -68,9 +70,9 @@ export default {
         console.log(res);
       });
 
-    },
-  },
-};
+    }
+  }
+}
 
 </script>
 <style scoped>

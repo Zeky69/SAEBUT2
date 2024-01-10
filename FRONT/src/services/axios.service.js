@@ -21,12 +21,16 @@ Ces trois cas sont traités par une unique fonction handleError().
 
 */
 
+const baseURL = 'https://api.codeky.fr'  // URL de base de l'API
+// const baseURL = 'http://localhost:3000'  // URL de base de l'API
 
 // creation d'un agent axios, avec une config. pour atteindre l'API
 const axiosAgent = axios.create({
-    //baseURL: 'https://api.codeky.fr'
-    baseURL: 'http://localhost:3000'
+    // baseURL: 'https://api.codeky.fr'
+    baseURL: baseURL
 });
+
+
 
 function handleError(serviceName, err) {
     if (err.response) {
@@ -151,12 +155,32 @@ async function putRequest(uri, data, name){
     return response.data;
 }
 
+async function postFileRequest(uri, data, name) {
+    let response = null
+    try {
+        response = await axiosAgent.post(uri, data, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+    } catch (err) {
+        // le catch se fait si le serveur répond avec une erreur type 4XX, 5XX, ou bien si le serveur est off
+        // dans ce cas, on appelle la méthode pour traiter ces types d'erreurs
+        response = handleError(name, err);
+    }
+    // on retourne les données dans response, qu'il y ait eu une erreur ou pas.
+    return response.data;
+}
+
+
 
 export {
     getRequest,
     postRequest,
     patchRequest,
     deleteRequest,
-    putRequest
+    putRequest,
+    postFileRequest,
+    baseURL
 }
 

@@ -210,6 +210,7 @@ export default defineComponent({
    backdrop-filter: blur(10px);
    padding: 25px;
    width: 90%;
+   margin-bottom: 100px;
  }
 
  .title-body{

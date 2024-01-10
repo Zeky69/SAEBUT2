@@ -23,7 +23,7 @@
         <div class="card-prestate"  v-for="(prestate,index) in filterList" :key="index">
           <div class="card-prestate-container">
             <div class="card-header">
-              <img  :src="prestate.photo_profil ? prestate.photo_profil : defaultImagePath" :alt="prestate.photo_profil ? prestate.photo_profil : defaultImagePath" >
+              <img  :src="getImage(prestate.photo_profil)" :alt="prestate.photo_profil ? prestate.photo_profil : defaultImagePath" >
             </div>
             <div class="card-text">
               <h3>{{prestate.nom}}</h3>
@@ -59,6 +59,7 @@
 <script>
 import BarSelect2 from "@/components/barSelect2.vue";
 import {getPrestataires} from "@/services/prestataire.service";
+import {getImage} from "@/services/image.service";
 
 export default {
   name: 'AllCardPrestate',
@@ -135,6 +136,7 @@ export default {
     defaultImagePath: 'stephane.jpg'
   }),
   methods: {
+    getImage,
     goToPrestate(id){
       this.$router.push({path: '/prestate/', params: {id: id}})
     },

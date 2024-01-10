@@ -81,7 +81,7 @@ const routes = [
       },
       {
         path: 'mypage',
-        component: ()=>import ('../views/PrestateView.vue')
+        component: ()=>import ('../views/MaPage.vue')
       },
       {
         path:'*',
@@ -94,7 +94,7 @@ const routes = [
   {
     path: '/prestate/:id',
     name: 'prestate',
-    component: () => import('../views/PrestateView.vue'),
+    component: () => import('../views/MaPage.vue'),
     props: true
     },
 
