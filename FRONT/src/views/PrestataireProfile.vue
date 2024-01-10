@@ -13,7 +13,7 @@
         </label>
 
 
-        <button class="btn accept-btn" @click="accept">Valider</button>
+        <button class="btn accept-btn" @click="changeImage">Valider</button>
       </div>
 
       <div class="edit-content card">
@@ -83,6 +83,7 @@
 import PageTitre from "@/components/Admin/PageTitre.vue";
 import {mapState, mapActions} from "vuex";
 import {updatePrestataire} from "@/services/prestataire.service";
+import {getImage,uploadImage,deleteImage} from "@/services/image.service"
 
 export default {
   name: 'PrestataireProfile',
@@ -91,12 +92,14 @@ export default {
     description: '',
     photoDeProfil: '',
     photoDeProfilChoisi: null,
+    photoChoisiName:'',
     prenom: '',
     nom: '',
     motDePasse: '',
     isEditing: false, // New state to track editing mode
     showPassword:false,
-    textPassword:'Afficher mot de passe'
+    textPassword:'Afficher mot de passe',
+    file:null
   }),
   components: {
     PageTitre,
@@ -112,16 +115,19 @@ export default {
 
       this.nomEntreprise = presta.nom;
       this.description = presta.description;
-      if(presta.photo_profil)
-      presta.photo_profil.replace('/','')
-      this.photoDeProfil = '/' + presta.photo_profil;
-      this.photoDeProfilChoisi = this.photoDeProfil;
+
+        this.photoDeProfil = presta.photo_profil;
+        this.photoChoisiName = this.photoDeProfil;
+        this.photoDeProfilChoisi = getImage(this.photoChoisiName);
+
+
       this.prenom = this.fname;
       this.nom = this.lname;
     },
     onFileSelected(eve) {
-      const file = eve.target.files[0];
-      this.photoDeProfilChoisi = URL.createObjectURL(file);
+      this.file = eve.target.files[0];
+      this.photoChoisiName = this.file.name;
+      this.photoDeProfilChoisi = URL.createObjectURL(this.file);
     },
     toggleEditing() {
       this.isEditing = !this.isEditing;
@@ -135,8 +141,20 @@ export default {
     },cancel(){
       this.isEditing = false;
       this.getInformation();
-    },async accept(){
-      this.photoDeProfil = this.photoDeProfil.replace('/','')
+    },changeImage() {
+      try {
+        if(this.photoDeProfil)
+          deleteImage(this.photoDeProfil)
+        if(this.file){
+          this.photoDeProfil = this.photoChoisiName;
+          uploadImage(this.file);
+        }
+        this.accept();
+      } catch (error) {
+        console.error("Une erreur est survenue lors du changement d'image:", error.message);
+      }
+    },
+    async accept(){
       const data={
         nomEntreprise:this.nomEntreprise,
         description : this.description,
@@ -200,7 +218,6 @@ export default {
   border-radius: 1000px;
   object-fit: cover;
   object-position: center;
-  background-color: #cacaca;
 }
 
 input[type=file]{
