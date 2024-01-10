@@ -9,7 +9,7 @@ const getImage = async (req, res) => {
          if (!fs.existsSync(file)) {
              return { error: 0 , data: path.join(__dirname, '../upload', 'default.png') };
             }
-         return file;
+         return {error:0 , data:file};
     } catch (error) {
         console.error(error);
         return { error: 1 , data: "Server Error"};

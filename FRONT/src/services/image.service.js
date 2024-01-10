@@ -1,7 +1,7 @@
-import {getRequest, postFileRequest, deleteRequest} from "@/services/axios.service";
+import {baseURL, postFileRequest, deleteRequest} from "@/services/axios.service";
 
-async function getImage(filename) {
-    return await getRequest('/image/' + filename, 'GETIMAGE')
+function getImage(filename) {
+    return baseURL + '/image/' + filename
 }
 
 async function uploadImage(file) {
