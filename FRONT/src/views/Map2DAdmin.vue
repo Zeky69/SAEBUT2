@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import TestMap from '../components/Map2Dedition.vue';
+import TestMap from '../components/Map2D/Map2Dedition.vue';
 
 export default {
   components: {

@@ -137,7 +137,7 @@ CREATE TABLE emplacement(
          posy DECIMAL(24,17),
          posz DECIMAL(24,17),
          rota DECIMAL(24,17),
-         prestataire_id SERIAL,
+         prestataire_id INT NOT NULL,
          image_path TEXT,
          type_id VARCHAR(50),
          PRIMARY KEY(id_batiment),

@@ -148,8 +148,8 @@ import 'tippy.js/dist/tippy.css';
 
 
 //importer service/mapPrestataires.js
-import {getAllEmp,getOneBatUUID,getBatbyEmpUUID,getOneEmpUUID,getOneEmp,deleteBat, updateEmpFree, createBat, getAllBat} from '../services/mapPrestataire.service.js';
-import {getEvent,createEvent,getEventUUID,deleteEvent} from '../services/scene.service.js';
+import {getAllEmp,getOneBatUUID,getBatbyEmpUUID,getOneEmpUUID,getOneEmp,deleteBat, updateEmpFree, createBat, getAllBat} from '../../services/mapPrestataire.service.js';
+import {getEvent,createEvent,getEventUUID,deleteEvent} from '../../services/scene.service.js';
 
 /*   getAllEmp,
 getOneEmp
@@ -218,6 +218,7 @@ export default {
           console.log("thisslertedEvent", this.selectedEvent.id_prestataire)
           console.log("thisprestat", this.prestataire)
             if (info.event._def.publicId == this.selectedEvent.id_event) {
+              console.log("jklsfjcklsdvnc,kqsdcvnk,qsdnc qsd,k n,qsdn jkqsnjkdvnqkdklalllo")
               let id = this.selectedEvent.id_scene;
               this.selectedEvent = 0;
               await this.refreshcalendare(id);
@@ -225,10 +226,15 @@ export default {
               this.uuidsceneSelect = 0;
             } else {
               const event = await getEventUUID(info.event._def.publicId);
+              console.log(event)
               this.selectedEvent = event;
               this.uuidsceneSelect = event.id_scene;
+              console.log("this.prestatnorselect",this.prestataire)
+              console.log("this.selectedEvent notselect",this.selectedEvent)
               if (this.selectedEvent.id_prestataire == this.prestataire) {
-                await this.refreshcalendare(this.selectedEvent.id_scene);
+                let idscenestring = this.selectedEvent.id_scene
+                console.log("id scene jdklsqjfkljsqlmfjqskljfqskl id", idscenestring)
+                await this.refreshcalendare(idscenestring)
               }else{
                 this.selectedEvent = 0;
                 this.uuidsceneSelect = 0;
@@ -259,7 +265,7 @@ export default {
 
       },
       uuidsceneSelect: 0,
-
+      uuidbat: 0,
       eventScene: [],
       description_event: "",
       description_batiment: "",
@@ -305,7 +311,7 @@ export default {
       groupe_sol: null,
       ambientLightscene2: null,
       scene2Container: null,
-      prestataire: "calixte",
+      prestataire: 1,
       testshape: [],
       checkedtype: [],
       tabbatlist: [],
@@ -369,24 +375,35 @@ export default {
       console.log("end", end)
       console.log("name", name)
       console.log("description", description)
-      let uuid = this.uuidsceneSelect;
 
-      console.log("uuid", uuid)
+      console.log("selectab", this.selectab[0])
+      let batuuid = this.selectab[0]["obj"].userData.uuid
+
+
+      console.log("kdklsdq bat", batuuid)
+
+
+      let bat = await getOneBatUUID(batuuid);
+
+      console.log("bat", bat)
+
+      let sceneuuid = bat[0].id_scene;
+
 
       //[uuid, info.description, info.nom, info.id_scene, info.couleur, info.etat, info.date_debut, info.date_fin]);
 
       let databdd = {
-        id_scene: uuid,
+        id_scene: sceneuuid,
         date_debut: start,
         date_fin: end,
         nom: name,
         description: description,
         etat: "waiting",
         couleur: "red",
-        id_prestataire: "calixte",
+        id_prestataire: 1,
       }
       console.log("databdd", databdd)
-      let eventcreated = await createEvent(databdd, uuid);
+      let eventcreated = await createEvent(databdd, sceneuuid);
 
 
 
@@ -408,7 +425,7 @@ export default {
 
       console.log("this.currentEvents bef refresh", this.currentEvents)
 
-      this.refreshcalendare(uuid);
+      this.refreshcalendare(sceneuuid);
       this.showAddEvent()
     },
 
@@ -663,8 +680,8 @@ export default {
 
     async refreshcalendare( uuid) {
       this.currentEvents = [];
+
       this.eventScene = await getEvent(uuid);
-      console.log("eventScene", this.eventScene)
       for (let i = 0; i < this.eventScene.length; i++) {
         let data = await this.eventParser(this.eventScene[i]);
         this.currentEvents.push(data);
@@ -725,73 +742,78 @@ export default {
         if (this.selectedObject.name.slice(0,3) == "bat") {
           console.log("batiment", this.selectedObject.name)
           console.log("batiment", this.selectedObject.name.slice(4,5))
-          if(this.selectedObject.name.slice(4,5) == "3" || this.selectedObject.name.slice(4,5) == "6"){
-            if (this.selectedObject.name.slice(4,5) == "3"){
+
+
+          let found;
+          let batiment;
+          found = await getOneBatUUID(this.selectedObject.userData.uuid);
+          console.log("found batiment click", found)
+          if (found != []){
+            batiment = found
+            found = true;
+          }
+          else {
+            found = false;
+          }
+
+          if (this.selectab.length == 0 && found) {
+            // Toggle the 'active' class on the selectmenu div
+
+
+            this.selectedObject.material.color.setHex(0xff0000);
+            var info
+
+            if(batiment[0].type_id == 3){
               console.log("batiment salle de conf")
               document.getElementById('selectmenu').classList.toggle('closed');
               document.getElementById('selectmenu').classList.toggle('supr');
               document.getElementById('scene').classList.toggle('active');
               document.getElementById('scene1').classList.toggle('active');
-              this.uuidsceneSelect = this.selectedObject.userData.uuid;
-              this.refreshcalendare(this.selectedObject.userData.uuid)
-              console.log("this.uuidsceneSelect", this.selectedObject)
 
-            }else{
-              console.log("batiment toilette")
-            }
 
-            }
-          else{
-            let found;
-            found = await getOneBatUUID(this.selectedObject.userData.uuid);
-            console.log("found", found)
-            if (found != []){
-              found = true;
-            }
-            else {
-              found = false;
-            }
 
-            if (this.selectab.length == 0 && found) {
-              // Toggle the 'active' class on the selectmenu div
+
+              let uuidScene = batiment[0].id_scene
+              console.log(uuidScene)
+              this.uuidsceneSelect = uuidScene
+              this.refreshcalendare(uuidScene)
+              info = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "conf"}
+            }
+            if(batiment[0].type_id != 6 && batiment[0].type_id != 3){
+              info = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "bat"}
               document.getElementById('selectmenu').classList.toggle('closed');
               document.getElementById('selectmenu').classList.toggle('supr');
               document.getElementById('remove').classList.toggle('active');
               document.getElementById('scene1').classList.toggle('active');
+            }
+            this.selectab.push(info);
+          } else {
+            if (this.selectedObject.uuid == this.selectab[0]["obj"].uuid) {
+              // Toggle the 'active' class on the selectmenu div
+              document.getElementById('selectmenu').classList.toggle('closed');
 
-              this.selectedObject.material.color.setHex(0xff0000);
-
-              var info = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "bat"}
-              this.selectab.push(info);
+              document.getElementById('scene1').classList.toggle('active');
+              //wait 300ms
+              setTimeout(() => {
+                document.getElementById('remove').classList.toggle('active');
+                document.getElementById('selectmenu').classList.toggle('supr');
+              }, 300);
+              this.selectedObject.material = this.selectab[0]["mat"].clone()
+              this.selectedObject.material.color.setHex(this.selectab[0]["col"])
+              this.selectab.pop(0)
+              this.selectedObject = 0
             } else {
-              if (this.selectedObject.uuid == this.selectab[0]["obj"].uuid) {
-                // Toggle the 'active' class on the selectmenu div
-                document.getElementById('selectmenu').classList.toggle('closed');
-
-                document.getElementById('scene1').classList.toggle('active');
-                //wait 300ms
-                setTimeout(() => {
-                  document.getElementById('remove').classList.toggle('active');
-                  document.getElementById('selectmenu').classList.toggle('supr');
-                }, 300);
-                this.selectedObject.material = this.selectab[0]["mat"].clone()
-                this.selectedObject.material.color.setHex(this.selectab[0]["col"])
-                this.selectab.pop(0)
-                this.selectedObject = 0
-              } else {
-                console.log("un objet est deja select")
-                this.selectedObject = 0
-              }
+              console.log("un objet est deja select")
+              this.selectedObject = 0
             }
 
           }
-
-
 
         } else {
           if (this.selectedObject.name.slice(0,3) == "emp") {
             let found;
             found = await getOneEmp({name: this.selectedObject.name, posx: this.selectedObject.position.x, posz: this.selectedObject.position.z});
+            console.log("found emp", found)
             if (found != []){
               found = true;
             }
@@ -811,6 +833,7 @@ export default {
               console.log("this.selectedObject", this.selectedObject)
                 var info2 = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "emp"}
                 this.selectab.push(info2);
+                console.log("this.selectab push", this.selectab)
             } else {
               if (this.selectedObject.name == this.selectab[0]["obj"].name) {
                 // Toggle the 'active' class on the selectmenu div
@@ -912,7 +935,7 @@ export default {
           }, 300);
 
         }
-        console.log("this.selectab", this.selectab)
+        console.log("this.selectabbefortype", this.selectab)
         //var uuid = this.selectab[0]["obj"].uuid;
         if (this.selectab[0]["type"] == "emp") {
           let found;
@@ -937,6 +960,8 @@ export default {
           console.log(this.batiment[this.idbatafficher].name)
           console.log("load", this.loaded)
           var batiment_bdd_found = await this.findObjectByName(this.loaded, this.batiment[this.idbatafficher].name)
+          console.log("batiment_bdd_found", batiment_bdd_found)
+          console.log("selectab", this.selectab)
           var batimentadd = batiment_bdd_found.clone();
           var mat = batimentadd.material.clone();
           var battobdd = batimentadd.toJSON()
@@ -966,7 +991,7 @@ export default {
             posy: y,
             posz: posz,
             rota: (this.rotation * Math.PI / 180),
-            prestataire: this.prestataire,
+            prestataire: 1,
             description: this.description_batiment,
             type: id_type,
             status: "waiting",
@@ -1094,14 +1119,23 @@ export default {
       }
 
       this.batiment_bdd = await getAllBat();
-      console.log("batiment", this.batiment_bdd)
+      console.log("batiments", this.batiment_bdd)
+      console.log("batiments", this.batiment)
       for (let i = 0; i< this.batiment_bdd.length; i++) {
         for (let j = 0; j < this.batiment.length; j++) {
+
           if (this.batiment_bdd[i].name == this.batiment[j].name) {
+            console.log("batiment", this.batiment_bdd[i])
+            console.log(this.batiment[j].type)
+            console.log(this.batiment[j].type === "Salle de conférence")
 
             var batiment_found = await this.findObjectByName(this.loaded, this.batiment[j].name)
+            console.log(batiment_found)
             var batiment_clone = batiment_found.clone();
             let mat = batiment_clone.material.clone();
+            let point3D = this.point2Dto3D(this.batiment_bdd[i].posx,this.batiment_bdd[i].posz)
+            console.log("point", point3D)
+
             batiment_clone.position.set(this.batiment_bdd[i].posx, this.batiment_bdd[i].posy, this.batiment_bdd[i].posz);
             batiment_clone.material.metalness = 0;
             batiment_clone.material = mat;
@@ -1109,10 +1143,12 @@ export default {
             batiment_clone.receiveShadow = true;
             batiment_clone.rotation.z = this.batiment_bdd[i].rota;
             batiment_clone.userData = {uuid: this.batiment_bdd[i].id_batiment, emp_uuid: this.batiment_bdd[i].id_emplacement ,description: this.batiment_bdd[i].description};
-            if(this.batiment.type == "toilette"){
+
+            console.log("clone" , batiment_clone)
+            if(this.batiment[j].type == "toilette"){
               this.nonselectionables.add(batiment_clone);
             }
-            else if(this.batiment.type == "salle de conférence"){
+            else if(this.batiment[j].type === "Salle de conférence"){
               this.selectionables.add(batiment_clone);
             }
             else {
@@ -1295,9 +1331,8 @@ export default {
               this.children[i].material.metalness = 0;
               this.children[i].receiveShadow = true;
             }
-            if(!this.children[i].name.includes("bat_6") && !this.children[i].name.includes("bat_3") ){
-              this.batiment.push(info)
-            }
+            this.batiment.push(info)
+
 
 
           } else {
@@ -1523,16 +1558,17 @@ Array [ -8.909232716902693, -20.492076873779297 ]
     },
 
     async matriceTo3DEmp(matricepoints, name, posx, posz, emp_uuid) {
-      let center = await this.point2Dto3D(posx, posz);
+      let center = await this.point2Dto3D(posz, posx);
+      console.log("center", center);
 
       // Inversion (flip) des coordonnées y dans la matrice
-      const flippedMatrice = matricepoints.map(([x, y]) => [2*-x, 2*-y]);
+      const flippedMatrice = matricepoints.map(([x, y]) => [y, -x]);
       //console.log("flippedMatrice", flippedMatrice);
 
       const points = flippedMatrice.map(([x, y]) => new THREE.Vector3(x, y));
       //console.log("points", points);
 
-      // Mise à l'échelle
+      // Mise à l'échell
       for (let i = 0; i < points.length; i++) {
         let pointemp = await this.point2Dto3D(points[i].x, points[i].y);
 
@@ -1550,9 +1586,6 @@ Array [ -8.909232716902693, -20.492076873779297 ]
 
       const geome = new THREE.ExtrudeGeometry(shape, { depth: depth, bevelEnabled: false });
       geome.rotateX(-Math.PI/2)
-
-      geome.rotateY(-Math.PI/2)
-      geome.translate(center.z+200, 0, center.x+50);
 
       const texture_emp = new THREE.TextureLoader().load('map/mapData/tex/tex_emp.png');
       const material_emp = new THREE.MeshPhongMaterial({ map: texture_emp });

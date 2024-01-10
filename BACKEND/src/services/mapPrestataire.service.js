@@ -134,9 +134,9 @@ const createbat = async (req, callback) => {
     console.log("connection")
     try {
         // Insérer le nouveau batiment dans la table batiment
-        const insertBatimentQuery = 'INSERT INTO batiment (id_batiment,description,nom, name, status, id_emplacement, posx, posy, posz, rota, utilisateur, type_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9, $10,$11 ,$12) RETURNING *';
+        const insertBatimentQuery = 'INSERT INTO batiment (id_batiment,description,nom, name, status, id_emplacement, posx, posy, posz, rota, prestataire_id, type_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9, $10,$11 ,$12) RETURNING *';
         const uuid_bat = uuidv4();
-        const insertBatimentValues = [uuid_bat ,description,nom,name,status, emp_uuid, posx, posy, posz, rota, prestataire, type];
+        const insertBatimentValues = [uuid_bat ,description,nom,name,status, emp_uuid, posx, posy, posz, rota, 1 , type];
         const result = await pool.query(insertBatimentQuery, insertBatimentValues);
 
         // Récupérer le batiment inséré
@@ -277,7 +277,7 @@ const getBatUUID = async (req) => {
     let result = [];
     try {
         // Récupérer tous les batiments
-        const getAllBatimentQuery = 'SELECT * FROM batiment WHERE id_batiment = $1';
+        const getAllBatimentQuery = 'SELECT * FROM batiment LEFT JOIN toilette ON batiment.id_batiment = toilette.id_batiment LEFT JOIN scene ON batiment.id_batiment = scene.id_batiment WHERE batiment.id_batiment = $1';
         const getAllBatimentValues = [uuid];
         result = await pool.query(getAllBatimentQuery, getAllBatimentValues);
         console.log("result", result.rows);
@@ -338,9 +338,9 @@ const getAllBat = async (req) => {
     let result = [];
     try {
         // Récupérer tous les batiments
-        const getAllBatimentQuery = 'SELECT * FROM batiment JOIN toilette ON batiment.id_batiment = toilette.id_batiment JOIN scene ON batiment.id_batiment = scene.id_batiment';
+        const getAllBatimentQuery = 'SELECT * FROM batiment LEFT JOIN toilette ON batiment.id_batiment = toilette.id_batiment LEFT JOIN scene ON batiment.id_batiment = scene.id_batiment';
         result = await pool.query(getAllBatimentQuery);
-        console.log("result", result.rows);
+        console.log("result allbat", result.rows);
     }
     catch (error) {
         console.error('Erreur lors de la récupération des batiments :', error);
