@@ -8,10 +8,9 @@
     </div>
     <div class="bg-wave">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-        <path fill="#1E061B" fill-opacity="1"
-          d="M0,32L40,64C80,96,160,160,240,202.7C320,245,400,267,480,250.7C560,235,640,181,720,160C800,139,880,149,960,149.3C1040,149,1120,139,1200,128C1280,117,1360,107,1400,101.3L1440,96L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z">
-        </path>
-      </svg>
+        <path fill="#1e061b" fill-opacity="1" d="M0,128L48,149.3C96,171,192,213,288,213.3C384,213,480,171,576,144C672,117,768,107,864,122.7C960,139,1056,181,1152,176C1248,171,1344,117,1392,90.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+      </path>
+    </svg>
     </div>
     <div class="newsletter">
       <p>Inscrivez-vous à la Newsletter de <strong>Belforaine</strong></p>
@@ -152,10 +151,12 @@ export default {
   bottom: 0;
   left: 0;
   width: 100%;
+  overflow:hidden;
 
   svg {
-    width: 100%;
+    width: 200rem;
     height: auto;
+    overflow: hidden;
   }
 }
 
@@ -165,6 +166,7 @@ export default {
   left: 0;
   width: 200%;
   transform: translateX(-50%);
+  overflow:hidden;
   svg {
     width: 100%;
     height: auto;

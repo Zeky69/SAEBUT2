@@ -2,6 +2,7 @@
   <div>
     <div id="navbar" class="navbar">
       <div class="navbar-content">
+        <TranslateTool />
         <div class="menu-top">
           <div class="menu-burger">
             <button>
@@ -31,6 +32,8 @@
 </template>
 
 <script>
+
+import TranslateTool from '@/components/TranslateTool.vue';
 export default {
   name: 'NavBar',
   data: () => ({
@@ -49,6 +52,9 @@ export default {
       'TestMap': '/testMap',
     }
   }),
+  components:{
+    TranslateTool
+  },
   methods: {
     menuClicked(path) {
       if (window.innerWidth < 902) {
