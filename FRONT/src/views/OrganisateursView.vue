@@ -74,9 +74,6 @@
   </div>
 
   </div>
-
-  <FooTer/>
-
   </div>
 
 
@@ -87,13 +84,10 @@
 <script>
 import CardOrganisateur from '@/components/CardOrganisateur.vue';
 
-import FooTer from '@/components/FooTer.vue';
-
 export default {
   name: "OrganisateursView",
   components: {
     CardOrganisateur,
-    FooTer
   },
 };
 </script>
