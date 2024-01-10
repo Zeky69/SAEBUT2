@@ -25,7 +25,7 @@ export default {
         path: "/prestataire",
       },
       {
-        title: "Commandes",
+        title: "Ma page",
         path: "/prestataire/mypage",
       },
       {

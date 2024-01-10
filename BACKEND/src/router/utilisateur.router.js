@@ -10,7 +10,10 @@ var router = express.Router();
 
 router.post('/login',userMiddlewares.validateLoginInput,userController.login);
 router.post('/register',userMiddlewares.validateRegistrationInput,userController.register)
+router.get('/prestataire/:id',userController.getPrestataireObject);
+
 router.get('/:token',userController.getInformationWithToken);
+
 
 
 module.exports = router;

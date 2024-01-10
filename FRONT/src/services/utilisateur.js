@@ -1,4 +1,5 @@
-import {postRequest,getRequest} from "@/services/axios.service";
+import {getRequest, postRequest} from "@/services/axios.service";
+
 const url='/user'
 
 async function LoginFromApi(data) {
@@ -49,10 +50,22 @@ async function getInformationFromToken(token) {
         throw error;
     }
 }
+async function getPrestataireObject(id_user){
+    try{
+        return await getPrestataireObjectAPI(id_user);
+    }catch (error){
+        console.error("Erreur lors de la récupération du prestataire",error.message);
+        throw error;
+    }
+}
 
+async function getPrestataireObjectAPI(id_user){
+    return getRequest(url+`/prestataire/${id_user}`,"GetPrestataireObject")
+}
 
 export default {
     Login,
     getInformationFromToken,
+    getPrestataireObject,
     Register
 }
