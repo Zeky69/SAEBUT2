@@ -25,6 +25,8 @@
     "js-cookie": "^3.0.5",
     "leaflet": "^1.9.4",
     "particles.js": "^2.0.0",
+    "sass": "^1.69.7",
+    "sass-loader": "^13.3.3",
     "swiper": "^11.0.4",
     "three": "^0.158.0",
     "tinymce": "^6.8.2",
