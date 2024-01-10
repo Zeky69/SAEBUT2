@@ -2,16 +2,22 @@
     <div id="app">
       <span v-if="shouldShowNavBar"><NavBar/></span>
       <router-view></router-view>
+
+      <div v-if="shouldShowNavBar">
+        <FooTer/>
+      </div>
     </div>
   </template>
 
   <script>
   import {mapState,mapActions} from "vuex";
   import NavBar from '../src/components/NavBar3.vue';
+  import FooTer from '../src/components/FooTer.vue'
 
   export default {
     components: {
       NavBar,
+      FooTer
     },
     computed:{
       ...mapState(['token','group_id']),
