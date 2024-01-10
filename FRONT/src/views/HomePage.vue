@@ -6,11 +6,8 @@
       </video>
       <div class="contenuHautDePage">
         <h1 v-html="$t('exploreExtraordinary')"></h1>
-        <p>
-          N'hésitez plus ! Laissez vous tenter pour un moment hors du temps pour LA fête foraine du futur et<br>
-          plongez dans une journée de joie, de découvertes et d'expériences inoubliables !
-        </p>
-        <a style="position: relative;" class="boutton" @click="goto">Billetterie</a>
+        <p v-html="$t('enjoyMoments')"></p>
+        <a style="position: relative;" class="boutton" @click="goto">{{ $t('ticketButton') }}</a>
       </div>
     </div>
     <img src="../assets/overlay.svg" class="overlay-image">
@@ -24,13 +21,11 @@
       </div>
       <div class="droite">
         <div class="textePresentatif">
-          <h2>Bienvenue à Belforaine <span style="color:#553C65"><br>le paradis du futur !</span></h2>
+          <h2>{{ $t('welcomeBelforaine')}} <span style="color:#553C65"><br>le paradis du futur !</span></h2>
           <p>
-            Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences
-            inspirantes et divertissement sans fin fusionnent. Plongez dans la magie que nous réserve le futur, le
-            tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !
+            {{ $t('futureMagic')}}
           </p>
-          <a class="boutton" >Plus d'information</a>
+          <a class="boutton" >{{ $t('learnMoreButton') }}</a>
         </div>
       </div>
       </div>
@@ -39,8 +34,7 @@
     <pass-billet></pass-billet>
     <div class="presentationCards">
       <br>
-      <h2>Plus que des manèges, une expérience<br>
-        <span style="color: #553C65">qui tourne la magie à l'infini !</span></h2>
+      <h2 v-html="$t('ridesExperience')"></h2>
       <MultipleCards/>
     </div>
     <Map2DUser/>
@@ -125,6 +119,7 @@ export default {
   padding: 15px 10px;
   border-radius: 10px;
   cursor: pointer;
+  text-align:center;
 }
 
 .boutton:hover{

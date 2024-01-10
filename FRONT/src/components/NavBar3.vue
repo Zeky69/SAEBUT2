@@ -2,7 +2,6 @@
   <div>
     <div id="navbar" class="navbar">
       <div class="navbar-content">
-        <TranslateTool />
         <div class="menu-top">
           <div class="menu-burger">
             <button>
@@ -14,6 +13,7 @@
             <h1>BELFORAINE</h1>
           </div>
           <div class="icons">
+            <TranslateTool/>
             <img :src="require('@/assets/icons/panier.svg')" @click="menuClicked('/panier')" class="i" alt="">
           </div>
         </div>
@@ -23,6 +23,7 @@
             }}</a>
           </div>
           <div class="scrolled-icons">
+            <TranslateTool />
             <img :src="require('@/assets/icons/panier.svg')" @click="menuClicked('/panier')" class="i" alt="">
           </div>
         </div>
