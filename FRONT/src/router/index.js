@@ -140,7 +140,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  await store.dispatch('getInformationFromToken', store.state.token);
+  if(store.state.token)await store.dispatch('getInformationFromToken', store.state.token);
 
   if ((to.path.startsWith('/admin'))) {
     if(store.state.group_id===1){
