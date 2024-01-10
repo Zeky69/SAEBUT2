@@ -35,10 +35,18 @@
         <router-link to="/modifier-preferences-cookies" class="link">Modifier vos préférences de cookies</router-link>
       </div>
       <div class="contenuRubriques">
-        <h3>À propos</h3>
-        <router-link to="/organisateurs" class="link">Organisateurs</router-link>
-        <router-link to="/prestataires" class="link">Prestataires</router-link>
-        <router-link to="/partenaires" class="link">Partenaires</router-link>
+        <h3>Rubriques</h3>
+        <router-link to="/" class="link">Accueil</router-link>
+        <router-link to="/attraction" class="link">Découvrez nos attractions</router-link>
+        <router-link to="/restauration" class="link">Un petit creux ? Réservez une table !</router-link>
+        <router-link to="/boutique" class="link">Notre boutique</router-link>
+        <router-link to="/billetterie" class="link">Achetez vos billets</router-link>
+      </div>
+      <div class="contenuRubriques">
+        <h3>+ Encore !</h3>
+        <router-link to="/a-propos" class="link">Qui sommes-nous ?</router-link>
+        <router-link to="/contact" class="link">Contactez-nous</router-link>
+        <router-link to="/login" class="link">Connectez-vous</router-link>
       </div>
     </div>
   </div>
@@ -100,10 +108,11 @@ export default {
     width: 30rem;
     height: 4rem;
     padding: 0 1rem;
+    margin-top: 1rem;
     border-radius: 1rem;
     background-image: radial-gradient(at top left, transparent 1%, rgba(255, 255, 255, 0.1) 99%),
       linear-gradient(to right, #2e1d4b, #3f2563, #553c65, #553c65, #3f2563);
-    color: #250f0f;
+    color: rgb(255, 255, 255, 0.7);
     transition: 0.3s ease-out;
 
     &::placeholder {
@@ -178,7 +187,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 3rem;
   padding: 1rem 0;
   margin-bottom: -3rem;
   z-index: 0;
@@ -188,6 +197,7 @@ export default {
     height: auto;
     object-fit: contain;
     z-index: 1;
+    pointer-events: none;
   }
 }
 
@@ -224,5 +234,7 @@ export default {
         opacity: 1;
       }
     }
+
+
   }
 }</style>
