@@ -22,6 +22,23 @@ const getPrestatairesEtatAccepte = async () => {
     }
 }
 
+const getPrestatairesTypes = async () => {
+    let resultat = null;
+    const client = await pool.connect();
+    try {
+        let sql = 'SELECT DISTINCT t.libelle , t.id_type , b.prestataire_id FROM emplacement INNER JOIN public.batiment b on emplacement.id_emplacement = b.id_emplacement inner join public.type t on t.id_type = b.type_id WHERE emplacement.id_emplacement in (SELECT  id_emplacement from emplacement WHERE batiment_id is not null);';
+        resultat = await client.query(sql);
+        return resultat.rows;
+    }
+    catch (error) {
+        console.log(error);
+        return error;
+    }
+    finally {
+        client.release();
+    }
+}
+
 const getPrestataireById = async (id) => {
     let resultat = null;
     const client = await pool.connect();
