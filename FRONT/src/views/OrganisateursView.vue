@@ -74,9 +74,6 @@
   </div>
 
   </div>
-
-  <FooTer/>
-
   </div>
 
 
@@ -87,13 +84,10 @@
 <script>
 import CardOrganisateur from '@/components/CardOrganisateur.vue';
 
-import FooTer from '@/components/FooTer.vue';
-
 export default {
   name: "OrganisateursView",
   components: {
     CardOrganisateur,
-    FooTer
   },
 };
 </script>
@@ -171,7 +165,6 @@ img{
   width: 100%;
   height: 100%;
   background: linear-gradient(to bottom, #553c656e, transparent);
-  z-index: 4;
 }
 .storytime {
   margin: 5em 10em;

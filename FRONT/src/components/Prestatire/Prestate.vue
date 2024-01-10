@@ -69,6 +69,9 @@ export default {
       this.donnee = this.prestate.page_info;
     }
 
+
+    console.log(this.prestate);
+
   }
   ,watch: {
     prestate: function () {

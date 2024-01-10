@@ -23,9 +23,9 @@ export default {
     message: String,
     email: String,
   },
-  data() {
-
-  },
+  data: () => ({
+  })
+  ,
   methods: {
     contactPerson() {
       console.log('Personne contactée !', this.email);
@@ -191,7 +191,7 @@ body
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   z-index: 1;
-  transform: 0.5s;
+  transform: 0.5s ;
   color: #fff;
 }
 

@@ -1,7 +1,7 @@
 
 <template>
   <div class="EspaceAdmin">
-    <PageTitre title="Tableau de bord" />
+    <h1 class="EffetViolet">Tableau de bord</h1>
     <div class="container-header">
       <div  class="Bienvenue">
         <h2 class="EffetViolet">Bienvenue, <br> {{lname}} {{fname}}</h2>
@@ -65,15 +65,11 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import {Chart} from 'vue-chartjs';
-import PageTitre from "./PageTitre.vue";
 
 export default {
   name: 'AdminInfoTemporaire',
   computed: {
     ...mapState(['token', 'fname', 'lname', 'group_id', 'user_id', 'email'])
-  },
-  components: {
-    PageTitre
   },
   methods: {
     ...mapActions(['logout']),
@@ -110,6 +106,15 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Goldman&display=swap');
+
+.EffetViolet{
+  text-align: left;
+  background: linear-gradient(179deg, #543C64 -58.62%, #868CD1 99.12%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .EspaceAdmin{
   display: flex;
   flex-direction: column;

@@ -5,7 +5,7 @@
         <source src="../assets/Observation_Wheel.mp4" type="video/mp4">
       </video>
       <div class="contenuHautDePage">
-        <h1>Explorez l'extraordinaire : là où les<br> rêves prennent vie !</h1>
+        <h1 v-html="$t('exploreExtraordinary')"></h1>
         <p>
           N'hésitez plus ! Laissez vous tenter pour un moment hors du temps pour LA fête foraine du futur et<br>
           plongez dans une journée de joie, de découvertes et d'expériences inoubliables !

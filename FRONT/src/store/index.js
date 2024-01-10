@@ -19,6 +19,7 @@ export default new Vuex.Store({
     lname : '',
     group_id: 3,
     stepPanier: 1,
+    prestataireObject: null,
   },
   getters: {
     isLoggedIn(state) {
@@ -32,6 +33,9 @@ export default new Vuex.Store({
     },
     getStepPanier(state){
       return state.stepPanier;
+    },
+    getPrestataireObject(state){
+      return state.prestataireObject;
     }
   },
   mutations: {
@@ -58,6 +62,9 @@ export default new Vuex.Store({
     },
     setStepPanier(state, step){
       state.stepPanier = step;
+    },
+    setPrestataireObject(state, prestataire){
+      state.prestataireObject = prestataire;
     }
   },
   actions: {
@@ -94,6 +101,17 @@ export default new Vuex.Store({
       } catch (e) {
         console.error("An error occurred:", e);
       }
+    },
+   async getPrestataireObject({commit}, idUser){
+      try{
+        let response = await userService.getPrestataireObject(idUser);
+        if(!response.error) {
+          commit('setPrestataireObject', response[0]);
+        }
+      }
+        catch (e) {
+            console.error("An error occurred:", e);
+        }
     },
 
     logout({commit}) {

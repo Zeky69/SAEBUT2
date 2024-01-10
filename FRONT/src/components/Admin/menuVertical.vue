@@ -6,10 +6,10 @@
         <img src="@/assets/logoWF2W.png" alt="logo" />
         <div class="title-container">
         <span class="title">Belforaine</span>
-        <span class="subtitle">> Administrateur</span>
+        <span class="subtitle">> {{ role }}</span>
         </div>
       </div>
-      <div class="profil-container">
+      <div class="profil-container" :style="{ background: 'linear-gradient(90deg,' + color1 + ' 0%, '+ color2 +' 100%)' }">
         <img src="@/assets/menu/stephane.jpg" alt="">
         <div class="profil-info">
           <span class="profil-info-name">{{lname}} {{fname}}</span>
@@ -67,7 +67,9 @@ export default {
     ListMenu: {
       type: Array,
       required: true,
-    },
+    },color1 : String,
+    color2:String,
+    role : String,
   },
   computed :{
     ...mapState(['lname','fname'])
@@ -173,7 +175,10 @@ height: 120px;
   margin:0 0 20px 10px ;
   border-radius: 15px 0 0 15px;
   background: linear-gradient(90deg, #553C65 0%, #2B4256 100%); ;
+
 }
+
+
 .profil-container img{
   width: 60px;
   height: 60px;

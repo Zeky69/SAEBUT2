@@ -8,10 +8,9 @@
     </div>
     <div class="bg-wave">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-        <path fill="#1E061B" fill-opacity="1"
-          d="M0,32L40,64C80,96,160,160,240,202.7C320,245,400,267,480,250.7C560,235,640,181,720,160C800,139,880,149,960,149.3C1040,149,1120,139,1200,128C1280,117,1360,107,1400,101.3L1440,96L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z">
-        </path>
-      </svg>
+        <path fill="#1e061b" fill-opacity="1" d="M0,128L48,149.3C96,171,192,213,288,213.3C384,213,480,171,576,144C672,117,768,107,864,122.7C960,139,1056,181,1152,176C1248,171,1344,117,1392,90.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+      </path>
+    </svg>
     </div>
     <div class="newsletter">
       <p>Inscrivez-vous à la Newsletter de <strong>Belforaine</strong></p>
@@ -35,10 +34,18 @@
         <router-link to="/modifier-preferences-cookies" class="link">Modifier vos préférences de cookies</router-link>
       </div>
       <div class="contenuRubriques">
-        <h3>À propos</h3>
-        <router-link to="/organisateurs" class="link">Organisateurs</router-link>
-        <router-link to="/prestataires" class="link">Prestataires</router-link>
-        <router-link to="/partenaires" class="link">Partenaires</router-link>
+        <h3>Rubriques</h3>
+        <router-link to="/" class="link">Accueil</router-link>
+        <router-link to="/attraction" class="link">Découvrez nos attractions</router-link>
+        <router-link to="/restauration" class="link">Un petit creux ? Réservez une table !</router-link>
+        <router-link to="/boutique" class="link">Notre boutique</router-link>
+        <router-link to="/billetterie" class="link">Achetez vos billets</router-link>
+      </div>
+      <div class="contenuRubriques">
+        <h3>+ Encore !</h3>
+        <router-link to="/a-propos" class="link">Qui sommes-nous ?</router-link>
+        <router-link to="/contact" class="link">Contactez-nous</router-link>
+        <router-link to="/login" class="link">Connectez-vous</router-link>
       </div>
     </div>
   </div>
@@ -100,10 +107,11 @@ export default {
     width: 30rem;
     height: 4rem;
     padding: 0 1rem;
+    margin-top: 1rem;
     border-radius: 1rem;
     background-image: radial-gradient(at top left, transparent 1%, rgba(255, 255, 255, 0.1) 99%),
       linear-gradient(to right, #2e1d4b, #3f2563, #553c65, #553c65, #3f2563);
-    color: #250f0f;
+    color: rgb(255, 255, 255, 0.7);
     transition: 0.3s ease-out;
 
     &::placeholder {
@@ -143,10 +151,12 @@ export default {
   bottom: 0;
   left: 0;
   width: 100%;
+  overflow:hidden;
 
   svg {
-    width: 100%;
+    width: 200rem;
     height: auto;
+    overflow: hidden;
   }
 }
 
@@ -156,6 +166,7 @@ export default {
   left: 0;
   width: 200%;
   transform: translateX(-50%);
+  overflow:hidden;
   svg {
     width: 100%;
     height: auto;
@@ -178,7 +189,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 3rem;
   padding: 1rem 0;
   margin-bottom: -3rem;
   z-index: 0;
@@ -188,6 +199,7 @@ export default {
     height: auto;
     object-fit: contain;
     z-index: 1;
+    pointer-events: none;
   }
 }
 
@@ -224,5 +236,7 @@ export default {
         opacity: 1;
       }
     }
+
+
   }
 }</style>

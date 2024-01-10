@@ -59,4 +59,18 @@ exports.getInformationWithToken = async (req,res) => {
 
 }
 
+exports.getPrestataireObject = async (req,res) => {
+    const id = req.params.id
+
+    try{
+        const prestataire = await userService.getPrestataireObject(id);
+        if(!prestataire){
+            return res.status(401).send("Problème avec la récupération du prestataire");
+        }
+        return res.status(200).json(prestataire);
+    } catch(error){
+        return res.status(500).send("Erreur lors de la connexion avec le token");
+    }
+}
+
 

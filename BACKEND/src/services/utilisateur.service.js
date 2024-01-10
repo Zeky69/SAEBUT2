@@ -1,12 +1,8 @@
 //admin.service.js
 
-const fs = require('fs');
-const path = require('path');
-const filePath = path.join(__dirname, '..','datasource/users.json');
 const pool = require("../database/db.js");
 
 const jwt = require("jsonwebtoken");
-const { log } = require('console');
 const jwtSecret= "djilsietmaxime";
 
 
@@ -79,6 +75,19 @@ async function getInformationWithToken(token){
       return response;
 }
 
+async function getPrestataireObject(id_user){
+    const client = await pool.connect();
+    try{
+        const query = `SELECT * FROM prestataire WHERE id_user=$1`;
+        const result = await client.query(query,[id_user]);
+        return result.rows;
+    }catch(err){
+        console.log("Erreur lors de la récupération du prestataire")
+    }finally{
+        client.release();
+    }
+}
+
 async function getUserByEmail(email) {
     const client = await pool.connect();
   
@@ -99,5 +108,6 @@ module.exports = {
     getUserByEmail,
     loginUser : loginUser,
     registerUser : registerUser,
-    getInformationWithToken : getInformationWithToken
+    getInformationWithToken : getInformationWithToken,
+    getPrestataireObject : getPrestataireObject
 }

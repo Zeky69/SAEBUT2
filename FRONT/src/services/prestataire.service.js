@@ -11,8 +11,22 @@ async function updatePage(prestataire){
     return await putRequest('/prestataires/updatePage',prestataire, 'updatePage')
 }
 
+
+async function getPrestataires(){
+    return await getRequest('/prestataires', 'getPrestataires')
+}
+
+
+
+ async  function getPrestataireObject(idUser){
+    return await getRequest('/user/prestataire/'+idUser,'getPrestataireObject')
+
+}
+
 export {
     getPrestataire,
-    updatePage
+    updatePage,
+    getPrestataires,
+    getPrestataireObject
 }
 

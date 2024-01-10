@@ -69,8 +69,27 @@ const routes = [
     },
   {
     path: '/prestataire',
-    name: 'EspacePrestaire',
-    component: () => import('../views/EspacePrestaire.vue'),
+    component: () => import('../views/EspacePrestaire.vue'),    children: [
+      {
+        path: '',
+        name: 'prestataire.info',
+        component: () => import('../components/PrestataireInfo.vue')
+      },
+      {
+        path: 'profil',
+        component: ()=>import ('../views/PrestataireProfile.vue')
+      },
+      {
+        path: 'mypage',
+        component: ()=>import ('../views/PrestateView.vue')
+      },
+      {
+        path:'*',
+        name: 'admin.notFound,',
+        component: () => import('../views/NotFound.vue')
+      }
+    ]
+
   },
   {
     path: '/prestate/:id',

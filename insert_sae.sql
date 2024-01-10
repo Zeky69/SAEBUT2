@@ -57,11 +57,17 @@ INSERT INTO UTILISATEURS(FIRST_NAME, LAST_NAME, email, Date_Created, Group_Id) V
 ('Jane', 'Smith', 'jane.smith@example.com', CURRENT_TIMESTAMP, 2),
 ('Bob', 'Johnson', 'bob.johnson@example.com', CURRENT_TIMESTAMP, 2);
 
-INSERT INTO prestataire ( description, nom, id_user, etat_id,page_info) VALUES
+INSERT INTO mots_de_passe_utilisateurs(User_Id, Password) VALUES
+((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'), 'password'),
+((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Jane' AND LAST_NAME = 'Smith'), 'password'),
+((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Bob' AND LAST_NAME = 'Johnson'), 'password');
+
+
+INSERT INTO prestataire ( description, nom, id_user, etat_id,page_info ,photo_profil) VALUES
 ('admin','belforaine', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'fnAdmin' AND LAST_NAME = 'lnAdmin'),2,NULL),
-('Prestataire Description', 'Prestataire Name', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'), 2,'<p>Ca marche de zinzin</p>'),
-('Prestataire Description', 'Prestataire Name', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Jane' AND LAST_NAME = 'Smith'), 2,NULL),
-('Prestataire Description', 'Prestataire Name', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Bob' AND LAST_NAME = 'Johnson'), 2,NULL);
+('Prestataire Description de macdonald', 'Mcdonald', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'), 2,'<p>Ca marche de zinzin</p>','macdo.jpeg'),
+('Prestataire Description de pixar', 'Pixar', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Jane' AND LAST_NAME = 'Smith'), 2,NULL,'Disnet.jpeg'),
+('Prestataire Description de disney', 'Disney', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Bob' AND LAST_NAME = 'Johnson'), 2,NULL,'pixar.jpg');
 
 
 INSERT INTO emplacement VALUES ('37f09601-f3e5-4707-8ba0-bedd6a0f8710', 'emp_test', 'lsmdmlq', 3.01549922724575500, 10.00000000000000000, 3.42965139680906360, 0, '{"matricepoints":[[3.697214350069089,2.1904708319286925],[2.07408378521734,2.351403372822247],[1.6232132855265036,5.221367018757306],[3.9857703648493725,5.19454492860838]]}'),

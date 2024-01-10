@@ -30,3 +30,31 @@ exports.updatePrestatairePage = async (req,res) => {
         return res.status(500).send(error.message || "Internal error");
     }
 }
+
+exports.getPrestatairesEtatAccepte = async (req,res) => {
+    try {
+        let reponse = await prestataireService.getPrestatairesEtatAccepte();
+        if (reponse) {
+            return res.status(200).send(reponse);
+        }
+        return res.status(401).send("Pas d'information trouvé");
+    }
+    catch (error) {
+        return res.status(500).send(error.message || "Internal error");
+    }
+}
+
+
+exports.updateUserProfile = async (req,res) => {
+    try {
+        const { id } = req.params;
+        const { nomEntreprise, description, photoDeProfil, prenom, nom, motDePasse } = req.body;
+
+        await prestataireService.updateUserProfile(id, nomEntreprise, description, photoDeProfil, prenom, nom, motDePasse);
+
+        res.status(200).json({ success: true, message: 'Profil utilisateur mis à jour avec succès.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Une erreur est survenue lors de la mise à jour du profil utilisateur.' });
+    }
+}
