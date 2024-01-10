@@ -119,6 +119,7 @@ module.exports = {
     updateUserProfile,
     getPrestataireById : getPrestataireById,
     updatePrestatairePage :updatePrestatairePage,
-    getPrestatairesEtatAccepte :getPrestatairesEtatAccepte
+    getPrestatairesEtatAccepte :getPrestatairesEtatAccepte,
+    getPrestatairesTypes :getPrestatairesTypes
 }
 
