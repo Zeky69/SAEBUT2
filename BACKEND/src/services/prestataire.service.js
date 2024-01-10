@@ -61,31 +61,30 @@ const updatePrestatairePage = async (prestataire) => {
 
 }
 
-async function updateUserProfile(user_id, nomEntreprise, description,photoDeProfil,prenom,nom,motDePasse){
+async function updateUserProfile(user_id, nomEntreprise, description,photoDeProfil,prenom,nom,motDePasse,email){
     const client = await pool.connect();
-
     try {
         await client.query('BEGIN');
 
         let query = `UPDATE prestataire 
-        SET nom =$1, description=$2, photo_profil=$3 
+        SET nom=$1, description=$2, photo_profil=$3
         WHERE id_user=$4;`;
 
         let res = await client.query(query, [nomEntreprise, description, photoDeProfil,user_id]);
 
         query = `UPDATE utilisateurs
-        SET LAST_NAME=$1, FIRST_NAME=$2
-        WHERE user_id=$3;`;
+        SET LAST_NAME=$1, FIRST_NAME=$2, email=$3
+        WHERE user_id=$4;`;
 
-        res = await client.query(query, [nom, prenom, user_id]);
+        res = await client.query(query, [nom, prenom, email,user_id]);
 
         if(motDePasse){
             query = `UPDATE MOTS_DE_PASSE_UTILISATEURS 
             SET Password=$1 where user_id=$2;`;
     
             res = await client.query(query, [motDePasse, user_id]);
-            await client.query('COMMIT');
         }
+        await client.query('COMMIT');
 
         console.log("Insertion réussit !")
     } catch (err) {

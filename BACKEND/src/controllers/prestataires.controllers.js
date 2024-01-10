@@ -48,9 +48,9 @@ exports.getPrestatairesEtatAccepte = async (req,res) => {
 exports.updateUserProfile = async (req,res) => {
     try {
         const { id } = req.params;
-        const { nomEntreprise, description, photoDeProfil, prenom, nom, motDePasse } = req.body;
+        const { nomEntreprise, description, photoDeProfil, prenom, nom, email,motDePasse } = req.body;
 
-        await prestataireService.updateUserProfile(id, nomEntreprise, description, photoDeProfil, prenom, nom, motDePasse);
+        await prestataireService.updateUserProfile(id, nomEntreprise, description, photoDeProfil, prenom, nom, motDePasse,email);
 
         res.status(200).json({ success: true, message: 'Profil utilisateur mis à jour avec succès.' });
     } catch (error) {
