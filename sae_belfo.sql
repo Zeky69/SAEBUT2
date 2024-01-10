@@ -161,34 +161,19 @@ CREATE TABLE emplacement(
         FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)
     );
 
-CREATE TABLE toilette(
-   id_toilette VARCHAR(50),
-   PRIMARY KEY(id_toilette),
-   id_batiment VARCHAR(50) NOT NULL UNIQUE,
-   FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment)
-);
-
-CREATE TABLE scene(
-   id_scene VARCHAR(50),
-   description VARCHAR(50),
-   PRIMARY KEY(id_scene),
-   id_batiment VARCHAR(50) NOT NULL UNIQUE,
-   FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment)
-    );
-
 
     CREATE TABLE event(
        id_event VARCHAR(50),
        description VARCHAR(255),
        nom VARCHAR(50),
-       id_scene VARCHAR(50) NOT NULL,
+       id_batiment VARCHAR(50) NOT NULL,
        color VARCHAR(50),
        status VARCHAR(50),
        start_date timestamp,
        end_date timestamp,
        id_prestataire INT NOT NULL,
        PRIMARY KEY(id_event),
-       FOREIGN KEY(id_scene) REFERENCES scene(id_scene)
+       FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment)
     );
 
 
@@ -199,16 +184,6 @@ CREATE TABLE scene(
        PRIMARY KEY(id_attraction),
        UNIQUE(id_emplacement),
        FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement)
-    );
-
-
-    CREATE TABLE accueil(
-       id_scene VARCHAR(50),
-       id_intervenant INT,
-       horaire timestamp,
-       PRIMARY KEY(id_scene, id_intervenant),
-       FOREIGN KEY(id_scene) REFERENCES scene(id_scene),
-       FOREIGN KEY(id_intervenant) REFERENCES UTILISATEURS(User_Id)
     );
 
     CREATE TABLE taggue(

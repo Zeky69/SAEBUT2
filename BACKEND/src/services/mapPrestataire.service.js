@@ -277,7 +277,7 @@ const getBatUUID = async (req) => {
     let result = [];
     try {
         // Récupérer tous les batiments
-        const getAllBatimentQuery = 'SELECT * FROM batiment LEFT JOIN toilette ON batiment.id_batiment = toilette.id_batiment LEFT JOIN scene ON batiment.id_batiment = scene.id_batiment WHERE batiment.id_batiment = $1';
+        const getAllBatimentQuery = 'SELECT * FROM batiment WHERE batiment.id_batiment = $1';
         const getAllBatimentValues = [uuid];
         result = await pool.query(getAllBatimentQuery, getAllBatimentValues);
         console.log("result", result.rows);
@@ -338,7 +338,7 @@ const getAllBat = async (req) => {
     let result = [];
     try {
         // Récupérer tous les batiments
-        const getAllBatimentQuery = 'SELECT * FROM batiment LEFT JOIN toilette ON batiment.id_batiment = toilette.id_batiment LEFT JOIN scene ON batiment.id_batiment = scene.id_batiment';
+        const getAllBatimentQuery = 'SELECT * FROM batiment';
         result = await pool.query(getAllBatimentQuery);
         console.log("result allbat", result.rows);
     }
