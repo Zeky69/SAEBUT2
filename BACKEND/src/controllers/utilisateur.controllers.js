@@ -1,7 +1,7 @@
-//login.controllers.js
+//utilisateur.controllers.js
 const jwt = require("jsonwebtoken")
 const jwtSecret= "djilsietmaxime";
-const loginService = require('../services/login.service');
+const userService = require('../services/utilisateur.service');
 
 exports.login = async (req, res) => {
     const { login, password } = req.body;
@@ -9,7 +9,7 @@ exports.login = async (req, res) => {
 
 
     try {
-        const user = await loginService.loginUser(login, password);
+        const user = await userService.loginUser(login, password);
         if (!user) {
             return res.status(401).send("Utilisateur non trouvé");
         }
@@ -30,7 +30,7 @@ exports.getInformationWithToken = async (req,res) => {
     const token = req.params.token // ou params
 
     try{
-        const information = await loginService.getInformationWithToken(token);
+        const information = await userService.getInformationWithToken(token);
         if(!information){
             return res.status(401).send("Problème avec la récupération depuis le token (je fais un test)");
         }
