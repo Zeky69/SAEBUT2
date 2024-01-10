@@ -33,7 +33,9 @@
               <p>{{prestate.type}}</p>
             </div>
             <div class="card-bottom">
-              <button class="btn-card" @click="goToPrestate(prestate.id)">Voir le profil</button>
+              <router-link :to="{ name: 'prestate', params: { id: prestate.id } }">
+                  <button class="btn-card">Voir le profil</button>
+              </router-link>
             </div>
           </div>
           </div>

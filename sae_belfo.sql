@@ -1,5 +1,6 @@
     DROP TABLE if exists accueil CASCADE;
     DROP TABLE if exists possède CASCADE;
+        DROP TABLE if exists possede CASCADE;
     DROP TABLE if exists vend CASCADE;
     DROP TABLE if exists reservation CASCADE;
     DROP TABLE if exists stand CASCADE;
@@ -53,7 +54,8 @@ CREATE TABLE ETAT(
     CREATE TABLE MOTS_DE_PASSE_UTILISATEURS (
         Id SERIAL PRIMARY KEY,
         User_Id INT REFERENCES UTILISATEURS(User_Id),
-        Password VARCHAR(255)
+        Password VARCHAR(255),
+        Unique(user_id,Password)
     );
 
     CREATE TABLE JOURNAUX_UTILISATEURS (
@@ -98,16 +100,18 @@ CREATE TABLE tags(
    PRIMARY KEY(id_tag)
 );
 
-   CREATE TABLE prestataire(
-      id_prestataire SERIAL,
-      description VARCHAR(255),
-      nom VARCHAR(50),
-      id_user INT NOT NULL,
-      etat_id INT,
-      PRIMARY KEY(id_prestataire),
-      FOREIGN KEY(id_user) REFERENCES UTILISATEURS(User_Id),
-      FOREIGN KEY(etat_id) REFERENCES ETAT(etat_id)
-   );
+    CREATE TABLE prestataire(
+       id_prestataire SERIAL,
+       description VARCHAR(255),
+       nom VARCHAR(50),
+       id_user INT NOT NULL,
+       etat_id INT,
+       page_info TEXT,
+       photo_profil TEXT,
+       PRIMARY KEY(id_prestataire),
+       FOREIGN KEY(id_user) REFERENCES UTILISATEURS(User_Id),
+       FOREIGN KEY(etat_id) REFERENCES ETAT(etat_id)
+    );
 
 CREATE TABLE emplacement(
     id_emplacement VARCHAR(50),
@@ -133,12 +137,14 @@ CREATE TABLE emplacement(
          posy DECIMAL(24,17),
          posz DECIMAL(24,17),
          rota DECIMAL(24,17),
-         utilisateur VARCHAR(50),
+         prestataire_id SERIAL,
+         image_path TEXT,
          type_id VARCHAR(50),
          PRIMARY KEY(id_batiment),
          id_emplacement VARCHAR(50) NOT NULL UNIQUE,
          FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
-         FOREIGN KEY(type_id) REFERENCES type(id_type)
+         FOREIGN KEY(type_id) REFERENCES type(id_type),
+         FOREIGN KEY(prestataire_id) REFERENCES prestataire(id_prestataire)
     );
 
 
@@ -196,14 +202,6 @@ CREATE TABLE scene(
     );
 
 
-    CREATE TABLE possède(
-       id_prestataire INT,
-       id_emplacement VARCHAR(50),
-       PRIMARY KEY(id_prestataire, id_emplacement),
-       FOREIGN KEY(id_prestataire) REFERENCES prestataire(id_prestataire),
-       FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement)
-    );
-
     CREATE TABLE accueil(
        id_scene VARCHAR(50),
        id_intervenant INT,
@@ -220,13 +218,3 @@ CREATE TABLE scene(
        FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
        FOREIGN KEY(id_tag) REFERENCES tags(id_tag)
     );
-
-
-
-
-
-
-
-
-
-

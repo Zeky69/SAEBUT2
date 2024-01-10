@@ -5,6 +5,10 @@ async function LoginFromApi(data) {
     return postRequest(url+'/login', data, 'LOGIN')
 }
 
+async function RegisterFromApi(data){
+    return postRequest(url+'/register',data,'REGISTER')
+}
+
 
 async function Login(data) {
     try {
@@ -15,6 +19,20 @@ async function Login(data) {
         console.error('Erreur lors du login', error.message);
         throw error;
     }
+}
+
+async function Register(data){
+    try{
+        let answer = await RegisterFromApi(data);
+        console.log("ouiiii")
+        console.log(answer);
+        return answer
+
+    }catch (error){
+        console.error("Erreur lors de l'inscription",error.message)
+        throw error;
+    }
+
 }
 
 async function getInformationFromTokenAPI(token){
@@ -35,5 +53,6 @@ async function getInformationFromToken(token) {
 
 export default {
     Login,
-    getInformationFromToken
+    getInformationFromToken,
+    Register
 }

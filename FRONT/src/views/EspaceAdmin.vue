@@ -5,7 +5,7 @@
     <menu-vertical :list-menu="ListMenu"/>
   </div>
   <div class="body-container">
-    <router-view ></router-view>
+    <router-view></router-view>
   </div>
   </div>
 
@@ -13,7 +13,7 @@
 
 <script>
 import {mapActions, mapState} from "vuex";
-import MenuVertical from "@/components/menuVertical.vue";
+import MenuVertical from "@/components/Admin/menuVertical.vue";
 
 export default {
   name: 'EspaceAdmin',

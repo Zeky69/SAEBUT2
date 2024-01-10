@@ -60,23 +60,17 @@ INSERT INTO droits VALUES   ('1', 'base'),
                             ('2', 'gestion dune page'),
                             ('3', 'gestion de tout'),
                             ('4', 'affichage user');
-       
-                                    
-INSERT INTO UTILISATEURS (FIRST_NAME, LAST_NAME, email, Date_Created, Group_Id)
-VALUES (
-    'John',
-    'Doe',
-    'john.doe@example.com',
-    CURRENT_TIMESTAMP,
-    2
-);
 
-INSERT INTO prestataire ( description, nom, id_user, etat_id)
-VALUES (
-    'Prestataire Description',
-    'Prestataire Name',
-    (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'),
-    1
-);
+
+
+INSERT INTO UTILISATEURS(FIRST_NAME, LAST_NAME, email, Date_Created, Group_Id) VALUES
+('John', 'Doe', 'john.doe@example.com', CURRENT_TIMESTAMP, 2),
+('Jane', 'Smith', 'jane.smith@example.com', CURRENT_TIMESTAMP, 2),
+('Bob', 'Johnson', 'bob.johnson@example.com', CURRENT_TIMESTAMP, 2);
+
+INSERT INTO prestataire ( description, nom, id_user, etat_id,page_info) VALUES
+('Prestataire Description', 'Prestataire Name', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'), 2,'<p>Ca marche de zinzin</p>'),
+('Prestataire Description', 'Prestataire Name', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Jane' AND LAST_NAME = 'Smith'), 2,NULL),
+('Prestataire Description', 'Prestataire Name', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Bob' AND LAST_NAME = 'Johnson'), 2,NULL);
 
 

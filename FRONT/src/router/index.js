@@ -17,8 +17,17 @@ const routes = [
   },  {
     path: '/billetterie',
     name: 'billetterie',
-    component: () => import(/* webpackChunkName: "about" */ '../views/BilleterieView.vue')
-  },  {
+    component: () => import(/* webpackChunkName: "about" */ '../views/BilletterieView.vue'),
+    children: [
+      {
+        path: '/billetterie/:idselect',
+        name: 'billetterieid',
+        component: () => import('../views/BilletterieView.vue'),
+        props: true
+      }
+    ]
+  }
+  ,  {
     path: '/boutique',
     name: 'boutique',
     component: () => import(/* webpackChunkName: "about" */ '../views/BoutiqueView.vue')
@@ -61,19 +70,31 @@ const routes = [
   {
     path: '/prestataire',
     name: 'EspacePrestaire',
-    component: () => import('../views/EspacePrestaire.vue')
+    component: () => import('../views/EspacePrestaire.vue'),
+  },
+  {
+    path: '/prestate/:id',
+    name: 'prestate',
+    component: () => import('../views/PrestateView.vue'),
+    props: true
+    },
 
-  },  {
+  {
     path: '/admin',
-    name: 'EspaceAdmin',
     component: () => import('../views/EspaceAdmin.vue'),
     children: [
       {
-        path: '/',
-        component: () => import('../components/AdminInfoTemporaire.vue')
+        path: '',
+        name: 'amdin.info',
+        component: () => import('../components/Admin/AdminInfoTemporaire.vue')
+      },
+      {
+        path: 'prestataires',
+        component: ()=>import ('../views/AdminPrestataire.vue')
       },
       {
         path:'*',
+        name: 'admin.notFound,',
         component: () => import('../views/NotFound.vue')
       }
     ]

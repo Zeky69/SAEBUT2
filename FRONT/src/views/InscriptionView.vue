@@ -8,46 +8,49 @@
             <div class="validate">
               <img src="@/assets/logo/check.svg" id="check">
               <p>Votre inscription a été enregistré un admin va traiter votre demande</p>
+              <span>Vous allez être rediriger dans quelques instants à la page d'accueil</span>
             </div>
           </span>
 
           <span v-else>
             <div class="formulaire-top">
-              <h2>Inscription</h2>
+              <h2>Inscription Prestataire</h2>
             </div>
 
             <div class="formulaire-contenu">
               <div class="register">
                 <div class="register-champ">
                   <p>Nom</p>
-                  <input type="text" class="inputFormulaire" :class="{ 'invalid': isInvalidCredentials }" placeholder="Entrez votre nom" v-model="nom" required>
+                  <input type="text" class="inputFormulaire" placeholder="Entrez votre nom" v-model="nom" required>
                   <span v-if="!nom && showErrors" class="error-message">Le champ Nom est obligatoire</span>
                 </div>
 
                 <div class="register-champ">
                   <p>Prénom</p>
-                  <input type="text" class="inputFormulaire" :class="{ 'invalid': isInvalidCredentials }" placeholder="Entrez votre prénom" v-model="prenom" required>
+                  <input type="text" class="inputFormulaire" placeholder="Entrez votre prénom" v-model="prenom" required>
                   <span v-if="!prenom && showErrors" class="error-message">Le champ Prénom est obligatoire</span>
                 </div>
 
                 <div class="register-champ">
                   <p>E-mail</p>
-                  <input type="text" class="inputFormulaire" :class="{ 'invalid': isInvalidCredentials }" placeholder="Entrez votre adresse e-mail" v-model="email" required>
+                  <input type="text" class="inputFormulaire" placeholder="Entrez votre adresse e-mail" v-model="email" required>
                   <span v-if="!email && showErrors" class="error-message">Le champ E-mail est obligatoire</span>
                 </div>
 
                 <div class="register-champ">
                   <p>Description (facultatif)</p>
-                  <input type="text" class="inputFormulaire" :class="{ 'invalid': isInvalidCredentials }" placeholder="Adresse e-mail" v-model="description">
+                  <input type="text" class="inputFormulaire"  placeholder="Adresse e-mail" v-model="description">
                 </div>
 
                 <div class="register-champ">
                   <p>Numéro Siret</p>
-                  <input type="text" class="inputFormulaire" :class="{ 'invalid': isInvalidCredentials }" placeholder="Adresse e-mail" v-model="siret" required>
+                  <input type="text" class="inputFormulaire" placeholder="Adresse e-mail" v-model="siret" required>
                   <span v-if="!siret && showErrors" class="error-message">Le champ Numéro Siret est obligatoire</span>
                 </div>
 
-                <div class="boutton" @click="validateFields">
+                <span class="error-message" id="back-error"></span>
+
+                <div class="boutton" @click="registerUser">
                   <p id="Inscription" :disabled="!areFieldsFilled">Inscription</p>
                 </div>
               </div>
@@ -60,12 +63,11 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import util from "@/services/utilisateur";
 
 export default {
   name: "InscriptionView",
   computed: {
-    ...mapState(['group_id']),
     areFieldsFilled() {
       return this.nom && this.prenom && this.email && this.siret;
     }
@@ -87,30 +89,40 @@ export default {
     document.removeEventListener("keydown", this.handleEnterKey);
   },
   methods: {
-    ...mapActions(['loginUser']),
-    check() {
-      this.isRegister = true;
-      let formulaire = document.getElementsByClassName("formulaire")[0];
-      formulaire.style.height = "400px";
-      formulaire.style.width = "400px";
+    async registerUser() {
+      if (this.areFieldsFilled) {
+        try {
+          const data = {
+            nom: this.nom,
+            prenom: this.prenom,
+            email: this.email,
+            description: this.description,
+            siret: this.siret
+          };
+
+          const response = await util.Register(data);
+          if (response.error) {
+            console.log(response.error)
+            throw response.data.error;
+          }
+
+          this.isRegister = true;
+          setTimeout(() => {
+            this.$router.push("/")
+          },3000)
+        } catch (error) {
+          document.getElementById("back-error").innerHTML = error;
+          console.error("Erreur lors de l'inscription", error.message);
+        }
+      } else{
+        this.showErrors = true;
+      }
     },
     handleEnterKey(event) {
       if (event.key === "Enter") {
-        this.connect();
+        this.registerUser();
       }
     },
-    validateFields() {
-      // Check if all fields are filled
-      if (this.areFieldsFilled) {
-        this.isRegister = true;
-        let formulaire = document.getElementsByClassName("formulaire")[0];
-        formulaire.style.height = "400px";
-        formulaire.style.width = "400px";
-      } else {
-        // Display error messages
-        this.showErrors = true;
-      }
-    }
   },
 };
 </script>
@@ -157,6 +169,10 @@ export default {
   font-size: 23px;
 }
 
+.validate span{
+  color: #FFFFFF;
+}
+
 #check{
   fill : #008000;
   height: 200px;
@@ -187,7 +203,7 @@ export default {
 .formulaire {
   padding: 8%;
   width: 500px;
-  height: 700px;
+  height: fit-content;
   position: relative;
   z-index: 10;
   border-radius: 12px;
@@ -199,7 +215,7 @@ export default {
 .formulaire-top h2 {
   color: white;
   font-family: "DM Sans";
-  font-size: 25px;
+  font-size: 30px;
   text-align: center;
   margin-top: 5%;
 }
@@ -218,7 +234,7 @@ export default {
 .register{
   display: flex;
   flex-direction: column;
-  gap: 17%;
+  gap: 25px;
   height: 40%;
 
 }
@@ -269,9 +285,7 @@ export default {
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 150px;
   justify-content: space-between;
-  margin-top: 10px;
 }
 
 .boutton p{

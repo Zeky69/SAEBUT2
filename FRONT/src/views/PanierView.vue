@@ -3,7 +3,7 @@
   <div class="root">
     <div class="navbar-height"></div>
 
-    <step-panier :items="['Panier','Informations','Récapitulatif','Paiement']" :step=1 ></step-panier>
+    <step-panier :items="['Panier','Informations','Récapitulatif','Paiement']" :step=stepPanier ></step-panier>
 
     <div class="all-conatiner">
 
@@ -29,10 +29,11 @@
 
 <script>
 
-  import lignePanier from "@/components/lignePanier.vue";
-  import MiniPanier from "@/components/panier.vue";
-  import StepPanier from "@/components/Step.vue";
+  import lignePanier from "@/components/Panier/lignePanier.vue";
+  import MiniPanier from "@/components/Panier/panier.vue";
+  import StepPanier from "@/components/Panier/Step.vue";
   import Cookies from "js-cookie";
+  import {mapState} from "vuex";
 
   export default {
     components: {
@@ -43,64 +44,10 @@
 
     data: () => ({
       elements: [],
-      // items: [
-      //     {
-      //   id: '1',
-      //   quantity: 2,
-      //   price: 19.99,
-      //   date: ['2024-11-10','2024-11-11'],
-      //   header: {
-      //     title: 'BelforPass Entire Day',
-      //     age : 'Adulte',
-      //     description: 'Profitez de la magie de Belforaine toute une journée.',
-      //     link: 'panier',
-      //     path: require('@/assets/Panier/image-pass.png'),
-      //     type: "billet"
-      //   }
-      // },{
-      //     id: '1',
-      //     quantity: 2,
-      //     price: 29.99,
-      //     date: ['2024-11-10','2024-11-11'],
-      //     header: {
-      //       title: 'BelforPass Entire Day',
-      //       age : 'Enfant',
-      //       description: 'Profitez de la magie de Belforaine toute une journée.',
-      //       link: 'panier',
-      //       path: require('@/assets/Panier/image-pass.png'),
-      //       type: "billet"
-      //     }
-      //   },
-      //   {
-      //     id: '2',
-      //     quantity: 2,
-      //     price: 29.99,
-      //     date: ['2024-11-10','2024-11-11'],
-      //     header: {
-      //       title: 'BelforPass Entire Day',
-      //       age : 'Adulte',
-      //       description: 'Profitez de la magie de Belforaine toute une journée.',
-      //       link: 'panier',
-      //       path: require('@/assets/Panier/image-pass.png'),
-      //       type: "billet"
-      //     }
-      //   },{
-      //     id: '3',
-      //     quantity: 2,
-      //     price: 29.99,
-      //     date: ['2024-11-10','2024-11-11'],
-      //     header: {
-      //       title: 'BelforPass Entire Day',
-      //       age : 'Adulte',
-      //       description: 'Profitez de la magie de Belforaine toute une journée.',
-      //       link: 'panier',
-      //       path: require('@/assets/Panier/image-pass.png'),
-      //       type: "billet"
-      //     }
-      //   }
-      // ]
-      items:[]
-    }),
+      items:[],
+    }),computed:{
+      ...mapState(['stepPanier'])
+    },
 
     methods: {
       deleteItem(elm) {

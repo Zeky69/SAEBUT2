@@ -10,14 +10,14 @@ const { log } = require('console');
 const jwtSecret= "djilsietmaxime";
 
 
-async function loginUser(login,password){
+async function loginUser(email,password){
     const client = await pool.connect();
     try{
         const query = `select * from utilisateurs
         left join MOTS_DE_PASSE_UTILISATEURS ON MOTS_DE_PASSE_UTILISATEURS.user_id=utilisateurs.user_id
         where email=$1 and password=$2;
         `;
-        res = await client.query(query,[login,password]);
+        res = await client.query(query,[email,password]);
         console.log("Connexion réussi");
         return res.rows[0];
     }catch(err){
@@ -27,6 +27,38 @@ async function loginUser(login,password){
         client.release();
     }
 }
+
+async function registerUser(nom, prenom, email, description, siret) {
+    const client = await pool.connect();
+
+    try {
+        await client.query('BEGIN');
+
+        let query = `INSERT INTO UTILISATEURS (FIRST_NAME, LAST_NAME, email, Date_Created, Group_Id)
+            VALUES ($1, $2, $3, now(), 2)
+            RETURNING User_id;`;
+
+        let res = await client.query(query, [nom, prenom, email]);
+        const prestataireId = res.rows[0].user_id;
+
+        query = `INSERT INTO prestataire (description, nom, id_user, etat_id)
+            VALUES ($1, $2, $3, 1) returning id_prestataire;`;
+
+        let resu = await client.query(query, [description, nom, prestataireId]);
+
+        await client.query('COMMIT');
+
+        console.log("Demande d'inscription réussi");
+        console.log(resu)
+        return resu.rows[0].id_prestataire;
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.log(err);
+    } finally {
+        client.release();
+    }
+}
+
 
 async function getInformationWithToken(token){
     let response;
@@ -47,7 +79,25 @@ async function getInformationWithToken(token){
       return response;
 }
 
+async function getUserByEmail(email) {
+    const client = await pool.connect();
+  
+    try {
+      const query = 'SELECT * FROM UTILISATEURS WHERE email = $1';
+      const result = await client.query(query, [email]);
+  
+      return result.rows[0];
+    } catch (error) {
+      console.error('Error in getUserByEmail:', error);
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
+
 module.exports = {
+    getUserByEmail,
     loginUser : loginUser,
+    registerUser : registerUser,
     getInformationWithToken : getInformationWithToken
 }
