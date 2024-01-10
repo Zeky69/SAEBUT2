@@ -64,10 +64,10 @@ INSERT INTO mots_de_passe_utilisateurs(User_Id, Password) VALUES
 
 
 INSERT INTO prestataire ( description, nom, id_user, etat_id,page_info ,photo_profil) VALUES
-('admin','belforaine', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'fnAdmin' AND LAST_NAME = 'lnAdmin'),2,NULL),
+('admin','belforaine', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'fnAdmin' AND LAST_NAME = 'lnAdmin'),2,NULL,NULL),
 ('Prestataire Description de macdonald', 'Mcdonald', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'), 2,'<p>Ca marche de zinzin</p>','macdo.jpeg'),
 ('Prestataire Description de pixar', 'Pixar', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Jane' AND LAST_NAME = 'Smith'), 2,NULL,'Disnet.jpeg'),
-('Prestataire Description de disney', 'Disney', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Bob' AND LAST_NAME = 'Johnson'), 2,NULL,'pixar.jpg');
+('Prestataire Description de disney', 'Disney', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Bob' AND LAST_NAME = 'Johnson'), 2 ,NULL,'pixar.jpg');
 
 
 INSERT INTO emplacement VALUES ('37f09601-f3e5-4707-8ba0-bedd6a0f8710', 'emp_test', 'lsmdmlq', 3.01549922724575500, 10.00000000000000000, 3.42965139680906360, 0, '{"matricepoints":[[3.697214350069089,2.1904708319286925],[2.07408378521734,2.351403372822247],[1.6232132855265036,5.221367018757306],[3.9857703648493725,5.19454492860838]]}'),
@@ -78,13 +78,12 @@ INSERT INTO emplacement VALUES ('37f09601-f3e5-4707-8ba0-bedd6a0f8710', 'emp_tes
 INSERT INTO batiment VALUES ( '251fe0ba-c541-49fc-98b9-2bcc9057a52e','description scene', 'stadium 1', 'bat_3_confer', 'accepted', 4.98128444846202000,10.00000000000000000,-9.62197766967598500,0,1 ,null,3,'03877ad4-d5cc-442b-9d8c-cf21bf964f58'),
                             ('de6255e4-3453-4989-8831-c8b2b102c99a', 'description toilette 2', 'toilette 2', 'bat_6_wc1', 'accepted',-0.72853483217727440,10.00000000000000000,-6.07609735198799700,0, 1, null,6, '07e1d974-66f4-4e1f-bbbe-4efb39b4f44f');
 
-INSERT INTO toilette VALUES ('f281672c-c7c8-4ad2-808f-dfd67138c701','de6255e4-3453-4989-8831-c8b2b102c99a');
-
-INSERT INTO scene VALUES('9fcbe75a-2918-4fbd-a558-dc994100f656','description scene','251fe0ba-c541-49fc-98b9-2bcc9057a52e');
+--INSERT INTO toilette VALUES ('f281672c-c7c8-4ad2-808f-dfd67138c701','de6255e4-3453-4989-8831-c8b2b102c99a');
 
 
-INSERT INTO event VALUES ('1', 'premier concert', 'description event 1','9fcbe75a-2918-4fbd-a558-dc994100f656', 'red', 'acepted', '2024-06-01T12:30:00', '2024-06-01T14:30:00',1),
-                         ('2',  'Premiere lan', 'description event 2', '9fcbe75a-2918-4fbd-a558-dc994100f656', 'blue', 'acepted', '2024-06-01T22:00:00', '2024-06-02T12:00:00',1),
-                         ('3', 'deuxieme concert', 'description event 3',  '9fcbe75a-2918-4fbd-a558-dc994100f656', 'green', 'acepted', '2024-06-03T14:00:00', '2024-06-03T16:00:00',2);
+
+INSERT INTO event VALUES ('1', 'premier concert', 'description event 1','251fe0ba-c541-49fc-98b9-2bcc9057a52e', 'red', 'acepted', '2024-06-01T12:30:00', '2024-06-01T14:30:00',1),
+                         ('2',  'Premiere lan', 'description event 2', '251fe0ba-c541-49fc-98b9-2bcc9057a52e', 'blue', 'acepted', '2024-06-01T22:00:00', '2024-06-02T12:00:00',1),
+                         ('3', 'deuxieme concert', 'description event 3',  '251fe0ba-c541-49fc-98b9-2bcc9057a52e', 'green', 'acepted', '2024-06-03T14:00:00', '2024-06-03T16:00:00',2);
 
 

@@ -84,7 +84,7 @@ const deleteScene = async (req) => {
     const client = await pool.connect();
     let uuid = req.params.uuid;
     try {
-        const sceneQuery = 'DELETE FROM scene WHERE id_scene = $1';
+        const sceneQuery = 'DELETE FROM batiment WHERE id_batiment = $1';
         const deleteSceneValues = [uuid];
         const scenes = await client.query(sceneQuery,deleteSceneValues);
 
@@ -105,7 +105,7 @@ const getEvent = async (req,res) => {
     let uuidScene = req.params.uuid;
     const client = await pool.connect();
     try {
-        const eventQuery = 'SELECT * FROM event WHERE id_scene = $1';
+        const eventQuery = 'SELECT * FROM event WHERE id_batiment = $1';
         const events = await client.query(eventQuery,[uuidScene]);
 
         const event = events.rows;
@@ -152,7 +152,7 @@ const saveEvent = async (req) => {
     console.log("info creat event",info);
     console.log("uuid",uuid);
     try {
-        const eventQuery = 'INSERT INTO event (id_event,description,nom,id_scene,color,status,start_date,end_date, id_prestataire) VALUES ($1,$2,$3,$4,$5,$6,$7,$8, $9) RETURNING *';
+        const eventQuery = 'INSERT INTO event (id_event,description,nom,id_batiment,color,status,start_date,end_date, id_prestataire) VALUES ($1,$2,$3,$4,$5,$6,$7,$8, $9) RETURNING *';
         const events = await client.query(eventQuery, [uuid, info.description, info.nom, info.id_scene, info.couleur, info.etat, info.date_debut, info.date_fin, info.id_prestataire]);
 
         console.log("l'event a bien été créé");

@@ -5,7 +5,6 @@ const adminRoutes = require('./router/admin.router');
 const userRoutes = require('./router/utilisateur.router');
 const mapPrestatairesRoutes = require('./router/mapPrestataires.router')
 const sceneRoutes = require('./router/scnene.router');
-const toiletteRoutes = require('./router/toilette.router');
 const map2DRoutes = require('./router/map2D.router');
 const bodyParser = require('body-parser');
 const resaRoutes = require('./router/reservation.router')
@@ -34,7 +33,6 @@ app.use("/map2D", map2DRoutes);
 app.use("/admin", adminRoutes);
 app.use("/mapPrestataires", mapPrestatairesRoutes);
 app.use("/scene", sceneRoutes);
-app.use("/toilette", toiletteRoutes);
 app.use("/user", userRoutes);
 app.use("/reservation", resaRoutes);
 
