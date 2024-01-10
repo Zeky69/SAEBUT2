@@ -11,7 +11,7 @@
       </div>
       <div class="profil-container" :style="{ background: 'linear-gradient(90deg,' + color1 + ' 0%, '+ color2 +' 100%)' }">
         <img src="@/assets/menu/stephane.jpg" alt="">
-        <div class="profil-info" :class="classe">
+        <div class="profil-info">
           <span class="profil-info-name">{{lname}} {{fname}}</span>
           <span class="profil-info-role">Organisateur</span>
         </div>

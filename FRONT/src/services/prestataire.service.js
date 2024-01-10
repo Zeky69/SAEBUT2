@@ -16,9 +16,17 @@ async function getPrestataires(){
     return await getRequest('/prestataires', 'getPrestataires')
 }
 
+
+
+ async  function getPrestataireObject(idUser){
+    return await getRequest('/user/prestataire/'+idUser,'getPrestataireObject')
+
+}
+
 export {
     getPrestataire,
     updatePage,
-    getPrestataires
+    getPrestataires,
+    getPrestataireObject
 }
 
