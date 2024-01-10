@@ -1078,16 +1078,12 @@ export default {
 
 
       this.emplacement_bdd = await getAllEmp();
-      console.log("emplacement_bdd", this.emplacement_bdd)
       for (let i = 0; i < this.emplacement_bdd.length; i++) {
         if(this.emplacement_bdd[i].id_emplacement == 0){
           break;
         }
-          console.log("emplacement", this.emplacement_bdd[i])
           var matricepoints = this.emplacement_bdd[i].matricepoints.matricepoints
-          console.log("mat", matricepoints)
         const emp = await this.matriceTo3DEmp(matricepoints, this.emplacement_bdd[i].nom, this.emplacement_bdd[i].posx, this.emplacement_bdd[i].posz, this.emplacement_bdd[i].id_emplacement);
-        console.log("emp3D", emp)
         emp.material = material_emp.clone();
         if(this.emplacement_bdd[i].batiment_id != null){
           emp.material.color.setHex(0x7e7e7e);
@@ -1098,6 +1094,7 @@ export default {
       }
 
       this.batiment_bdd = await getAllBat();
+      console.log("batiment", this.batiment_bdd)
       for (let i = 0; i< this.batiment_bdd.length; i++) {
         for (let j = 0; j < this.batiment.length; j++) {
           if (this.batiment_bdd[i].name == this.batiment[j].name) {
@@ -1319,7 +1316,8 @@ export default {
             } else {
               if (this.children[i].name.slice(0, 3) == "sol") {
                 if(this.children[i].name == "sol_sol") {
-                  const texturesol = new THREE.TextureLoader().load('map/mapData/tex/tex_solmir.png');
+                  const texturesol = new THREE.TextureLoader().load('map/mapData/tex/tex_sol.png');
+                  texturesol.flipY = false;
                   const mat_sol = new THREE.MeshPhongMaterial({map: texturesol});
                   this.children[i].material = mat_sol;
                   this.children[i].material.metalness = 0;
@@ -1329,6 +1327,7 @@ export default {
                 }
                 else{
                   const texturesol = new THREE.TextureLoader().load('map/mapData/tex/tex_arrsol.png');
+                  texturesol.flipY = false;
                   texturesol.wrapS = THREE.RepeatWrapping;
                   texturesol.wrapT = THREE.RepeatWrapping;
                   texturesol.repeat.set(2, 2);
@@ -1342,7 +1341,8 @@ export default {
               }
               else {
                 if (this.children[i].name.slice(0, 3) == "dec") {
-                if(this.children[i].name.includes("tree")){
+                if(this.children[i].name.includes("sapins")){
+                  console.log("sapin")
                   const texturetree = new THREE.TextureLoader().load('map/mapData/tex/tex_tree.png');
                   texturetree.flipY = false;
                   const mattree = new THREE.MeshPhongMaterial({map: texturetree});
@@ -1439,7 +1439,7 @@ export default {
         z: adjustedBoundingBox.min.z
       };
 
-      console.log("pontmap3Dlfjdklsdkljf", coinHautDroit3D, coinHautGauche3D,coinBasGauche,coinBasDroite)
+      //console.log("pontmap3Dlfjdklsdkljf", coinHautDroit3D, coinHautGauche3D,coinBasGauche,coinBasDroite)
 
       /*
       cooextreme3D
@@ -1483,7 +1483,7 @@ Array [ -8.909232716902693, -20.492076873779297 ]
         x: -8.909232716902693,
         z: 20.492076873779297
       };
-      console.log("prettyuseless",coinHautGauchePretty,coinHautDroitPretty,coinBasGauchePretty,coinBasDroitePretty)
+      //console.log("prettyuseless",coinHautGauchePretty,coinHautDroitPretty,coinBasGauchePretty,coinBasDroitePretty)
       /*
       kjsdkljqskldjklqsjdklqskljd max
           max:
@@ -1496,73 +1496,6 @@ Array [ -8.909232716902693, -20.492076873779297 ]
           z:-152.0225906055275
        */
       // Application de la transformation aux coordonnées 2D
-      let point3D2;
-      if(x > 0){
-        if(z > 0){
-          point3D2 = {
-            //x: (coinHautDroitPretty.x * x) / coinHautDroit3D.x,
-            //z: (coinHautDroitPretty.z * z) / coinHautDroit3D.z
-
-            //x: ((coinHautDroit3D.x * x)/ coinHautDroitPretty.x),
-            //z: ((coinHautDroit3D.z * z)/ coinHautDroitPretty.z)
-
-
-            x: (coinHautDroit3D.x * x)/ coinHautDroitPretty.x,
-            z: (coinHautDroit3D.z * z)/ coinHautDroitPretty.z
-          }
-        }
-        else{
-          point3D2 = {
-            //x: (coinHautGauchePretty.x * x) / coinBasDroite.x,
-            //z: (coinHautGauchePretty.z * z) / coinBasDroite.z
-
-            //x: ((coinBasDroite.x * x)/ coinHautGauchePretty.x),
-            //z: ((coinBasDroite.z * z)/ coinHautGauchePretty.z)
-
-            x: ((coinBasDroite.x * x)/ coinBasDroitePretty.x),
-            z: ((coinBasDroite.z * z)/ coinBasDroitePretty.z)
-
-
-          }
-        }
-      }
-      else{
-        if(z > 0){
-          point3D2 = {
-            //x: (coinBasDroitePretty.x * x) / coinHautGauche3D.x,
-            //z: (coinBasDroitePretty.z * z) / coinHautGauche3D.z
-
-            //x: ((coinHautGauche3D.x * x)/ coinBasDroitePretty.x),
-            //z: ((coinHautGauche3D.z * z)/ coinBasDroitePretty.z)
-
-            x: ((coinHautGauche3D.x * x)/ coinHautGauchePretty.x),
-            z: ((coinHautGauche3D.z * z)/ coinHautGauchePretty.z)
-          }
-        }
-        else{
-          point3D2 = {
-            //x: (coinBasGauchePretty.x * x) / coinBasGauche.x,
-            //z: (coinBasGauchePretty.z * z) / coinBasGauche.z
-
-            //x: ((coinBasGauche.x * x)/ coinBasGauchePretty.x),
-            //z: ((coinBasGauche.z * z)/ coinBasGauchePretty.z)
-
-            x: ((coinBasGauche.x * x)/ coinBasGauchePretty.x),
-            z: ((coinBasGauche.z * z)/ coinBasGauchePretty.z)
-          }
-        }
-      }
-
-
-
-
-
-
-      const point3D = {
-        x: (x * (adjustedBoundingBox.max.x - adjustedBoundingBox.min.x)/(0.001781847*10000)),
-        z: (z * (adjustedBoundingBox.max.z - adjustedBoundingBox.min.z)/(0.004098415*10000))
-      };
-
 
 
 
@@ -1570,8 +1503,12 @@ Array [ -8.909232716902693, -20.492076873779297 ]
       //botom right pretty coo [ 8.909232717044802, -20.492076873779297 ]
 
       let botrghtpretty = [8.909232717044802, -20.492076873779297]
-      let botrght3D = [145.76097359713458, 1.8496733903884888, 150.63050706416016]
-      point3D2 = {
+      //2 -145.2783025259123, z: 150.63050706416016
+      //3 -145.2783025259123, z: -152.0225906055275
+     //hd -152.0225906055275
+      let botrght3D = [145.2783025259123, 1.8496733903884888,150.63050706416016]
+
+      let point3D2 = {
         x: (botrght3D[0] * x) / botrghtpretty[0],
         z: (botrght3D[2] * z) / botrghtpretty[1]
       }
@@ -1582,18 +1519,20 @@ Array [ -8.909232716902693, -20.492076873779297 ]
       }
 
  */
-      console.log("point3D", point3D)
-      console.log("point3D2", point3D2)
       return point3D2;
     },
 
     async matriceTo3DEmp(matricepoints, name, posx, posz, emp_uuid) {
       let center = await this.point2Dto3D(posx, posz);
-      console.log("center", center)
-      const points = matricepoints.map(([x, y]) => new THREE.Vector3(x,y));
-      console.log("matrice", matricepoints)
-      console.log("points", points)
-      // mettre à l'échelle
+
+      // Inversion (flip) des coordonnées y dans la matrice
+      const flippedMatrice = matricepoints.map(([x, y]) => [2*-x, 2*-y]);
+      //console.log("flippedMatrice", flippedMatrice);
+
+      const points = flippedMatrice.map(([x, y]) => new THREE.Vector3(x, y));
+      //console.log("points", points);
+
+      // Mise à l'échelle
       for (let i = 0; i < points.length; i++) {
         let pointemp = await this.point2Dto3D(points[i].x, points[i].y);
 
@@ -1601,15 +1540,19 @@ Array [ -8.909232716902693, -20.492076873779297 ]
         points[i].y = pointemp.z - center.z;
       }
 
+      // Le reste de votre code...
+
 
 
       // Épaisseur de l'objet
       const depth = 2;
       const shape = new THREE.Shape(points);
-      console.log("shape", shape)
 
       const geome = new THREE.ExtrudeGeometry(shape, { depth: depth, bevelEnabled: false });
       geome.rotateX(-Math.PI/2)
+
+      geome.rotateY(-Math.PI/2)
+      geome.translate(center.z+200, 0, center.x+50);
 
       const texture_emp = new THREE.TextureLoader().load('map/mapData/tex/tex_emp.png');
       const material_emp = new THREE.MeshPhongMaterial({ map: texture_emp });
@@ -1619,7 +1562,6 @@ Array [ -8.909232716902693, -20.492076873779297 ]
       mesh.receiveShadow = true;
       mesh.name = name;
       mesh.userData = {uuid: emp_uuid};
-      console.log("mesh", mesh);
       return mesh;
     },
 
@@ -2031,6 +1973,8 @@ input:checked + .slider:before {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+
 
 
 .custom-btn {
