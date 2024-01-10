@@ -24,24 +24,24 @@
             <td>{{ item.last_name }}</td>
             <td>{{ item.description }}</td>
             <td>{{ item.email }}</td>
-            <td>{{ item.etat_libelle }}</td>
+            <td class="state" :class="statusClass(item.etat_libelle)">{{ item.etat_libelle }}</td>
 
 
             <td>
               <template v-if="item.etat_id === 2">
                 <!-- État: Accepté -->
-                <button>Edit</button>
+                <button class="edit-btn">Edit</button>
               </template>
 
               <template v-else-if="item.etat_id === 3">
                 <!-- État: Refusé -->
-                <button @click="reAcceptUser(item)">Re-Accepter</button>
+                <button class="accept-btn" @click="reAcceptUser(item)">Re-Accepter</button>
               </template>
 
               <template v-else-if="item.etat_id === 1">
                 <!-- État: En attente -->
-                <button @click="manageUser(item.id_user, item.id_prestataire, 2)">Accepter</button>
-                <button @click="manageUser(item.id_user, item.id_prestataire, 3)">Refuser</button>
+                <button class="accept-btn" @click="manageUser(item.id_user, item.id_prestataire, 2)">Accepter</button><br>
+                <button class="reject-btn" @click="manageUser(item.id_user, item.id_prestataire, 3)">Refuser</button>
               </template>
 
             </td>
@@ -67,7 +67,12 @@ export default {
   data: () => ({
     tablePresta: [],
     selectedState: "all",
-    rubriques: ['Prénom', 'Nom', 'Description', 'Email', 'État']
+    rubriques: ['Prénom', 'Nom', 'Description', 'Email', 'État'],
+    statusColors: {
+      accepté: 'green',
+      refusé: 'red',
+      "en attente": 'yellow'
+    }
   }),
   computed: {
     filteredUsers() {
@@ -80,6 +85,9 @@ export default {
         );
       }
     },
+    statusClass() {
+      return (status) => this.statusColors[status] || '';
+    }
   },
   methods: {
     fetchUsers() {
@@ -131,10 +139,11 @@ export default {
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans&display=swap');
 
-$purple: #9b5de5;
+$purple: #745f8f;
 $dark-gray: black;
 
 .admin-presta {
+  font-family: "DM Sans Regular";
   display: flex;
   flex-direction: column;
   padding: 0 6%;
@@ -156,29 +165,37 @@ $dark-gray: black;
   }
 
   select {
-    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    /*background-image: url("data:image/svg+xml;utf8,<svg fill='black' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><polygon points='0,0 4,0 2,4'/></svg>");
-    */
-    background-repeat: no-repeat;
-    background-position: right calc(100% - 10px) top 50%, 0 0;
-    background-size: 12px 12px;
-    border: none;
-    outline: none;
+    background: rgba(255, 255, 255, 0.21);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    border: 1px solid rgba(255, 255, 255, 0.31);
     cursor: pointer;
     padding: 0.5rem;
     font-size: inherit;
     border-radius: 4px;
-    appearance: menulist;
+    appearance: listbox;
     text-align: center;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.31);
+    }
   }
 
   table {
     border-collapse: collapse;
     width: 100%;
     margin-top: 20px;
-    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.479);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.5px);
+    -webkit-backdrop-filter: blur(8.5px);
+    border: 1px solid rgba(130, 23, 119, 0.43);
     overflow: hidden;
 
     tr {
@@ -195,7 +212,7 @@ $dark-gray: black;
 
     th,
     td {
-      padding: 8px;
+      padding: 1rem;
       text-align: left;
     }
 
@@ -203,17 +220,15 @@ $dark-gray: black;
       position: sticky;
       top: 0;
       padding: 1.5rem;
-      background-color: rgba(255, 255, 255, 0.9);
       box-shadow: 0 2px 2px rgba(#000000, 0.1);
       z-index: 1;
       font-weight: normal;
-      color: #553C65;
+      color: $purple;
+      font-weight: bold;
 
     }
 
-    td {
-      border-bottom: 1px solid lighten($dark-gray, 5%);
-    }
+
 
     table:first-of-type {
       margin: 15px 2px;
@@ -224,25 +239,91 @@ $dark-gray: black;
     }
   }
 
-  button {
+  .green {
+    color: green;
+  }
+
+  .red {
+    color: red;
+  }
+
+  .yellow {
+    color: rgb(147, 107, 56);
+  }
+
+  .accept-btn {
     background-color: $purple;
-    padding: 8px 16px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
     opacity: 0.6;
-    margin-left: 20px;
     margin-top: auto;
     margin-bottom: auto;
-    background: rgba(130, 23, 119, 0.23);
-    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.23);
+    border-radius: 10px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(8.5px);
     -webkit-backdrop-filter: blur(8.5px);
-    border: 1px solid rgba(130, 23, 119, 0.43);
+    border: 1px solid rgba(116, 116, 116, 0.43);
+
+    border-color: rgb(65, 147, 65);
+    color: rgb(65, 147, 65);
+
+    padding: 0.5rem 4rem;
+    font-size: 16px;
 
     &:hover {
-      background-color: darken($purple, 10%);
+      background-color: rgb(67, 152, 70);
+      color: white;
+    }
+  }
+
+  .reject-btn {
+    background-color: $purple;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    opacity: 0.6;
+    margin-top: 5%;
+    margin-bottom: auto;
+    background: rgba(255, 255, 255, 0.23);
+    border-radius: 10px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.5px);
+    -webkit-backdrop-filter: blur(8.5px);
+    border: 1px solid rgba(116, 116, 116, 0.43);
+
+    border-color: rgb(142, 58, 58);
+    color: rgb(142, 58, 58);
+
+    padding: 0.5rem 4rem;
+    font-size: 16px;
+
+    &:hover {
+      background-color: rgb(173, 84, 84);
+      color: white;
+      transition: color 0.2s ease-in-out;
+    }
+  }
+
+  .edit-btn {
+    background-color: $purple;
+    padding: 0.5rem 5rem;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    opacity: 0.6;
+    margin-top: auto;
+    margin-bottom: auto;
+    background: rgba(255, 255, 255, 0.23);
+    border-radius: 10px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.5px);
+    -webkit-backdrop-filter: blur(8.5px);
+    border: 1px solid rgba(116, 116, 116, 0.43);
+
+    &:hover {
+      background-color: white;
     }
   }
 
