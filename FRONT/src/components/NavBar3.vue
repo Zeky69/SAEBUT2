@@ -33,65 +33,68 @@
 <script>
 export default {
   name: 'NavBar',
-  data() {
-    return {
-      isTransparent: false,
-      isHomePage: false,
-      navOpen: true,
-      prevScrollpos: 0,
-      scrolled: false,
-      navBarTitles: {
-        Accueil: '/',
-        Attractions: '/attraction',
-        Restauration: '/restauration',
-        Boutique: '/boutique',
-        Billetterie: '/billetterie',
-        Organisateurs: '/organisateurs',
-        TestMap: '/testMap',
-      }
-    };
-  },
+  data: () => ({
+    isTransparent: false,
+    isHomePage: false,
+    navOpen: true,
+    prevScrollpos: 0,
+    scrolled: false,
+    navBarTitles: {
+      'Accueil': '/',
+      'Attractions': '/attraction',
+      'Restauration': '/restauration',
+      'Boutique': '/boutique',
+      'Billetterie': '/billetterie',
+      'Organisateurs': '/organisateurs',
+      'TestMap': '/testMap',
+    }
+  }),
   methods: {
     menuClicked(path) {
       if (window.innerWidth < 902) {
-        this.navOpen = !this.navOpen;
+        this.navOpen = !this.navOpen
       }
-      this.$router.push(path).catch(() => {});
+      this.$router.push(path).catch(() => {
+      });
     },
     handleScroll() {
-      const navbarContent = document.getElementsByClassName('navbar-content')[0];
-      if (!navbarContent) return;
-
       if ((!this.scrolled && window.innerWidth > 902) || (this.scrolled && window.innerWidth > 1100)) {
         this.navOpen = true;
       } else {
         this.navOpen = false;
       }
       this.scrolled = window.scrollY >= 100;
+      let navbarContent = document.getElementsByClassName('navbar-content')[0];
+      if (navbarContent) {
+        navbarContent.classList.toggle('scrolled', this.scrolled);
+      } let currentScrollPos = window.pageYOffset;
+      let navbarElement = document.getElementById("navbar");
 
-      if (this.prevScrollpos > window.pageYOffset || window.pageYOffset < 100) {
-        this.navbarShown = true;
-      } else {
-        this.navbarShown = false;
+      if (navbarElement) {
+        if (this.prevScrollpos > currentScrollPos || currentScrollPos < 100) {
+          navbarElement.style.top = "0";
+        } else {
+          navbarElement.style.top = "-200px";
+          this.navOpen = false;
+        }
       }
-      this.prevScrollpos = window.pageYOffset;
 
-      navbarContent.classList.toggle('scrolled', this.scrolled);
-
-      if (!this.navOpen && window.pageYOffset < 100) {
-        navbarContent.style.height = null;
-      } else if (this.scrolled && window.innerWidth <= 902) {
-        navbarContent.style.height = `${navbarContent.scrollHeight}px`;
-      }
-    },
+      this.prevScrollpos = currentScrollPos;
+    }
   },
   watch: {
-    $route() {
+    '$route'() {
       this.isHomePage = this.$route.path === '/attraction';
       this.isTransparent = this.isHomePage;
-    },
+    }
   },
   mounted() {
+    if ((!this.scrolled && window.innerWidth > 902) || (this.scrolled && window.innerWidth > 1100)) {
+      this.navOpen = true;
+    } else {
+      this.navOpen = false;
+    }
+
     window.addEventListener('scroll', this.handleScroll);
     window.addEventListener('resize', () => {
       if ((!this.scrolled && window.innerWidth > 902) || (this.scrolled && window.innerWidth > 1100)) {
@@ -104,8 +107,8 @@ export default {
     // Vérifiez également le chemin de la route lors du montage initial
     this.isHomePage = this.$route.path === '/attraction';
     this.isTransparent = this.isHomePage;
-  },
-};
+  }
+}
 </script>
 
 <style scoped>
@@ -392,4 +395,5 @@ export default {
   .title h1 {
     display: none
   }
-}</style>
+}
+</style>
