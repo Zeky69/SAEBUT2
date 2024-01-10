@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="logo">
-      <img src="../assets/logo/insta.png" alt="Instagram Logo">
+      <img src="../assets/logo/insta.png" href="google.fr" alt="Instagram Logo">
       <img src="../assets/logo/facebook.png" alt="Facebook Logo">
       <img src="../assets/logo/twitter.png" alt="Twitter Logo">
       <img src="../assets/logo/youtube.png" alt="YouTube Logo">
@@ -58,7 +58,7 @@ export default {
 
 .footer {
   position: relative;
-
+  margin-top: 15rem;
 }
 
 .newsletter {
@@ -75,8 +75,6 @@ export default {
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.4);
-
-
 }
 
 .newsletter p {
