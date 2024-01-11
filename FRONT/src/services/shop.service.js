@@ -17,6 +17,21 @@ async function getArticles(id) {
     }
 }
 
+async function getRandomArticlesFromAPI() {
+    return getRequest(url+'/random', 'getRandomArticles')
+}
+
+async function getRandomArticles() {
+    try {
+        console.log("je suis la ")
+        let answer = await getRandomArticlesFromAPI();
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des articles', error.message);
+        throw error;
+    }
+}
+
 async function getCategorieFromAPI(id) {
     return getRequest(url+`/categorie/${id}`, 'getCategorie')
 }
@@ -32,8 +47,39 @@ async function getCategorie(id) {
     }
 }
 
+async function getAllCategorieFromApi() {
+    return getRequest(url+`/categorie`, 'getAllCategorie')
+}
+
+async function getAllCategorie() {
+    try {
+        let answer = await getAllCategorieFromApi();
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des catégories', error.message);
+        throw error;
+    }
+}
+
+async function getCategorieByProductFromAPI(id) {
+    return getRequest(url+`/categorie/articles/${id}`, 'getCategorieByProduct')
+}
+
+async function getCategorieByProduct(id) {
+    try {
+        let answer = await getCategorieByProductFromAPI(id);
+        console.log(answer)
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des catégories', error.message);
+        throw error;
+    }
+}
 
 export default {
 getArticles,
-    getCategorie
+    getCategorie,
+    getAllCategorie,
+    getRandomArticles,
+    getCategorieByProduct
 }

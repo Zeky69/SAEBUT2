@@ -19,15 +19,15 @@
 
     <div class="best-vente">
       <h2>Nos meilleurs ventes</h2>
-      <BestSell/>
+      <BestSell :table="listArticles"/>
     </div>
 
     <h2 class="accroche">Votre bonheur a portée de main</h2>
 
     <div class="categorie">
-      <div v-for="(cat, index) in category" :key="index" class="categorie-content" :style="{ backgroundImage: 'url(' + setImage(cat.image) + ')', before: { backgroundImage: 'url(' + setImage(cat.image) + ')' } }" @click="navigateToCategory(cat.id)">
+      <div v-for="(cat, index) in category" :key="index" class="categorie-content" :style="{ backgroundImage: 'url(' + setImage(cat.image) + ')', before: { backgroundImage: 'url(' + setImage(cat.image) + ')' } }" @click="navigateToCategory(cat.id_categorie)">
 
-     <p>{{ cat.name }}</p>
+     <p>{{ cat.libelle_categorie }}</p>
       </div>
     </div>
 
@@ -37,17 +37,14 @@
 <script>
 
 import BestSell from "@/components/BestSell.vue";
+import shopService from "@/services/shop.service";
 
 import {getImage} from "@/services/image.service"
 export default {
   name : 'BoutiqueView',
   data : ()=> ({
-  category:[
-    {name:'Goodies', id:1,image:'goodies.png'},
-    {name:'Vêtements',id:2, image:'vetement.png'},
-    {name:'Accessoires',id:4,image:'accessoires.jpg'},
-    {name:'Peluches',id:3, image:'peluches.png'}
-  ]
+  category:[],
+    listArticles:[],
   }),
   components:{
     BestSell
@@ -57,7 +54,17 @@ export default {
     },
     setImage(url){
       return getImage(url);
+    },async getArticles() {
+      try{
+        this.category = await shopService.getAllCategorie();
+        this.listArticles = await shopService.getRandomArticles()
+
+      }catch (err){
+        console.error("Error fetching articles:", err);
+      }
     }
+  },created() {
+    this.getArticles()
   }
 }
 </script>

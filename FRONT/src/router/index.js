@@ -29,11 +29,10 @@ const routes = [
   }
   ,  {
     path: '/boutique',
-    name: 'boutique',
     component: () => import(/* webpackChunkName: "about" */ '../views/BoutiqueVue.vue')
    , children: [
        {
-         name:'BoutiqueVue',
+         name:'BoutiqueView',
          path:'/',
          component : () => import('../components/BoutiqueView.vue')
     },
@@ -100,7 +99,7 @@ const routes = [
       },
       {
         path:'*',
-        name: 'admin.notFound,',
+        name: 'presta.notFound,',
         component: () => import('../views/NotFound.vue')
       }
     ]

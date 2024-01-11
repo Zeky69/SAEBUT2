@@ -82,6 +82,7 @@ CREATE TABLE categorie_produit(
 	id_categorie SERIAL,
 	libelle_categorie VARCHAR(50),
 	description VARCHAR(250),
+	image VARCHAR(50),
 	PRIMARY KEY(id_categorie)
 );
 
