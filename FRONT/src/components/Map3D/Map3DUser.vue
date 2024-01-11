@@ -589,131 +589,16 @@ export default {
     },
 
     async point2Dto3D(x, z ) {
-      /*
-      // Bounding box de la map 3D
-      const boundingBox = {
-        min: { x: -0.9983415603637695, y: -1, z: -1.0045995712280273 },
-        max: { x: 1.0016584396362305, y: 1, z: 0.9954003691673279 }
-      };
-
-      // Échelle
-      const scale = { x: 145.51963806152344, y: 1.8496733903884888, z: 151.32655334472656 };
-
-      // Conversion de la bounding box et de l'échelle
-      const adjustedBoundingBox = {
-        min: {
-          x: boundingBox.min.x * scale.x,
-          y: boundingBox.min.y * scale.y,
-          z: boundingBox.min.z * scale.z
-        },
-        max: {
-          x: boundingBox.max.x * scale.x,
-          y: boundingBox.max.y * scale.y,
-          z: boundingBox.max.z * scale.z
-        }
-      };
-
-      let coinHautGauche3D = {
-        x: adjustedBoundingBox.min.x,
-        z: adjustedBoundingBox.max.z
-      };
-      let coinHautDroit3D = {
-        x: adjustedBoundingBox.max.x,
-        z: adjustedBoundingBox.max.z
-      };
-      let coinBasGauche = {
-        x: adjustedBoundingBox.min.x,
-        z: adjustedBoundingBox.min.z
-      };
-      let coinBasDroite= {
-        x: adjustedBoundingBox.max.x,
-        z: adjustedBoundingBox.min.z
-      };
-
-      //console.log("pontmap3Dlfjdklsdkljf", coinHautDroit3D, coinHautGauche3D,coinBasGauche,coinBasDroite)
-
-      /*
-      cooextreme3D
-      Object { x: 145.76097359713458, z: 150.63050706416016 }
-
-Object { x: -145.2783025259123, z: 150.63050706416016 }
-
-Object { x: -145.2783025259123, z: -152.0225906055275 }
-
-Object { x: 145.76097359713458, z: -152.0225906055275 }
-       */
-
-
-      /*
-      cooppretty
-      top  left
-      Array [ 8.909232717044802, -20.492076873779297 ]
-      Map2Dedition.vue:304
-      bottom right
-      Array [ -8.909232716902693, 20.492076873779297 ]
-      Map2Dedition.vue:305
-      top right
-      Array [ 8.909232717044802, 20.492076873779297 ]
-      Map2Dedition.vue:306
-      bottom left
-      Array [ -8.909232716902693, -20.492076873779297 ]
-       */
-      /*
-      let coinHautGauchePretty = {
-        x: 8.909232717044802,
-        z: -20.492076873779297
-      };
-      let coinHautDroitPretty = {
-        x: 8.909232717044802,
-        z:  20.492076873779297
-      };
-      let coinBasGauchePretty = {
-        x: -8.909232716902693,
-        z: -20.492076873779297
-      };
-      let coinBasDroitePretty = {
-        x: -8.909232716902693,
-        z: 20.492076873779297
-      };
-      //console.log("prettyuseless",coinHautGauchePretty,coinHautDroitPretty,coinBasGauchePretty,coinBasDroitePretty)
-      /*
-      kjsdkljqskldjklqsjdklqskljd max
-          max:
-          x: 145.76097359713458
-          y: 1.8496733903884888
-          z: 150.63050706416016
-          min
-          x-145.2783025259123
-          y-1.8496733903884888
-          z:-152.0225906055275
-       */
-      // Application de la transformation aux coordonnées 2D
-
-
-
-
-      //botom right pretty coo [ 8.909232717044802, -20.492076873779297 ]
-
-
       let botrghtpretty = [8.909232717044802, -20.492076873779297]
-      //2 -145.2783025259123, z: 150.63050706416016
-      //3 -145.2783025259123, z: -152.0225906055275
-      //hd -152.0225906055275
-      let botrght3D = [145.2783025259123, 1.8496733903884888,150.63050706416016]
+      let botrght3D = [275.13375854492188, 1.8496733903884888,275]
 
       let point3D2 = {
         x: (botrght3D[0] * x) / botrghtpretty[0],
-        z: (botrght3D[2] * z) / botrghtpretty[1]
+        z: (botrght3D[2] * z) / botrghtpretty[1]-20
       }
-      /*
-            point3D2={
-              x: x*1,
-              z: z*1
-            }
-
-       */
       return point3D2;
     },
+
 
     async matriceTo3DEmp(matricepoints, name, posx, posz, emp_uuid) {
       let center = await this.point2Dto3D(posz, posx);
