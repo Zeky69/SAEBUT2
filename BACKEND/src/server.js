@@ -46,8 +46,8 @@ const swaggerOption = {
             contact: {
                 name: "Belforaine",
             },
-            servers: ["http://localhost:3000/"],
-            //servers: ['https://api.codeky.fr'],
+            //servers: ["http://localhost:3000/"],
+            servers: ['https://api.codeky.fr'],
         },
     }),
     apis: ["server.js", "./router/*.js"],
