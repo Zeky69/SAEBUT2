@@ -143,8 +143,10 @@ export default {
       this.getInformation();
     },changeImage() {
       try {
-        if(this.photoDeProfil)
+        if(this.photoDeProfil){
           deleteImage(this.photoDeProfil)
+          this.photoDeProfil="";
+        }
         if(this.file){
           this.photoDeProfil = this.photoChoisiName;
           uploadImage(this.file);
