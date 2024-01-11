@@ -3,7 +3,7 @@
   <div>
 
 
-    <h1 style="padding-top: 300px">presta</h1>
+    <h1 style="padding-top: 300px">ADMIN</h1>
 
 
     <TestMap/>
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import TestMap from '../components/Map3D/MapTest.vue';
+import TestMap from '../components/Map3D/Map3DAdmin.vue';
 
 export default {
   components: {

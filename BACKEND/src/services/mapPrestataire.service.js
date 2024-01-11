@@ -191,7 +191,7 @@ const deleteEmp = async (id) => {
     try {
         let res;
         let sql = "DELETE FROM emplacement WHERE id_emplacement = $1 RETURNING *";
-        res = await pool.query(sql, [id]);
+        res = await client.query(sql, [id]);
         console.log("Suppression réussie de l'emplacement avec id" + id );
         return res.rows;
     } catch (err) {
@@ -388,7 +388,7 @@ const deletebat = async (req) => {
     try {
         const deleteBatimentQuery = 'DELETE FROM batiment WHERE id_batiment = $1';
         const deleteBatimentValues = [id_batiment];
-        await pool.query(deleteBatimentQuery, deleteBatimentValues);
+        await client.query(deleteBatimentQuery, deleteBatimentValues);
     }
     catch (error) {
         console.error('Erreur lors de la suppression du batiment :', error);
