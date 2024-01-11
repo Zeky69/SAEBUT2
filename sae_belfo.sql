@@ -193,3 +193,14 @@ CREATE TABLE emplacement(
        FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
        FOREIGN KEY(id_tag) REFERENCES tags(id_tag)
     );
+
+    CREATE TABLE commentaire(
+       id_commentaire SERIAL,
+       nom VARCHAR(50),
+       id_prestataire INT NOT NULL,
+       commentaire TEXT,
+       note INT,
+       date_commentaire TIMESTAMP ,
+       PRIMARY KEY(id_commentaire),
+        FOREIGN KEY(id_prestataire) REFERENCES prestataire(id_prestataire)
+    );

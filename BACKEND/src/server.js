@@ -10,6 +10,7 @@ const map2DRoutes = require('./router/map2D.router');
 const bodyParser = require('body-parser');
 const resaRoutes = require('./router/reservation.router')
 const imageRoutes = require('./router/image.router')
+const commentaireRoutes = require('./router/commentaire.router')
 
 const cors = require('cors');
 const path = require("path");
@@ -42,6 +43,7 @@ app.use("/user", userRoutes);
 app.use("/reservation", resaRoutes);
 
 app.use('/image', imageRoutes);
+app.use('/commentaire',commentaireRoutes);
 
 
 

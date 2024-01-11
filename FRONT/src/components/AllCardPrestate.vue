@@ -144,12 +144,10 @@ export default {
     getPrestataires().then((response) => {
       this.ListPresate = response;
       this.filterList = this.ListPresate;
-      console.log(this.ListPresate);
     })
 
     getPrestatairesTypes().then((response) => {
       this.ListTypePrestaire = response;
-      console.log(this.ListTypePrestaire);
     })
 
     document.addEventListener('dragstart', function (event) {
