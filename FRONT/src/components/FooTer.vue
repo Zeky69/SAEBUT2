@@ -66,6 +66,8 @@ export default {
 .footer {
   position: relative;
   margin-top: 15rem;
+  padding: 3rem 0;
+  overflow: hidden;
 }
 
 .newsletter {
