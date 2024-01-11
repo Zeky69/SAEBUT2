@@ -35,6 +35,7 @@
               <p>{{types.libelle}}</p>
               </div>
             </div>
+
           </div>
           <div class="card-bottom">
             <router-link :to="{ name: 'prestate', params: { id: prestate.id_prestataire } }">
@@ -48,6 +49,7 @@
       <div class="button-container">
           <button class="button" @click="scrollToNextCard"><svg class="svg-icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M672 512 672 512 352 192 320 224 624 528 320 832 352 864 688 528Z"  /></svg></button>
         </div>
+
       </div>
 
 
