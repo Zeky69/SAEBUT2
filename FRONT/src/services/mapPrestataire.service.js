@@ -220,6 +220,22 @@ async function deleteBat(data) {
     }
 }
 
+async function updateBatStatusFromAPI(data) {
+    return patchRequest('/mapPrestataires/bat', data, 'UPDATEBATSTATUS')
+}
+
+async function updateBatStatus(data) {
+    try {
+        console.log("data update front",data)
+        let answer = await updateBatStatusFromAPI(data);
+        return answer;
+    } catch (error) {
+        // Gérer l'erreur ici
+        console.error('Erreur lors de la mise à jour du batiment :', error.message);
+        throw error; // Vous pouvez choisir de gérer l'erreur ici ou la remonter à l'appelant
+    }
+}
+
 
 
 
@@ -241,5 +257,6 @@ export {
     getManyBat,
     deleteBat,
     getBatType,
-    updateEmpInfo
+    updateEmpInfo,
+    updateBatStatus,
 }

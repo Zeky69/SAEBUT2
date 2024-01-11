@@ -27,7 +27,10 @@ router.get('/bat/:uuid', mapPrestatairesMiddlewares.validatebatUUID, mapPrestata
 router.get('/bat/emp/:uuid', mapPrestatairesMiddlewares.validebatempUUID, mapPrestatairesControllers.getBatempUUID);
 
 
+
 router.post('/bat', mapPrestatairesMiddlewares.validateAddbatInputdebug , mapPrestatairesControllers.savebat);
+
+router.patch('/bat', mapPrestatairesMiddlewares.validateUpdatebatInput , mapPrestatairesControllers.updatebat);
 
 router.delete('/bat', mapPrestatairesMiddlewares.validateDelbatInput , mapPrestatairesControllers.deletebat);
 

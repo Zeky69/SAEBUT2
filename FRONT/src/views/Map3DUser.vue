@@ -2,7 +2,7 @@
 
   <div>
 
-    <Map3DUser/>
+    <Map3DUser style="margin-top: 25vh;"/>
   </div>
 
 

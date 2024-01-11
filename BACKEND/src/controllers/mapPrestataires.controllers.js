@@ -13,6 +13,16 @@ exports.getBatdebug2 = async (req,res) => {
     });
 };
 
+exports.updatebat = async (req,res) => {
+    let info = req.body;
+    console.log("info",info);
+    let reponse = await mapPrestatairesService.updateBatStatus(info);
+    if (reponse) {
+        return res.status(200).send(reponse);
+    }
+    return res.status(401).send("no info");
+}
+
 exports.getBatType = async (req,res) => {
     let reponse = await mapPrestatairesService.getBatType(req);
     console.log("reponse controller",reponse);

@@ -165,10 +165,14 @@ CREATE TABLE emplacement(
 
     CREATE TABLE reservation(
         id_reservation SERIAL,
-        id_batiment VARCHAR(50),
+        id_batiment VARCHAR(50) NOT NULL,
         ouverture timestamp,
         duree varchar(50),
         id_client INT,
+        description VARCHAR(255),
+        nom VARCHAR(50),
+        color VARCHAR(50),
+        status VARCHAR(50),
         PRIMARY KEY(id_reservation),
         FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment),
         FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)

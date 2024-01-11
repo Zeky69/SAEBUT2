@@ -75,8 +75,10 @@
             <label for="fname">Nom de l'événement:</label><br>
             <input type="text" id="fname" name="fname" style="width: 86%;"><br>
             <label for="lname">Description de l'événement:</label><br>
-            <textarea id="eventdescri" v-model="description_event" placeholder="Veuillez décrire votre event" name="lname" style="width: 86%;"></textarea>
+            <textarea id="eventdescri" v-model="description_event" placeholder="Veuillez décrire votre event" name="lname" style="width: 80%;"></textarea>
             <br>
+            <label for="nbPlace">Nombre de place:</label><br>
+            <input type="number" id="nbPlace" name="nbPlace" style="width: 86%;"><br>
             <label for="lname">Date de début:</label><br>
             <input type="datetime-local" id="start" name="event-start"
                    value="2024-06-01T12:00"
@@ -172,8 +174,9 @@ import 'tippy.js/dist/tippy.css';
 
 
 //importer service/mapPrestataires.js
-import {getAllEmp,getOneBatUUID,getBatbyEmpUUID,getOneEmpUUID,getOneEmp,deleteBat, updateEmpFree, createBat, getAllBat, deleteEmp} from '../../services/mapPrestataire.service.js';
-import {getEvent,createEvent,getEventUUID,deleteEvent} from '../../services/scene.service.js';
+import {getAllEmp,getOneBatUUID,getBatbyEmpUUID,getOneEmpUUID,getOneEmp,deleteBat, updateEmpFree, createBat, getAllBat, deleteEmp, updateBatStatus} from '../../services/mapPrestataire.service.js';
+import {getEvent,getEventUUID,deleteEvent} from '../../services/scene.service.js';
+import event from '../../services/reservation.js';
 
 /*   getAllEmp,
 getOneEmp
@@ -363,7 +366,7 @@ export default {
 
     async accepterBatiment(){
 
-      //await updateStatusBat(this.selectedObject.userData.uuid);
+      await updateBatStatus(this.selectedObject.userData.uuid);
       this.closepreview(2)
     },
 
@@ -395,10 +398,14 @@ export default {
       let end = document.getElementById("end").value;
       //mettre au bon format : 2024-06-01T10:30:00.000Z
       //"2024-06-01T16:00:00.000Z"
-      start = start + ":00.000Z";
-      end = end + ":00.000Z";
+
+
+      //start = start + ":00.000Z";
+      //end = end + ":00.000Z";
+
       let name = document.getElementById("fname").value;
       let description = document.getElementById("eventdescri").value;
+      let nbplace = document.getElementById("nbPlace").value;
       console.log("start", start)
       console.log("end", end)
       console.log("name", name)
@@ -408,8 +415,58 @@ export default {
       let batuuid = this.selectab[0]["obj"].userData.uuid
 
 
+      let startDate = new Date(start);
+      let endDate = new Date(end);
+
+      let diffInMilliseconds = endDate - startDate;
+
+// Convertir la différence en heures et minutes
+      let hours = Math.floor(diffInMilliseconds / (60 * 60 * 1000));
+      let minutes = Math.floor((diffInMilliseconds % (60 * 60 * 1000)) / (60 * 1000));
+
+// Formatage de la durée
+      let formattedDuration = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+
+
+      console.log("diff", formattedDuration)
+
+
       //[uuid, info.description, info.nom, info.id_scene, info.couleur, info.etat, info.date_debut, info.date_fin]);
 
+      /*
+          CREATE TABLE reservation(
+        id_reservation SERIAL,
+        id_batiment VARCHAR(50) NOT NULL,
+        ouverture timestamp,
+        duree varchar(50),
+        id_client INT,
+        description VARCHAR(255),
+        nom VARCHAR(50),
+        color VARCHAR(50),
+        status VARCHAR(50),
+        PRIMARY KEY(id_reservation),
+        FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment),
+        FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)
+    );
+       */
+
+      let dataReservation ={
+        id_bat: batuuid,
+        date: start,
+        duree: formattedDuration,
+        description: description,
+        nom: name,
+        color: "red",
+        status: "accepted",
+      }
+
+      let eventcreated
+
+      for (let i = 0; i < nbplace; i++) {
+        eventcreated = await event.postDispo(dataReservation);
+      }
+
+/*
       let databdd = {
         id_scene: batuuid,
         date_debut: start,
@@ -421,9 +478,11 @@ export default {
         id_prestataire: 1,
       }
       console.log("databdd", databdd)
-      let eventcreated = await createEvent(databdd, batuuid);
 
+ */
 
+      start = start + ":00.000Z";
+      end = end + ":00.000Z";
 
 
       let data = {
@@ -434,6 +493,10 @@ export default {
         color: 'red',
         description: description,
       }
+
+      let resa = await event.getAllDispoById(batuuid);
+
+      console.log("resa", resa)
 
 
       //add event au calendrier

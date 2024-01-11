@@ -124,6 +124,22 @@ const getBatType = async (req) => {
     }
 }
 
+const updateBatStatus = async (req) => {
+    const client = await pool.connect();
+    let {uuid} = req
+    console.log("updatebatstatus", uuid)
+    try {
+        let res;
+        let sql = "UPDATE batiment SET status = $1 WHERE id_batiment = $2 RETURNING *";
+        res = await pool.query(sql, ["accepted", uuid]);
+        console.log("Modification réussie du batiment avec id" + uuid);
+        return res.rows;
+    } catch (err) {
+        console.log(err);
+        return err;
+    }
+}
+
 
 
 const createbat = async (req, callback) => {
@@ -421,5 +437,6 @@ module.exports = {
     deletebat,
     getBatType,
     updateEmp,
+    updateBatStatus,
 }
 

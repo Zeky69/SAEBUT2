@@ -23,6 +23,10 @@ exports.validatebatFilterInputdebug = (req, res, next) => {
 
 }
 
+exports.validateUpdatebatInput = (req, res, next) => {
+    next();
+}
+
 exports.validateempUUID = (req, res, next) => {
     console.log("valide emp uuid middle");
     next();

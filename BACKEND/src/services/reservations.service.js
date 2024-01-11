@@ -69,16 +69,37 @@ async function getAllDispoById (req,callback) {
     }
 }
 
+/*
+    CREATE TABLE reservation(
+        id_reservation SERIAL,
+        id_batiment VARCHAR(50) NOT NULL,
+        ouverture timestamp,
+        duree varchar(50),
+        id_client INT,
+        description VARCHAR(255),
+        nom VARCHAR(50),
+        color VARCHAR(50),
+        status VARCHAR(50),
+        PRIMARY KEY(id_reservation),
+        FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment),
+        FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)
+    );
+ */
+
 async function createDispo (req,callback) {
     let id_bat = req.body.id_bat;
     let date = req.body.date;
     let duree = req.body.duree;
     let ArrayDuree = duree.split(":");
     duree = parseInt(ArrayDuree[0])*60+parseInt(ArrayDuree[1]);
+    let description = req.body.description;
+    let nom = req.body.nom;
+    let color = req.body.color;
+    let status = req.body.status;
     const client = await pool.connect();
     try{
-        const query = `INSERT INTO reservation (id_batiment,ouverture,duree) VALUES ($1, $2, $3)`;
-        res = await client.query(query, [id_bat, date, duree]);
+        const query = `INSERT INTO reservation (id_batiment,ouverture,duree,description,nom,color,status) VALUES ($1, $2, $3, $4, $5, $6, $7)`;
+        res = await client.query(query, [id_bat, date, duree,description, nom, color, status]);
         callback(null,"c good");
     }catch(err){
         console.log(err);
