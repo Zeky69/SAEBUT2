@@ -38,11 +38,18 @@ async function updatePrestataire(user_id,data){
     }
 }
 
+
+async function getPrestatairesTypes(){
+    return await getRequest('/prestataires/types', 'getPrestatairesTypes')
+}
+
 export {
     updatePrestataire,
     getPrestataire,
     updatePage,
     getPrestataires,
-    getPrestataireObject
+    getPrestataireObject,
+    getPrestatairesTypes
+
 }
 
