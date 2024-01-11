@@ -18,8 +18,8 @@ async function test (req,callback) {
 }
 
 async function getAllResaByIdUser (req,callback) {
-    let id_bat = req.query.id_bat;
-    let id_client = req.query.id_user;
+    let id_bat = req.params.id_bat;
+    let id_client = req.params.id_user;
     const client = await pool.connect();
     try{
         const query = `SELECT * from reservation where id_client=$1 and id_batiment=$2 ORDER BY ouverture ASC`;
@@ -36,7 +36,7 @@ async function getAllResaByIdUser (req,callback) {
 }
 
 async function getAllResaById (req,callback) {
-    let id_bat = req.query.id_bat;
+    let id_bat = req.params.id_bat;
     const client = await pool.connect();
     try{
         const query = `select ouverture,duree, id_batiment, id_client, count(id_reservation) as amount,(SELECT id_reservation  from reservation r2 where id_batiment=$1 AND id_client IS NOT NULL AND r1.ouverture=r2.ouverture AND r1.duree=r2.duree LIMIT 1)  from reservation r1 where id_batiment=$1 AND id_client IS NOT NULL GROUP BY ouverture,duree, id_batiment, id_client ORDER BY ouverture ASC`;
@@ -53,7 +53,7 @@ async function getAllResaById (req,callback) {
 }
 
 async function getAllDispoById (req,callback) {
-    let id_bat = req.query.id_bat;
+    let id_bat = req.params.id_bat;
     const client = await pool.connect();
     try{
         const query = `select ouverture,duree, id_batiment, id_client, count(id_reservation) as amount,(SELECT id_reservation  from reservation r2 where id_batiment=$1 AND id_client IS NULL AND r1.ouverture=r2.ouverture AND r1.duree=r2.duree LIMIT 1)  from reservation r1 where id_batiment=$1 AND id_client IS NULL GROUP BY ouverture,duree, id_batiment, id_client ORDER BY ouverture ASC`;
@@ -128,7 +128,7 @@ async function reserver(req, callback){
 }
 
 async function deleteDispoById(req, callback){
-    let id_reservation = req.body.id_dispo;
+    let id_reservation = req.params.id_dispo;
     const client = await pool.connect();
     try{
         const query = `delete from reservation where id_reservation=$1`;

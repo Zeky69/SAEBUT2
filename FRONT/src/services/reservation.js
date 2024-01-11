@@ -1,28 +1,27 @@
-import { getRequest, postRequest} from "@/services/axios.service"
+import {deleteRequest, getRequest, patchRequest, postRequest} from "@/services/axios.service"
 
-async function getAllResaByIdFromAPI(id_bat) {
-    return getRequest('/reservation/?id_bat='+id_bat, 'GETALLRESABYID')
+async function getAllResaByIdFromAPI(id) {
+    return getRequest('/reservation/'+id, 'GETALLRESABYID')
 }
 
 async function getAllDispoByIdFromAPI(id) {
-    return getRequest('/reservation/disponibilite/?id_bat='+id, 'GETALLDISPOBYID')
+    return getRequest('/reservation/disponibilite/'+id, 'GETALLDISPOBYID')
 }
 
 async function postDispoToAPI(data) {
-    console.log("test sending to API"+data)
-    return postRequest('/reservation/createDispo', data, 'POSTDISPO')
+    return postRequest('/reservation/disponibilite/', data, 'POSTDISPO')
 }
 
 async function postResaToAPI(data){
-    return postRequest('/reservation/reserver', data, 'POSTRESA')
+    return postRequest('/reservation/', data, 'POSTRESA')
 }
 
 async function deleteDispoToAPI(data) {
-    return postRequest('/reservation/deleteDispo', data, 'DELETEDISPO')
+    return deleteRequest('/reservation/disponibilite/'+data.id_dispo, data, 'DELETEDISPO')
 }
 
 async function deleteResaToAPI(data) {
-    return postRequest('/reservation/deleteResa', data, 'DELETERESA')
+    return patchRequest('/reservation/', data, 'DELETERESA')
 }
 
 
@@ -37,10 +36,8 @@ async function getAllDispoById(id) {
 }
 
 async function postDispo(data) {
-    console.log("Entrée dans le service postDispo")
     try {
         let answer = await postDispoToAPI(data)
-        console.log("Réponse du back",answer)
         return answer
     } catch (error) {
         // Gérer l'erreur ici
