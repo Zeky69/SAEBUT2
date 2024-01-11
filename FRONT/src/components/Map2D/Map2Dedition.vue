@@ -5,7 +5,7 @@
   <l-map style="width:1000px ; height: 800px;" :min-zoom="19" :max-zoom="21" :max-bounds="cartebounds" :center="center" @click="addCoordinates">
     <l-tile-layer :url="url" ></l-tile-layer>
     <l-marker :lat-lng="markerLatLng"></l-marker>
-    <l-image-overlay :url="'map2D.png'" :bounds="cartebounds"></l-image-overlay>
+    <l-image-overlay :url="'../map2D.png'" :bounds="cartebounds"></l-image-overlay>
       <l-polygon
           v-for="(feature , index) in features"
           :key="index"

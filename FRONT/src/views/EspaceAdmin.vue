@@ -37,8 +37,8 @@ data: () => ({
       path: "/admin/prestataires",
     },
     {
-      title: "Statistiques",
-      path: "/admin/statistiques",
+      title: "map",
+      path: "/admin/map",
     },
     {
       title: "Profil",

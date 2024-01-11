@@ -4,7 +4,7 @@
   <div class="all-container">
     <div class="dotted"></div>
     <div class="title-container"><h1 class="title">Carte &nbsp;<span>Interactive</span></h1></div>
-    <div style="text-align: center;"><button class="btn" @click="$router.push('/panier')"> Acceder a la map 3D</button></div>
+    <div style="text-align: center;"><button class="btn" @click="$router.push('/map3DUser')"> Acceder a la map 3D</button></div>
   <div class="map">
     <div class="filtre-container">
       <div class="info-panel-user info-panel-close">

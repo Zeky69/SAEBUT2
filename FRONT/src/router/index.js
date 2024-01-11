@@ -61,16 +61,9 @@ const routes = [
     path: '/panier',
     name: 'panier',
     component: () => import(/* webpackChunkName: "about" */ '../views/PanierView.vue')
-  }, {path: '/testMap',
-    name: 'testMap',
-    component: () => import(/* webpackChunkName: "about" */ '../views/TestMap.vue')
-  }, {path: '/MapPresta',
-    name: 'MapPresta',
-    component: () => import(/* webpackChunkName: "about" */ '../views/TempMapPresta.vue')
-  },
-  {path: '/Map2DAdmin',
-    name: 'Map2DAdmin',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Map2DAdmin.vue')
+  }, {path: '/map3DUser',
+    name: 'map3DUser',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Map3DUser.vue')
   },
   {
     path: '/restauration',
@@ -96,6 +89,10 @@ const routes = [
       {
         path: 'mypage',
         component: ()=>import ('../views/MaPage.vue')
+      },
+      {
+        path: 'map',
+        component: ()=>import ('../views/Map3DPrestataire.vue')
       },
       {
         path:'*',
@@ -125,6 +122,11 @@ const routes = [
         path: 'prestataires',
         component: ()=>import ('../views/AdminPrestataire.vue')
       },
+      {
+        path: 'map',
+        component: ()=>import ('../views/Map3DAdmin.vue')
+      },
+
       {
         path:'*',
         name: 'admin.notFound,',

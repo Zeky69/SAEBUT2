@@ -37,14 +37,13 @@ export default {
         path: "/prestataire/prestataires",
       },
       {
-        title: "Mes reservations",
-        path: "/prestataire/statistiques",
+        title: "Map",
+        path: "/prestataire/map",
       },
       {
         title: "Profil",
         path: "/prestataire/profil",
-      }
-
+      },
     ]
   }),
   computed: {

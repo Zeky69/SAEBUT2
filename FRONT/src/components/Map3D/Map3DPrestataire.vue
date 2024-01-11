@@ -58,9 +58,6 @@
         <div class="placeButton" style="height: 10%; width: 95%; margin-right: 5%;">
           <button id="btn2" @click="refreshcalmyfuncpls(1)" class="custom-btn" :disabled="idbatafficher == -1" :class="{ 'disabled-btn': idbatafficher == -1 }"> Placer le Batiment</button>
         </div>
-        <div class="removeAdmin" style="height: 10%; width: 95%; margin-right: 5%;">
-          <button id="btn2" @click="refreshcalmyfuncpls(3)" class="custom-btn">remove l'emplacement</button>
-        </div>
 
       </div>
       <div class="scene active" id="scene">
@@ -68,7 +65,7 @@
         <div class="eventOptions">
           <div class="eventAction" id="eventAction">
             <button class="addEventBut custom-btn" id="addEventBut" @click="showAddEvent()">Ajouter un Evenement</button>
-            <button class="removeEventBut custom-btn" id="removeEventBut" @click="showDelEvent()">info Evenement</button>
+            <button class="removeEventBut custom-btn" id="removeEventBut" @click="showDelEvent()">Remove un Evenement</button>
           </div>
           <div class="addEventFrom" id="addEventFrom">
             <h2>Ajouter un événement</h2>
@@ -85,7 +82,7 @@
             <input type="datetime-local" id="end" name="event-start"
                    value="2024-06-01T12:00"
                    min="2024-06-01T00:00" max="2024-06-14T00:00" style="width: 86%;"><br><br>
-            <button id="btn3" class="custom-btn" @click="askAddEvent"> creer un crenaux</button>
+            <button id="btn3" class="custom-btn" @click="askAddEvent"> Demander un crenaux</button>
 
 
           </div>
@@ -100,10 +97,10 @@
               <h3>Status de l'envenement</h3>
               <p>
                 {{ selectedEvent.status === 'waiting'
-                  ? "Evenement en attente de validation"
+                  ? "La demande pour cet événement est en train d'être analysée par les administrateurs"
                   : "L'événement a été accepté" }}
               </p>
-              <button id="btn4" class="custom-btn" @click="accepterEvent"> Valider l'événement</button>
+
               <!-- Ajoutez d'autres détails de l'événement ici -->
               <button id="btn4" class="custom-btn" @click="deleteEventfunc"> Supprimer l'événement</button>
             </div>
@@ -111,7 +108,6 @@
               <p>Aucun événement sélectionné</p>
             </div>
           </div>
-          <button id="btn2" @click="refreshcalmyfuncpls(3)" class="custom-btn">remove Batiment</button>
         </div>
 
       </div>
@@ -121,30 +117,12 @@
           <h2>Enlever le batiment</h2>
           <div class="closepreview">
             <button id="btn1" @click="closepreview(2)" class="custom-btn"><img class="croix" src="../../../public/croix.svg"> </button>
-
           </div>
-        </div>
-        <div class="infoBat2" style="height: 90%">
-
-
-
-          <div class="infoBat-content" style="justify-items: center; width: 100%; height: 100%;">
-
-            <h2>Nom : </h2> <span>{{nomBatiment}}</span>
-            <h2>Type : </h2> <span>{{typeBatiment}}</span>
-            <h2>Description : </h2> <span>{{descriptionBatiment}}</span>
-            <h2>Etat : </h2> <span>{{ !accepted
-              ? "batiment en attente de validation"
-              : "L'événement a été accepté" }}</span>
-
-          </div>
-
-          <button id="btn2" @click="accepterBatiment()" class="custom-btn" :disabled="accepted" :class="{ 'disabled-btn': accepted}"> Accepter le batiment</button>
         </div>
 
 
         <div class="placeButton" style="height: 10%; width: 90%; margin-left: 5%; margin-right: 5%;">
-          <button id="btn2" @click="refreshcalmyfuncpls(3)" class="custom-btn">remove Batiment all</button>
+          <button id="btn2" @click="refreshcalmyfuncpls(2)" class="custom-btn">remove Batiment</button>
         </div>
       </div>
     </div>
@@ -172,8 +150,9 @@ import 'tippy.js/dist/tippy.css';
 
 
 //importer service/mapPrestataires.js
-import {getAllEmp,getOneBatUUID,getBatbyEmpUUID,getOneEmpUUID,getOneEmp,deleteBat, updateEmpFree, createBat, getAllBat, deleteEmp} from '../../services/mapPrestataire.service.js';
+import {getAllEmp,getOneBatUUID,getBatbyEmpUUID,getOneEmpUUID,getOneEmp,deleteBat, updateEmpFree, createBat, getAllBat} from '../../services/mapPrestataire.service.js';
 import {getEvent,createEvent,getEventUUID,deleteEvent} from '../../services/scene.service.js';
+
 
 /*   getAllEmp,
 getOneEmp
@@ -195,9 +174,6 @@ export default {
   data() {
 
     return {
-      nomBatiment: null,
-      typeBatiment: [],
-      descriptionBatiment: null,
       nom_Event: "",
       selectedEvent: 0,
       currentEvents: [],
@@ -248,7 +224,6 @@ export default {
       groupe_sol: null,
       ambientLightscene2: null,
       scene2Container: null,
-      accepted: false,
       prestataire: 1,
       testshape: [],
       checkedtype: [],
@@ -294,6 +269,8 @@ export default {
           tippy(info.el, {
             content: info.event.extendedProps.description,
           })
+          console.log("thisslertedEvent", this.selectedEvent.id_prestataire)
+          console.log("thisprestat", this.prestataire)
           if (info.event._def.publicId == this.selectedEvent.id_event) {
             console.log("jklsfjcklsdvnc,kqsdcvnk,qsdnc qsd,k n,qsdn jkqsnjkdvnqkdklalllo")
             let id = this.selectedEvent.id_batiment;
@@ -308,10 +285,14 @@ export default {
             this.uuidsceneSelect = event.id_batiment;
             console.log("this.prestatnorselect",this.prestataire)
             console.log("this.selectedEvent notselect",this.selectedEvent)
-            let idscenestring = this.selectedEvent.id_batiment
-            console.log("id scene jdklsqjfkljsqlmfjqskljfqskl id", idscenestring)
-            await this.refreshcalendare(idscenestring)
-
+            if (this.selectedEvent.id_prestataire == this.prestataire) {
+              let idscenestring = this.selectedEvent.id_batiment
+              console.log("id scene jdklsqjfkljsqlmfjqskljfqskl id", idscenestring)
+              await this.refreshcalendare(idscenestring)
+            }else{
+              this.selectedEvent = 0;
+              this.uuidsceneSelect = 0;
+            }
 
           }
 
@@ -360,12 +341,6 @@ export default {
   },
 
   methods: {
-
-    async accepterBatiment(){
-
-      //await updateStatusBat(this.selectedObject.userData.uuid);
-      this.closepreview(2)
-    },
 
     async deleteEventfunc(){
       console.log("deleteEvent")
@@ -416,9 +391,9 @@ export default {
         date_fin: end,
         nom: name,
         description: description,
-        etat: "accepted",
+        etat: "waiting",
         couleur: "red",
-        id_prestataire: 1,
+        id_prestataire: this.prestataire
       }
       console.log("databdd", databdd)
       let eventcreated = await createEvent(databdd, batuuid);
@@ -492,16 +467,6 @@ export default {
 
       // Aucun objet trouvé avec le nom donné dans cette branche
       return null;
-    },
-
-    async accepterEvent(){
-      console.log("accepterEvent")
-      console.log("this.selectedEvent", this.selectedEvent)
-      let id = this.selectedEvent.id_event;
-      let uuid = this.uuidsceneSelect;
-      console.log("id", id)
-      console.log("uuid", uuid)
-      //await updateEvent(id);
     },
 
     async previewbat() {
@@ -670,12 +635,17 @@ export default {
       console.log("event", event)
 
 
-        if(event.status == "accepted"){
+      if(event.id_prestataire == this.prestataire){
+        if(event.status == "acepted"){
           event.color = "green";
         }
         else{
           event.color = "orange";
         }
+      }
+      else {
+        event.color = "red";
+      }
       if(this.selectedEvent != 0) {
         if (event.id_event == this.selectedEvent.id_event) {
           event.color = "blue";
@@ -805,16 +775,6 @@ export default {
               document.getElementById('selectmenu').classList.toggle('supr');
               document.getElementById('remove').classList.toggle('active');
               document.getElementById('scene1').classList.toggle('active');
-              let bat = await getOneBatUUID(batimentuuid);
-              if(bat[0].status == "waiting"){
-                this.accepted = false;
-              }
-              else {
-                this.accepted = true;
-              }
-              this.nomBatiment = bat[0].nom;
-              this.typeBatiment = bat[0].type_id;
-              this.descriptionBatiment = bat[0].description;
             }
             this.selectab.push(info);
           } else {
@@ -843,11 +803,6 @@ export default {
               this.selectedObject.material.color.setHex(this.selectab[0]["col"])
               this.selectab.pop(0)
               this.selectedObject = 0
-              this.accepted = false;
-              this.nomBatiment = null;
-              this.typeBatiment = [];
-              this.descriptionBatiment = null;
-
             } else {
               console.log("un objet est deja select")
               this.selectedObject = 0
@@ -957,16 +912,10 @@ export default {
       console.log("refresh")
       console.log("this.selectab", this.selectab)
       console.log("this.idbatafficher", this.idbatafficher)
-
       if (this.selectab.length == 1) {
 
         if (mode == 1) {
-          if(this.selectab[0]["type"] == "emp"){
-            this.deletscene2()
-
-          }
-
-
+          this.deletscene2()
           document.getElementById('selectmenu').classList.toggle('closed');
 
           document.getElementById('scene1').classList.toggle('active');
@@ -988,78 +937,6 @@ export default {
             document.getElementById('selectmenu').classList.toggle('supr');
           }, 300);
 
-        }
-
-        if(mode == 3){
-          document.getElementById('selectmenu').classList.toggle('closed');
-
-          document.getElementById('scene1').classList.toggle('active');
-          if(this.selectab[0]["type"] == "emp"){
-            this.deletscene2()
-          }
-          let type = this.selectab[0]["type"]
-          //wait 300ms
-          setTimeout(() => {
-            if(type == "emp"){
-              document.getElementById('add').classList.toggle('active');
-            }
-
-            document.getElementById('scene').classList.toggle('active');
-            document.getElementById('selectmenu').classList.toggle('supr');
-            }, 300);
-          let uuid = this.selectab[0]["obj"].userData.uuid;
-          let empuuid = this.selectab[0]["obj"].userData.emp_uuid;
-
-          if(this.selectab[0]["type"] == "emp"){
-
-            let emp = await getOneEmpUUID(uuid);
-            if (emp[0].batiment_id != null){
-                console.log("retirer le batiment avant")
-            }
-            else {
-              await deleteEmp(this.selectab[0]["obj"].userData.uuid);
-            }
-          }
-          else {
-
-            let events = await getEvent(uuid);
-
-            for(let i = 0; i < events.length; i++){
-              await deleteEvent(events[i].id_event);
-
-            }
-            this.currentEvents = [];
-            this.$refs.fullCalendarRef.getApi().setOption('events', this.currentEvents);
-            this.selectedEvent = 0;
-            this.refreshcalendare(uuid)
-
-            await updateEmpFree({uuid: empuuid, batid: 0});
-            await deleteBat(uuid);
-
-            let emp = await this.findobjectByuserUUID(empuuid)
-            console.log("empinScene", emp)
-            const texture_emp = new THREE.TextureLoader().load('../map/mapData/tex/tex_emp.png');
-            const material_emp = new THREE.MeshPhongMaterial({map: texture_emp});
-            let hex = material_emp.color.getHex();
-            emp.material.color.setHex(hex);
-            this.selectionables.add(emp)
-
-
-
-
-          }
-          this.selectionables.remove(this.selectab[0]["obj"])
-          while (this.selectab.length > 0) {
-            console.log("pop")
-            this.selectab.pop(0);
-          }
-          this.selectedObject = 0
-
-
-
-
-
-          return
         }
         console.log("this.selectabbefortype", this.selectab)
         //var uuid = this.selectab[0]["obj"].uuid;
@@ -1120,7 +997,7 @@ export default {
             prestataire: 1,
             description: this.description_batiment,
             type: id_type,
-            status: "accepted",
+            status: "waiting",
           }
           this.description_batiment = "";
           this.nom_batiment = "";
@@ -1132,7 +1009,7 @@ export default {
           //to do rota
           batimentadd.castShadow = true;
           batimentadd.receiveShadow = true;
-          //batimentadd.material.color.setHex(0xffa500);
+          batimentadd.material.color.setHex(0xffa500);
           batimentadd.userData = {uuid: 0, emp_uuid: uuid, description: descriptionsave};
           this.selectionables.add(batimentadd);
 
@@ -1270,24 +1147,37 @@ export default {
             batiment_clone.rotation.z = this.batiment_bdd[i].rota;
             batiment_clone.userData = {uuid: this.batiment_bdd[i].id_batiment, emp_uuid: this.batiment_bdd[i].id_emplacement ,description: this.batiment_bdd[i].description};
 
-            this.selectionables.add(batiment_clone)
-            if (this.batiment_bdd[i].status == "accepted") {
-              //mettre en vert
-              console.log("vert")
-              //batiment_clone.material.color.setHex(0x00ff00);
-            } else {
-              if (this.batiment_bdd[i].status == "waiting") {
-                //metre en orange
-                console.log("orange")
-                batiment_clone.material.color.setHex(0xffa500);
-              }
+            console.log("clone" , batiment_clone)
+            if(this.batiment[j].type == "toilette"){
+              this.nonselectionables.add(batiment_clone);
             }
+            else if(this.batiment[j].type === "Salle de conférence"){
+              this.selectionables.add(batiment_clone);
+            }
+            else {
+              console.log("batiment", this.batiment_bdd[i])
+              if (this.batiment_bdd[i].prestataire_id != this.prestataire) {
+                this.nonselectionables.add(batiment_clone);
+              } else {
+                if (this.batiment_bdd[i].status == "accepted") {
+                  //mettre en vert
+                  console.log("vert")
+                  batiment_clone.material.color.setHex(0x00ff00);
+                  this.selectionables.add(batiment_clone);
+                } else {
+                  if (this.batiment_bdd[i].status == "waiting") {
+                    //metre en orange
+                    console.log("orange")
+                    batiment_clone.material.color.setHex(0xffa500);
+                    this.selectionables.add(batiment_clone);
+                  }
+                }
 
               }
             }
           }
-
-
+        }
+      }
 
       this.camera.rotation.x = -0.7;
       this.camera.position.set(120, 100, 160);
@@ -1335,7 +1225,7 @@ export default {
                   name: this.children[i].name,
                   nom: "Salle de conférence",
                   type: "Salle de conférence",
-                  selected: true
+                  selected: false
                 }
               }
               if(this.children[i].name == "bat_1_rest"){
@@ -1605,15 +1495,16 @@ export default {
       // Le reste de votre code...
 
 
+
       // Épaisseur de l'objet
       const depth = 2
       const shape = new THREE.Shape(points)
 
-      const geome = new THREE.ExtrudeGeometry(shape, {depth: depth, bevelEnabled: false})
-      geome.rotateX(-Math.PI / 2)
+      const geome = new THREE.ExtrudeGeometry(shape, { depth: depth, bevelEnabled: false })
+      geome.rotateX(-Math.PI/2)
 
       const texture_emp = new THREE.TextureLoader().load('../map/mapData/tex/tex_emp.png');
-      const material_emp = new THREE.MeshPhongMaterial({map: texture_emp});
+      const material_emp = new THREE.MeshPhongMaterial({ map: texture_emp });
       const mesh = new THREE.Mesh(geome, material_emp);
       mesh.position.set(center.x, 0, center.z);
       mesh.castShadow = true;
@@ -1624,20 +1515,21 @@ export default {
     },
 
 
+
     filteredTypes() {
       // Utilisez cette propriété calculée pour filtrer le tableau uniqueTypes selon vos besoins
       // Par exemple, si vous ne voulez afficher que les types qui sont sélectionnés, vous pouvez faire :
-      for (let i = 0; i < this.batiment.length; i++) {
-        if (this.batiment[i].selected) {
+      for(let i = 0; i < this.batiment.length; i++){
+        if(this.batiment[i].selected){
           this.tabbatlist.push(this.batiment[i]);
         }
         let foundinchecklist = false;
-        for (let j = 0; j < this.checkedtype.length; j++) {
-          if (this.batiment[i].type == this.checkedtype[j].type) {
+        for(let j = 0; j < this.checkedtype.length; j++){
+          if(this.batiment[i].type == this.checkedtype[j].type){
             foundinchecklist = true;
           }
         }
-        if (!foundinchecklist) {
+        if(!foundinchecklist){
           this.checkedtype.push(this.batiment[i].type)
         }
       }
@@ -1645,7 +1537,8 @@ export default {
     },
 
 
-    async start() {
+
+    async start(){
       this.showLoadingScreen();
       await this.loadfinal();
       this.filteredTypes();
@@ -1666,6 +1559,7 @@ export default {
       const cube = new THREE.Mesh(geometry, material);
       this.vitrine.add(cube);
       this.scene2.add(this.vitrine);
+
 
 
       this.animateScene2();
@@ -1704,7 +1598,7 @@ export default {
       this.renderer.render(this.scene, this.camera);
     },
 
-    async checkboxChanged(type) {
+    async checkboxChanged(type){
       for (let i = 0; i < this.batiment.length; i++) {
         if (this.batiment[i].type == type) {
           if (this.batiment[i].selected) {
@@ -1730,22 +1624,22 @@ export default {
       if (this.controls.target.y < 0) {
         this.controls.target.y = 0;
       }
-      if (this.controls.target.x > 150) {
+      if(this.controls.target.x >150){
         this.controls.target.x = 150;
       }
-      if (this.controls.target.x < -150) {
+      if(this.controls.target.x < -150){
         this.controls.target.x = -150;
       }
-      if (this.controls.target.z > 150) {
+      if(this.controls.target.z >150){
         this.controls.target.z = 150;
       }
-      if (this.controls.target.z < -150) {
+      if(this.controls.target.z < -150){
         this.controls.target.z = -150;
       }
     }
 
   },
-  computed: {
+  computed:{
     uniqueTypes() {
       const types = new Set();
       this.batiment.forEach((bat) => {
@@ -1755,6 +1649,7 @@ export default {
       });
 
 
+
       //retirer les types qui ne sont pas dans la liste
       types.delete(undefined);
 
@@ -1762,9 +1657,17 @@ export default {
 
       return Array.from(types);
     },
+
+
+
+
   },
 
   mounted() {
+
+    this.prestataire = this.$store.state.user_id
+
+    console.log("prestataire", this.prestataire)
 
 
     this.scene = new THREE.Scene();
@@ -1790,6 +1693,7 @@ export default {
     this.controls.maxDistance = 250;
 
 
+
 //const canvasElement = document.querySelector('[data-engine="three.js r156"]');
 
     this.ambientLight = new THREE.AmbientLight(0xffffff); // Couleur en hexadécimal
@@ -1812,7 +1716,7 @@ export default {
 
 
 // Position du soleil
-    this.sun.setFromSphericalCoords(1, 1.2, 2 * Math.PI + Math.PI / 5);
+    this.sun.setFromSphericalCoords(1, 1.2 ,2*Math.PI + Math.PI / 5);
     this.sky.material.uniforms.sunPosition.value.copy(this.sun);
 
 
@@ -1828,6 +1732,7 @@ export default {
 // Ajouter la lumière à la scène
     this.scene.add(this.light);
     window.dispatchEvent(new Event('resize'));
+//var id_prestataire = "calixte";
 
     this.selectionables = new THREE.Group();
     this.nonselectionables = new THREE.Group();
@@ -1839,10 +1744,12 @@ export default {
     this.vitrine = new THREE.Group();
 
 
+
+
 // scene 2
     this.scene2 = new THREE.Scene();
     this.scene2Container = this.$refs.scene2Container;
-    this.camera2 = new THREE.PerspectiveCamera(75, this.scene2Container.offsetWidth / this.scene2Container.offsetHeight, 0.1, 1000);
+    this.camera2 = new THREE.PerspectiveCamera(75, this.scene2Container.offsetWidth/this.scene2Container.offsetHeight , 0.1, 1000);
     this.renderer2 = new THREE.WebGLRenderer();
     this.renderer2.setSize(window.innerWidth, window.innerHeight);
     this.controls3 = new OrbitControls(this.camera2, this.renderer2.domElement);
@@ -1867,18 +1774,25 @@ export default {
 
 
 // Position du soleil
-    this.sun2.setFromSphericalCoords(1, 1.2, 2 * Math.PI + Math.PI / 5);
+    this.sun2.setFromSphericalCoords(1, 1.2 ,2*Math.PI + Math.PI / 5);
     this.controls3.update();
 // Vous pouvez également ajouter des lumières ou des contrôles spécifiques à cette scène si nécessaire
 
 
+
+
 /// scene 2 fin
+
+
+
+
 
 
     this.renderer.domElement.addEventListener('mousemove', this.onMouseMove);
     this.renderer.domElement.addEventListener('click', this.onMouseClick);
     this.resizeListener = this.handleResize.bind(this);
     window.addEventListener('resize', this.resizeListener);
+
 
 
     this.start();
@@ -1897,30 +1811,30 @@ export default {
 
 <style>
 
-#btn2 {
+#btn2{
   width: 100%;
   margin-right: 5%;
 }
 
 
-.topmenu {
+.topmenu{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.croix {
+.croix{
   with: 30px;
   height: 30px;
 }
 
-.previsual {
+.previsual{
   text-align: center;
   justify-items: center;
   justify-content: center;
 }
 
-.optionBatiment {
+.optionBatiment{
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -1933,7 +1847,7 @@ export default {
   max-width: 23vw;
 }
 
-.descri {
+.descri{
   margin-top: 15px;
   width: 80%;
   min-height: 30px;
@@ -1999,6 +1913,7 @@ input:checked + .slider:before {
 }
 
 
+
 .loading-screen {
   position: fixed;
   top: 0;
@@ -2023,13 +1938,11 @@ input:checked + .slider:before {
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
+
+
 
 
 .custom-btn {
@@ -2058,7 +1971,7 @@ input:checked + .slider:before {
   background-color: #6c757d; /* Gardez la couleur grise au survol pour le bouton désactivé */
 }
 
-.eventAction {
+.eventAction{
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -2067,21 +1980,22 @@ input:checked + .slider:before {
 }
 
 
-.addEventFrom {
+
+.addEventFrom{
   display: none;
 }
 
-.addEventFrom.active {
+.addEventFrom.active{
   display: block;
   width: 100%;
 }
 
-.removeEvent {
+.removeEvent{
   display: none;
   margin-bottom: 20px;
 }
 
-.removeEvent.active {
+.removeEvent.active{
   display: block;
 }
 
@@ -2089,16 +2003,16 @@ input:checked + .slider:before {
   width: 30%;
   height: 100%;
   background-color: #D9D9D9;
-  transition: right 0.3s ease-in-out;
+  transition:right 0.3s ease-in-out;
   min-width: 30%;
 }
 
 
-.selectmenu.closed {
+.selectmenu.closed{
   right: -30%;
 }
 
-.eventOptions {
+.eventOptions{
   display: flex;
   flex-direction: column;
   justify-items: center;
@@ -2107,24 +2021,24 @@ input:checked + .slider:before {
 }
 
 
-.scene1 {
+.scene1{
   user-select: none;
   height: 100%;
   width: 100%;
   transition: width 0.3s ease-in-out;
 }
 
-.scene1.active {
+.scene1.active{
   width: 70%;
 }
 
 
-.scene {
+.scene{
   display: none;
 
 }
 
-.scene.active {
+.scene.active{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -2134,26 +2048,28 @@ input:checked + .slider:before {
 }
 
 
-.add {
+
+
+.add{
   display: none;
 }
 
-.add.active {
+.add.active{
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   height: 100%;
 }
 
-.remove {
+.remove{
   display: none;
 }
 
-.remove.active {
+.remove.active{
   display: block;
 }
 
-#btn1 {
+#btn1{
   all: unset;
 }
 
@@ -2163,7 +2079,6 @@ input:checked + .slider:before {
   top: 0;
   left: 0;
   right: 0;
-  height: 100%;
-}
+  height: 100%; }
 
 </style>
