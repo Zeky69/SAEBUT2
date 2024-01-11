@@ -4,13 +4,13 @@
     <img class="img-background" src="../assets/pageAccueil/fond-prestate.png" alt="">
     <div class="card-container" >
       <div class="header">
-        <h1>Nos partenaires</h1>
+        <h1>{{ $t('titlepartners') }}</h1>
         <div class="filtre-container">
           <div class="search-bar">
-            <input class="search-input" placeholder="Rechercher"  type="text" v-model="filtre.nom" id="nom" name="nom">
+            <input class="search-input" :placeholder="$t('research')" type="text" v-model="filtre.nom" id="nom" name="nom">
             <img class="loupe" :src="require('@/assets/icons/loupe.svg')"  alt="loupe de recherche">
           </div>
-          <bar-select2 :options="['Attraction', 'Restaurateur','Animateur' ,'Traiteur' ]" v-model="filtre.type" :default="'Categorie'" @input="setFiltreType" ></bar-select2>
+          <bar-select2 :options="[$t('attraction'), $t('animation'), $t('caterer')]" v-model="filtre.type" :default="$t('defaultCategory')" @input="setFiltreType"></bar-select2>
         </div>
       </div>
       <div>
@@ -35,6 +35,10 @@
               <p>{{types.libelle}}</p>
               </div>
             </div>
+            <div class="card-bottom">
+              <router-link :to="{ name: 'prestate', params: { id: prestate.id_prestataire } }">
+                  <button class="btn-card">{{ $t('profile') }}</button>
+              </router-link>
             </div>
 
           </div>
@@ -50,7 +54,7 @@
         </div>
       </div>
 
-
+      </div>
 
 
       </div>

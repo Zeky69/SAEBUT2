@@ -24,17 +24,18 @@ export default {
 }
 
 button {
-    background-color: rgba(0, 0, 0, 0.0);
+    background-color: transparent;
     color: #fff;
     border: none;
     padding: 0px 15px;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    transform: translateY(2px);
 
     .flag-icon {
-        width: 1.5rem;
-        height: 1.5rem; 
+        width: 1.8rem;
+        height: 1.8rem; 
         display: inline-block;
         background-size: cover;
     }
