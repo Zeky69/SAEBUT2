@@ -174,96 +174,6 @@ export default {
       nom_Event: "",
       selectedEvent: 0,
       currentEvents: [],
-      calendarOptions: {
-        height: '70%',
-        plugins: [
-          dayGridPlugin,
-          timeGridPlugin,
-          interactionPlugin, // needed for dateClick,
-        ],
-        headerToolbar: {
-          left: "prev,next",
-          center: "title",
-          right: "timeGridFourDay,timeGridDay",
-        },
-        initialView: "timeGridFourDay",
-        // alternatively, use the `events` setting to fetch from a feed
-        /* you can update a remote database when these fire:
-      eventAdd:
-      eventChange:
-      eventRemove:
-      */
-        slotLabelFormat: [
-          {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-          }
-        ],
-        //faire un event de 8h a 14h
-        initialDate: '2024-06-01',
-        slotDuration: '00:30',
-        events: this.currentEvents ? this.currentEvents.map(event => ({
-          title: event.nom,
-          start: event.start,
-          end: event.end,
-          color: event.color,
-          description: event.description,
-        })) : [],
-        //show description on click
-        eventClick: async (info) => {
-          tippy(info.el, {
-            content: info.event.extendedProps.description,
-          })
-          console.log("thisslertedEvent", this.selectedEvent.id_prestataire)
-          console.log("thisprestat", this.prestataire)
-            if (info.event._def.publicId == this.selectedEvent.id_event) {
-              console.log("jklsfjcklsdvnc,kqsdcvnk,qsdnc qsd,k n,qsdn jkqsnjkdvnqkdklalllo")
-              let id = this.selectedEvent.id_batiment;
-              this.selectedEvent = 0;
-              await this.refreshcalendare(id);
-
-              this.uuidsceneSelect = 0;
-            } else {
-              const event = await getEventUUID(info.event._def.publicId);
-              console.log(event)
-              this.selectedEvent = event;
-              this.uuidsceneSelect = event.id_batiment;
-              console.log("this.prestatnorselect",this.prestataire)
-              console.log("this.selectedEvent notselect",this.selectedEvent)
-              if (this.selectedEvent.id_prestataire == this.prestataire) {
-                let idscenestring = this.selectedEvent.id_batiment
-                console.log("id scene jdklsqjfkljsqlmfjqskljfqskl id", idscenestring)
-                await this.refreshcalendare(idscenestring)
-              }else{
-                this.selectedEvent = 0;
-                this.uuidsceneSelect = 0;
-              }
-
-            }
-
-            console.log("this.selectedEvent", this.selectedEvent);
-
-        },
-        views: {
-          timeGridFourDay: {
-            type: 'timeGrid',
-            duration: {days: 4},
-            buttonText: '4 day',
-            dayHeaderFormat: {weekday: "long", month: "numeric", day: "numeric", omitCommas: true},
-            slotDuration: '00:30',
-          },
-          timeGridDay: { // Assurez-vous que cette configuration est correcte pour la vue timeGridDay
-            type: 'timeGrid',
-            duration: {days: 1},
-            buttonText: '1 day',
-            allDaySlot: false,
-            dayHeaderFormat: {weekday: "long", month: "numeric", day: "numeric", omitCommas: true},
-            slotDuration: '00:30',
-          },
-        },
-
-      },
       uuidsceneSelect: 0,
       uuidbat: 0,
       eventScene: [],
@@ -315,6 +225,96 @@ export default {
       testshape: [],
       checkedtype: [],
       tabbatlist: [],
+      calendarOptions: {
+        height: '70%',
+        plugins: [
+          dayGridPlugin,
+          timeGridPlugin,
+          interactionPlugin, // needed for dateClick,
+        ],
+        headerToolbar: {
+          left: "prev,next",
+          center: "title",
+          right: "timeGridFourDay,timeGridDay",
+        },
+        initialView: "timeGridFourDay",
+        // alternatively, use the `events` setting to fetch from a feed
+        /* you can update a remote database when these fire:
+      eventAdd:
+      eventChange:
+      eventRemove:
+      */
+        slotLabelFormat: [
+          {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          }
+        ],
+        //faire un event de 8h a 14h
+        initialDate: '2024-06-01',
+        slotDuration: '00:30',
+        events: this.currentEvents ? this.currentEvents.map(event => ({
+          title: event.nom,
+          start: event.start,
+          end: event.end,
+          color: event.color,
+          description: event.description,
+        })) : [],
+        //show description on click
+        eventClick: async (info) => {
+          tippy(info.el, {
+            content: info.event.extendedProps.description,
+          })
+          console.log("thisslertedEvent", this.selectedEvent.id_prestataire)
+          console.log("thisprestat", this.prestataire)
+          if (info.event._def.publicId == this.selectedEvent.id_event) {
+            console.log("jklsfjcklsdvnc,kqsdcvnk,qsdnc qsd,k n,qsdn jkqsnjkdvnqkdklalllo")
+            let id = this.selectedEvent.id_batiment;
+            this.selectedEvent = 0;
+            await this.refreshcalendare(id);
+
+            this.uuidsceneSelect = 0;
+          } else {
+            const event = await getEventUUID(info.event._def.publicId);
+            console.log(event)
+            this.selectedEvent = event;
+            this.uuidsceneSelect = event.id_batiment;
+            console.log("this.prestatnorselect",this.prestataire)
+            console.log("this.selectedEvent notselect",this.selectedEvent)
+            if (this.selectedEvent.id_prestataire == this.prestataire) {
+              let idscenestring = this.selectedEvent.id_batiment
+              console.log("id scene jdklsqjfkljsqlmfjqskljfqskl id", idscenestring)
+              await this.refreshcalendare(idscenestring)
+            }else{
+              this.selectedEvent = 0;
+              this.uuidsceneSelect = 0;
+            }
+
+          }
+
+          console.log("this.selectedEvent", this.selectedEvent);
+
+        },
+        views: {
+          timeGridFourDay: {
+            type: 'timeGrid',
+            duration: {days: 4},
+            buttonText: '4 day',
+            dayHeaderFormat: {weekday: "long", month: "numeric", day: "numeric", omitCommas: true},
+            slotDuration: '00:30',
+          },
+          timeGridDay: { // Assurez-vous que cette configuration est correcte pour la vue timeGridDay
+            type: 'timeGrid',
+            duration: {days: 1},
+            buttonText: '1 day',
+            allDaySlot: false,
+            dayHeaderFormat: {weekday: "long", month: "numeric", day: "numeric", omitCommas: true},
+            slotDuration: '00:30',
+          },
+        },
+
+      },
 
 
       //style save batiment_bdd[0] = {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1", status: "en cours"}
@@ -1197,6 +1197,8 @@ export default {
 
         const loadedGltf = gltf.scene;
         this.loaded = loadedGltf
+
+        console.log("children", this.childrenf)
 
 
 
