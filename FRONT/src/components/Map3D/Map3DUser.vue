@@ -94,6 +94,8 @@ export default {
   data(){
     return {
     //nbactivité: 0,
+
+
     loaded: null,
     sky: null,
     sun: null,
