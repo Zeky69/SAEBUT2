@@ -121,6 +121,7 @@
           <h2>Enlever le batiment</h2>
           <div class="closepreview">
             <button id="btn1" @click="closepreview(2)" class="custom-btn"><img class="croix" src="../../../public/croix.svg"> </button>
+
           </div>
         </div>
         <div class="infoBat2" style="height: 90%">
@@ -132,10 +133,13 @@
             <h2>Nom : </h2> <span>{{nomBatiment}}</span>
             <h2>Type : </h2> <span>{{typeBatiment}}</span>
             <h2>Description : </h2> <span>{{descriptionBatiment}}</span>
+            <h2>Etat : </h2> <span>{{ !accepted
+              ? "batiment en attente de validation"
+              : "L'événement a été accepté" }}</span>
 
           </div>
 
-
+          <button id="btn2" @click="accepterBatiment()" class="custom-btn" :disabled="accepted" :class="{ 'disabled-btn': accepted}"> Accepter le batiment</button>
         </div>
 
 
@@ -244,6 +248,7 @@ export default {
       groupe_sol: null,
       ambientLightscene2: null,
       scene2Container: null,
+      accepted: false,
       prestataire: 1,
       testshape: [],
       checkedtype: [],
@@ -355,6 +360,12 @@ export default {
   },
 
   methods: {
+
+    async accepterBatiment(){
+
+      //await updateStatusBat(this.selectedObject.userData.uuid);
+      this.closepreview(2)
+    },
 
     async deleteEventfunc(){
       console.log("deleteEvent")
@@ -794,6 +805,16 @@ export default {
               document.getElementById('selectmenu').classList.toggle('supr');
               document.getElementById('remove').classList.toggle('active');
               document.getElementById('scene1').classList.toggle('active');
+              let bat = await getOneBatUUID(batimentuuid);
+              if(bat[0].status == "waiting"){
+                this.accepted = false;
+              }
+              else {
+                this.accepted = true;
+              }
+              this.nomBatiment = bat[0].nom;
+              this.typeBatiment = bat[0].type_id;
+              this.descriptionBatiment = bat[0].description;
             }
             this.selectab.push(info);
           } else {
@@ -822,6 +843,11 @@ export default {
               this.selectedObject.material.color.setHex(this.selectab[0]["col"])
               this.selectab.pop(0)
               this.selectedObject = 0
+              this.accepted = false;
+              this.nomBatiment = null;
+              this.typeBatiment = [];
+              this.descriptionBatiment = null;
+
             } else {
               console.log("un objet est deja select")
               this.selectedObject = 0
@@ -975,7 +1001,6 @@ export default {
           //wait 300ms
           setTimeout(() => {
             if(type == "emp"){
-              this.deletscene2()
               document.getElementById('add').classList.toggle('active');
             }
 
