@@ -8,7 +8,7 @@
       </div>
       <div class="Perfomance">
         <div class="graphique">
-          <canvas id="donutChart" style="max-height: 180px"></canvas>
+          <Doughnut :data="data" :options="options" />
         </div>
         <div class="Perfomance-text">
           <h2>Performances</h2>
@@ -64,16 +64,33 @@
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
-import {Chart} from 'vue-chartjs';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+
+import { Doughnut } from 'vue-chartjs'
 import PageTitre from "./PageTitre.vue";
+
+ChartJS.register(ArcElement, Tooltip, Legend)
+
 
 export default {
   name: 'AdminInfoTemporaire',
   computed: {
     ...mapState(['token', 'fname', 'lname', 'group_id', 'user_id', 'email'])
-  },
+  }, data: () => ({
+    data: {
+      datasets: [{
+        data: [0.5909,0.4091],
+        backgroundColor: ['purple', 'transparent'],
+      }],
+    },
+    options :{
+      rotation: -100,
+
+    }
+  }),
   components: {
-    PageTitre
+    PageTitre,
+    Doughnut
   },
   methods: {
     ...mapActions(['logout']),
@@ -81,31 +98,19 @@ export default {
       this.$router.replace('/login');
       this.logout();
     },
-    renderDonutChart() {
+    async renderDonutChart() {
       const ctx = document.getElementById('donutChart').getContext('2d');
 
-      const gradient = ctx.createLinearGradient(0, 0, 0, 100);
-      gradient.addColorStop(0, 'rgb(178, 94, 231)'); // #B25EE7
-      gradient.addColorStop(1, 'rgb(217, 69, 69)'); // #D94545
+      this.gradient = await ctx.createLinearGradient(0, 0, 0, 100);
+      this.gradient.addColorStop(0, 'rgb(178, 94, 231)'); // #B25EE7
+      this.gradient.addColorStop(1, 'rgb(217, 69, 69)'); // #D94545
 
-
-      new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          datasets: [{
-            data: [0.5909,0.4091],
-            backgroundColor: [gradient, 'transparent'],
-          }],
-        },options :{
-          rotation: -100,
-        }
-      });
     },
-  },
-  mounted() {
-    this.renderDonutChart();
-  },
-};
+    mounted() {
+      this.renderDonutChart();
+    },
+  }
+}
 </script>
 
 <style scoped>
@@ -276,4 +281,8 @@ export default {
   box-shadow: 0px 0px 155.2px -76px rgba(0, 0, 0, 0.25);
 }
 
+.graphique {
+  height: 155px; /* Ajuster la hauteur du graphique selon vos besoins */
+  width: 155px; /* Ajuster la largeur du graphique selon vos besoins */
+}
 </style>
