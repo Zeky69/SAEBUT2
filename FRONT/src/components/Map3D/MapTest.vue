@@ -219,7 +219,7 @@ export default {
           console.log("thisprestat", this.prestataire)
             if (info.event._def.publicId == this.selectedEvent.id_event) {
               console.log("jklsfjcklsdvnc,kqsdcvnk,qsdnc qsd,k n,qsdn jkqsnjkdvnqkdklalllo")
-              let id = this.selectedEvent.id_scene;
+              let id = this.selectedEvent.id_batiment;
               this.selectedEvent = 0;
               await this.refreshcalendare(id);
 
@@ -228,11 +228,11 @@ export default {
               const event = await getEventUUID(info.event._def.publicId);
               console.log(event)
               this.selectedEvent = event;
-              this.uuidsceneSelect = event.id_scene;
+              this.uuidsceneSelect = event.id_batiment;
               console.log("this.prestatnorselect",this.prestataire)
               console.log("this.selectedEvent notselect",this.selectedEvent)
               if (this.selectedEvent.id_prestataire == this.prestataire) {
-                let idscenestring = this.selectedEvent.id_scene
+                let idscenestring = this.selectedEvent.id_batiment
                 console.log("id scene jdklsqjfkljsqlmfjqskljfqskl id", idscenestring)
                 await this.refreshcalendare(idscenestring)
               }else{
@@ -380,20 +380,10 @@ export default {
       let batuuid = this.selectab[0]["obj"].userData.uuid
 
 
-      console.log("kdklsdq bat", batuuid)
-
-
-      let bat = await getOneBatUUID(batuuid);
-
-      console.log("bat", bat)
-
-      let sceneuuid = bat[0].id_scene;
-
-
       //[uuid, info.description, info.nom, info.id_scene, info.couleur, info.etat, info.date_debut, info.date_fin]);
 
       let databdd = {
-        id_scene: sceneuuid,
+        id_scene: batuuid,
         date_debut: start,
         date_fin: end,
         nom: name,
@@ -403,7 +393,7 @@ export default {
         id_prestataire: 1,
       }
       console.log("databdd", databdd)
-      let eventcreated = await createEvent(databdd, sceneuuid);
+      let eventcreated = await createEvent(databdd, batuuid);
 
 
 
@@ -425,7 +415,7 @@ export default {
 
       console.log("this.currentEvents bef refresh", this.currentEvents)
 
-      this.refreshcalendare(sceneuuid);
+      this.refreshcalendare(batuuid);
       this.showAddEvent()
     },
 
@@ -680,8 +670,9 @@ export default {
 
     async refreshcalendare( uuid) {
       this.currentEvents = [];
-
+      console.log("uuid refresh", uuid)
       this.eventScene = await getEvent(uuid);
+      console.log("event scene refressh",this.eventScene)
       for (let i = 0; i < this.eventScene.length; i++) {
         let data = await this.eventParser(this.eventScene[i]);
         this.currentEvents.push(data);
@@ -745,11 +736,13 @@ export default {
 
 
           let found;
-          let batiment;
+          let batimentuuid;
+          let batiment
           found = await getOneBatUUID(this.selectedObject.userData.uuid);
           console.log("found batiment click", found)
           if (found != []){
             batiment = found
+            batimentuuid = this.selectedObject.userData.uuid;
             found = true;
           }
           else {
@@ -773,10 +766,7 @@ export default {
 
 
 
-              let uuidScene = batiment[0].id_scene
-              console.log(uuidScene)
-              this.uuidsceneSelect = uuidScene
-              this.refreshcalendare(uuidScene)
+              this.refreshcalendare(batimentuuid)
               info = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "conf"}
             }
             if(batiment[0].type_id != 6 && batiment[0].type_id != 3){
@@ -791,13 +781,24 @@ export default {
             if (this.selectedObject.uuid == this.selectab[0]["obj"].uuid) {
               // Toggle the 'active' class on the selectmenu div
               document.getElementById('selectmenu').classList.toggle('closed');
-
               document.getElementById('scene1').classList.toggle('active');
               //wait 300ms
-              setTimeout(() => {
-                document.getElementById('remove').classList.toggle('active');
-                document.getElementById('selectmenu').classList.toggle('supr');
-              }, 300);
+
+              if(this.selectab[0]["type"] !== "conf"){
+                setTimeout(() => {
+                  document.getElementById('remove').classList.toggle('active');
+                  document.getElementById('selectmenu').classList.toggle('supr');
+                }, 300);
+              }
+              else {
+                setTimeout(() => {
+                  document.getElementById('scene').classList.toggle('active');
+                  document.getElementById('selectmenu').classList.toggle('supr');
+                }, 300);
+              }
+
+
+
               this.selectedObject.material = this.selectab[0]["mat"].clone()
               this.selectedObject.material.color.setHex(this.selectab[0]["col"])
               this.selectab.pop(0)
@@ -1153,7 +1154,7 @@ export default {
             }
             else {
               console.log("batiment", this.batiment_bdd[i])
-              if (this.batiment_bdd[i].utilisateur != this.prestataire) {
+              if (this.batiment_bdd[i].prestataire_id != this.prestataire) {
                 this.nonselectionables.add(batiment_clone);
               } else {
                 if (this.batiment_bdd[i].status == "accepted") {
@@ -1434,6 +1435,7 @@ export default {
     },
 
     async point2Dto3D(x, z ) {
+     /*
       // Bounding box de la map 3D
       const boundingBox = {
         min: { x: -0.9983415603637695, y: -1, z: -1.0045995712280273 },
@@ -1501,7 +1503,7 @@ Array [ 8.909232717044802, 20.492076873779297 ]
 Map2Dedition.vue:306
 bottom left
 Array [ -8.909232716902693, -20.492076873779297 ]
- */
+
       let coinHautGauchePretty = {
         x: 8.909232717044802,
         z: -20.492076873779297
@@ -1531,6 +1533,8 @@ Array [ -8.909232716902693, -20.492076873779297 ]
           z:-152.0225906055275
        */
       // Application de la transformation aux coordonnées 2D
+
+
 
 
 

@@ -11,17 +11,7 @@
           <div class="carousel-container">
 
             <div class="card-prestate"  v-for="(prestate,index) in ListPresate" :key="index">
-
-              <div class="card-prestate-container">
-                <div class="card-header">
-                  <img  :src="prestate.image" alt="stephan">
-                </div>
-
-                <div class="card-text">
-                  <h3>{{prestate.name}}</h3>
-                </div>
-
-              </div>
+              <CardShop :logo="prestate.logo" :title="prestate.title" :description="prestate.description" :stock="prestate.stock" :price="prestate.price" />
             </div>
 
           </div>
@@ -42,71 +32,42 @@
 </template>
 
 <script>
+import CardShop from "@/components/CardShop.vue";
 
 export default {
   name: 'BestSell',
+  components: {CardShop},
   data: () => ({
     ListPresate: [
       {
-        id: 1,
-        name: "Zekeriya Maxime",
-        type: "Animateur",
-        image: "stephane.jpg"
+        "logo": "@/assets/logoWF.png",
+        "title": "Jeu 1",
+        "description": "Description du jeu 1.",
+        "stock": 10,
+        "price": "$19.99"
       },
       {
-        id: 2,
-        name: "Mhammed Djilsi",
-        type: "Attraction",
-        image: "stephane.jpg"
+        "logo": "@/assets/logoWF.png",
+        "title": "Jeu 2",
+        "description": "Description du jeu 2.",
+        "stock": 5,
+        "price": "$29.99"
       },
       {
-        id: 3,
-        name: "Stephane Stefan",
-        type: "Restaurateur",
-        image: "stephane.jpg"
+        "logo": "@/assets/logoWF.png",
+        "title": "Jeu 3",
+        "description": "Description du jeu 3.",
+        "stock": 8,
+        "price": "$24.99"
       },
       {
-        id: 4,
-        name: "Joseph Sansèphe",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 5,
-        name: "Stephan",
-        type: "Attraction",
-        image: "stephane.jpg"
-      },
-      {
-        id: 6,
-        name: "Stephan",
-        type: "Animateur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 7,
-        name: "Stephan",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 8,
-        name: "Stephan",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 9,
-        name: "Stephan",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 10,
-        name: "Stephan",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      }],
+        "logo": "@/assets/logoWF.png",
+        "title": "Jeu 4",
+        "description": "Description du jeu 4.",
+        "stock": 15,
+        "price": "$39.99"
+      }
+    ],
   }),
   methods: {
     scrollToNextCard() {
@@ -200,23 +161,6 @@ export default {
   display: none;
 }
 
-
-
-.card-prestate {
-  display: flex;
-  flex-direction: column;
-  background: rgba(23, 35, 49, 0.7);
-  backdrop-filter: blur(15px);
-  border-radius: 10px;
-  min-width: 300px;
-  height: 400px;
-}
-
-
-.card-prestate-container{
-  box-sizing: content-box;
-  padding: 20px;
-}
 
 .card-header img {
   width: 100%;

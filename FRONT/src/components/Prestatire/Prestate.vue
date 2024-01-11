@@ -3,8 +3,8 @@
   <div class="prestate-all-container">
   <div class="editor-container" v-if="mode === '1'" >
     <div class="action-container">
-    <button @click="valide" class="btn-click">Valide</button>
-      <button @click="changeMode" class="btn-click">Change Mode</button>
+    <button @click="valide" class="btn-click">Valider</button>
+      <button @click="changeMode" class="btn-click">Prévisualisation</button>
 
     </div>
     <div v-if="sousMode === '1'">
@@ -70,7 +70,6 @@ export default {
     }
 
 
-    console.log(this.prestate);
 
   }
   ,watch: {
@@ -109,7 +108,7 @@ export default {
 
 }
 .btn-click{
-  width: 100px;
+  width: 200px;
   height: 50px;
   background-color: #2E2E2E;
   color: white;
@@ -129,10 +128,11 @@ export default {
 
 .editor-container{
   display: flex;
-  width: 80%;
+  width: 100%;
   flex-direction: column;
   justify-content: center;
 }
+
 
 .action-container{
   display: flex;

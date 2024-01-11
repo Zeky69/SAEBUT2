@@ -1,4 +1,5 @@
 import {getRequest, putRequest} from "@/services/axios.service"
+const url='/prestataires/';
 
 
 async function getPrestataire(id) {
@@ -23,10 +24,32 @@ async function getPrestataires(){
 
 }
 
+function updatePrestataireFromApi(user_id,data){
+    return putRequest(url+`profil/${user_id}`,data,'UpdatePrestaireInformation')
+}
+
+async function updatePrestataire(user_id,data){
+    try {
+        const response = await updatePrestataireFromApi(user_id, data);
+        return response;
+    } catch (error) {
+        console.error("Erreur mise à jour données prestataire", error);
+        throw error;
+    }
+}
+
+
+async function getPrestatairesTypes(){
+    return await getRequest('/prestataires/types', 'getPrestatairesTypes')
+}
+
 export {
+    updatePrestataire,
     getPrestataire,
     updatePage,
     getPrestataires,
-    getPrestataireObject
+    getPrestataireObject,
+    getPrestatairesTypes
+
 }
 

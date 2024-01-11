@@ -81,7 +81,7 @@ const routes = [
       },
       {
         path: 'mypage',
-        component: ()=>import ('../views/PrestateView.vue')
+        component: ()=>import ('../views/MaPage.vue')
       },
       {
         path:'*',
@@ -94,7 +94,7 @@ const routes = [
   {
     path: '/prestate/:id',
     name: 'prestate',
-    component: () => import('../views/PrestateView.vue'),
+    component: () => import('../views/MaPage.vue'),
     props: true
     },
 
@@ -140,14 +140,24 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  if(store.state.token)await store.dispatch('getInformationFromToken', store.state.token);
+
   if ((to.path.startsWith('/admin'))) {
-    await store.dispatch('getInformationFromToken', store.state.token);
     if(store.state.group_id===1){
       next()
     }else {
       next('/');
     }
   }
+
+  if ((to.path.startsWith('/prestataire'))) {
+    if(store.state.group_id===2){
+      next()
+    }else {
+      next('/');
+    }
+  }
+
   next();
 
 

@@ -22,6 +22,23 @@ const getPrestatairesEtatAccepte = async () => {
     }
 }
 
+const getPrestatairesTypes = async () => {
+    let resultat = null;
+    const client = await pool.connect();
+    try {
+        let sql = 'SELECT DISTINCT t.libelle , t.id_type , b.prestataire_id FROM emplacement INNER JOIN public.batiment b on emplacement.id_emplacement = b.id_emplacement inner join public.type t on t.id_type = b.type_id WHERE emplacement.id_emplacement in (SELECT  id_emplacement from emplacement WHERE batiment_id is not null);';
+        resultat = await client.query(sql);
+        return resultat.rows;
+    }
+    catch (error) {
+        console.log(error);
+        return error;
+    }
+    finally {
+        client.release();
+    }
+}
+
 const getPrestataireById = async (id) => {
     let resultat = null;
     const client = await pool.connect();
@@ -61,31 +78,30 @@ const updatePrestatairePage = async (prestataire) => {
 
 }
 
-async function updateUserProfile(user_id, nomEntreprise, description,photoDeProfil,prenom,nom,motDePasse){
+async function updateUserProfile(user_id, nomEntreprise, description,photoDeProfil,prenom,nom,motDePasse,email){
     const client = await pool.connect();
-
     try {
         await client.query('BEGIN');
 
         let query = `UPDATE prestataire 
-        SET nom =$1, description=$2, photo_profil=$3 
+        SET nom=$1, description=$2, photo_profil=$3
         WHERE id_user=$4;`;
 
         let res = await client.query(query, [nomEntreprise, description, photoDeProfil,user_id]);
 
         query = `UPDATE utilisateurs
-        SET LAST_NAME=$1, FIRST_NAME=$2
-        WHERE user_id=$3;`;
+        SET LAST_NAME=$1, FIRST_NAME=$2, email=$3
+        WHERE user_id=$4;`;
 
-        res = await client.query(query, [nom, prenom, user_id]);
+        res = await client.query(query, [nom, prenom, email,user_id]);
 
         if(motDePasse){
             query = `UPDATE MOTS_DE_PASSE_UTILISATEURS 
             SET Password=$1 where user_id=$2;`;
     
             res = await client.query(query, [motDePasse, user_id]);
-            await client.query('COMMIT');
         }
+        await client.query('COMMIT');
 
         console.log("Insertion réussit !")
     } catch (err) {
@@ -103,6 +119,7 @@ module.exports = {
     updateUserProfile,
     getPrestataireById : getPrestataireById,
     updatePrestatairePage :updatePrestatairePage,
-    getPrestatairesEtatAccepte :getPrestatairesEtatAccepte
+    getPrestatairesEtatAccepte :getPrestatairesEtatAccepte,
+    getPrestatairesTypes :getPrestatairesTypes
 }
 

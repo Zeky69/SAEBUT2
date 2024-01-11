@@ -2,6 +2,21 @@
 const prestataireService = require('../services/prestataire.service');
 
 
+exports.getPrestatairesTypes = async (req,res) => {
+    try {
+        let reponse = await prestataireService.getPrestatairesTypes();
+        if (reponse) {
+            return res.status(200).send(reponse);
+        }
+        return res.status(401).send("Pas d'information trouvé");
+    }
+    catch (error) {
+        return res.status(500).send(error.message || "Internal error");
+    }
+
+}
+
+
 exports.getPrestataireById = async (req,res) => {
     let id = req.params.id;
     try {
@@ -48,9 +63,9 @@ exports.getPrestatairesEtatAccepte = async (req,res) => {
 exports.updateUserProfile = async (req,res) => {
     try {
         const { id } = req.params;
-        const { nomEntreprise, description, photoDeProfil, prenom, nom, motDePasse } = req.body;
+        const { nomEntreprise, description, photoDeProfil, prenom, nom, email,motDePasse } = req.body;
 
-        await prestataireService.updateUserProfile(id, nomEntreprise, description, photoDeProfil, prenom, nom, motDePasse);
+        await prestataireService.updateUserProfile(id, nomEntreprise, description, photoDeProfil, prenom, nom, motDePasse,email);
 
         res.status(200).json({ success: true, message: 'Profil utilisateur mis à jour avec succès.' });
     } catch (error) {
