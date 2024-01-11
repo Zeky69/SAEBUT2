@@ -12,7 +12,7 @@ exports.test = (req, res) => {
 }
 
 exports.getAllResa = (req, res) => {
-    if (req.query.user_id) {
+    if (req.params.user_id) {
         return resaService.getAllResaByIdUser(req,(error,data)=>{
             if (error) {
                 console.log(error)
@@ -32,16 +32,6 @@ exports.getAllResa = (req, res) => {
 
 exports.getAllDispoById = (req, res) => {
     return resaService.getAllDispoById(req,(error,data)=>{
-        if (error) {
-            console.log(error)
-            return res.status(500).send("Internal error");
-        }
-        return res.status(200).send(data);
-    });
-}
-
-exports.getAuth = (req, res) => {
-    return resaService.getAuth(req,(error,data)=>{
         if (error) {
             console.log(error)
             return res.status(500).send("Internal error");
