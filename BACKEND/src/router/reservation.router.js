@@ -3,9 +3,9 @@ const resaController = require('../controllers/reservations.controllers');
 var router = express.Router();
 
 router.get('/test', resaController.test);
+router.get('/disponibilite/',resaController.getAllDispoById);
 router.get('/', resaController.getAllResa);
-router.get('/disponibilite', resaController.getAllDispoById);
-router.get('/auth', resaController.getAuth);
+
 
 router.post('/createDispo', resaController.createDispo);
 router.post('/reserver', resaController.reserver)

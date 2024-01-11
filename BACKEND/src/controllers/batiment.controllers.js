@@ -1,15 +1,23 @@
 const batimentService = require('../services/batiment.service');
+const resaService = require("../services/reservations.service");
 
 exports.getBatByIdPrestataire = async (req, res) => {
-    const idPresta = req.params.idPresta;
-    try {
-        const batiment = await batimentService.getBatByIdPrestataire(idPresta);
-        if (batiment.length === 0) {
-            return res.status(404).json({ message: 'Aucun batiment trouvé' });
+    return batimentService.getBatByIdPrestataire(req, (error, data) => {
+        if (error) {
+            console.log(error)
+            return res.status(500).send("Internal error");
         }
-        res.status(200).json(batiment);
-    } catch (error) {
-        console.error('Erreur lors de la récupération des batiments :', error);
-        res.status(500).json({ error: 'Erreur lors de la récupération des batiments' });
-    }
+        return res.status(200).send(data);
+    });
+}
+
+exports.updateDisplay = (req, res) => {
+    return batimentService.updateDisplay(req,(error,data)=>{
+        if (error) {
+            console.log(error)
+            return res.status(500).send("Internal error");
+        }
+        console.log(data);
+        return res.status(200).send("display updated");
+    });
 }

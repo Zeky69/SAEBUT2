@@ -1,21 +1,27 @@
 <template>
-  <div class="main">
-    <div class="reservation">
-    <h1>Reservations</h1>
+  <div class="main" v-if="mode==='1' || (mode==='2' && display)">
+    <div class="reservation" >
+    <h1>{{this.nom}}</h1>
+      <div v-if="mode==='1'">
+        <label for="display" >Utiliser les réservations ?</label>
+        <input id="display" type="checkbox" :checked="display" @click="$emit('updateDisplay', id_bat)">
+      </div>
+
+    <h2>Reservations</h2>
     <ul>
       <li v-for="(reservation, indexResa) in reservations" :key="indexResa">
-        {{reservation.id_reservation}} - {{reservation.id_emplacement}} - {{reservation.ouverture}} - {{reservation.duree}} min <button @click="deleteResaClicked(reservation.id_reservation)">Annuler</button>
+        {{reservation.ouverture}} - {{reservation.duree}} min | quantite : {{reservation.amount}}<button @click="deleteResaClicked(reservation.id_reservation)">Annuler</button>
       </li>
     </ul>
     </div>
     <div class="diponibilite">
-      <h1>Disponibilités</h1>
+      <h2>Disponibilités</h2>
       <ul>
-        <li v-for="dispo in disponibilites" :key="dispo.id_reservation">
-          {{dispo.id_reservation}} - {{dispo.id_emplacement}} - {{dispo.ouverture}} - {{dispo.duree}} min <button @click="reserverDate(dispo.id_reservation)">Reserver</button> <button @click="deleteDispoClicked(dispo.id_reservation)">Supprimer</button>
+        <li v-for="(dispo,indexDispo) in disponibilites" :key="indexDispo">
+          {{dispo.ouverture}} - {{dispo.duree}} min | quantite : {{dispo.amount}}<button @click="reserverDate(dispo.id_reservation)">Reserver</button> <button v-if="mode==='1'" @click="deleteDispoClicked(dispo.id_reservation)">Supprimer</button>
         </li>
-      <li> Créer une disponibilité:
-        <form @submit="checkForm">
+      <li v-if="mode==='1'"> Créer une disponibilité:
+        <div>
           <div>
             <div>
             <label for="newDispo">Choisir le début: </label>
@@ -43,7 +49,7 @@
           <div>
             <input type="submit" value="Ajouter" @click="checkForm" />
           </div>
-        </form>
+        </div>
 
       </li>
     </ul>
@@ -55,33 +61,25 @@
 <script>
 import {defineComponent} from "vue";
 import RestauService from "@/services/reservation";
+import {mapState} from "vuex";
 
 export default defineComponent({
   name: "reservationComponent",
   props: {
-    id_emp: String,
-    user_id: String,
+    id_bat: String,
+    id_prestataire: String,
+    mode: String,
+    nom:String,
+    display: Boolean
   },
   data : () => ({
+      ...mapState(["user_id"]),
       newDispoDate: "2024-06-01T08:30",
       newDispoDuree: "00:15",
       disponibilites: [],
       reservations: [],
   }),
   computed: {
-    isRestaurateur() { //TODO implement this
-      try{
-        let response = RestauService.getAuth(this.id_emp,this.user_id)
-        if(!response.error){
-          return response.data;
-        }else{
-          console.log("Erreur lors de la vérification de l'authentification");
-        }
-      }catch (e){
-        console.error("An error occurred:", e);
-      }
-      return false;
-    },
   },
 
   methods: {
@@ -91,7 +89,7 @@ export default defineComponent({
         if (response.error) {
           console.log("Erreur lors de la suppression d'une disponibilité");
         } else {
-          this.getDisponibilite()
+          await this.getDisponibilite()
         }
       } catch (e) {
         console.error("An error occurred:", e);
@@ -103,8 +101,8 @@ export default defineComponent({
         if (response.error) {
           console.log("Erreur lors de l'annulation' d'une reservation");
         } else {
-          this.getReservation()
-          this.getDisponibilite()
+          await this.getReservation()
+          await this.getDisponibilite()
         }
       } catch (e) {
         console.error("An error occurred:", e);
@@ -112,9 +110,8 @@ export default defineComponent({
     },
     async getDisponibilite(){
       try{
-        let response = await RestauService.getAllDispoById(this.id_emp)
+        let response = await RestauService.getAllDispoById(this.id_bat)
         if(!response.error){
-          console.log(response)
           this.disponibilites = response;
         }else{
           console.log("Erreur lors de la récupération des disponibilités");
@@ -125,7 +122,7 @@ export default defineComponent({
     },
     async getReservation() {
       try {
-        let response = await RestauService.getAllResaById(this.user_id,this.id_emp)
+        let response = await RestauService.getAllResaById(this.id_bat)
         if (!response.error) {
           this.reservations = response;
         } else {
@@ -138,13 +135,11 @@ export default defineComponent({
     async checkForm() {
       try {
         //TO DO: check input and check authentication
-        console.log(this.newDispoDate)
-        console.log(this.newDispoDuree)
-        let response = await RestauService.postDispo({"date":this.newDispoDate, "id_emp":this.id_emp, "duree":this.newDispoDuree})
+        let response = await RestauService.postDispo({"date":this.newDispoDate, "id_bat":this.id_bat, "duree":this.newDispoDuree})
         if (response.error) {
           console.log("Erreur lors de la création des disponibilités");
         } else {
-          this.getDisponibilite()
+          await this.getDisponibilite()
         }
       } catch (e) {
         console.error("An error occurred:", e);
@@ -153,12 +148,12 @@ export default defineComponent({
 
     async reserverDate(id_dispo){
         try {
-          let response = await RestauService.postResa({"id_dispo":id_dispo,"id_client":this.user_id})
+          let response = await RestauService.postResa({"id_dispo":id_dispo,"id_client":2})
           if (response.error) {
             console.log("Erreur lors de la réservation d'une disponibilité");
           } else {
-            this.getReservation()
-            this.getDisponibilite()
+            await this.getReservation()
+            await this.getDisponibilite()
           }
         } catch (e) {
           console.error("An error occurred:", e);

@@ -1,14 +1,11 @@
 import { getRequest, postRequest} from "@/services/axios.service"
 
-async function getAllResaByIdFromAPI(id_client,id_emp) {
-    return getRequest('/reservation/?user_id='+id_client+'&id_emp='+id_emp, 'GETALLRESABYID')
+async function getAllResaByIdFromAPI(id_bat) {
+    return getRequest('/reservation/?id_bat='+id_bat, 'GETALLRESABYID')
 }
 
 async function getAllDispoByIdFromAPI(id) {
-    return getRequest('/reservation/disponibilite/?id='+id, 'GETALLDISPOBYID')
-}
-async function getAuthFromAPI(id_emp,user_id) {
-    return getRequest('/reservation/auth/?id_emp='+id_emp+'&user_id='+user_id, 'GETAUTH')
+    return getRequest('/reservation/disponibilite/?id_bat='+id, 'GETALLDISPOBYID')
 }
 
 async function postDispoToAPI(data) {
@@ -29,18 +26,13 @@ async function deleteResaToAPI(data) {
 }
 
 
-
-async function getAllResaById(id_client,id_emp) {
-    let answer = await getAllResaByIdFromAPI(id_client,id_emp)
+async function getAllResaById(id_bat) {
+    let answer = await getAllResaByIdFromAPI(id_bat)
     return answer
 }
 
 async function getAllDispoById(id) {
     let answer = await getAllDispoByIdFromAPI(id)
-    return answer
-}
-async function getAuth(id_emp,user_id) {
-    let answer = await getAuthFromAPI(id_emp,user_id)
     return answer
 }
 
@@ -94,12 +86,13 @@ async function deleteResa(data) {
     }
 }
 
+
+
 export default {
     getAllResaById,
     getAllDispoById,
-    getAuth,
     postDispo,
     postResa,
     deleteDispo,
-    deleteResa
+    deleteResa,
 }

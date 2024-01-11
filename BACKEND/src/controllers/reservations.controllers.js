@@ -13,7 +13,7 @@ exports.test = (req, res) => {
 
 exports.getAllResa = (req, res) => {
     if (req.query.user_id) {
-        return resaService.getAllResaById(req,(error,data)=>{
+        return resaService.getAllResaByIdUser(req,(error,data)=>{
             if (error) {
                 console.log(error)
                 return res.status(500).send("Internal error");
@@ -21,7 +21,7 @@ exports.getAllResa = (req, res) => {
             return res.status(200).send(data);
         });
     }
-    return resaService.getAllResa(req,(error,data)=>{
+    return resaService.getAllResaById(req,(error,data)=>{
         if (error) {
             console.log(error)
             return res.status(500).send("Internal error");
@@ -64,7 +64,6 @@ exports.createDispo = (req, res) => {
 exports.reserver = (req, res) => {
     return resaService.reserver(req,(error,data)=>{
         if (error) {
-            console.log(error)
             return res.status(500).send("Internal error");
         }
         return res.status(200).send("reservation created");
@@ -83,8 +82,6 @@ exports.deleteDispoById = (req, res) => {
 }
 
 exports.deleteResaById = (req, res) => {
-    console.log("deleteResaById");
-    console.log(req);
     return resaService.deleteResaById(req,(error,data)=>{
         if (error) {
             console.log(error)
@@ -94,4 +91,6 @@ exports.deleteResaById = (req, res) => {
         return res.status(200).send("resa deleted");
     });
 }
+
+
 
