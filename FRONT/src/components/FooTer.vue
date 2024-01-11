@@ -66,6 +66,8 @@ export default {
 .footer {
   position: relative;
   margin-top: 15rem;
+  padding: 3rem 0;
+  overflow: hidden;
 }
 
 .newsletter {
@@ -152,7 +154,6 @@ export default {
   left: 0;
   width: 100%;
   overflow:hidden;
-
   svg {
     width: 200rem;
     height: auto;
@@ -164,8 +165,8 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 200%;
-  transform: translateX(-50%);
+  width: 180%;
+  transform: translateX(-40%);
   overflow:hidden;
   svg {
     width: 100%;

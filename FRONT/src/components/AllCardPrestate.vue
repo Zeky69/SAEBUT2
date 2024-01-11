@@ -4,13 +4,13 @@
     <img class="img-background" src="../assets/pageAccueil/fond-prestate.png" alt="">
     <div class="card-container" >
       <div class="header">
-        <h1>Nos partenaires</h1>
+        <h1>{{ $t('titlepartners') }}</h1>
         <div class="filtre-container">
           <div class="search-bar">
-            <input class="search-input" placeholder="Rechercher"  type="text" v-model="filtre.nom" id="nom" name="nom">
+            <input class="search-input" :placeholder="$t('research')" type="text" v-model="filtre.nom" id="nom" name="nom">
             <img class="loupe" :src="require('@/assets/icons/loupe.svg')"  alt="loupe de recherche">
           </div>
-          <bar-select2 :options="['Attraction', 'Restaurateur','Animateur' ,'Traiteur' ]" v-model="filtre.type" :default="'Categorie'" @input="setFiltreType" ></bar-select2>
+          <bar-select2 :options="[$t('attraction'), $t('animation'), $t('caterer')]" v-model="filtre.type" :default="$t('defaultCategory')" @input="setFiltreType"></bar-select2>
         </div>
       </div>
       <div>
@@ -35,22 +35,22 @@
               <p>{{types.libelle}}</p>
               </div>
             </div>
-            </div>
 
           </div>
           <div class="card-bottom">
             <router-link :to="{ name: 'prestate', params: { id: prestate.id_prestataire } }">
-              <button class="btn-card">Voir le profil</button>
+              <button class="btn-card">{{ $t('profile') }}</button>
             </router-link>
           </div>
           </div>
       </div>
-        <div class="button-container">
-          <button class="button" @click="scrollToNextCard"><svg class="svg-icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M672 512 672 512 352 192 320 224 624 528 320 832 352 864 688 528Z"  /></svg></button>
-        </div>
       </div>
 
+      <div class="button-container">
+          <button class="button" @click="scrollToNextCard"><svg class="svg-icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M672 512 672 512 352 192 320 224 624 528 320 832 352 864 688 528Z"  /></svg></button>
+        </div>
 
+      </div>
 
 
       </div>
@@ -144,12 +144,10 @@ export default {
     getPrestataires().then((response) => {
       this.ListPresate = response;
       this.filterList = this.ListPresate;
-      console.log(this.ListPresate);
     })
 
     getPrestatairesTypes().then((response) => {
       this.ListTypePrestaire = response;
-      console.log(this.ListTypePrestaire);
     })
 
     document.addEventListener('dragstart', function (event) {

@@ -2,8 +2,18 @@
     "exploreExtraordinary": "Explore the extraordinary: where dreams<br> come to life!",
     "enjoyMoments": "Don't hesitate! Indulge yourself in a timeless moment at the future's carnival and<br> immerse in a day of joy, discovery, and unforgettable experiences!",
     "ticketButton": "Get Tickets",
-    "welcomeBelforaine": "Welcome to Belforaine, the paradise of the future!",
+    "welcomeBelforaine": "Welcome to Belforaine, <span style=\"color:#553C65\"><br>the paradise of the future !</span>",
     "futureMagic": "Discover a world where electrifying LANs, breathtaking virtual reality adventures, inspiring conferences, and endless entertainment merge. Dive into the magic that the future holds, all in one destination. Belforaine, where the future becomes reality, and pleasure is infinite!",
     "learnMoreButton": "Learn More",
-    "ridesExperience": "More than just rides, an experience <br> <span style=\"color:#553C65\"> that spins magic infinitely!</span>"    
+    "ridesExperience": "More than just rides, an experience <br> <span style=\"color:#553C65\"> that spins magic infinitely!</span>",
+    "titlepartners": "Our Partners",
+    "research": "Search",
+    "defaultCategory": "Category",
+    "attraction": "Ride",
+    "animation": "Animator",
+    "caterer": "Caterer",
+    "profile": "Check the profile"
+
+
+    
   }

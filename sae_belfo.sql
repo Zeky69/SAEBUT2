@@ -1,4 +1,5 @@
     DROP TABLE if exists accueil CASCADE;
+    DROP TABLE if exists commentaire CASCADE;
     DROP TABLE if exists possède CASCADE;
         DROP TABLE if exists possede CASCADE;
     DROP TABLE if exists vend CASCADE;
@@ -152,12 +153,12 @@ CREATE TABLE emplacement(
 
     CREATE TABLE reservation(
         id_reservation SERIAL,
-        id_emplacement VARCHAR(50),
+        id_batiment VARCHAR(50),
         ouverture timestamp,
         duree varchar(50),
         id_client INT,
         PRIMARY KEY(id_reservation),
-        FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
+        FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment),
         FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)
     );
 
@@ -192,4 +193,15 @@ CREATE TABLE emplacement(
        PRIMARY KEY(id_emplacement, id_tag),
        FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
        FOREIGN KEY(id_tag) REFERENCES tags(id_tag)
+    );
+
+    CREATE TABLE commentaire(
+       id_commentaire SERIAL,
+       nom VARCHAR(50),
+       id_prestataire INT NOT NULL,
+       commentaire TEXT,
+       note INT,
+       date_commentaire TIMESTAMP ,
+       PRIMARY KEY(id_commentaire),
+        FOREIGN KEY(id_prestataire) REFERENCES prestataire(id_prestataire)
     );

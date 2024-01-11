@@ -2,9 +2,16 @@
     "exploreExtraordinary": "Explorez l'extraordinaire : là où les<br> rêves prennent vie !",
     "enjoyMoments": "N'hésitez plus ! Laissez-vous tenter pour un moment hors du temps à la fête foraine du futur et<br> plongez dans une journée de joie, de découvertes et d'expériences inoubliables !",
     "ticketButton": "Billetterie",
-    "welcomeBelforaine": "Bienvenue à Belforaine, le paradis du futur !",
+    "welcomeBelforaine": "Bienvenue à Belforaine, <span style=\"color:#553C65\"><br>le paradis du futur !</span>",
     "futureMagic": "Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences inspirantes et divertissement sans fin fusionnent. Plongez dans la magie que nous réserve le futur, le tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !",
     "learnMoreButton": "Plus d'information",
-    "ridesExperience": "Plus que des manèges, une expérience qui tourne la magie à l'infini !"
-  }
+    "ridesExperience": "Plus que des manèges, une expérience qui tourne la magie à l'infini !",
+    "titlepartners": "Nos partenaires",
+    "research": "Rechercher",
+    "defaultCategory": "Catégorie",
+    "attraction": "Attraction",
+    "animation": "Animateur",
+    "caterer": "Traiteur",
+    "profile": "Voir le profil"
+}
   
