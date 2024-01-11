@@ -88,11 +88,11 @@ INSERT INTO event VALUES ('1', 'premier concert', 'description event 1','251fe0b
 
 
 
-INSERT INTO categorie_produit(libelle_categorie,description) VALUES
-    ('Goodies', 'Des objets uniques qui ajoutent une touche de magie à votre quotidien.'),
-    ('Vêtements', 'Exprimez votre style avec nos vêtements tendance et originaux.'),
-    ('Peluches', 'Adoptez des compagnons doux et câlins qui éveilleront votre enfant intérieur.'),
-    ('Accessoires', 'Les petits détails qui font la différence : accessoires audacieux pour des moments mémorables.');
+INSERT INTO categorie_produit(libelle_categorie,description,image) VALUES
+    ('Goodies', 'Des objets uniques qui ajoutent une touche de magie à votre quotidien.','goodies.png'),
+    ('Vêtements', 'Exprimez votre style avec nos vêtements tendance et originaux.','vetement.png'),
+    ('Peluches', 'Adoptez des compagnons doux et câlins qui éveilleront votre enfant intérieur.','accessoires.png'),
+    ('Accessoires', 'Les petits détails qui font la différence : accessoires audacieux pour des moments mémorables.','peluches.png');
     
     select * from categorie_produit;
 
@@ -105,7 +105,7 @@ INSERT INTO produit (nom, prix, stock, categorie_id,photo) VALUES
     ('Porte-clés lumineux', 4.49, 75, 1,'porte_cle_lumineux.png'),
     ('Carnet de notes féerique', 6.99, 60, 1,'carnet_note.png'),    
 	('Stylo en métal gravé', 5.99, 50, 1,'stylo_grave.png'),
-    ('Mug isotherme avec couvercle', 14.99, 40, 1,'mug.png'),
+    ('Mug isotherme avec couvercle', 14.99, 40, 1,'mug.png');
 
 
 -- Ajout des produits pour la catégorie 'Vêtements'
@@ -131,7 +131,7 @@ INSERT INTO produit (nom, prix, stock, categorie_id, photo) VALUES
     ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png'),
     ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png'),
     ('Étui à lunettes original', 8.49, 50, 4,'etui.png'),
-    ('Bracelet en argent avec pendentif', 29.99, 25, 4),'bracelet-argent.png';
+    ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png');
 
 
 
