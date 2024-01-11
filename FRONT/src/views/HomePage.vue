@@ -21,7 +21,7 @@
       </div>
       <div class="droite">
         <div class="textePresentatif">
-          <h2>{{ $t('welcomeBelforaine')}} <span style="color:#553C65"><br>le paradis du futur !</span></h2>
+          <h2 v-html="$t('welcomeBelforaine')"></h2>
           <p>
             {{ $t('futureMagic')}}
           </p>
