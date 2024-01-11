@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS ELEMENTS_DE_MENU CASCADE;
 DROP TABLE IF EXISTS MENUS CASCADE;
 DROP TABLE IF EXISTS DROITS_DE_GROUPES CASCADE;
 DROP TABLE IF EXISTS DROITS CASCADE;
+DROP TABLE IF EXISTS categorie_produit CASCADE;
 drop table IF EXISTS mots_de_passe_utilisateurs cascade;
 DROP TABLE IF EXISTS JOURNAUX_UTILISATEURS CASCADE;
 drop table if exists utilisateurs cascade;
@@ -77,12 +78,22 @@ CREATE TABLE DROITS_DE_GROUPES(
     PRIMARY KEY (Group_Id,Right_Id)
 ); -- On peut avoir plusieurs droits pour un element (ex : le menu accueil visible par tous)
 
+CREATE TABLE categorie_produit(
+	id_categorie SERIAL,
+	libelle_categorie VARCHAR(50),
+	description VARCHAR(250),
+	PRIMARY KEY(id_categorie)
+);
+
 
     CREATE TABLE produit(
-       id_produit VARCHAR(50),
+       id_produit SERIAL,
        nom VARCHAR(50),
        prix NUMERIC(5,2),
        stock INT,
+       photo VARCHAR(50),
+       categorie_id INT,
+       FOREIGN KEY(categorie_id) REFERENCES categorie_produit(id_categorie),
        PRIMARY KEY(id_produit)
     );
 

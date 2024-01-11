@@ -1,0 +1,200 @@
+<template>
+  <div class="articles-pages">
+
+    <div class="page-banner">
+      <div class="image-container">
+        <div class="blurred-image"></div>
+        <div class="sharp-image"></div>
+      </div>
+      <div class="text">
+        <p class="title">{{ titre }}</p>
+        <p class="subtitle">{{ description }}</p>
+      </div>
+    </div>
+
+    <div class="page">
+
+      <div class="filter">
+
+        <div class="recherche">
+          <label for="site-search">Nom :</label>
+          <input type="search" id="site-search" placeholder="Rechercher article" />
+        </div>
+
+        <div class="prix">
+
+        </div>
+
+
+
+
+      </div>
+      <div class="articles">
+
+        <h2 id="pas-article" v-if="articles.length===0"> Malheureusement il n'y'a pas d'articles ici ...</h2>
+
+
+        <div  v-for="(prestate,index) in articles" :key="index">
+          <CardShop :logo="prestate.photo" :title="prestate.nom" :stock="prestate.stock" :price="prestate.prix" :id=id :nomCat="titre" :description="description"/>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</template>
+
+<script>
+import CardShop from "@/components/CardShop.vue";
+import ArticleShop from "@/services/shop.service"
+
+
+export default {
+  name:'ArticleShop',
+  props:['id'],
+  components:{
+    CardShop
+  },
+  data : () =>({
+    articles:[],
+    titre:'',
+    description:'',
+    id_produit:''
+  }),
+ async mounted() {
+    this.getArticles();
+  },
+  methods:{
+    getArticles(){
+      ArticleShop
+          .getArticles(this.id)
+          .then((response) => {
+            this.articles = response;
+            if(this.articles.length===0) this.$router.replace("/boutique");
+          })
+          .catch((error) => {
+            console.error("Error fetching articles:", error);
+
+          });
+
+      ArticleShop.getCategorie(this.id).then((response) =>{
+        this.titre = response.libelle_categorie;
+        this.description = response.description;
+        this.id_produit = response.id_produit;
+
+      }).catch((error)=>{
+        console.error("Error fetching categorie:", error);
+      });
+
+
+    }
+
+  }
+}
+</script>
+
+<style scoped>
+.articles-pages{
+  font-family: "DM Sans";
+  color: #000000;
+}
+
+.page-banner {
+  position: relative;
+  height: 30em;
+  margin-bottom: 4em;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.sharp-image {
+  background: url(../assets/fondFeteForaine.png) no-repeat center center fixed;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  filter: brightness(40%) blur(9px);
+  padding-bottom: 1.5em;
+}
+
+
+.blurred-image {
+  background: url(../assets/fondFeteForaine.png) no-repeat center center fixed;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  padding-bottom: 1.5em;
+}
+
+
+.text {
+  position: absolute;
+  top: 60%;
+  left:5%;
+  text-align: left;
+  text-align: left;
+  color: white;
+  z-index: 3;
+}
+
+.title {
+  font-size: 3.5em;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 2em;
+  font-family: Syne;
+  margin-bottom: 1em;
+}
+
+
+.page{
+  display: flex;
+  flex-direction: row;
+  margin: 1%;
+
+}
+
+.filter{
+  width: auto;
+  height: 100px;
+  flex: 1;}
+
+.articles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 42px;
+  flex: 2.5;
+}
+
+
+.recherche{
+  display: flex;
+  flex-direction: column;
+  gap : 5px;
+  width:85%;
+  font-size: 15px;
+}
+
+#site-search{
+  border-radius: 5px;
+  border: none;
+  background-color: #c6c6c6;
+  color: #000000;
+  padding: 3%;
+
+
+}
+
+</style>

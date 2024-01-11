@@ -30,8 +30,23 @@ const routes = [
   ,  {
     path: '/boutique',
     name: 'boutique',
-    component: () => import(/* webpackChunkName: "about" */ '../views/BoutiqueView.vue')
-  },  {
+    component: () => import(/* webpackChunkName: "about" */ '../views/BoutiqueVue.vue')
+   , children: [
+       {
+         name:'BoutiqueVue',
+         path:'/',
+         component : () => import('../components/BoutiqueView.vue')
+    },
+      {
+        name: 'articleShop',
+        path: '/articles/:id', // Modifiez ici pour inclure 'articles'
+        component: () => import('../views/ArticleShop.vue'),
+        props: true
+      },
+      ]
+      },
+
+    {
     path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "about" */ '../views/LoginView.vue')

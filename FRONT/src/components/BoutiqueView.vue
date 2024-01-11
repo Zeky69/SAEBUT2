@@ -25,8 +25,9 @@
     <h2 class="accroche">Votre bonheur a portée de main</h2>
 
     <div class="categorie">
-      <div v-for="(cat, index) in category" :key="index" class="categorie-content">
-        <p>{{ cat.name }}</p>
+      <div v-for="(cat, index) in category" :key="index" class="categorie-content" :style="{ backgroundImage: 'url(' + setImage(cat.image) + ')', before: { backgroundImage: 'url(' + setImage(cat.image) + ')' } }" @click="navigateToCategory(cat.id)">
+
+     <p>{{ cat.name }}</p>
       </div>
     </div>
 
@@ -36,19 +37,28 @@
 <script>
 
 import BestSell from "@/components/BestSell.vue";
+
+import {getImage} from "@/services/image.service"
 export default {
   name : 'BoutiqueView',
   data : ()=> ({
   category:[
-    {name:'Goodies'},
-    {name:'Vêtements'},
-    {name:'Accessoires'},
-    {name:'Peluches'}
+    {name:'Goodies', id:1,image:'goodies.png'},
+    {name:'Vêtements',id:2, image:'vetement.png'},
+    {name:'Accessoires',id:4,image:'accessoires.jpg'},
+    {name:'Peluches',id:3, image:'peluches.png'}
   ]
   }),
   components:{
     BestSell
-  },
+  },methods:{
+    navigateToCategory(categoryId) {
+      this.$router.push({ name: 'articleShop',params:{id:categoryId}});
+    },
+    setImage(url){
+      return getImage(url);
+    }
+  }
 }
 </script>
 
@@ -175,7 +185,16 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  background-size: cover;
+
+
+}
+
+.categorie-content p{
   position: relative;
+  z-index: 100;
+  filter: none;
 }
 
 .categorie-content::before {
@@ -185,9 +204,9 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: url(../assets/fondFeteForaine.png) no-repeat center;
   background-size: cover;
-  filter: brightness(30%);
+  background-color: rgba(0, 0, 0, 0.53);
+
 }
 
 .categorie-content p {

@@ -87,3 +87,52 @@ INSERT INTO event VALUES ('1', 'premier concert', 'description event 1','251fe0b
                          ('3', 'deuxieme concert', 'description event 3',  '251fe0ba-c541-49fc-98b9-2bcc9057a52e', 'green', 'acepted', '2024-06-03T14:00:00', '2024-06-03T16:00:00',2);
 
 
+
+INSERT INTO categorie_produit(libelle_categorie,description) VALUES
+    ('Goodies', 'Des objets uniques qui ajoutent une touche de magie à votre quotidien.'),
+    ('Vêtements', 'Exprimez votre style avec nos vêtements tendance et originaux.'),
+    ('Peluches', 'Adoptez des compagnons doux et câlins qui éveilleront votre enfant intérieur.'),
+    ('Accessoires', 'Les petits détails qui font la différence : accessoires audacieux pour des moments mémorables.');
+    
+    select * from categorie_produit;
+
+select * from categorie_produit;
+
+-- Ajout des produits pour la catégorie 'Goodies'
+INSERT INTO produit (nom, prix, stock, categorie_id,photo) VALUES
+    ('Stylo magique', 2.99, 100, 1,'stylo_magique.png'),
+    ('Tasse enchantée', 9.99, 50, 1,'tasse_magique.png'),
+    ('Porte-clés lumineux', 4.49, 75, 1,'porte_cle_lumineux.png'),
+    ('Carnet de notes féerique', 6.99, 60, 1,'carnet_note.png'),    
+	('Stylo en métal gravé', 5.99, 50, 1,'stylo_grave.png'),
+    ('Mug isotherme avec couvercle', 14.99, 40, 1,'mug.png'),
+
+
+-- Ajout des produits pour la catégorie 'Vêtements'
+INSERT INTO produit (nom, prix, stock, categorie_id,photo) VALUES
+    ('T-shirt graphique', 19.99, 30, 2,'t-shirt-graphique.png'),
+    ('Sweat à capuche confort', 39.99, 20, 2,'sweat-capuche.png'),
+    ('Chaussettes colorées', 8.99, 50, 2,'chaussette-coloré.png'),
+    ('Casquette brodée', 14.99, 40, 2,'casquette-brode.png');
+
+-- Ajout des produits pour la catégorie 'Peluches'
+INSERT INTO produit (nom, prix, stock, categorie_id,photo) VALUES
+    ('Peluche licorne magique', 29.99, 15, 3,'peluche_licorne.png'),
+    ('Ours en peluche câlin', 24.99, 20, 3,'ours_calin.png'),
+    ('Doudou éléphant doux', 19.99, 25, 3,'peluche_elephan.png'),
+    ('Peluche dragon rigolo', 34.99, 12, 3,'peluche_dragon.png'),
+	('Peluche ourson géant', 39.99, 20, 3,'peluche_ourson.png'),
+    ('Peluche chaton réaliste', 16.99, 35, 3,'peluche_chaton.png');
+
+
+-- Ajout des produits pour la catégorie 'Accessoires'
+INSERT INTO produit (nom, prix, stock, categorie_id, photo) VALUES
+    ('Coque de téléphone artistique', 12.99, 40, 4,'coque_telephone.png'),
+    ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png'),
+    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png'),
+    ('Étui à lunettes original', 8.49, 50, 4,'etui.png'),
+    ('Bracelet en argent avec pendentif', 29.99, 25, 4),'bracelet-argent.png';
+
+
+
+

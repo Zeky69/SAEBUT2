@@ -14,6 +14,7 @@ const resaRoutes = require('./router/reservation.router')
 const batRoutes = require('./router/batiment.router')
 const imageRoutes = require('./router/image.router')
 const commentaireRoutes = require('./router/commentaire.router')
+const shopRoutes = require('./router/shop.router')
 
 const cors = require('cors');
 const path = require("path");
@@ -67,6 +68,7 @@ app.use("/reservation", resaRoutes);
 app.use("/batiment", batRoutes);
 
 app.use('/image', imageRoutes);
+app.use('/shop',shopRoutes);
 app.use('/commentaire',commentaireRoutes);
 
 
