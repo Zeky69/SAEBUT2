@@ -50,9 +50,6 @@ export default {
       'Boutique': '/boutique',
       'Billetterie': '/billetterie',
       'Organisateurs': '/organisateurs',
-      'TestMap': '/testMap',
-      'MapPresta': '/MapPresta',
-      'Map2DAdmin': '/Map2DAdmin',
     }
   }),
   components:{
