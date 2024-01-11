@@ -3,33 +3,36 @@
     <div id="container" style="background-color: #D9D9D9; width: 90vw; height: 900px; max-width: 90vw; margin: 5vw; overflow: hidden; display: flex; user-select: none;" >
       <div class="scene1" id="scene1" ref="scene1Container">      </div>
 
-      <div class="selectmenu closed" id="selectmenu" >
+      <div class="selectmenu" id="selectmenu" >
 
-        <div class="infoBat" id="info">
+        <div class="infoBat" id="info" style="height: 100%;">
           <div class="menutop">
             <h2>information du batiment</h2>
             <div class="closepreview">
               <button id="btn1" @click="closepreview()" ><img class="croix" src="../../../public/croix.svg"> </button>
             </div>
           </div>
-
-          <div class="infoconc">
-          </div>
-
           <!-- liste la description le nom et le type -->
-          <div class="infoBat2">
+          <div class="infoBat2" style="height: 90%">
 
-            <div v-show="nbactivité != 0" >
-              <h2>Activité(s) : </h2>
-              <div class="activité" v-for="act in nbactivité" v-bind:key="act.id_activite">
-                <span>{{act.nom}}</span>
-              </div>
-            </div>
 
-            <div class="infoBat-content" style="justify-items: center; width: 100%;">
+
+            <div class="infoBat-content" style="justify-items: center; width: 100%; height: 100%;">
+
               <h2>Nom : </h2> <span>{{nomBatiment}}</span>
               <h2>Type : </h2> <span>{{typeBatiment}}</span>
               <h2>Description : </h2> <span>{{descriptionBatiment}}</span>
+
+
+              <FullCalendar :options="calendarOptions"  ref="fullCalendarRef" style="height: 60%;"/>
+
+              <div v-show="selectedEvent != 0">
+                <h3>Evenement : </h3> <span>{{selectedEvent.nom}}</span>
+                <h3>Type : </h3> <span>{{selectedEvent.type}}</span>
+                <h3>Description : </h3> <span>{{selectedEvent.description}}</span>
+                <br>
+                <button id="reservation" class="custom-btn">reserver une place</button>
+              </div>
             </div>
 
 
@@ -68,13 +71,29 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Sky } from 'three/addons/objects/Sky.js';
 
+import FullCalendar from "@fullcalendar/vue";
+
+
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+
+import tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
+
 import  {getOneBatUUID,getAllBat,getBatType} from '../../services/mapPrestataire.service.js';
+import  {getEventUUID,getEvent} from '../../services/scene.service.js';
+
 
 //getBatbyEmpUUID,getOneEmpUUID,getOneEmp
 export default {
+  components: {
+    FullCalendar,
+  },
   name: "Map3DUser.vue",
-  data : () => ({
-    nbactivité: 0,
+  data(){
+    return {
+    //nbactivité: 0,
     loaded: null,
     sky: null,
     sun: null,
@@ -107,7 +126,94 @@ export default {
     typeBatiment: [],
     descriptionBatiment: null,
     typeBatimentcheck: [],
-  }),
+    currentEvents: [],
+    nom_Event: "",
+    selectedEvent: 0,
+    calendarOptions: {
+      height: '70%',
+      plugins: [
+        dayGridPlugin,
+        timeGridPlugin,
+        interactionPlugin, // needed for dateClick,
+      ],
+      headerToolbar: {
+        left: "prev,next",
+        center: "title",
+        right: "timeGridFourDay,timeGridDay",
+      },
+      initialView: "timeGridFourDay",
+      // alternatively, use the `events` setting to fetch from a feed
+      /* you can update a remote database when these fire:
+    eventAdd:
+    eventChange:
+    eventRemove:
+    */
+      slotLabelFormat: [
+        {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        }
+      ],
+      //faire un event de 8h a 14h
+      initialDate: '2024-06-01',
+      slotDuration: '00:30',
+      events: this.currentEvents ? this.currentEvents.map(event => ({
+        title: event.nom,
+        start: event.start,
+        end: event.end,
+        color: event.color,
+        description: event.description,
+      })) : [],
+      //show description on click
+      eventClick: async (info) => {
+        tippy(info.el, {
+          content: info.event.extendedProps.description,
+        })
+        if (info.event._def.publicId == this.selectedEvent.id_event) {
+          console.log("jklsfjcklsdvnc,kqsdcvnk,qsdnc qsd,k n,qsdn jkqsnjkdvnqkdklalllo")
+          let id = this.selectedEvent.id_batiment;
+          this.selectedEvent = 0;
+          await this.refreshcalendare(id);
+
+          this.uuidsceneSelect = 0;
+        } else {
+          const event = await getEventUUID(info.event._def.publicId);
+          console.log(event)
+          this.selectedEvent = event;
+          await this.refreshcalendare(event.id_batiment);
+        }
+
+      },
+      views: {
+        timeGridFourDay: {
+          type: 'timeGrid',
+          duration: { days: 4 },
+          buttonText: '4 day',
+          dayHeaderFormat: { weekday: "long", month: "numeric", day: "numeric", omitCommas: true },
+          slotDuration: '00:30',
+          slotLabelFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
+        },
+        timeGridDay: { // Assurez-vous que cette configuration est correcte pour la vue timeGridDay
+          type: 'timeGrid',
+          duration: {days: 1},
+          buttonText: '1 day',
+          allDaySlot: false,
+          dayHeaderFormat: {weekday: "long", month: "numeric", day: "numeric", omitCommas: true},
+          slotDuration: '00:30',
+        },
+      },
+
+    },
+    uuidsceneSelect: 0,
+    uuidbat: 0,
+    eventScene: [],
+    description_event: "",
+    typeBatimeent: "",
+    checkedtype: [],
+    tabbatlist: [],
+
+  }},
   methods: {
 
     async findtypebatiment(id){
@@ -163,11 +269,13 @@ export default {
         const loader = new GLTFLoader();
         loader.load('map/mapData/map_belfo.glb', async (gltf) => {
 
+          console.log("children", this.children)
+
           const loadedGltf = gltf.scene;
           this.loaded = loadedGltf
 
 
-
+          this.children = [];
           this.findchild(loadedGltf, this.children);
 
 
@@ -481,131 +589,16 @@ export default {
     },
 
     async point2Dto3D(x, z ) {
-      /*
-      // Bounding box de la map 3D
-      const boundingBox = {
-        min: { x: -0.9983415603637695, y: -1, z: -1.0045995712280273 },
-        max: { x: 1.0016584396362305, y: 1, z: 0.9954003691673279 }
-      };
-
-      // Échelle
-      const scale = { x: 145.51963806152344, y: 1.8496733903884888, z: 151.32655334472656 };
-
-      // Conversion de la bounding box et de l'échelle
-      const adjustedBoundingBox = {
-        min: {
-          x: boundingBox.min.x * scale.x,
-          y: boundingBox.min.y * scale.y,
-          z: boundingBox.min.z * scale.z
-        },
-        max: {
-          x: boundingBox.max.x * scale.x,
-          y: boundingBox.max.y * scale.y,
-          z: boundingBox.max.z * scale.z
-        }
-      };
-
-      let coinHautGauche3D = {
-        x: adjustedBoundingBox.min.x,
-        z: adjustedBoundingBox.max.z
-      };
-      let coinHautDroit3D = {
-        x: adjustedBoundingBox.max.x,
-        z: adjustedBoundingBox.max.z
-      };
-      let coinBasGauche = {
-        x: adjustedBoundingBox.min.x,
-        z: adjustedBoundingBox.min.z
-      };
-      let coinBasDroite= {
-        x: adjustedBoundingBox.max.x,
-        z: adjustedBoundingBox.min.z
-      };
-
-      //console.log("pontmap3Dlfjdklsdkljf", coinHautDroit3D, coinHautGauche3D,coinBasGauche,coinBasDroite)
-
-      /*
-      cooextreme3D
-      Object { x: 145.76097359713458, z: 150.63050706416016 }
-
-Object { x: -145.2783025259123, z: 150.63050706416016 }
-
-Object { x: -145.2783025259123, z: -152.0225906055275 }
-
-Object { x: 145.76097359713458, z: -152.0225906055275 }
-       */
-
-
-      /*
-      cooppretty
-      top  left
-      Array [ 8.909232717044802, -20.492076873779297 ]
-      Map2Dedition.vue:304
-      bottom right
-      Array [ -8.909232716902693, 20.492076873779297 ]
-      Map2Dedition.vue:305
-      top right
-      Array [ 8.909232717044802, 20.492076873779297 ]
-      Map2Dedition.vue:306
-      bottom left
-      Array [ -8.909232716902693, -20.492076873779297 ]
-       */
-      /*
-      let coinHautGauchePretty = {
-        x: 8.909232717044802,
-        z: -20.492076873779297
-      };
-      let coinHautDroitPretty = {
-        x: 8.909232717044802,
-        z:  20.492076873779297
-      };
-      let coinBasGauchePretty = {
-        x: -8.909232716902693,
-        z: -20.492076873779297
-      };
-      let coinBasDroitePretty = {
-        x: -8.909232716902693,
-        z: 20.492076873779297
-      };
-      //console.log("prettyuseless",coinHautGauchePretty,coinHautDroitPretty,coinBasGauchePretty,coinBasDroitePretty)
-      /*
-      kjsdkljqskldjklqsjdklqskljd max
-          max:
-          x: 145.76097359713458
-          y: 1.8496733903884888
-          z: 150.63050706416016
-          min
-          x-145.2783025259123
-          y-1.8496733903884888
-          z:-152.0225906055275
-       */
-      // Application de la transformation aux coordonnées 2D
-
-
-
-
-      //botom right pretty coo [ 8.909232717044802, -20.492076873779297 ]
-
-
       let botrghtpretty = [8.909232717044802, -20.492076873779297]
-      //2 -145.2783025259123, z: 150.63050706416016
-      //3 -145.2783025259123, z: -152.0225906055275
-      //hd -152.0225906055275
-      let botrght3D = [145.2783025259123, 1.8496733903884888,150.63050706416016]
+      let botrght3D = [275.13375854492188, 1.8496733903884888,275]
 
       let point3D2 = {
         x: (botrght3D[0] * x) / botrghtpretty[0],
-        z: (botrght3D[2] * z) / botrghtpretty[1]
+        z: (botrght3D[2] * z) / botrghtpretty[1]-20
       }
-      /*
-            point3D2={
-              x: x*1,
-              z: z*1
-            }
-
-       */
       return point3D2;
     },
+
 
     async matriceTo3DEmp(matricepoints, name, posx, posz, emp_uuid) {
       let center = await this.point2Dto3D(posz, posx);
@@ -760,7 +753,9 @@ Object { x: 145.76097359713458, z: -152.0225906055275 }
           }
 
           if (this.selectab.length == 0 && found) {
+            this.eventScene = await getEvent(this.selectedObject.userData.uuid);
             // Toggle the 'active' class on the selectmenu div
+            console.log("events", this.eventScene.length)
 
 
             this.selectedObject.material.color.setHex(0xff0000);
@@ -770,12 +765,15 @@ Object { x: 145.76097359713458, z: -152.0225906055275 }
               document.getElementById('scene1').classList.toggle('active');
 
 
-              let uuidScene = batiment[0].id_scene
+              let uuidScene = batiment[0].id_batiment
               console.log(uuidScene)
               this.uuidsceneSelect = uuidScene
               this.refreshcalendare(uuidScene)
               info = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "conf"}
-            this.selectab.push(info);
+              this.selectab.push(info);
+              this.nomBatiment = batiment[0].nom
+              this.descriptionBatiment = batiment[0].description
+              this.typeBatiment = batiment[0].type
           } else {
             if (this.selectedObject.uuid == this.selectab[0]["obj"].uuid) {
               // Toggle the 'active' class on the selectmenu div
@@ -784,7 +782,6 @@ Object { x: 145.76097359713458, z: -152.0225906055275 }
               document.getElementById('scene1').classList.toggle('active');
               //wait 300ms
               setTimeout(() => {
-                document.getElementById('remove').classList.toggle('active');
                 document.getElementById('selectmenu').classList.toggle('supr');
               }, 300);
               this.selectedObject.material = this.selectab[0]["mat"].clone()
@@ -801,6 +798,58 @@ Object { x: 145.76097359713458, z: -152.0225906055275 }
         }
       }
     },
+    async eventParser(event){
+      console.log("event", event)
+/*
+
+      if(event.id_prestataire == this.prestataire){
+        if(event.status == "acepted"){
+          event.color = "green";
+        }
+        else{
+          event.color = "orange";
+        }
+      }
+      else {
+        event.color = "red";
+      }
+
+      */
+      event.color = "green";
+      if(this.selectedEvent != 0) {
+        if (event.id_event == this.selectedEvent.id_event) {
+          event.color = "blue";
+        }
+      }
+
+
+
+      let data = {
+        id : event.id_event,
+        title: event.nom,
+        start: event.start_date,
+        end: event.end_date,
+        color: event.color,
+        description: event.description,
+      }
+      return data;
+    },
+
+    async refreshcalendare(uuid) {
+      this.currentEvents = [];
+      console.log("uuid refresh", uuid)
+      console.log("event scene refressh", this.eventScene)
+      this.eventScene = await getEvent(uuid);
+
+      console.log("event scene refressh", this.eventScene)
+      for (let i = 0; i < this.eventScene.length; i++) {
+        let data = await this.eventParser(this.eventScene[i]);
+        this.currentEvents.push(data);
+      }
+
+      this.$refs.fullCalendarRef.getApi().setOption('events', this.currentEvents);
+
+    },
 
 
     handleResize() {
@@ -815,12 +864,18 @@ Object { x: 145.76097359713458, z: -152.0225906055275 }
     showLoadingScreen() {
       document.getElementById('loadingScreen').style.display = 'flex';
       document.getElementById('scene1').style.display = 'none';
-      document.getElementById('selectmenu').style.display = 'none';
+      //document.getElementById('selectmenu').style.display = 'none';
+      document.getElementById('selectmenu').style.visibility = 'hidden';
+
+
     },
     hideLoadingScreen() {
       document.getElementById('loadingScreen').style.display = 'none';
       document.getElementById('scene1').style.display = 'flex';
-      document.getElementById('selectmenu').style.display = 'block';
+      //document.getElementById('selectmenu').style.display = 'block';
+
+      document.getElementById('selectmenu').style.visibility = 'visible';
+      document.getElementById('selectmenu').classList.toggle('closed');
     },
     animate() {
       requestAnimationFrame(this.animate);
@@ -984,13 +1039,28 @@ Object { x: 145.76097359713458, z: -152.0225906055275 }
   width: 70%;
 }
 
-.infoBat{
-  display: none;
+.calendare{
+  width: 70%;
+  visibility: hidden;
+  position: absolute;
 }
 
-.infoBat.active{
-  display: block;
+.calendare.here{
+  visibility: visible;
+  position: relative;
 }
+
+.custom-btn {
+  margin: 10px;
+  background-color: #28a745; /* couleur verte */
+  color: #fff; /* couleur du texte blanc */
+  padding: 10px 15px; /* rembourrage du bouton */
+  border: none; /* pas de bordure */
+  border-radius: 5px; /* coins arrondis */
+  cursor: pointer; /* curseur main au survol */
+  font-size: 16px; /* taille du texte */
+}
+
 
 #btn1{
   all: unset;
@@ -1072,4 +1142,11 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
+.fc-time-grid.fc-content-skeleton {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%; }
 </style>

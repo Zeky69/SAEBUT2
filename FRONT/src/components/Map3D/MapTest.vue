@@ -20,6 +20,8 @@
           <select id="batidInput" v-model="idbatafficher">
             <option value=-1 disabled selected>Sélectionnez un bâtiment</option>
             <option v-for="batimentsolo in tabbatlist" :key="batimentsolo.id" :value="batimentsolo.id">{{ batimentsolo.nom }}</option>
+
+
           </select>
         </div>
 
@@ -174,96 +176,6 @@ export default {
       nom_Event: "",
       selectedEvent: 0,
       currentEvents: [],
-      calendarOptions: {
-        height: '70%',
-        plugins: [
-          dayGridPlugin,
-          timeGridPlugin,
-          interactionPlugin, // needed for dateClick,
-        ],
-        headerToolbar: {
-          left: "prev,next",
-          center: "title",
-          right: "timeGridFourDay,timeGridDay",
-        },
-        initialView: "timeGridFourDay",
-        // alternatively, use the `events` setting to fetch from a feed
-        /* you can update a remote database when these fire:
-      eventAdd:
-      eventChange:
-      eventRemove:
-      */
-        slotLabelFormat: [
-          {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-          }
-        ],
-        //faire un event de 8h a 14h
-        initialDate: '2024-06-01',
-        slotDuration: '00:30',
-        events: this.currentEvents ? this.currentEvents.map(event => ({
-          title: event.nom,
-          start: event.start,
-          end: event.end,
-          color: event.color,
-          description: event.description,
-        })) : [],
-        //show description on click
-        eventClick: async (info) => {
-          tippy(info.el, {
-            content: info.event.extendedProps.description,
-          })
-          console.log("thisslertedEvent", this.selectedEvent.id_prestataire)
-          console.log("thisprestat", this.prestataire)
-            if (info.event._def.publicId == this.selectedEvent.id_event) {
-              console.log("jklsfjcklsdvnc,kqsdcvnk,qsdnc qsd,k n,qsdn jkqsnjkdvnqkdklalllo")
-              let id = this.selectedEvent.id_batiment;
-              this.selectedEvent = 0;
-              await this.refreshcalendare(id);
-
-              this.uuidsceneSelect = 0;
-            } else {
-              const event = await getEventUUID(info.event._def.publicId);
-              console.log(event)
-              this.selectedEvent = event;
-              this.uuidsceneSelect = event.id_batiment;
-              console.log("this.prestatnorselect",this.prestataire)
-              console.log("this.selectedEvent notselect",this.selectedEvent)
-              if (this.selectedEvent.id_prestataire == this.prestataire) {
-                let idscenestring = this.selectedEvent.id_batiment
-                console.log("id scene jdklsqjfkljsqlmfjqskljfqskl id", idscenestring)
-                await this.refreshcalendare(idscenestring)
-              }else{
-                this.selectedEvent = 0;
-                this.uuidsceneSelect = 0;
-              }
-
-            }
-
-            console.log("this.selectedEvent", this.selectedEvent);
-
-        },
-        views: {
-          timeGridFourDay: {
-            type: 'timeGrid',
-            duration: {days: 4},
-            buttonText: '4 day',
-            dayHeaderFormat: {weekday: "long", month: "numeric", day: "numeric", omitCommas: true},
-            slotDuration: '00:30',
-          },
-          timeGridDay: { // Assurez-vous que cette configuration est correcte pour la vue timeGridDay
-            type: 'timeGrid',
-            duration: {days: 1},
-            buttonText: '1 day',
-            allDaySlot: false,
-            dayHeaderFormat: {weekday: "long", month: "numeric", day: "numeric", omitCommas: true},
-            slotDuration: '00:30',
-          },
-        },
-
-      },
       uuidsceneSelect: 0,
       uuidbat: 0,
       eventScene: [],
@@ -315,6 +227,96 @@ export default {
       testshape: [],
       checkedtype: [],
       tabbatlist: [],
+      calendarOptions: {
+        height: '70%',
+        plugins: [
+          dayGridPlugin,
+          timeGridPlugin,
+          interactionPlugin, // needed for dateClick,
+        ],
+        headerToolbar: {
+          left: "prev,next",
+          center: "title",
+          right: "timeGridFourDay,timeGridDay",
+        },
+        initialView: "timeGridFourDay",
+        // alternatively, use the `events` setting to fetch from a feed
+        /* you can update a remote database when these fire:
+      eventAdd:
+      eventChange:
+      eventRemove:
+      */
+        slotLabelFormat: [
+          {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          }
+        ],
+        //faire un event de 8h a 14h
+        initialDate: '2024-06-01',
+        slotDuration: '00:30',
+        events: this.currentEvents ? this.currentEvents.map(event => ({
+          title: event.nom,
+          start: event.start,
+          end: event.end,
+          color: event.color,
+          description: event.description,
+        })) : [],
+        //show description on click
+        eventClick: async (info) => {
+          tippy(info.el, {
+            content: info.event.extendedProps.description,
+          })
+          console.log("thisslertedEvent", this.selectedEvent.id_prestataire)
+          console.log("thisprestat", this.prestataire)
+          if (info.event._def.publicId == this.selectedEvent.id_event) {
+            console.log("jklsfjcklsdvnc,kqsdcvnk,qsdnc qsd,k n,qsdn jkqsnjkdvnqkdklalllo")
+            let id = this.selectedEvent.id_batiment;
+            this.selectedEvent = 0;
+            await this.refreshcalendare(id);
+
+            this.uuidsceneSelect = 0;
+          } else {
+            const event = await getEventUUID(info.event._def.publicId);
+            console.log(event)
+            this.selectedEvent = event;
+            this.uuidsceneSelect = event.id_batiment;
+            console.log("this.prestatnorselect",this.prestataire)
+            console.log("this.selectedEvent notselect",this.selectedEvent)
+            if (this.selectedEvent.id_prestataire == this.prestataire) {
+              let idscenestring = this.selectedEvent.id_batiment
+              console.log("id scene jdklsqjfkljsqlmfjqskljfqskl id", idscenestring)
+              await this.refreshcalendare(idscenestring)
+            }else{
+              this.selectedEvent = 0;
+              this.uuidsceneSelect = 0;
+            }
+
+          }
+
+          console.log("this.selectedEvent", this.selectedEvent);
+
+        },
+        views: {
+          timeGridFourDay: {
+            type: 'timeGrid',
+            duration: {days: 4},
+            buttonText: '4 day',
+            dayHeaderFormat: {weekday: "long", month: "numeric", day: "numeric", omitCommas: true},
+            slotDuration: '00:30',
+          },
+          timeGridDay: { // Assurez-vous que cette configuration est correcte pour la vue timeGridDay
+            type: 'timeGrid',
+            duration: {days: 1},
+            buttonText: '1 day',
+            allDaySlot: false,
+            dayHeaderFormat: {weekday: "long", month: "numeric", day: "numeric", omitCommas: true},
+            slotDuration: '00:30',
+          },
+        },
+
+      },
 
 
       //style save batiment_bdd[0] = {name: "batiment1", type: "batiment", position: {x: 0, y: 0, z: 0}, rotation: {x: 0, y: 0, z: 0}, name_of_emp: "emp1", prestataire_id: "prestataire1", status: "en cours"}
@@ -492,13 +494,10 @@ export default {
         console.log("position ", this.selectab[0]["obj"].position.x)
         console.log("position ", this.selectab[0]["obj"].position.z)
         let posx = this.selectab[0]["obj"].position.x;
-        let posz = this.selectab[0]["obj"].position.y;
-        let point = await this.point2Dto3D(posx, posz);
-        posz = point.z;
-        posx = point.x;
+        let posz = this.selectab[0]["obj"].position.z;
 
-        this.previewbatiewbatiment.position.x = this.selectab[0]["obj"].position.x;
-        this.previewbatiewbatiment.position.z = this.selectab[0]["obj"].position.z;
+        this.previewbatiewbatiment.position.x = posx;
+        this.previewbatiewbatiment.position.z = posz
         this.previewbatiewbatiment.position.y = objet_model.position.y;
         console.log("previewbatiewbatiment", this.previewbatiewbatiment)
       }
@@ -885,6 +884,8 @@ export default {
       document.getElementById('selectmenu').classList.toggle('supr');
     }, 300);
 
+    this.clearpreviewbat();
+
 
   }
   if (mode == 2) {
@@ -1198,6 +1199,8 @@ export default {
         const loadedGltf = gltf.scene;
         this.loaded = loadedGltf
 
+        console.log("children", this.childrenf)
+
 
 
         this.findchild(loadedGltf, this.children);
@@ -1221,7 +1224,7 @@ export default {
                 name: this.children[i].name,
                 nom: "Salle de conférence",
                 type: "Salle de conférence",
-                selected: true
+                selected: false
               }
             }
             if(this.children[i].name == "bat_1_rest"){
@@ -1435,134 +1438,42 @@ export default {
     },
 
     async point2Dto3D(x, z ) {
-     /*
-      // Bounding box de la map 3D
-      const boundingBox = {
-        min: { x: -0.9983415603637695, y: -1, z: -1.0045995712280273 },
-        max: { x: 1.0016584396362305, y: 1, z: 0.9954003691673279 }
-      };
-
-      // Échelle
-      const scale = { x: 145.51963806152344, y: 1.8496733903884888, z: 151.32655334472656 };
-
-      // Conversion de la bounding box et de l'échelle
-      const adjustedBoundingBox = {
-        min: {
-          x: boundingBox.min.x * scale.x,
-          y: boundingBox.min.y * scale.y,
-          z: boundingBox.min.z * scale.z
-        },
-        max: {
-          x: boundingBox.max.x * scale.x,
-          y: boundingBox.max.y * scale.y,
-          z: boundingBox.max.z * scale.z
-        }
-      };
-
-      let coinHautGauche3D = {
-        x: adjustedBoundingBox.min.x,
-        z: adjustedBoundingBox.max.z
-      };
-      let coinHautDroit3D = {
-        x: adjustedBoundingBox.max.x,
-        z: adjustedBoundingBox.max.z
-      };
-      let coinBasGauche = {
-        x: adjustedBoundingBox.min.x,
-        z: adjustedBoundingBox.min.z
-      };
-      let coinBasDroite= {
-        x: adjustedBoundingBox.max.x,
-        z: adjustedBoundingBox.min.z
-      };
-
-      //console.log("pontmap3Dlfjdklsdkljf", coinHautDroit3D, coinHautGauche3D,coinBasGauche,coinBasDroite)
-
-      /*
-      cooextreme3D
-      Object { x: 145.76097359713458, z: 150.63050706416016 }
-
-Object { x: -145.2783025259123, z: 150.63050706416016 }
-
-Object { x: -145.2783025259123, z: -152.0225906055275 }
-
-Object { x: 145.76097359713458, z: -152.0225906055275 }
-       */
-
-
-/*
-cooppretty
-top  left
-Array [ 8.909232717044802, -20.492076873779297 ]
-Map2Dedition.vue:304
-bottom right
-Array [ -8.909232716902693, 20.492076873779297 ]
-Map2Dedition.vue:305
-top right
-Array [ 8.909232717044802, 20.492076873779297 ]
-Map2Dedition.vue:306
-bottom left
-Array [ -8.909232716902693, -20.492076873779297 ]
-
-      let coinHautGauchePretty = {
-        x: 8.909232717044802,
-        z: -20.492076873779297
-      };
-      let coinHautDroitPretty = {
-        x: 8.909232717044802,
-        z:  20.492076873779297
-      };
-      let coinBasGauchePretty = {
-        x: -8.909232716902693,
-        z: -20.492076873779297
-      };
-      let coinBasDroitePretty = {
-        x: -8.909232716902693,
-        z: 20.492076873779297
-      };
-      //console.log("prettyuseless",coinHautGauchePretty,coinHautDroitPretty,coinBasGauchePretty,coinBasDroitePretty)
-      /*
-      kjsdkljqskldjklqsjdklqskljd max
-          max:
-          x: 145.76097359713458
-          y: 1.8496733903884888
-          z: 150.63050706416016
-          min
-          x-145.2783025259123
-          y-1.8496733903884888
-          z:-152.0225906055275
-       */
-      // Application de la transformation aux coordonnées 2D
-
-
-
-
-
-
-      //botom right pretty coo [ 8.909232717044802, -20.492076873779297 ]
-
       let botrghtpretty = [8.909232717044802, -20.492076873779297]
-      //2 -145.2783025259123, z: 150.63050706416016
-      //3 -145.2783025259123, z: -152.0225906055275
-     //hd -152.0225906055275
-      let botrght3D = [145.2783025259123, 1.8496733903884888,150.63050706416016]
+      let botrght3D = [441,1.8496733903884888,-811.1476745605469]
+      let point3D2
 
-      let point3D2 = {
-        x: (botrght3D[0] * x) / botrghtpretty[0],
-        z: (botrght3D[2] * z) / botrghtpretty[1]
+      if(x > 0 && z > 0){
+        point3D2 = {
+          x: (botrght3D[0] * x) / botrghtpretty[0],
+          z: (botrght3D[2] * -z) / botrghtpretty[1]
+        }
+        return point3D2;
       }
-/*
-      point3D2={
-        x: x*1,
-        z: z*1
+      if(x < 0 && z > 0){
+        point3D2 = {
+          x: (botrght3D[0] * x) / botrghtpretty[0],
+          z: (botrght3D[2] * z) / botrghtpretty[1]
+        }
+        return point3D2;
       }
-
- */
-      return point3D2;
+      if(x < 0 && z < 0){
+        point3D2 = {
+          x: (botrght3D[0] * x) / botrghtpretty[0],
+          z: (botrght3D[2] * -z) / botrghtpretty[1]
+        }
+        return point3D2;
+      }
+      if(x > 0 && z < 0){
+        point3D2 = {
+          x: (botrght3D[0] * x) / botrghtpretty[0],
+          z: (botrght3D[2] * -z) / botrghtpretty[1]
+        }
+        return point3D2;
+      }
     },
 
     async matriceTo3DEmp(matricepoints, name, posx, posz, emp_uuid) {
-      let center = await this.point2Dto3D(posz, posx);
+      let center = await this.point2Dto3D(posz, -posx);
       console.log("center", center);
 
       // Inversion (flip) des coordonnées y dans la matrice
@@ -1585,10 +1496,10 @@ Array [ -8.909232716902693, -20.492076873779297 ]
 
 
       // Épaisseur de l'objet
-      const depth = 2;
-      const shape = new THREE.Shape(points);
+      const depth = 2
+      const shape = new THREE.Shape(points)
 
-      const geome = new THREE.ExtrudeGeometry(shape, { depth: depth, bevelEnabled: false });
+      const geome = new THREE.ExtrudeGeometry(shape, { depth: depth, bevelEnabled: false })
       geome.rotateX(-Math.PI/2)
 
       const texture_emp = new THREE.TextureLoader().load('map/mapData/tex/tex_emp.png');
@@ -1730,7 +1641,18 @@ Array [ -8.909232716902693, -20.492076873779297 ]
   computed:{
     uniqueTypes() {
       const types = new Set();
-      this.batiment.forEach((bat) => types.add(bat.type));
+      this.batiment.forEach((bat) => {
+        if (bat.type !== "Salle de conférence" && bat.type !== "toilette") {
+          types.add(bat.type);
+        }
+      });
+
+
+      //retirer les types qui ne sont pas dans la liste
+      types.delete(undefined);
+
+      console.log("types", types)
+
       return Array.from(types);
     },
   },
