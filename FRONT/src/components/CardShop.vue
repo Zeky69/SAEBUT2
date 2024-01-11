@@ -32,7 +32,7 @@ export default {
     title: String,
     stock: Number,
     price: String,
-    id : String,
+    id : Number,
     nomCat:String,
     description:String,
   },mounted() {

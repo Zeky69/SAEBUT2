@@ -17,25 +17,37 @@
       <div class="filter">
 
         <div class="recherche">
-          <label for="site-search">Nom :</label>
-          <input type="search" id="site-search" placeholder="Rechercher article" />
+          <label for="site-search" >Nom :</label>
+          <input type="search" id="site-search" v-model="nameFilter" placeholder="Rechercher article" />
         </div>
+
 
         <div class="prix">
 
+          <div class="number">
+            <label for="site-search">Min :</label>
+            <input type="number" class="number-input" v-model="min" />
+          </div>
+
+          <div class="number">
+            <label for="site-search">Max :</label>
+            <input type="number" class="number-input" v-model="max"/>
+          </div>
         </div>
+        <button @click="resetFiltre">Réinitialiser le filtre</button>
 
 
 
 
       </div>
+
       <div class="articles">
 
         <h2 id="pas-article" v-if="articles.length===0"> Malheureusement il n'y'a pas d'articles ici ...</h2>
 
 
-        <div  v-for="(prestate,index) in articles" :key="index">
-          <CardShop :logo="prestate.photo" :title="prestate.nom" :stock="prestate.stock" :price="prestate.prix" :id=id :nomCat="titre" :description="description"/>
+        <div  v-for="(prestate,index) in filterTable" :key="index">
+          <CardShop :logo="prestate.photo" :title="prestate.nom" :stock="prestate.stock" :price="prestate.prix" :id=parseInt(prestate.id_produit) :nomCat="titre" :description="description"/>
         </div>
       </div>
 
@@ -60,10 +72,26 @@ export default {
     articles:[],
     titre:'',
     description:'',
-    id_produit:''
+    id_produit:'',
+    nameFilter:'',
+    max:0,
+    min:0
   }),
  async mounted() {
     this.getArticles();
+  },
+  computed:{
+    filterTable(){
+      let filter = this.articles;
+      if(this.nameFilter){
+        filter = this.filterByName(filter);
+      }
+
+      if(this.min>-1 && this.max>0)
+        filter = this.filterByPrice(filter)
+      return filter;
+    }
+
   },
   methods:{
     getArticles(){
@@ -86,10 +114,18 @@ export default {
       }).catch((error)=>{
         console.error("Error fetching categorie:", error);
       });
-
-
+    },filterByName(filter){
+      if(this.nameFilter !== ''){
+        const lowerCaserName = this.nameFilter.toLowerCase();
+        return filter.filter(v => v.nom.toLowerCase().includes(lowerCaserName));
+      }
+    }, filterByPrice(filter) {
+      return filter.filter(v => parseInt(v.prix) >= this.min && parseInt(v.prix) <= this.max);
+    },resetFiltre(){
+      this.nameFilter="";
+      this.min=0;
+      this.max=0;
     }
-
   }
 }
 </script>
@@ -194,7 +230,24 @@ export default {
   color: #000000;
   padding: 3%;
 
+}
 
+.prix{
+  padding-top: 5%;
+  width: 85%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.number{
+  display: flex;
+  align-items: center;
+}
+
+.number-input{
+  width: 60px;
+  height: 25px;
 }
 
 </style>

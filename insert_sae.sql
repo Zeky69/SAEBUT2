@@ -91,8 +91,8 @@ INSERT INTO event VALUES ('1', 'premier concert', 'description event 1','251fe0b
 INSERT INTO categorie_produit(libelle_categorie,description,image) VALUES
     ('Goodies', 'Des objets uniques qui ajoutent une touche de magie à votre quotidien.','goodies.png'),
     ('Vêtements', 'Exprimez votre style avec nos vêtements tendance et originaux.','vetement.png'),
-    ('Peluches', 'Adoptez des compagnons doux et câlins qui éveilleront votre enfant intérieur.','accessoires.png'),
-    ('Accessoires', 'Les petits détails qui font la différence : accessoires audacieux pour des moments mémorables.','peluches.png');
+    ('Peluches', 'Adoptez des compagnons doux et câlins qui éveilleront votre enfant intérieur.','peluches.png'),
+    ('Accessoires', 'Les petits détails qui font la différence : accessoires audacieux pour des moments mémorables.','accessoires.jpg');
     
     select * from categorie_produit;
 
