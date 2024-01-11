@@ -5,14 +5,14 @@
 
     <step-panier :items="['Panier','Informations','Récapitulatif','Paiement']" :step=stepPanier ></step-panier>
 
-    <div class="all-conatiner">
+    <div v-if="stepPanier ===1" class="all-conatiner">
 
   <div class="panier-container">
     <h1 class="title">Mon Panier</h1>
 
     <div class="panier-body">
 
-   <ligne-panier v-for="(item, index) in elements" :key="index"  :items="item.donnees" @delete-item="deleteItem"></ligne-panier>
+   <ligne-panier v-for="(item, index) in elements" :key="index"  :items="item.donnees" @delete-item="deleteItem" :have-date="item.date !== null"></ligne-panier>
 
     </div>
   </div>
@@ -21,6 +21,13 @@
 
       <mini-panier :items="items" @delete-item="deleteItem"></mini-panier>
     </div>
+    </div>
+
+
+    <div v-if="stepPanier === 2 " class="all-conatiner">
+      <information-panier>
+      </information-panier>
+
     </div>
   </div>
 
@@ -34,9 +41,11 @@
   import StepPanier from "@/components/Panier/Step.vue";
   import Cookies from "js-cookie";
   import {mapState} from "vuex";
+  import InformationPanier from "@/components/InformationPanier.vue";
 
   export default {
     components: {
+      InformationPanier,
       StepPanier,
       MiniPanier,
       lignePanier,
@@ -80,9 +89,6 @@
 
 
       this.elements = this.items.reduce((acc, item) => {
-        console.log("--------------------");
-        console.log(item);
-        console.log(acc);
         const index = acc.findIndex((element) => element.id === item.id && JSON.stringify(element.date) === JSON.stringify(item.date));
         if (index === -1) {
           acc.push({
