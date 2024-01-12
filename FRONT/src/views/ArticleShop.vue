@@ -34,7 +34,7 @@
             <input type="number" class="number-input" v-model="max"/>
           </div>
         </div>
-        <button @click="resetFiltre">Réinitialiser le filtre</button>
+        <button class="btn-filtre" @click="resetFiltre">Réinitialiser le filtre</button>
 
 
 
@@ -240,14 +240,29 @@ export default {
   justify-content: space-between;
 }
 
-.number{
-  display: flex;
-  align-items: center;
-}
-
 .number-input{
   width: 60px;
   height: 25px;
+  border-radius: 5px;
+  border: none;
+  background-color: #c6c6c6;
+  color: #000000;
+  padding: 3%;
+
+}
+
+.btn-filtre{
+  width: 85%;
+  height: 40px;
+  background-color: #553C65;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: bold;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  cursor: pointer;
 }
 
 </style>

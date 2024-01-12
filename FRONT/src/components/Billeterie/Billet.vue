@@ -61,7 +61,6 @@ export default {
       this.selected = this.items.find((item) => item.id === this.idselect);
     }else
       this.selected = null;
-    console.log(this.selected);
   }
   ,
   methods: {

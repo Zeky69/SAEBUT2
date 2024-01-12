@@ -55,7 +55,6 @@ export default {
         let canvas = document.getElementById('canvas'+index)
         QRCode.toCanvas(canvas, uuid.uuid,{ color: { dark: '#000000', light: '#ffffff' }}, function (error) {
           if (error) console.error(error);
-          console.log('QR code généré avec succès pour UUID:', uuid.uuid);
         });
       });
     },
@@ -82,7 +81,6 @@ export default {
       this.order.acheteur = JSON.parse(acheteur);
       createCommandeWithoutAccount(this.order).then(
           (res) => {
-            console.log(res)
             this.billets = res;
             this.$nextTick(() => {
               this.generateQRCodes();

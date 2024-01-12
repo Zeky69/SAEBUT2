@@ -45,7 +45,6 @@ export default {
     scrolled: false,
     navBarTitles: {
       'Accueil': '/',
-      'Attractions': '/attraction',
       'Restauration': '/restauration',
       'Boutique': '/boutique',
       'Billetterie': '/billetterie',

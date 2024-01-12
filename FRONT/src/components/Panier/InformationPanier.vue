@@ -134,11 +134,8 @@ export default {
         billet: this.billetInformation,
       }
       let acheteur = this.informationAchateur
-      console.log(order)
-      console.log('kf,rmzev :v ze:')
       Cookies.set('order', JSON.stringify(order))
       Cookies.set('acheteur', JSON.stringify(acheteur))
-      console.log(Cookies.get('order'))
       this.$store.dispatch("setStepPanier", 3)
     },
     getDate(item){
@@ -160,7 +157,6 @@ export default {
     let storedPanier = Cookies.get('panier');
     if (storedPanier) {
       this.panier = JSON.parse(storedPanier);
-      console.log(this.panier);
       this.panier.forEach((item)=>{
         if(item.header.type ==='billet'){
           for (let i = 0; i < item.quantity; i++) {

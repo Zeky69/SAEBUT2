@@ -23,7 +23,6 @@ async function getRandomArticlesFromAPI() {
 
 async function getRandomArticles() {
     try {
-        console.log("je suis la ")
         let answer = await getRandomArticlesFromAPI();
         return answer;
     } catch (error) {

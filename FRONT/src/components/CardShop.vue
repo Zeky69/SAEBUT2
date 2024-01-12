@@ -36,7 +36,6 @@ export default {
     nomCat:String,
     description:String,
   },mounted() {
-    console.log(this.logo)
     this.image = getImage(this.logo);
   },
   methods: {

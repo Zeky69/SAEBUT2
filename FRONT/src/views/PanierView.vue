@@ -105,7 +105,6 @@
       let storedPanier = Cookies.get('panier');
       if (storedPanier) {
         this.items = JSON.parse(storedPanier);
-        console.log(this.items);
 
 
 

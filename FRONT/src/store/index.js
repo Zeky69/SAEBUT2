@@ -7,8 +7,6 @@ import userService from '../services/utilisateur'
 
 let tokens = localStorage.getItem('token') || null;
 
-console.log(tokens)
-
 export default new Vuex.Store({
   state: {
     token : tokens,

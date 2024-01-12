@@ -213,6 +213,16 @@ export default {
           return 'cerlce orange';
         case '2':
           return 'cerlce jaune';
+        case '3':
+          return 'cerlce rose';
+        case '4':
+          return 'cerlce rouge';
+          case '5':
+          return 'cerlce vert';
+          case '6':
+          return 'cerlce bleu';
+          case '7':
+          return 'cerlce violet';
         default:
           return 'cerlce gris';
 
@@ -389,6 +399,20 @@ option {
 .gris{
   background-color: #7e7e7e;
 }
+
+.violet{
+  background-color: #a800ff;
+}
+
+.rose{
+  background-color: #ff70f6;
+}
+
+.vert{
+  background-color: #00ff00;
+}
+
+.
 
 .title-container{
   width: 100%;

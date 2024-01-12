@@ -93,7 +93,6 @@ export default {
 
     this.total = this.order.panier.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
 
-    console.log(orders)
 
 
 
