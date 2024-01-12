@@ -30,7 +30,7 @@ async function updateDisplay(req, callback){
                  SET use_resa=$1
                  WHERE id_batiment = $2`;
         res = await client.query(query, [display, id_batiment]);
-        callback(null, "c good");
+        callback(null, "ok");
     } catch (err) {
         callback(err, null);
     } finally {
