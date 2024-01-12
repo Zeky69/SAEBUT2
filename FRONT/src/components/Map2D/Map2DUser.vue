@@ -123,6 +123,7 @@ export default {
             "description": bat.description,
             "marker": bat.marker,
             "type" : bat.id_type,
+            "id_prestataire": bat.prestataire_id,
           }
         }
         this.features.push(data)

@@ -34,6 +34,18 @@ drop table if exists utilisateurs cascade;
 drop table IF EXISTS groupes cascade;
 drop table IF EXISTS ETAT cascade;
 
+DROP TABLE IF EXISTS billet cascade;
+DROP TABLE IF EXISTS sousBillet CASCADE;
+DROP TABLE IF EXISTS commande CASCADE;
+DROP TABLE IF EXISTS ligneCommandeArticle CASCADE;
+DROP TABLE IF EXISTS ligneCommandeBillet CASCADE;
+DROP TABLE IF EXISTS date_belforaine CASCADE;
+
+
+
+
+
+
 CREATE TABLE GROUPES(
     Id SERIAL PRIMARY KEY,
     libelle VARCHAR(255)
@@ -216,5 +228,68 @@ CREATE TABLE emplacement(
        note INT,
        date_commentaire TIMESTAMP ,
        PRIMARY KEY(id_commentaire),
-        FOREIGN KEY(id_prestataire) REFERENCES prestataire(id_prestataire)
+       FOREIGN KEY(id_prestataire) REFERENCES prestataire(id_prestataire)
     );
+
+
+CREATE TABLE billet(
+           id SERIAL,
+           title VARCHAR(100),
+           description VARCHAR(255),
+           price DECIMAL(5,2),
+           day int,
+           path VARCHAR(255),
+           PRIMARY KEY(id)
+     );
+
+     CREATE TABLE sousBillet(
+       subId INT NOT NULL,
+       id_billet INT NOT NULL,
+       subtitle VARCHAR(100),
+       PRIMARY KEY(subId, id_billet),
+       FOREIGN KEY(id_billet) REFERENCES billet(id)
+
+     );
+
+
+     CREATE TABLE commande(
+       id_commande SERIAL,
+       id_user INT NOT NULL,
+       date_commande TIMESTAMP,
+       PRIMARY KEY(id_commande),
+       FOREIGN KEY(id_user) REFERENCES UTILISATEURS(User_Id)
+     );
+
+     CREATE TABLE date_belforaine(
+       id_date_belforaine SERIAL,
+       date_evenement TIMESTAMP,
+       PRIMARY KEY(id_date_belforaine)
+     );
+
+    CREATE TABLE ligneCommandeBillet(
+           uuid VARCHAR(100) NOT NULL,
+           id_commande INT NOT NULL,
+           id_billet INT NOT NULL,
+           subId INT NOT NULL,
+           nom VARCHAR(100),
+           prenom VARCHAR(100),
+           date JSON,
+           PRIMARY KEY(uuid),
+           FOREIGN KEY(id_billet,subId) REFERENCES sousBillet(id_billet,subId)
+     );
+
+
+
+     CREATE TABLE ligneCommandeArticle(
+           id_commande INT NOT NULL,
+           id_produit INT NOT NULL,
+           quantite INT NOT NULL,
+           PRIMARY KEY(id_commande, id_produit),
+           FOREIGN KEY(id_produit) REFERENCES produit(id_produit)
+     );
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-import {getRequest} from "@/services/axios.service";
+import {getRequest, postRequest} from "@/services/axios.service";
 
 const url='/shop';
 
@@ -76,10 +76,27 @@ async function getCategorieByProduct(id) {
     }
 }
 
+async function createCommandeWithoutAccountFromAPI(data) {
+    return postRequest(url+`/commande`, data, 'createCommandeWithoutAccount')
+}
+
+export async function createCommandeWithoutAccount(data) {
+    try{
+        let answer = await createCommandeWithoutAccountFromAPI(data);
+        return answer;
+    }
+    catch(error){
+        console.error('Erreur lors de la création de la commande', error.message);
+        throw error;
+    }
+}
+
+
 export default {
 getArticles,
     getCategorie,
     getAllCategorie,
     getRandomArticles,
-    getCategorieByProduct
+    getCategorieByProduct,
+    createCommandeWithoutAccount
 }

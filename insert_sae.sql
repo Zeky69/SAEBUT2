@@ -135,4 +135,41 @@ INSERT INTO produit (nom, prix, stock, categorie_id, photo) VALUES
 
 
 
+INSERT INTO billet(title,description,price,day,path) VALUES
+('Billet Basic','Profitez de la magie de Belforaine toute une journée.',24.99,1,'billet_basic.png'),
+('Billet Fast','Profitez de la magie de Belforaine toute une journée avec un accès prioritaire aux attractions.',34.99,1,'billet_fast.png'),
+('Billet Premium','Profitez de la magie de Belforaine pendant 2 jours avec un accès prioritaire aux attractions et des goodies offerts à l`entrée.',59.99,2,'billet_premium.png');
+
+
+INSERT INTO sousBillet (subId , id_billet , subtitle) VALUES
+(1,1,'Adulte'),
+(2,1,'Enfant'),
+(1,2,'Adulte'),
+(2,2,'Enfant'),
+(1,3,'Adulte'),
+(2,3,'Enfant');
+
+INSERT INTO date_belforaine (date_evenement) VALUES
+('2024-01-15'),
+('2024-01-16'),
+('2024-01-17');
+
+
+
+
+
+INSERT INTO commande (id_user,date_commande) VALUES
+(2,now());
+
+
+
+
+INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom,date) VALUES
+('151',1,1,2,'Zekeriya','Akburak','{"date":["2024-01-16"]}'),
+('15415',1,2,1,'Mhammed','Akburak','{"date":["2024-01-16"]}'),
+('5415',1,3,1,'Enzo','LeRaptor','{"date":["2024-01-15","2024-01-16"]}');
+
+INSERT INTO ligneCommandeArticle(id_commande , id_produit , quantite) VALUES
+(1,1,5);
+
 

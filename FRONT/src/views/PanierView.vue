@@ -3,7 +3,7 @@
   <div class="root">
     <div class="navbar-height"></div>
 
-    <step-panier :items="['Panier','Informations','Récapitulatif','Paiement']" :step=stepPanier ></step-panier>
+    <step-panier v-if="stepPanier !==5" :items="['Panier','Informations','Récapitulatif','Paiement']" :step=stepPanier ></step-panier>
 
     <div v-if="stepPanier ===1" class="all-conatiner">
 
@@ -13,6 +13,10 @@
     <div class="panier-body">
 
    <ligne-panier v-for="(item, index) in elements" :key="index"  :items="item.donnees" @delete-item="deleteItem" :have-date="item.date !== null"></ligne-panier>
+      <div v-if="elements.length ===0" class="empty">
+        <h2>Ce panier semble un peu vide, tu pourrais y ajouter quelque chose ?</h2>
+
+      </div>
 
     </div>
   </div>
@@ -29,6 +33,18 @@
       </information-panier>
 
     </div>
+
+    <div v-if="stepPanier === 3" class="all-conatiner">
+      <recupelatif-view></recupelatif-view>
+    </div>
+
+    <div v-if="stepPanier===4" class="all-conatiner">
+      <paiement-view></paiement-view>
+    </div>
+
+    <div v-if="stepPanier===5" class="all-conatiner">
+      <fin-view></fin-view>
+    </div>
   </div>
 
 
@@ -41,10 +57,16 @@
   import StepPanier from "@/components/Panier/Step.vue";
   import Cookies from "js-cookie";
   import {mapState} from "vuex";
-  import InformationPanier from "@/components/InformationPanier.vue";
+  import InformationPanier from "@/components/Panier/InformationPanier.vue";
+  import RecupelatifView from "@/components/Panier/Recupelatif.vue";
+  import PaiementView from "@/components/Panier/paiement.vue";
+  import FinView from "@/components/Panier/FinView.vue";
 
   export default {
     components: {
+      FinView,
+      PaiementView,
+      RecupelatifView,
       InformationPanier,
       StepPanier,
       MiniPanier,
@@ -158,7 +180,25 @@
 .mini-panier{
   margin-top : 100px;
 }
-
+.empty{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 100%;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+.empty h2{
+  font-family: "DM Sans Regular", Syne, Helvetica, sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-align: center;
+  width: 80%;
+}
 
 
 

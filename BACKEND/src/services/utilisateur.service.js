@@ -56,6 +56,39 @@ async function registerUser(nom, prenom, email, description, siret) {
 }
 
 
+async function registerGhostsUser(nom, prenom, email) {
+    const client = await pool.connect();
+
+    try {
+        await client.query('BEGIN');
+
+        let checkQuery = 'SELECT User_id FROM UTILISATEURS WHERE email = $1';
+        let checkRes = await client.query(checkQuery, [email]);
+
+        if (checkRes.rows.length > 0) {
+            await client.query('COMMIT');
+            return checkRes.rows[0].user_id;
+        }
+
+        let insertQuery = `INSERT INTO UTILISATEURS (FIRST_NAME, LAST_NAME, email, Date_Created, Group_Id)
+            VALUES ($1, $2, $3, now(), 3)
+            RETURNING User_id;`;
+
+        let insertRes = await client.query(insertQuery, [nom, prenom, email]);
+        await client.query('COMMIT');
+
+        return insertRes.rows[0].user_id;
+
+    } catch (err) {
+        await client.query('ROLLBACK');
+        console.error(err);
+    } finally {
+        client.release();
+    }
+}
+
+
+
 async function getInformationWithToken(token){
     let response;
     jwt.verify(token, jwtSecret, (err, decoded) => {
@@ -109,5 +142,6 @@ module.exports = {
     loginUser : loginUser,
     registerUser : registerUser,
     getInformationWithToken : getInformationWithToken,
-    getPrestataireObject : getPrestataireObject
+    getPrestataireObject : getPrestataireObject,
+    registerGhostsUser : registerGhostsUser
 }

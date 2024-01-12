@@ -20,7 +20,7 @@
     <span class="information">Vous pourrez choisir votre méthode de paiement plus tard</span>
     </div>
     <div class="footer-container">
-      <button class="btn-validate">Valider mon panier</button>
+      <button class="btn-validate" @click="setStep(2)" :disabled="items.length === 0">Valider mon panier</button>
       <button class="btn-continue" @click="gotoShop">Continuer mes achats</button>
     </div>
 
@@ -31,6 +31,7 @@
 
 
 <script >
+
 export default {
   name: 'mini-panier',
   components: {
@@ -51,7 +52,13 @@ export default {
   computed: {
   },
   methods: {
+    setStep(i){
+      if(this.items.length === 0){
+        return
+      }
+      this.$store.dispatch("setStepPanier", i)
 
+    },
     getsvg(type){
       switch (type){
         case "billet":
@@ -224,6 +231,10 @@ li{
   background: #A361BF url('@/assets/icons/cart.svg') center/contain no-repeat;
   background-size: 60%;
   border-radius: 50px;
+}
+.btn-validate:disabled{
+  background: rgba(163, 97, 191, 0.5);
+  cursor: not-allowed;
 }
 
 </style>
