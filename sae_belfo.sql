@@ -166,6 +166,7 @@ CREATE TABLE emplacement(
     CREATE TABLE reservation(
         id_reservation SERIAL,
         id_batiment VARCHAR(50) NOT NULL,
+        id_prestataire INT NOT NULL,
         ouverture timestamp,
         duree varchar(50),
         id_client INT,

@@ -82,5 +82,27 @@ exports.deleteResaById = (req, res) => {
     });
 }
 
+exports.getDispoByID = (req, res) => {
+    return resaService.getDispoByID(req,(error,data)=>{
+        if (error) {
+            console.log(error)
+            return res.status(500).send("Internal error");
+        }
+        console.log(data);
+        return res.status(200).send(data);
+    });
+}
+
+exports.accepterDispo = (req, res) => {
+    return resaService.accepterDispo(req,(error,data)=>{
+        if (error) {
+            console.log(error)
+            return res.status(500).send("Internal error");
+        }
+        console.log(data);
+        return res.status(200).send(data);
+    });
+}
+
 
 

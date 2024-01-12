@@ -157,6 +157,10 @@ router.post('/', resaController.reserver)
  *           description: Erreur interne du serveur
  */
 
+router.get('/disponibilite/id/:id_dispo', resaController.getDispoByID);
+
+router.patch('/disponibilite/:id_dispo', resaController.accepterDispo);
+
 router.delete('/disponibilite/:id_dispo', resaController.deleteDispoById);
 router.patch('/', resaController.deleteResaById);
 

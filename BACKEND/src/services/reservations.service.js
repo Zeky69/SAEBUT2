@@ -56,7 +56,7 @@ async function getAllDispoById (req,callback) {
     let id_bat = req.params.id_bat;
     const client = await pool.connect();
     try{
-        const query = `select ouverture,duree, id_batiment, id_client, count(id_reservation) as amount,(SELECT id_reservation  from reservation r2 where id_batiment=$1 AND id_client IS NULL AND r1.ouverture=r2.ouverture AND r1.duree=r2.duree LIMIT 1)  from reservation r1 where id_batiment=$1 AND id_client IS NULL GROUP BY ouverture,duree, id_batiment, id_client ORDER BY ouverture ASC`;
+        const query = `select nom, description, color, status, id_prestataire, ouverture,duree, id_batiment, id_client, count(id_reservation) as amount,(SELECT id_reservation  from reservation r2 where id_batiment=$1 AND id_client IS NULL AND r1.ouverture=r2.ouverture AND r1.duree=r2.duree LIMIT 1)  from reservation r1 where id_batiment=$1 AND id_client IS NULL GROUP BY ouverture,duree, id_batiment, id_client,nom, description, color, status,id_prestataire ORDER BY ouverture ASC`;
         res = await client.query(query,[id_bat]);
         for (let i = 0; i < res.rows.length; i++) {
             res.rows[i].ouverture = res.rows[i].ouverture.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' , year: 'numeric', month: 'numeric', day: 'numeric', hour : "2-digit", minute:"2-digit" });
@@ -96,10 +96,11 @@ async function createDispo (req,callback) {
     let nom = req.body.nom;
     let color = req.body.color;
     let status = req.body.status;
+    let id_prestataire = req.body.id_prestataire;
     const client = await pool.connect();
     try{
-        const query = `INSERT INTO reservation (id_batiment,ouverture,duree,description,nom,color,status) VALUES ($1, $2, $3, $4, $5, $6, $7)`;
-        res = await client.query(query, [id_bat, date, duree,description, nom, color, status]);
+        const query = `INSERT INTO reservation (id_batiment,ouverture,duree,description,nom,color,status,id_prestataire) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`;
+        res = await client.query(query, [id_bat, date, duree,description, nom, color, status, id_prestataire]);
         callback(null,"c good");
     }catch(err){
         console.log(err);
@@ -155,6 +156,40 @@ async function deleteResaById(req, callback){
     }
 }
 
+async function getDispoByID(req, callback){
+    let id_dispo = req.params.id_dispo;
+    let id = parseInt(id_dispo)
+    const client = await pool.connect();
+    try{
+        const query = `select * from reservation where id_reservation=$1`;
+        res = await client.query(query, [id_dispo]);
+        callback(null,res.rows);
+    }catch(err){
+        callback(err,null);
+    }finally{
+        client.release();
+    }
+}
+
+async function accepterDispo(req, callback){
+    let id_dispo = req.params.id_dispo;
+    let id = parseInt(id_dispo)
+    const client = await pool.connect();
+    try{
+        const query = `select id_batiment, ouverture,duree from reservation where id_reservation=$1`;
+        res = await client.query(query, [id_dispo]);
+
+        const query2 = "UPDATE reservation SET status='accepted' WHERE id_batiment=$1 AND ouverture=$2 AND duree=$3";
+        const values = [res.rows[0].id_batiment, res.rows[0].ouverture, res.rows[0].duree];
+        const res2 = await client.query(query2,values);
+
+        callback(null,res2.rows);
+    }catch(err){
+        callback(err,null);
+    }finally{
+        client.release();
+    }
+}
 
 
 module.exports = {
@@ -165,5 +200,7 @@ module.exports = {
     reserver:reserver,
     deleteDispoById:deleteDispoById,
     deleteResaById:deleteResaById,
+    getDispoByID:getDispoByID,
+    accepterDispo:accepterDispo,
     test:test
 };

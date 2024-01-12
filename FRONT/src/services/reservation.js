@@ -24,6 +24,15 @@ async function deleteResaToAPI(data) {
     return patchRequest('/reservation/', data, 'DELETERESA')
 }
 
+async function getDispoByIDFromAPI(id) {
+    return getRequest('/reservation/disponibilite/id/'+id, 'GETDISPOBYID')
+}
+
+async function accepterDispoFromAPI(id_dispo) {
+    return patchRequest('/reservation/disponibilite/'+id_dispo, 'ACCEPTERDISPO')
+
+}
+
 
 async function getAllResaById(id_bat) {
     let answer = await getAllResaByIdFromAPI(id_bat)
@@ -83,6 +92,29 @@ async function deleteResa(data) {
     }
 }
 
+async function getDispoByID(id) {
+    try {
+        let answer = await getDispoByIDFromAPI(id)
+        console.log("Réponse du back", answer)
+        return answer
+    }
+    catch (error) {
+        console.error('Erreur lors de la récupération de la disponibilité :', error.message);
+        throw error;
+    }
+}
+
+async function accepterDispo(id) {
+    try {
+        let answer = await accepterDispoFromAPI(id)
+        console.log("Réponse du back", answer)
+        return answer
+    }
+    catch (error) {
+        console.error('Erreur lors de la récupération de la disponibilité :', error.message);
+        throw error;
+    }
+}
 
 
 export default {
@@ -92,4 +124,6 @@ export default {
     postResa,
     deleteDispo,
     deleteResa,
+    getDispoByID,
+    accepterDispo,
 }

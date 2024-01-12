@@ -175,7 +175,7 @@ import 'tippy.js/dist/tippy.css';
 
 //importer service/mapPrestataires.js
 import {getAllEmp,getOneBatUUID,getBatbyEmpUUID,getOneEmpUUID,getOneEmp,deleteBat, updateEmpFree, createBat, getAllBat, deleteEmp, updateBatStatus} from '../../services/mapPrestataire.service.js';
-import {getEvent,getEventUUID,deleteEvent} from '../../services/scene.service.js';
+import {getEvent,deleteEvent} from '../../services/scene.service.js';
 import event from '../../services/reservation.js';
 
 /*   getAllEmp,
@@ -286,7 +286,7 @@ export default {
         initialDate: '2024-06-01',
         slotDuration: '00:30',
         events: this.currentEvents ? this.currentEvents.map(event => ({
-          title: event.nom,
+          title: event.title,
           start: event.start,
           end: event.end,
           color: event.color,
@@ -297,7 +297,9 @@ export default {
           tippy(info.el, {
             content: info.event.extendedProps.description,
           })
-          if (info.event._def.publicId == this.selectedEvent.id_event) {
+          console.log("info", info)
+          console.log("info.event", this.selectedEvent)
+          if (info.event._def.publicId == this.selectedEvent.id_reservation) {
             console.log("jklsfjcklsdvnc,kqsdcvnk,qsdnc qsd,k n,qsdn jkqsnjkdvnqkdklalllo")
             let id = this.selectedEvent.id_batiment;
             this.selectedEvent = 0;
@@ -305,10 +307,11 @@ export default {
 
             this.uuidsceneSelect = 0;
           } else {
-            const event = await getEventUUID(info.event._def.publicId);
-            console.log(event)
-            this.selectedEvent = event;
-            this.uuidsceneSelect = event.id_batiment;
+            const id = parseInt(info.event._def.publicId);
+            const event2 = await event.getDispoByID(info.event._def.publicId);
+            console.log(event2)
+            this.selectedEvent = event2[0];
+            this.uuidsceneSelect = event2[0].id_batiment;
             console.log("this.prestatnorselect",this.prestataire)
             console.log("this.selectedEvent notselect",this.selectedEvent)
             let idscenestring = this.selectedEvent.id_batiment
@@ -373,11 +376,12 @@ export default {
     async deleteEventfunc(){
       console.log("deleteEvent")
       console.log("this.selectedEvent", this.selectedEvent)
-      let id = this.selectedEvent.id_event;
+      let data = {
+        id_dispo: this.selectedEvent.id_reservation,
+      }
       let uuid = this.uuidsceneSelect;
-      console.log("id", id)
       console.log("uuid", uuid)
-      await deleteEvent(id);
+      await event.deleteDispo(data);
 
 
 
@@ -458,14 +462,15 @@ export default {
         nom: name,
         color: "red",
         status: "accepted",
+        id_prestataire: 1,
       }
 
       let eventcreated
 
       for (let i = 0; i < nbplace; i++) {
         eventcreated = await event.postDispo(dataReservation);
+        console.log("eventcreated", eventcreated)
       }
-
 /*
       let databdd = {
         id_scene: batuuid,
@@ -480,30 +485,6 @@ export default {
       console.log("databdd", databdd)
 
  */
-
-      start = start + ":00.000Z";
-      end = end + ":00.000Z";
-
-
-      let data = {
-        id : eventcreated.id_event,
-        title: name,
-        start: start,
-        end: end,
-        color: 'red',
-        description: description,
-      }
-
-      let resa = await event.getAllDispoById(batuuid);
-
-      console.log("resa", resa)
-
-
-      //add event au calendrier
-      this.currentEvents.push(data);
-
-
-
       console.log("this.currentEvents bef refresh", this.currentEvents)
 
       this.refreshcalendare(batuuid);
@@ -560,10 +541,11 @@ export default {
     async accepterEvent(){
       console.log("accepterEvent")
       console.log("this.selectedEvent", this.selectedEvent)
-      let id = this.selectedEvent.id_event;
+      let id = this.selectedEvent.id_reservation;
       let uuid = this.uuidsceneSelect;
       console.log("id", id)
       console.log("uuid", uuid)
+      await event.accepterDispo(id);
       //await updateEvent(id);
     },
 
@@ -733,6 +715,8 @@ export default {
       console.log("event", event)
 
 
+
+
         if(event.status == "accepted"){
           event.color = "green";
         }
@@ -740,44 +724,89 @@ export default {
           event.color = "orange";
         }
       if(this.selectedEvent != 0) {
-        if (event.id_event == this.selectedEvent.id_event) {
+        if (event.id == this.selectedEvent.id_reservation) {
           event.color = "blue";
         }
       }
 
 
 
-
-
       let data = {
-        id : event.id_event,
-        title: event.nom,
-        start: event.start_date,
-        end: event.end_date,
+        id : event.id,
+        title: event.title,
+        start: event.start,
+        end: event.end,
         color: event.color,
         description: event.description,
       }
       return data;
     },
 
+    async monthDaySwap(date) {
+      let date2 = new Date(date);
+      let day = date2.getDate();
+      let month = date2.getMonth() + 1;
+      let year = date2.getFullYear();
+      let hour = date2.getHours();
+      let minute = date2.getMinutes();
+      let second = date2.getSeconds();
+
+      // Ajoute un zéro devant le mois, le jour, l'heure, les minutes et les secondes si nécessaire
+      month = month < 10 ? "0" + month : month;
+      day = day < 10 ? "0" + day : day;
+      hour = hour < 10 ? "0" + hour : hour;
+      minute = minute < 10 ? "0" + minute : minute;
+      second = second < 10 ? "0" + second : second;
+
+      let date3 = year + "-" + day + "-" + month + "T" + hour + ":" + minute + ":" + second + ".000Z";
+      return date3;
+    },
+
+
 
     async refreshcalendare( uuid) {
+
+      let resa = await event.getAllDispoById(uuid);
+
+      console.log("resa", resa)
+
+
       this.currentEvents = [];
-      console.log("uuid refresh", uuid)
-      this.eventScene = await getEvent(uuid);
-      console.log("event scene refressh",this.eventScene)
-      for (let i = 0; i < this.eventScene.length; i++) {
-        let data = await this.eventParser(this.eventScene[i]);
-        this.currentEvents.push(data);
+
+      for (let i = 0; i < resa.length; i++) {
+        let start2 = new Date(resa[i].ouverture);
+        let duree = resa[i].duree;
+
+        // Créer une copie de la date de début pour éviter de modifier la date d'origine
+        let end2 = new Date(start2);
+        end2.setMinutes(end2.getMinutes() + duree);
+
+        end2 = await this.monthDaySwap(end2);
+        start2 = await this.monthDaySwap(start2);
+
+        console.log("start2", start2)
+        console.log("end2", end2)
+
+        let status = resa[i].status;
+
+        let datadispo = {
+          id : resa[i].id_reservation,
+          title: resa[i].nom,
+          start: start2,
+          end: end2,
+          color: resa[i].color,
+          description: resa[i].description,
+          id_prestataire: resa[i].id_prestataire,
+          status: status,
+        }
+        let data = await this.eventParser(datadispo);
+        await this.currentEvents.push(data);
       }
-
-      console.log("this.currentEvents", this.currentEvents)
-
-
       this.$refs.fullCalendarRef.getApi().setOption('events', this.currentEvents);
 
       console.log("refreshcalendare");
       console.log("uuid", uuid);
+      console.log("this.currentEvents", this.currentEvents);
     },
 
     showAddEvent(){
@@ -2193,7 +2222,7 @@ input:checked + .slider:before {
   justify-content: space-between;
   text-align: center;
   justify-items: center;
-  height: 100%;
+  height: 80%;
 }
 
 
