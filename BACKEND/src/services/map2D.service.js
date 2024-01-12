@@ -22,7 +22,7 @@ const getToilette = async (req,res) => {
 const getAllEmplacementWithBatiment = async (req,res) => {
     const client = await pool.connect();
     try {
-        const emplacementQuery = 'SELECT b.nom , b.description , t.marker , t.id_type , emplacement.matricePoints FROM emplacement INNER JOIN public.batiment b on emplacement.id_emplacement = b.id_emplacement INNER JOIN public.type t on t.id_type = b.type_id';
+        const emplacementQuery = 'SELECT b.nom , b.description , t.marker , t.id_type , emplacement.matricePoints , b.prestataire_id FROM emplacement INNER JOIN public.batiment b on emplacement.id_emplacement = b.id_emplacement INNER JOIN public.type t on t.id_type = b.type_id';
         const res = await client.query(emplacementQuery);
         return res.rows;
     } catch (error) {

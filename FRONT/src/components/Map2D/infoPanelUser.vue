@@ -8,6 +8,9 @@
 
     </div>
     <div class="infoPanel-footer">
+      <router-link :to="{ name: 'prestate', params: { id: feature.properties.id_prestataire } }">
+        <button>Visiter</button>
+      </router-link>
       <button @click="closePanel">Fermer</button>
   </div>
   </div>

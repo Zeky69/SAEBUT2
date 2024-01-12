@@ -10,12 +10,15 @@ router.get('/disponibilite/:id_bat',resaController.getAllDispoById);
  *   get:
  *       get:
  *       summary: Obtenir toutes les disponibilités pour un bâtiment spécifié
+ *       tags:
+ *       - Reservation
  *       parameters:
  *         - name: id_bat
  *           in: path
  *           required: true
- *           type: integer  # Assurez-vous que le type correspond au type réel de votre identifiant
+ *           type: string
  *           description: L'identifiant du bâtiment pour lequel récupérer les disponibilités
+ *           example: de6255e4-3453-4989-8831-c8b2b102c99a
  *       responses:
  *         200:
  *           description: Succès - Récupération des disponibilités réussie
@@ -54,12 +57,15 @@ router.get('/:id_bat', resaController.getAllResa);
  * /reservation/{id_bat}:
  *    get:
  *       summary: Obtenir toutes les réservations pour un bâtiment spécifié
+ *       tags:
+ *       - Reservation
  *       parameters:
  *         - name: id_bat
  *           in: path
  *           required: true
  *           type: string
  *           description: L'identifiant du bâtiment pour lequel récupérer les réservations
+ *           example: de6255e4-3453-4989-8831-c8b2b102c99a
  *       responses:
  *         200:
  *           description: Succès - Récupération des réservations réussie
@@ -99,8 +105,8 @@ router.post('/disponibilite/', resaController.createDispo);
  * /reservation/disponibilite:
  *    post:
  *       summary: Créer une nouvelle disponibilité pour un bâtiment
- *       consumes:
- *         - application/json
+ *       tags:
+ *       - Reservation
  *       parameters:
  *         - in: body
  *           name: body
@@ -111,13 +117,16 @@ router.post('/disponibilite/', resaController.createDispo);
  *               id_bat:
  *                 type: string
  *                 description: L'identifiant du bâtiment pour lequel créer une disponibilité
+ *                 example: de6255e4-3453-4989-8831-c8b2b102c99a
  *               date:
  *                 type: string
  *                 format: date-time
  *                 description: La date et l'heure d'ouverture de la disponibilité
+ *                 example: 2024-06-01T08:30
  *               duree:
  *                 type: string
  *                 description: La durée de la disponibilité au format HH:mm
+ *                 example: 00:30
  *       responses:
  *         200:
  *           description: Création de la disponibilité réussie
@@ -133,8 +142,8 @@ router.post('/', resaController.reserver)
  * /reservation:
  *     post:
  *       summary: Réserver une disponibilité
- *       consumes:
- *         - application/json
+ *       tags:
+ *       - Reservation
  *       parameters:
  *         - in: body
  *           name: body
@@ -145,9 +154,11 @@ router.post('/', resaController.reserver)
  *               id_client:
  *                 type: integer
  *                 description: L'identifiant du client effectuant la réservation
+ *                 example: 2
  *               id_dispo:
  *                 type: integer
  *                 description: L'identifiant de la disponibilité à réserver
+ *                 example: 1
  *       responses:
  *         200:
  *           description: Réservation réussie
@@ -162,7 +173,55 @@ router.get('/disponibilite/id/:id_dispo', resaController.getDispoByID);
 router.patch('/disponibilite/:id_dispo', resaController.accepterDispo);
 
 router.delete('/disponibilite/:id_dispo', resaController.deleteDispoById);
-router.patch('/', resaController.deleteResaById);
+/**
+ * @swagger
+ * /reservation/disponibilite/{id_dispo}:
+ *     delete:
+ *       summary: Supprimer une disponibilité
+ *       tags:
+ *       - Reservation
+ *       parameters:
+ *         - name: id_dispo
+ *           in: path
+ *           required: true
+ *           type: integer
+ *           description: L'identifiant de la disponibilité à supprimer
+ *           example: 1
+ *       responses:
+ *         200:
+ *           description: Suppression de la disponibilité réussie
+ *         400:
+ *           description: Disponibilité non trouvée pour l'identifiant spécifié
+ *         500:
+ *           description: Erreur interne du serveur
+ */
 
+router.patch('/', resaController.deleteResaById);
+/**
+ * @swagger
+ * /reservation:
+ *    patch:
+ *       summary: Annuler une réservation
+ *       tags:
+ *       - Reservation
+ *       parameters:
+ *         - in: body
+ *           name: body
+ *           required: true
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_resa:
+ *                 type: integer
+ *                 description: L'identifiant de la réservation à annuler
+ *                 example: 1
+ *       responses:
+ *         200:
+ *           description: Annulation de la réservation réussie
+ *         400:
+ *           description: Requête invalide - Vérifiez la structure de la requête
+ *         500:
+ *           description: Erreur interne du serveur
+ */
 
 module.exports = router;
