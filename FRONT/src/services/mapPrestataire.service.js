@@ -2,13 +2,11 @@ import {getRequest, postRequest,deleteRequest, patchRequest} from "@/services/ax
 
 async function getAllEmpFromAPI(){
     let answer = await getRequest('/mapPrestataires/emp', 'GETALLEMP')
-    console.log("return front api",answer)
     return answer
 }
 
 async function getAllEmp() {
     let answer = await getAllEmpFromAPI()
-    console.log("return front",answer)
     return answer
 }
 
@@ -46,7 +44,6 @@ async function getBatdebug() {
 
 
 async function getOneEmp(data) {
-    console.log(data)
     let answer = null;
     try {
         answer = await getOneEmpFromAPI(data);
@@ -60,7 +57,6 @@ async function getOneEmp(data) {
 
 
 async function createEmpFromAPI(data) {
-    console.log("route front",data)
     return postRequest('/mapPrestataires/emp', data, 'CREATEEMP')
 }
 
@@ -82,7 +78,6 @@ async function deleteEmpFromAPI(data) {
 }
 
 async function deleteEmp(data) {
-    console.log("data del front",data)
     try {
         let answer = await deleteEmpFromAPI(data);
         return answer;
@@ -99,7 +94,6 @@ async function updateEmpFreeFromAPI(data) {
 
 async function updateEmpFree(data) {
     try {
-        console.log("data update front",data)
         let answer = await updateEmpFreeFromAPI(data);
         return answer;
     } catch (error) {
@@ -116,7 +110,6 @@ async function updateEmpInfoFromAPI(data){
 
 async function updateEmpInfo(data) {
     try {
-        console.log("data update front",data)
         let answer = await updateEmpInfoFromAPI(data);
         return answer;
     } catch (error) {
@@ -160,7 +153,6 @@ async function getManyBat(filtre) {
 }
 
 async function createBatFromAPI(data) {
-    console.log("route front",data)
     return postRequest('/mapPrestataires/bat', data, 'CREATEBAT')
 }
 
@@ -226,7 +218,6 @@ async function updateBatStatusFromAPI(data) {
 
 async function updateBatStatus(data) {
     try {
-        console.log("data update front",data)
         let answer = await updateBatStatusFromAPI(data);
         return answer;
     } catch (error) {

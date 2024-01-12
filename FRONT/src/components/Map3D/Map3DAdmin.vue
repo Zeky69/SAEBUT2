@@ -175,7 +175,6 @@ import 'tippy.js/dist/tippy.css';
 
 //importer service/mapPrestataires.js
 import {getAllEmp,getOneBatUUID,getBatbyEmpUUID,getOneEmpUUID,getOneEmp,deleteBat, updateEmpFree, createBat, getAllBat, deleteEmp, updateBatStatus} from '../../services/mapPrestataire.service.js';
-import {getEvent,deleteEvent} from '../../services/scene.service.js';
 import event from '../../services/reservation.js';
 
 /*   getAllEmp,
@@ -297,32 +296,18 @@ export default {
           tippy(info.el, {
             content: info.event.extendedProps.description,
           })
-          console.log("info", info)
-          console.log("info.event", this.selectedEvent)
           if (info.event._def.publicId == this.selectedEvent.id_reservation) {
-            console.log("jklsfjcklsdvnc,kqsdcvnk,qsdnc qsd,k n,qsdn jkqsnjkdvnqkdklalllo")
             let id = this.selectedEvent.id_batiment;
             this.selectedEvent = 0;
             await this.refreshcalendare(id);
-
             this.uuidsceneSelect = 0;
           } else {
-            const id = parseInt(info.event._def.publicId);
             const event2 = await event.getDispoByID(info.event._def.publicId);
-            console.log(event2)
             this.selectedEvent = event2[0];
             this.uuidsceneSelect = event2[0].id_batiment;
-            console.log("this.prestatnorselect",this.prestataire)
-            console.log("this.selectedEvent notselect",this.selectedEvent)
             let idscenestring = this.selectedEvent.id_batiment
-            console.log("id scene jdklsqjfkljsqlmfjqskljfqskl id", idscenestring)
             await this.refreshcalendare(idscenestring)
-
-
           }
-
-          console.log("this.selectedEvent", this.selectedEvent);
-
         },
         views: {
           timeGridFourDay: {
@@ -374,17 +359,11 @@ export default {
     },
 
     async deleteEventfunc(){
-      console.log("deleteEvent")
-      console.log("this.selectedEvent", this.selectedEvent)
       let data = {
         id_dispo: this.selectedEvent.id_reservation,
       }
       let uuid = this.uuidsceneSelect;
-      console.log("uuid", uuid)
       await event.deleteDispo(data);
-
-
-
 
       this.refreshcalendare(uuid);
       this.showDelEvent()
@@ -396,63 +375,20 @@ export default {
 
 
     async askAddEvent() {
-      console.log("askAddEvent")
-
       let start = document.getElementById("start").value;
       let end = document.getElementById("end").value;
-      //mettre au bon format : 2024-06-01T10:30:00.000Z
-      //"2024-06-01T16:00:00.000Z"
-
-
-      //start = start + ":00.000Z";
-      //end = end + ":00.000Z";
-
       let name = document.getElementById("fname").value;
       let description = document.getElementById("eventdescri").value;
       let nbplace = document.getElementById("nbPlace").value;
-      console.log("start", start)
-      console.log("end", end)
-      console.log("name", name)
-      console.log("description", description)
-
-      console.log("selectab", this.selectab[0])
       let batuuid = this.selectab[0]["obj"].userData.uuid
-
-
       let startDate = new Date(start);
       let endDate = new Date(end);
-
       let diffInMilliseconds = endDate - startDate;
-
 // Convertir la différence en heures et minutes
       let hours = Math.floor(diffInMilliseconds / (60 * 60 * 1000));
       let minutes = Math.floor((diffInMilliseconds % (60 * 60 * 1000)) / (60 * 1000));
-
 // Formatage de la durée
       let formattedDuration = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
-
-
-      console.log("diff", formattedDuration)
-
-
-      //[uuid, info.description, info.nom, info.id_scene, info.couleur, info.etat, info.date_debut, info.date_fin]);
-
-      /*
-          CREATE TABLE reservation(
-        id_reservation SERIAL,
-        id_batiment VARCHAR(50) NOT NULL,
-        ouverture timestamp,
-        duree varchar(50),
-        id_client INT,
-        description VARCHAR(255),
-        nom VARCHAR(50),
-        color VARCHAR(50),
-        status VARCHAR(50),
-        PRIMARY KEY(id_reservation),
-        FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment),
-        FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)
-    );
-       */
 
       let dataReservation ={
         id_bat: batuuid,
@@ -464,41 +400,17 @@ export default {
         status: "accepted",
         id_prestataire: 1,
       }
-
-      let eventcreated
-
       for (let i = 0; i < nbplace; i++) {
-        eventcreated = await event.postDispo(dataReservation);
-        console.log("eventcreated", eventcreated)
+        await event.postDispo(dataReservation);
       }
-/*
-      let databdd = {
-        id_scene: batuuid,
-        date_debut: start,
-        date_fin: end,
-        nom: name,
-        description: description,
-        etat: "accepted",
-        couleur: "red",
-        id_prestataire: 1,
-      }
-      console.log("databdd", databdd)
-
- */
-      console.log("this.currentEvents bef refresh", this.currentEvents)
-
       this.refreshcalendare(batuuid);
       this.showAddEvent()
     },
-
-
-
 
     handleResize() {
       // Logique de gestion du redimensionnement
       this.camera.aspect = window.innerWidth / window.innerHeight;
       this.camera.updateProjectionMatrix();
-
       const scene1Container = this.$refs.scene1Container;
       this.renderer.setSize(window.innerWidth, scene1Container.offsetHeight);
       this.renderer.outputEncoding = THREE.LinearToneMapping;
@@ -539,30 +451,18 @@ export default {
     },
 
     async accepterEvent(){
-      console.log("accepterEvent")
-      console.log("this.selectedEvent", this.selectedEvent)
       let id = this.selectedEvent.id_reservation;
-      let uuid = this.uuidsceneSelect;
-      console.log("id", id)
-      console.log("uuid", uuid)
       await event.accepterDispo(id);
       //await updateEvent(id);
     },
 
     async previewbat() {
-      console.log("previewbat")
       if (this.idbatafficher !== -1) {
         // Retirez tous les enfants de la vitrine
         while (this.previewgroupe.children.length > 0) {
           this.previewgroupe.remove(this.previewgroupe.children[0]);
         }
-
-        // Ajoutez le nouvel objet à la vitrine
-        console.log("batiment", this.batiment)
-        console.log("bat a afficher", this.batiment[this.idbatafficher].name)
-        console.log("preview select tab",this.selectab)
         var objet_model = await this.findObjectByName(this.loaded, this.batiment[this.idbatafficher].name)
-        console.log("objet_model", objet_model)
         var objet = objet_model.clone();
         objet.position.set(0, objet.position.y, 0);
         objet.name = this.batiment[this.idbatafficher].name;
@@ -571,24 +471,17 @@ export default {
         //this.previewbatiewbatiment.material.color.setHex(0x7e7e7e);
         this.previewgroupe.add(objet);
         this.rotation;
-        console.log("selectab obj",this.selectab[0]["obj"])
-        console.log("position ", this.selectab[0]["obj"].position.x)
-        console.log("position ", this.selectab[0]["obj"].position.z)
         let posx = this.selectab[0]["obj"].position.x;
         let posz = this.selectab[0]["obj"].position.z;
 
         this.previewbatiewbatiment.position.x = posx;
         this.previewbatiewbatiment.position.z = posz
         this.previewbatiewbatiment.position.y = objet_model.position.y;
-        console.log("previewbatiewbatiment", this.previewbatiewbatiment)
       }
     },
 
 
     async batvitrine() {
-      console.log("rentrer dans vitrine")
-      console.log("idbat", this.idbatafficher)
-      console.log(this.loaded)
       if (this.idbatafficher != -1) {
         // Retirez tous les enfants de la vitrine
         while (this.vitrine.children.length > 0) {
@@ -596,26 +489,15 @@ export default {
         }
 
         // Ajoutez le nouvel objet à la vitrine
-        console.log("batiment", this.batiment)
-        console.log("bat a afficher", this.batiment[this.idbatafficher].name)
         var objet_model = await this.findObjectByName(this.loaded, this.batiment[this.idbatafficher].name)
-        console.log("objet_model", objet_model)
         var objet = objet_model.clone();
         objet.position.set(0, objet.position.y, 0);
         objet.name = this.batiment[this.idbatafficher].name;
-        console.log("objet", objet)
         this.vitrine.add(objet);
-        console.log("vitrien", this.vitrine)
-        console.log("batiment", this.batiment)
-        console.log("scene2", this.scene2)
-
       }
     },
 
     creationscene2() {
-      //test
-
-
       setTimeout(() => {
         this.scene2 = new THREE.Scene();
         this.scene2Container = this.$refs.scene2Container;
@@ -712,11 +594,6 @@ export default {
     },
 
     async eventParser(event){
-      console.log("event", event)
-
-
-
-
         if(event.status == "accepted"){
           event.color = "green";
         }
@@ -728,9 +605,6 @@ export default {
           event.color = "blue";
         }
       }
-
-
-
       let data = {
         id : event.id,
         title: event.title,
@@ -765,12 +639,7 @@ export default {
 
 
     async refreshcalendare( uuid) {
-
       let resa = await event.getAllDispoById(uuid);
-
-      console.log("resa", resa)
-
-
       this.currentEvents = [];
 
       for (let i = 0; i < resa.length; i++) {
@@ -783,9 +652,6 @@ export default {
 
         end2 = await this.monthDaySwap(end2);
         start2 = await this.monthDaySwap(start2);
-
-        console.log("start2", start2)
-        console.log("end2", end2)
 
         let status = resa[i].status;
 
@@ -803,10 +669,6 @@ export default {
         await this.currentEvents.push(data);
       }
       this.$refs.fullCalendarRef.getApi().setOption('events', this.currentEvents);
-
-      console.log("refreshcalendare");
-      console.log("uuid", uuid);
-      console.log("this.currentEvents", this.currentEvents);
     },
 
     showAddEvent(){
@@ -853,15 +715,10 @@ export default {
 
       if (this.selectedObject != 0) {
         if (this.selectedObject.name.slice(0,3) == "bat") {
-          console.log("batiment", this.selectedObject.name)
-          console.log("batiment", this.selectedObject.name.slice(4,5))
-
-
           let found;
           let batimentuuid;
           let batiment
           found = await getOneBatUUID(this.selectedObject.userData.uuid);
-          console.log("found batiment click", found)
           if (found != []){
             batiment = found
             batimentuuid = this.selectedObject.userData.uuid;
@@ -879,7 +736,6 @@ export default {
             var info
 
             if(batiment[0].type_id == 3){
-              console.log("batiment salle de conf")
               document.getElementById('selectmenu').classList.toggle('closed');
               document.getElementById('selectmenu').classList.toggle('supr');
               document.getElementById('scene').classList.toggle('active');
@@ -941,7 +797,6 @@ export default {
               this.descriptionBatiment = null;
 
             } else {
-              console.log("un objet est deja select")
               this.selectedObject = 0
             }
 
@@ -951,7 +806,6 @@ export default {
           if (this.selectedObject.name.slice(0,3) == "emp") {
             let found;
             found = await getOneEmp({name: this.selectedObject.name, posx: this.selectedObject.position.x, posz: this.selectedObject.position.z});
-            console.log("found emp", found)
             if (found != []){
               found = true;
             }
@@ -968,10 +822,8 @@ export default {
               document.getElementById('scene1').classList.toggle('active');
               this.creationscene2()
               this.selectedObject.material.color.setHex(0xff0000);
-              console.log("this.selectedObject", this.selectedObject)
               var info2 = {obj: this.selectedObject, mat: originmat, col: origineColor, type: "emp"}
               this.selectab.push(info2);
-              console.log("this.selectab push", this.selectab)
             } else {
               if (this.selectedObject.name == this.selectab[0]["obj"].name) {
                 // Toggle the 'active' class on the selectmenu div
@@ -989,7 +841,6 @@ export default {
                 this.selectab.pop(0)
                 this.selectedObject = 0
               } else {
-                console.log("un objet est deja select")
                 this.selectedObject = 0
               }
 
@@ -1002,7 +853,6 @@ export default {
     },
 
     async clearpreviewbat() {
-      console.log("clearpreviewbat")
       if (this.idbatafficher !== -1) {
         // Retirez tous les enfants de la vitrine
         while (this.previewgroupe.children.length > 0) {
@@ -1046,10 +896,6 @@ export default {
     },
 
     async refreshcalmyfuncpls(mode) {
-      console.log("refresh")
-      console.log("this.selectab", this.selectab)
-      console.log("this.idbatafficher", this.idbatafficher)
-
       if (this.selectab.length == 1) {
 
         if (mode == 1) {
@@ -1106,7 +952,7 @@ export default {
 
             let emp = await getOneEmpUUID(uuid);
             if (emp[0].batiment_id != null){
-                console.log("retirer le batiment avant")
+              console.log("emp a un batiment")
             }
             else {
               await deleteEmp(this.selectab[0]["obj"].userData.uuid);
@@ -1114,11 +960,11 @@ export default {
           }
           else {
 
-            let events = await getEvent(uuid);
+            let events = await event.getAllDispoById(uuid);
 
-            for(let i = 0; i < events.length; i++){
-              await deleteEvent(events[i].id_event);
-
+            while (events.length > 0) {
+              await event.deleteDispo(events[0].id_reservation);
+              await event.getAllDispoById(uuid);
             }
             this.currentEvents = [];
             this.$refs.fullCalendarRef.getApi().setOption('events', this.currentEvents);
@@ -1129,20 +975,15 @@ export default {
             await deleteBat(uuid);
 
             let emp = await this.findobjectByuserUUID(empuuid)
-            console.log("empinScene", emp)
             const texture_emp = new THREE.TextureLoader().load('../map/mapData/tex/tex_emp.png');
             const material_emp = new THREE.MeshPhongMaterial({map: texture_emp});
             let hex = material_emp.color.getHex();
             emp.material.color.setHex(hex);
             this.selectionables.add(emp)
 
-
-
-
           }
           this.selectionables.remove(this.selectab[0]["obj"])
           while (this.selectab.length > 0) {
-            console.log("pop")
             this.selectab.pop(0);
           }
           this.selectedObject = 0
@@ -1153,16 +994,12 @@ export default {
 
           return
         }
-        console.log("this.selectabbefortype", this.selectab)
         //var uuid = this.selectab[0]["obj"].uuid;
         if (this.selectab[0]["type"] == "emp") {
           let found;
-          let empbdd = null;
           let uuid = this.selectab[0]["obj"].userData.uuid;
           found = await getOneEmpUUID(uuid);
           if (found != []){
-            empbdd = found[0];
-            console.log("empbdd", empbdd)
             found = true;
 
           }
@@ -1173,13 +1010,8 @@ export default {
             console.log("emp n'est pas dans la bdd")
             return
           }
-          console.log("temoijdkljdkljzskldjklsjlk")
-          console.log(this.idbatafficher)
-          console.log(this.batiment[this.idbatafficher].name)
-          console.log("load", this.loaded)
           var batiment_bdd_found = await this.findObjectByName(this.loaded, this.batiment[this.idbatafficher].name)
-          console.log("batiment_bdd_found", batiment_bdd_found)
-          console.log("selectab", this.selectab)
+
           var batimentadd = batiment_bdd_found.clone();
           var mat = batimentadd.material.clone();
           var battobdd = batimentadd.toJSON()
@@ -1192,15 +1024,9 @@ export default {
           var posx= this.selectab[0]["obj"].position.x;
           var posz= this.selectab[0]["obj"].position.z;
           var y = batimentadd.position.y;
-
-          console.log("prestat", this.prestataire)
-          console.log("je suis dans refresh et je check la description", this.description_batiment)
-          console.log("nom", this.nom_batiment)
           let descriptionsave = this.description_batiment
           let nombat = this.nom_batiment
           let id_type = batimentadd.name.slice(4,5)
-          console.log("id_type", id_type)
-
           var databat = {
             name: batimentadd.name,
             nom: nombat,
@@ -1231,12 +1057,7 @@ export default {
           await createBat(databat);
 
           const batfrombdd = await getBatbyEmpUUID(uuid);
-          console.log("batfrombdd", batfrombdd)
-
-
           batimentadd.userData.uuid = batfrombdd[0].id_batiment;
-
-          console.log("batiment uuid", batimentadd.userData.uuid)
 
           let data = {
             uuid: uuid,
@@ -1257,12 +1078,8 @@ export default {
         } else {
           if (this.selectab[0]["type"] == "bat") {
             let found;
-            let batbdd = null;
             found = await getOneBatUUID(this.selectab[0]["obj"].userData.uuid);
-            console.log("found bat at refresh", found)
             if (found != []){
-              batbdd = found[0];
-              console.log("batbdd", batbdd)
               found = true;
             }
             else {
@@ -1271,8 +1088,6 @@ export default {
 
             if (found) {
               let bat_to_rmove = await getOneBatUUID(this.selectab[0]["obj"].userData.uuid);
-              console.log("bat_to_rmove", bat_to_rmove)
-              console.log("uuid", bat_to_rmove[0].id_batiment)
               let emp_uuid = bat_to_rmove[0].id_emplacement;
               let data = {
                 uuid: emp_uuid,
@@ -1281,7 +1096,6 @@ export default {
               await updateEmpFree(data);
               await deleteBat(bat_to_rmove[0].id_batiment);
               let empinScene = await this.findobjectByuserUUID(emp_uuid);
-              console.log("empinScene", empinScene)
               const texture_emp = new THREE.TextureLoader().load('../map/mapData/tex/tex_emp.png');
               const material_emp = new THREE.MeshPhongMaterial({map: texture_emp});
               let hex = material_emp.color.getHex();
@@ -1315,7 +1129,6 @@ export default {
     },
 
     async setup() {
-      console.log("setup")
       const texture_emp = new THREE.TextureLoader().load('../map/mapData/tex/tex_emp.png');
       const material_emp = new THREE.MeshPhongMaterial({map: texture_emp});
 
@@ -1337,23 +1150,13 @@ export default {
       }
 
       this.batiment_bdd = await getAllBat();
-      console.log("batiments", this.batiment_bdd)
-      console.log("batiments", this.batiment)
       for (let i = 0; i< this.batiment_bdd.length; i++) {
         for (let j = 0; j < this.batiment.length; j++) {
 
           if (this.batiment_bdd[i].name == this.batiment[j].name) {
-            console.log("batiment", this.batiment_bdd[i])
-            console.log(this.batiment[j].type)
-            console.log(this.batiment[j].type === "Salle de conférence")
-
             var batiment_found = await this.findObjectByName(this.loaded, this.batiment[j].name)
-            console.log(batiment_found)
             var batiment_clone = batiment_found.clone();
             let mat = batiment_clone.material.clone();
-            let point3D = this.point2Dto3D(this.batiment_bdd[i].posx,this.batiment_bdd[i].posz)
-            console.log("point", point3D)
-
             batiment_clone.position.set(this.batiment_bdd[i].posx, this.batiment_bdd[i].posy, this.batiment_bdd[i].posz);
             batiment_clone.material.metalness = 0;
             batiment_clone.material = mat;
@@ -1365,12 +1168,10 @@ export default {
             this.selectionables.add(batiment_clone)
             if (this.batiment_bdd[i].status == "accepted") {
               //mettre en vert
-              console.log("vert")
               //batiment_clone.material.color.setHex(0x00ff00);
             } else {
               if (this.batiment_bdd[i].status == "waiting") {
                 //metre en orange
-                console.log("orange")
                 batiment_clone.material.color.setHex(0xffa500);
               }
             }
@@ -1383,10 +1184,6 @@ export default {
 
       this.camera.rotation.x = -0.7;
       this.camera.position.set(120, 100, 160);
-
-      console.log("selectionables", this.selectionables)
-      console.log("nonselectionables", this.nonselectionables)
-
 
     },
 
@@ -1401,11 +1198,6 @@ export default {
 
           const loadedGltf = gltf.scene;
           this.loaded = loadedGltf
-
-          console.log("children", this.childrenf)
-
-
-
           this.findchild(loadedGltf, this.children);
 
 
@@ -1564,7 +1356,6 @@ export default {
                     this.children[i].material = mat_sol;
                     this.children[i].material.metalness = 0;
                     this.children[i].receiveShadow = true;
-                    console.log("sol",this.children[i])
                     this.groupe_sol.add(this.children[i]);
                   }
                   else{
@@ -1584,7 +1375,6 @@ export default {
                 else {
                   if (this.children[i].name.slice(0, 3) == "dec") {
                     if(this.children[i].name.includes("sapins")){
-                      console.log("sapin")
                       const texturetree = new THREE.TextureLoader().load('../map/mapData/tex/tex_tree.png');
                       texturetree.flipY = false;
                       const mattree = new THREE.MeshPhongMaterial({map: texturetree});
@@ -1677,14 +1467,11 @@ export default {
 
     async matriceTo3DEmp(matricepoints, name, posx, posz, emp_uuid) {
       let center = await this.point2Dto3D(posz, -posx);
-      console.log("center", center);
 
       // Inversion (flip) des coordonnées y dans la matrice
       const flippedMatrice = matricepoints.map(([x, y]) => [y, -x]);
-      //console.log("flippedMatrice", flippedMatrice);
 
       const points = flippedMatrice.map(([x, y]) => new THREE.Vector3(x, y));
-      //console.log("points", points);
 
       // Mise à l'échell
       for (let i = 0; i < points.length; i++) {
@@ -1742,7 +1529,6 @@ export default {
       await this.loadfinal();
       this.filteredTypes();
       await this.setup();
-      console.log("aftersetup", this.selectionables)
       this.scene.add(this.selectionables);
       this.scene.add(this.nonselectionables);
       this.scene.add(this.previewgroupe);
@@ -1849,9 +1635,6 @@ export default {
 
       //retirer les types qui ne sont pas dans la liste
       types.delete(undefined);
-
-      console.log("types", types)
-
       return Array.from(types);
     },
   },
