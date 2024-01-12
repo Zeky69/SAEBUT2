@@ -153,8 +153,9 @@ CREATE TABLE emplacement(
          prestataire_id INT NOT NULL,
          image_path TEXT,
          type_id VARCHAR(50),
-         PRIMARY KEY(id_batiment),
          id_emplacement VARCHAR(50) NOT NULL UNIQUE,
+        use_Resa BOOLEAN default true,
+         PRIMARY KEY(id_batiment),
          FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
          FOREIGN KEY(type_id) REFERENCES type(id_type),
          FOREIGN KEY(prestataire_id) REFERENCES prestataire(id_prestataire)
