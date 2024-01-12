@@ -75,8 +75,8 @@ INSERT INTO emplacement VALUES ('37f09601-f3e5-4707-8ba0-bedd6a0f8710', 'emp_tes
         ,('07e1d974-66f4-4e1f-bbbe-4efb39b4f44f', 'emp_toillee', 'lsdkqml', -0.72853483217727440,10.00000000000000000,-6.07609735198799700,0, '{"matricepoints":[[0.18042506184201557,-11.005997521360555],[-2.0198346796007627,-11.220574242551962],[-2.236254173126895,1.7076732092480285],[0.2525645680151456,1.1444093161028235]]}' );
 
 
-INSERT INTO batiment VALUES ( '251fe0ba-c541-49fc-98b9-2bcc9057a52e','description scene', 'stadium 1', 'bat_3_confer', 'accepted', 4.98128444846202000,10.00000000000000000,-9.62197766967598500,0,1 ,null,3,'03877ad4-d5cc-442b-9d8c-cf21bf964f58'),
-                            ('de6255e4-3453-4989-8831-c8b2b102c99a', 'description toilette 2', 'toilette 2', 'bat_6_wc1', 'accepted',-0.72853483217727440,10.00000000000000000,-6.07609735198799700,0, 1, null,6, '07e1d974-66f4-4e1f-bbbe-4efb39b4f44f');
+INSERT INTO batiment VALUES ( '251fe0ba-c541-49fc-98b9-2bcc9057a52e','description scene', 'stadium 1', 'bat_3_confer', 'accepted', 4.98128444846202000,10.00000000000000000,-9.62197766967598500,0,3 ,null,3,'03877ad4-d5cc-442b-9d8c-cf21bf964f58'),
+                            ('de6255e4-3453-4989-8831-c8b2b102c99a', 'description toilette 2', 'toilette 2', 'bat_6_wc1', 'accepted',-0.72853483217727440,10.00000000000000000,-6.07609735198799700,0, 3, null,6, '07e1d974-66f4-4e1f-bbbe-4efb39b4f44f');
 
 --INSERT INTO toilette VALUES ('f281672c-c7c8-4ad2-808f-dfd67138c701','de6255e4-3453-4989-8831-c8b2b102c99a');
 
