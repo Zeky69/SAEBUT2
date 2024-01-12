@@ -499,7 +499,6 @@ export default {
               var batiment_found = await this.findObjectByName(this.loaded, this.batiment[j].name)
               var batiment_clone = batiment_found.clone();
               let mat = batiment_clone.material.clone();
-              let point3D = this.point2Dto3D(this.batiment_bdd[i].posx,this.batiment_bdd[i].posz)
               batiment_clone.position.set(this.batiment_bdd[i].posx, this.batiment_bdd[i].posy, this.batiment_bdd[i].posz);
               batiment_clone.material.metalness = 0;
               batiment_clone.material = mat;
