@@ -956,7 +956,7 @@ export default {
             posy: y,
             posz: posz,
             rota: (this.rotation * Math.PI / 180),
-            prestataire: 1,
+            prestataire: this.prestataire,
             description: this.description_batiment,
             type: id_type,
             status: "waiting",
@@ -1591,7 +1591,9 @@ export default {
 
   mounted() {
 
-    this.prestataire = this.$store.state.user_id
+
+
+    this.prestataire = 3
 
 
 
