@@ -60,11 +60,6 @@ export default {
     password:"",
     isInvalidCredentials: false,
   }),mounted() {
-    if(this.group_id===1){
-      this.$router.replace('/admin');
-    }else if(this.group_id===2){
-      this.$router.replace('/prestataire');
-    }
     document.addEventListener("keydown", this.handleEnterKey);
   },
 

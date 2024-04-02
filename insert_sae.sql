@@ -31,9 +31,10 @@ INSERT INTO UTILISATEURS(FIRST_NAME,LAST_NAME,email,Date_Created,Group_Id) VALUE
                               ( 'fnUser', 'lnUser', 'test@test.com',now(),3),
                               ('fnPresta', 'lnPresta', 'test2@test2.com' ,now(),2);
 
-INSERT INTO mots_de_passe_utilisateurs(User_Id,Password) VALUES(1,'mdpAdmin'),
-                                             (2,'mdpUser'),
-                                             (3,'mdpUser2');
+	INSERT INTO mots_de_passe_utilisateurs(User_Id,Password) VALUES(1,'$2b$10$i5g1xQgrDAbFT.I6Fi6PVubx9ciGHKk7FRaAJCMEoefhAmd2NKiV6'),
+		                                     (2,'$2b$10$0uVsqG09RJDqfHu0QeJE..552NrRvAKh5.ypknPBCbYbErOaq6D8a'),
+		                                     (3,'$2b$10$Q6WR1IlxWBcityVVNbO2p.ehl3vuLtRKnN2klfpSR6xQpASf9cIIu');
+
 
 INSERT INTO prestataire( description, nom, id_user, etat_id ,photo_profil) VALUES ('Drake le meilleur chanteur','Drake','3',2,'drake.png');
 
@@ -58,9 +59,9 @@ INSERT INTO UTILISATEURS(FIRST_NAME, LAST_NAME, email, Date_Created, Group_Id) V
 ('Bob', 'Johnson', 'bob.johnson@example.com', CURRENT_TIMESTAMP, 2);
 
 INSERT INTO mots_de_passe_utilisateurs(User_Id, Password) VALUES
-((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'), 'password'),
-((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Jane' AND LAST_NAME = 'Smith'), 'password'),
-((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Bob' AND LAST_NAME = 'Johnson'), 'password');
+((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'), '$2b$10$H0zB1Ub0YiHQXu.pstzZOescgnHpZLAjNTAXfo/CiOuCnuFse/4ha'),
+((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Jane' AND LAST_NAME = 'Smith'), '$2b$10$H0zB1Ub0YiHQXu.pstzZOescgnHpZLAjNTAXfo/CiOuCnuFse/4ha'),
+((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Bob' AND LAST_NAME = 'Johnson'), '$2b$10$H0zB1Ub0YiHQXu.pstzZOescgnHpZLAjNTAXfo/CiOuCnuFse/4ha');
 
 
 INSERT INTO prestataire ( description, nom, id_user, etat_id,page_info ,photo_profil) VALUES

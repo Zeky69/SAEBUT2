@@ -52,7 +52,6 @@ export default {
   methods:{
     ...mapActions(['logout']),
     deconnexion(){
-      this.$router.replace('/login');
       this.logout();
     }
   },
