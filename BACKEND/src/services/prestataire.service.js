@@ -1,8 +1,11 @@
 //prestataire.services.js
-const { v4: uuidv4 } = require("uuid");
-const pool = require("../database/db.js");
-const bcrypt = require("bcrypt");
+const { v4: uuidv4 } = require('uuid');
+const pool = require("../database/db.js")
+const bcrypt = require("bcrypt")
 const saltRounds = 10;
+
+
+
 
 const getPrestatairesEtatAccepte = async () => {
     let resultat = null;
@@ -25,7 +28,7 @@ const getPrestatairesTypes = async () => {
     let resultat = null;
     const client = await pool.connect();
     try {
-        let sql = 'SELECT DISTINCT t.libelle , t.id_type , emplacement.prestataire_id FROM emplacement INNER JOIN public.type t on t.id_type = emplacement.id_type WHERE emplacement.id_emplacement in (SELECT  id_emplacement from emplacement WHERE emplacement.prestataire_id is not null);';
+        let sql = 'SELECT DISTINCT t.libelle , t.id_type , b.prestataire_id FROM emplacement INNER JOIN public.batiment b on emplacement.id_emplacement = b.id_emplacement inner join public.type t on t.id_type = b.type_id WHERE emplacement.id_emplacement in (SELECT  id_emplacement from emplacement WHERE batiment_id is not null);';
         resultat = await client.query(sql);
         return resultat.rows;
     }
@@ -75,19 +78,12 @@ const updatePrestatairePage = async (prestataire) => {
         client.release();
     }
 
-async function updateUserProfile(
-  user_id,
-  nomEntreprise,
-  description,
-  photoDeProfil,
-  prenom,
-  nom,
-  motDePasse,
-  email
-) {
-  const client = await pool.connect();
-  try {
-    await client.query("BEGIN");
+}
+
+async function updateUserProfile(user_id, nomEntreprise, description,photoDeProfil,prenom,nom,motDePasse,email){
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
 
     let query = `UPDATE prestataire 
         SET nom=$1, description=$2, photo_profil=$3
