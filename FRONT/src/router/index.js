@@ -70,10 +70,6 @@ const routes = [
     name: 'panier',
     meta: { requiresAuth: false, group_id: 3 },
     component: () => import(/* webpackChunkName: "about" */ '../views/PanierView.vue')
-  }, {path: '/map3DUser',
-    name: 'map3DUser',
-    meta: { requiresAuth: false, group_id: 3 },
-    component: () => import(/* webpackChunkName: "about" */ '../views/Map3DUser.vue')
   },
   {
     path: '/restauration',
@@ -106,7 +102,9 @@ const routes = [
       },
       {
         path: 'map',
-        component: ()=>import ('../views/Map3DPrestataire.vue')
+        name: 'prestataire.map',
+        component: ()=>import ('../components/Map2D/Map2D.vue')
+
       },
       {
         path:'*',
@@ -139,7 +137,8 @@ const routes = [
       },
       {
         path: 'map',
-        component: ()=>import ('../views/Map3DAdmin.vue')
+        name: 'admin.map',
+        component: ()=>import ('../views/Map2DAdmin.vue')
       },
 
       {

@@ -5,68 +5,75 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const getPrestatairesEtatAccepte = async () => {
-  let resultat = null;
-  const client = await pool.connect();
-  try {
-    let sql =
-      "select * from prestataire WHERE etat_id = 2 and nom != $1 ORDER BY id_prestataire ASC";
-    resultat = await client.query(sql, ["belforaine"]);
-    return resultat.rows;
-  } catch (error) {
-    console.log(error);
-    return error;
-  } finally {
-    client.release();
-  }
-};
+    let resultat = null;
+    const client = await pool.connect();
+    try {
+        let sql = 'select * from prestataire WHERE etat_id = 2 and nom != $1 ORDER BY id_prestataire ASC';
+        resultat = await client.query(sql,["belforaine"]);
+        return resultat.rows;
+    }
+    catch (error) {
+        console.log(error);
+        return error;
+    }
+    finally {
+        client.release();
+    }
+}
 
 const getPrestatairesTypes = async () => {
-  let resultat = null;
-  const client = await pool.connect();
-  try {
-    let sql =
-      "SELECT DISTINCT t.libelle , t.id_type , b.prestataire_id FROM emplacement INNER JOIN public.batiment b on emplacement.id_emplacement = b.id_emplacement inner join public.type t on t.id_type = b.type_id WHERE emplacement.id_emplacement in (SELECT  id_emplacement from emplacement WHERE batiment_id is not null);";
-    resultat = await client.query(sql);
-    return resultat.rows;
-  } catch (error) {
-    console.log(error);
-    return error;
-  } finally {
-    client.release();
-  }
-};
+    let resultat = null;
+    const client = await pool.connect();
+    try {
+        let sql = 'SELECT DISTINCT t.libelle , t.id_type , emplacement.prestataire_id FROM emplacement INNER JOIN public.type t on t.id_type = emplacement.id_type WHERE emplacement.id_emplacement in (SELECT  id_emplacement from emplacement WHERE emplacement.prestataire_id is not null);';
+        resultat = await client.query(sql);
+        return resultat.rows;
+    }
+    catch (error) {
+        console.log(error);
+        return error;
+    }
+    finally {
+        client.release();
+    }
+}
 
 const getPrestataireById = async (id) => {
-  let resultat = null;
-  const client = await pool.connect();
-  try {
-    let sql = "select * from prestataire WHERE id_prestataire = $1";
-    let values = [id];
-    resultat = await client.query(sql, values);
-    console.log("resultat", resultat.rows);
-    return resultat.rows;
-  } catch (error) {
-    console.log("error", error);
-    return error;
-  } finally {
-    client.release();
-  }
-};
+    let resultat = null;
+    const client = await pool.connect();
+    try {
+        let sql = 'select * from prestataire WHERE id_prestataire = $1';
+        let values = [id];
+        resultat = await client.query(sql, values);
+        console.log("resultat",resultat.rows);
+        return resultat.rows;
+    }
+    catch (error) {
+        console.log("error",error);
+        return error;
+    }
+    finally {
+        client.release();
+    }
+}
+
 
 const updatePrestatairePage = async (prestataire) => {
-  const client = await pool.connect();
-  try {
-    let sql = "UPDATE prestataire SET page_info = $1 WHERE id_prestataire = $2";
-    let values = [prestataire.page_info, prestataire.id_prestataire];
-    await client.query(sql, values);
-    return true;
-  } catch (error) {
-    console.log(error);
-    return false;
-  } finally {
-    client.release();
-  }
-};
+
+    const client = await pool.connect();
+    try {
+        let sql = 'UPDATE prestataire SET page_info = $1 WHERE id_prestataire = $2';
+        let values = [prestataire.page_info,prestataire.id_prestataire];
+        await client.query(sql, values);
+        return true;
+    }
+    catch (error) {
+        console.log(error);
+        return false;
+    }
+    finally {
+        client.release();
+    }
 
 async function updateUserProfile(
   user_id,
@@ -118,10 +125,14 @@ async function updateUserProfile(
   }
 }
 
+
+
+
 module.exports = {
-  updateUserProfile,
-  getPrestataireById: getPrestataireById,
-  updatePrestatairePage: updatePrestatairePage,
-  getPrestatairesEtatAccepte: getPrestatairesEtatAccepte,
-  getPrestatairesTypes: getPrestatairesTypes,
-};
+    updateUserProfile,
+    getPrestataireById : getPrestataireById,
+    updatePrestatairePage :updatePrestatairePage,
+    getPrestatairesEtatAccepte :getPrestatairesEtatAccepte,
+    getPrestatairesTypes :getPrestatairesTypes
+}
+

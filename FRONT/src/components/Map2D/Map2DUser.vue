@@ -4,7 +4,6 @@
   <div class="all-container">
     <div class="dotted"></div>
     <div class="title-container"><h1 class="title">Carte &nbsp;<span>Interactive</span></h1></div>
-    <div style="text-align: center;"><button class="btn" @click="$router.push('/map3DUser')"> Acceder a la map 3D</button></div>
   <div class="map">
     <div class="filtre-container">
       <div class="info-panel-user info-panel-close">
@@ -111,13 +110,11 @@ export default {
 
     getMap2DBat().then((response) => {
 
+      console.log(response)
+
       response.forEach((bat) => {
-        const ugly = []
-        bat.matricepoints.matricepoints.forEach((point) => {
-          ugly.push(this.uglycoo(point))
-        })
         const data = {
-          "geometry": ugly,
+          "geometry": bat.matricepoints.matricepoints,
           "properties": {
             "name": bat.nom,
             "description": bat.description,
@@ -126,6 +123,7 @@ export default {
             "id_prestataire": bat.prestataire_id,
           }
         }
+        console.log(data)
         this.features.push(data)
       })
 
@@ -193,19 +191,7 @@ export default {
     },
     getIconUrl(f) {
     return require(`@/assets/map2D/icons/${f.properties.marker}`);
-    },
-    uglycoo(coo) {
-      const centerx = 47.74826581735272
-      const centery = 6.802135705947877
-
-      coo[0] = coo[0] / 10000
-      coo[1] = coo[1] / 10000
-
-      coo[0] = coo[0] + centerx
-      coo[1] = coo[1] + centery
-      return coo
     }
-
   ,
   getColor(f){
       switch (f.properties.type){

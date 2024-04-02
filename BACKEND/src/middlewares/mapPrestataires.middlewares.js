@@ -34,8 +34,8 @@ exports.validateAddbatInputdebug = async (req, res, next) => {
 }
 
 exports.validateAddempInput = async (req, res, next) => {
-    const { name, description , posx, posy, posz, rota, matricepoints } = req.body;
-    if (!name || !description || !posx || !posy || !posz || rota === undefined || !matricepoints) {
+    const { name, description , matricepoints } = req.body;
+    if (!name || !description ||  !matricepoints) {
         return res.status(400).send("Un des champs est nul");
     }
     next();
