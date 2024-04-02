@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from "@/store";
+import utilisateur from "@/services/utilisateur";
 
 Vue.use(VueRouter)
 
@@ -60,7 +61,28 @@ const routes = [
     name:'register',
     meta: { requiresAuth: false, group_id: 3 },
     component: () => import('../views/InscriptionView.vue')
-  },{
+  },
+  {path: '/forget-password',
+    name: 'forger-password',
+    meta: {requiresAuth: false, group_id: 3},
+    component: () => import('../views/MotDePasseOublie.vue')
+  },
+  {
+    path: '/reset-password/:token',
+    name: 'reset-password',
+    component: () => import('@/views/ResetPassword.vue'),
+    beforeEnter: (to, from, next) => {
+      utilisateur.VerifyToken(to.params.token)
+          .then(() => {
+            next();
+          })
+          .catch((error) => {
+            console.error('Erreur de vérification du token:', error);
+            next('/login');
+          });
+    }
+  },
+  {
     path: '/organisateurs',
     name: 'organisateurs',
     meta: { requiresAuth: false, group_id: 3 },

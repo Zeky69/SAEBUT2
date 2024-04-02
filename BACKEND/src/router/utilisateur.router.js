@@ -1,15 +1,31 @@
 // utilisateur.router.js
 
-const express = require('express');
-const userController = require('../controllers/utilisateur.controllers');
-const userMiddlewares = require('../middlewares/utilisateur.middlewares');
+const express = require("express");
+const userController = require("../controllers/utilisateur.controllers");
+const userMiddlewares = require("../middlewares/utilisateur.middlewares");
 var router = express.Router();
 
 //se connecter
 //router.get('/', loginMiddlewares.validateLoginInput,loginController.login);
 
-router.post('/login',userMiddlewares.validateLoginInput,userController.login);
-router.post('/register',userMiddlewares.validateRegistrationInput,userController.register)
+router.post("/login", userMiddlewares.validateLoginInput, userController.login);
+router.post(
+  "/register",
+  userMiddlewares.validateRegistrationInput,
+  userController.register
+);
+router.post("/forgot-password", userController.forgotPassword);
+router.get(
+  "/reset-password/:token",
+  userMiddlewares.verifyTokenMiddleware,
+  userController.resetPasswordForm
+);
+
+router.post(
+  "/reset-password/:token",
+  userMiddlewares.verifyTokenMiddleware,
+  userController.resetPassword
+);
 /**
  * @swagger
  * /utilisateur/register:
@@ -59,10 +75,12 @@ router.post('/register',userMiddlewares.validateRegistrationInput,userController
  *         500:
  *           description: Erreur interne du serveur lors de l'enregistrement de l'utilisateur
  */
-router.get('/prestataire/:id',userController.getPrestataireObject);
+router.get("/prestataire/:id", userController.getPrestataireObject);
 
-router.get('/:token',userController.getInformationWithToken);
-
-
+router.get(
+  "/:token",
+  userMiddlewares.verifyTokenMiddleware,
+  userController.getInformationWithToken
+);
 
 module.exports = router;

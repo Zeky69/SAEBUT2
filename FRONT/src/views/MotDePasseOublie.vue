@@ -1,46 +1,39 @@
 <template>
-  <div class="FormulaireLogin">
+  <div class="FormulaireForget">
     <div class="background"></div>
     <div class="container">
       <div class="gauche">
         <div class="formulaire">
-          <div class="formulaire-top">
-            <h2>Connexion <span style="font-weight: normal; color: gray;">- Inscription</span></h2>
-          </div>
-          <div class="formulaire-contenu">
-            <div class="connexion">
-            <div class="Login">
-            <p>E-mail</p>
-            <input type="text" class="inputFormulaire" :class="{ 'invalid': isInvalidCredentials }" placeholder="Adresse e-mail" v-model="login">
-              <span class="faux"></span>
+          <span v-if="isRegister">
+            <div class="validate">
+              <img src="@/assets/logo/check.svg" id="check">
+              <p>Votre demande a été enregistré, si vous avez un compte vous recevrez un mail d'ici quelques instants</p>
+              <span>Vous allez être rediriger dans quelques instants à la page d'accueil</span>
+            </div>
+          </span>
+
+          <span v-else>
+            <div class="formulaire-top">
+              <h2>Mot de passe oublié</h2>
             </div>
 
-            <div class="Login">
-              <p>Mot de passe</p>
-              <input type="password" class="inputFormulaire" :class="{ 'invalid': isInvalidCredentials }"  placeholder="Mot de passe" v-model="password">
-              <span class="faux"></span>
+            <div class="formulaire-contenu">
+              <div class="register">
+                <p style="text-align: center; font-size: 20px">Veuillez renseignez votre e-mail</p>
+
+                <div class="register-champ">
+                  <p>E-mail</p>
+                  <input type="text" class="inputFormulaire" placeholder="Entrez votre adresse e-mail" v-model="email" required>
+                  <span v-if="!email && showErrors" class="error-message">Le champ E-mail est obligatoire</span>
+                </div>
+                <span class="error-message" id="back-error"></span>
+
+                <div class="boutton" @click="Forget">
+                  <p id="Inscription" :disabled="!areFieldsFilled">Envoyer e-mail de réinitialisation</p>
+                </div>
+              </div>
             </div>
-              <router-link to="/forget-password"><p style="text-decoration: none; color: #FFFFFF; font-size: 14px">Mot de passe oublié ?</p></router-link>
-            </div>
-            <div class="boutton">
-            <p class="connexion_btn" @click="connect()">Connexion</p>
-              <hr />
-              <p id="Inscription" @click="$router.push('/register')">Inscription</p>
-
-
-            </div>
-
-          </div>
-        </div>
-      </div>
-      <div class="droite">
-        <img src="../assets/logoWF2W.png" class="logo">
-        <div class="reseaux">
-            <img src="../assets/logo/TwitterX.svg">
-          <img src="../assets/logo/Facebook.svg">
-          <img src="../assets/logo/YouTube.svg">
-          <img src="../assets/logo/Instagram.svg">
-
+          </span>
         </div>
       </div>
     </div>
@@ -48,64 +41,67 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import util from "@/services/utilisateur";
 
 export default {
-  name: "LoginView",
-  computed:{
-    ...mapState(['group_id'])
+  name: "MotDePasseOublie",
+  computed: {
+    areFieldsFilled() {
+      return this.email;
+    }
   },
-  data : () => ({
-    login:"",
-    password:"",
-    isInvalidCredentials: false,
-  }),mounted() {
+  data: () => ({
+    email: "",
+    isRegister: false,
+    showErrors: false
+  }),
+  mounted() {
     document.addEventListener("keydown", this.handleEnterKey);
   },
 
   beforeDestroy() {
     document.removeEventListener("keydown", this.handleEnterKey);
   },
-  methods:{
-    ...mapActions(['loginUser']),
-    async connect(){
-      console.log(this.login)
-      var data =
-          {"email" : this.login,
-            "password" :this.password};
-      await this.loginUser(data);
-      if(this.group_id===2){
-        this.$router.push('/prestataire');
-      }else if(this.group_id===1){
-        this.$router.push('/admin');
-      }else{
-        this.isInvalidCredentials = true;
-        this.login = "";
-        this.password = "";
-        let elements = document.getElementsByClassName("faux");
-        for (let i = 0; i < elements.length; i++) {
-          elements[i].innerHTML = 'Mot de passe ou email incorrect';
+  methods: {
+    async Forget() {
+      if (this.areFieldsFilled) {
+        try {
+          const response = await util.Forget(this.email);
+          if (response.error) {
+            console.log(response.error)
+            throw response.data.error;
+          }
+
+          this.isRegister = true;
+          setTimeout(() => {
+            this.$router.push("/")
+          },3000)
+        } catch (error) {
+          document.getElementById("back-error").innerHTML = error;
+          console.error("Erreur lors de l'envoi du mail", error.message);
         }
-
+      } else{
+        this.showErrors = true;
       }
-      console.log(this.token);
     },
-
     handleEnterKey(event) {
       if (event.key === "Enter") {
-        this.connect();
+        this.Forget();
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
-.FormulaireLogin {
+.FormulaireForget {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.FormulaireLogin::after {
+.FormulaireForget::after {
   content: '';
   position: fixed;
   top: 0;
@@ -123,7 +119,38 @@ export default {
   height: 100%;
   filter: blur(7px);
   z-index: -1;
-  overflow: hidden; /* Ajoutez cette ligne pour bloquer le défilement du fond */
+  overflow: hidden;
+}
+
+.validate{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.validate p{
+  color: white;
+  text-align: center;
+  font-size: 23px;
+}
+
+.validate span{
+  color: #FFFFFF;
+}
+
+#check{
+  fill : #008000;
+  height: 200px;
+  width: 200px;
+}
+
+.gauche{
+  margin: 35% 0%;
+}
+
+.error-message{
+  color: #ff0000;
 }
 
 
@@ -136,13 +163,13 @@ export default {
   flex-direction: row;
   top: 100px;
   margin: 0 7%;
-  
+
 }
 
 .formulaire {
-  padding: 5%;
-  width: 500px; /* Ajustez la largeur selon vos besoins */
-  height: 500px; /* Ajustez la hauteur selon vos besoins */
+  padding: 8%;
+  width: 500px;
+  height: fit-content;
   position: relative;
   z-index: 10;
   border-radius: 12px;
@@ -154,7 +181,7 @@ export default {
 .formulaire-top h2 {
   color: white;
   font-family: "DM Sans";
-  font-size: 25px;
+  font-size: 30px;
   text-align: center;
   margin-top: 5%;
 }
@@ -162,8 +189,7 @@ export default {
 .formulaire-contenu{
   display: flex;
   flex-direction: column;
-
-  height: 70%;
+  height: 60%;
   width: 80%;
   color: white;
   position: relative;
@@ -171,27 +197,28 @@ export default {
   margin-top: 10px;
 }
 
-.Login{
+.register{
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 25px;
+  height: 40%;
+
+}
+
+.register-champ{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: flex-start;
   font-family: "DM Sans";
 }
 
-.connexion{
-  display: flex;
-  flex-direction: column;
-  height: 300px;
-  justify-content: space-evenly;
 
-}
-
-.Login p{
+.register-champ p{
   font-size: 20px;
 }
 
-.connexion a{
+.register a{
   padding-left: 58%;
   font-style: italic;
 }
@@ -204,7 +231,7 @@ export default {
   border-bottom: 1px solid #ffffff;
   outline: 0;
   padding: 7px 0;
- background-color: transparent;
+  background-color: transparent;
   transition: border-color 0.2s;
 }
 
@@ -215,7 +242,7 @@ export default {
 .faux{
   color: red;
 }
-.connexion a{
+.register a{
   text-decoration: underline;
   font-family: "DM Sans";
   font-size: 13px;
@@ -224,9 +251,7 @@ export default {
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 150px;
   justify-content: space-between;
-  margin-top: 10px;
 }
 
 .boutton p{
@@ -242,16 +267,6 @@ export default {
   cursor: pointer;
 }
 
-.boutton .connexion_btn:hover {
-  background-color: #ffffff;
-  color: #000000;
-  transition: 0.2s;
-}
-
-.boutton .connexion_btn:active {
-  background-color: #ffffff;
-  color: #000000;
-}
 
 .boutton hr{
   border-top: 3px double #ffffff;
@@ -276,40 +291,9 @@ export default {
   border: none;
 }
 
-.droite{
-  margin-right: 10%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.logo{
-  width: 80%;
-  height: auto;
-  max-width: 322px;
-  filter: drop-shadow(0px 4px 29px #000000);
-}
-
 .reseaux img{
   width: 50px;
   filter: invert(100%) sepia(0%) saturate(7498%) hue-rotate(184deg) brightness(100%) contrast(100%);
-}
-
-@media all and (max-width:1300px) {
-  .container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .gauche {
-    margin-right: 0;
-    text-align: center;
-    justify-content: center;
-  }
-.droite{
-  display: none;
-}
-
 }
 
 @media all and (max-width: 900px) {
@@ -323,7 +307,7 @@ export default {
     font-size: 30px;
   }
 
-  .Login p{
+  .register-champ p{
     font-size: 20px;
   }
 
@@ -331,7 +315,7 @@ export default {
     font-size: 15px;
   }
 
-  .connexion a {
+  .register a {
     font-size: 13px;
   }
 
@@ -354,7 +338,7 @@ export default {
     font-size: 30px;
   }
 
-  .Login p{
+  .register-champ p{
     font-size: 20px;
   }
 
@@ -362,7 +346,7 @@ export default {
     font-size: 15px;
   }
 
-  .connexion a {
+  .register a {
     font-size: 13px;
   }
 

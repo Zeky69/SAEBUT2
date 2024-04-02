@@ -54,8 +54,6 @@ data: () => ({
     ...mapActions(['logout']),
     deconnexion(){
       this.logout();
-      this.$router.replace('/login');
-
     }
   },
   mounted() {

@@ -152,6 +152,44 @@ async function getUserByEmail(email) {
   }
 }
 
+async function generatePasswordResetToken(email) {
+  try {
+    const user = await getUserByEmail(email);
+    if (!user) {
+      throw new Error("Utilisateur non trouvé");
+    }
+
+    const token = jwt.sign({ user_id: user.user_id }, jwtSecret, {
+      expiresIn: "15m",
+    });
+    return token;
+  } catch (error) {
+    console.error("Error in generatePasswordResetToken:", error);
+    throw error;
+  }
+}
+
+async function updateUserPassword(userId, hashedPassword) {
+  const client = await pool.connect();
+
+  console.log(userId);
+
+  try {
+    const query =
+      "UPDATE mots_de_passe_utilisateurs SET password = $1 WHERE user_id = $2";
+    const result = await client.query(query, [hashedPassword, userId]);
+
+    if (result.rowCount === 0) {
+      throw new Error("Mise à jour du mot de passe échouée");
+    }
+  } catch (error) {
+    console.error("Error in updateUserPassword:", error);
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
 module.exports = {
   getUserByEmail,
   loginUser: loginUser,
@@ -159,4 +197,6 @@ module.exports = {
   getInformationWithToken: getInformationWithToken,
   getPrestataireObject: getPrestataireObject,
   registerGhostsUser: registerGhostsUser,
+  generatePasswordResetToken,
+  updateUserPassword,
 };
