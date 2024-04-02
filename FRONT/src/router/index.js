@@ -8,15 +8,18 @@ const routes = [
   {
     path: '/',
     name: 'HomePage',
+    meta: { requiresAuth: false, group_id: 3 },
     component: () => import('../views/HomePage.vue')
   },
   {
     path: '/attraction',
     name: 'attraction',
+    meta: { requiresAuth: false, group_id: 3 },
     component: () => import(/* webpackChunkName: "about" */ '../views/AttractionView.vue')
   },  {
     path: '/billetterie',
     name: 'billetterie',
+    meta: { requiresAuth: false, group_id: 3 },
     component: () => import(/* webpackChunkName: "about" */ '../views/BilletterieView.vue'),
     children: [
       {
@@ -29,6 +32,8 @@ const routes = [
   }
   ,  {
     path: '/boutique',
+    meta: { requiresAuth: false, group_id: 3 },
+
     component: () => import(/* webpackChunkName: "about" */ '../views/BoutiqueVue.vue')
    , children: [
        {
@@ -48,35 +53,44 @@ const routes = [
     {
     path: '/login',
     name: 'login',
-    component: () => import(/* webpackChunkName: "about" */ '../views/LoginView.vue')
+      meta: { requiresAuth: false, group_id: 3 },
+      component: () => import(/* webpackChunkName: "about" */ '../views/LoginView.vue')
   },{
     path:'/register',
     name:'register',
+    meta: { requiresAuth: false, group_id: 3 },
     component: () => import('../views/InscriptionView.vue')
   },{
     path: '/organisateurs',
     name: 'organisateurs',
+    meta: { requiresAuth: false, group_id: 3 },
     component: () => import(/* webpackChunkName: "about" */ '../views/OrganisateursView.vue')
   },  {
     path: '/panier',
     name: 'panier',
+    meta: { requiresAuth: false, group_id: 3 },
     component: () => import(/* webpackChunkName: "about" */ '../views/PanierView.vue')
   }, {path: '/map3DUser',
     name: 'map3DUser',
+    meta: { requiresAuth: false, group_id: 3 },
     component: () => import(/* webpackChunkName: "about" */ '../views/Map3DUser.vue')
   },
   {
     path: '/restauration',
     name: 'restauration',
+    meta: { requiresAuth: false, group_id: 3 },
     component: () => import(/* webpackChunkName: "about" */ '../views/ReservationView.vue')
   },{
     path: '/search',
     name: 'search',
+    meta: { requiresAuth: false, group_id: 3 },
     component: () => import('../views/SearchVue.vue')
     },
   {
     path: '/prestataire',
-    component: () => import('../views/EspacePrestaire.vue'),    children: [
+    component: () => import('../views/EspacePrestaire.vue'),
+    meta: { requiresAuth: true, group_id: 2 },
+    children: [
       {
         path: '',
         name: 'prestataire.info',
@@ -112,6 +126,7 @@ const routes = [
   {
     path: '/admin',
     component: () => import('../views/EspaceAdmin.vue'),
+    meta: { requiresAuth: true, group_id: 1 },
     children: [
       {
         path: '',
@@ -156,28 +171,39 @@ const router = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const routeRecord = to.matched.find(record => record.meta.group_id !== undefined);
+  const group_id = routeRecord ? routeRecord.meta.group_id : null;
 
-  if ((to.path.startsWith('/admin'))) {
-    if(store.state.token)await store.dispatch('getInformationFromToken', store.state.token);
-    if(store.state.group_id===1){
-      next()
-    }else {
-      next('/');
+
+  if (store.state.token) {
+    await store.dispatch('getInformationFromToken', store.state.token);
+    if (requiresAuth) {
+      if (group_id === store.state.group_id) {
+        next();
+      } else {
+        switch (store.state.group_id) {
+          case 1:
+            next('/admin');
+            break;
+          case 2:
+            next('/prestataire');
+            break;
+          default:
+            next('/');
+            break;
+        }
+      }
+    } else {
+      next();
+    }
+  } else {
+    if (requiresAuth) {
+      next('/login');
+    } else {
+      next();
     }
   }
-
-  if ((to.path.startsWith('/prestataire'))) {
-    if(store.state.token)await store.dispatch('getInformationFromToken', store.state.token);
-    if(store.state.group_id===2){
-      next()
-    }else {
-      next('/');
-    }
-  }
-
-  next();
-
-
 });
 
 
