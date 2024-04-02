@@ -49,24 +49,24 @@
                   <th>Description</th>
                   <td><input type="text" v-model="newfeature.properties.description"></td>
                 </tr>
-<!--                <tr>-->
-<!--                  <th>Type</th>-->
-<!--                  <td>-->
-<!--                    <select v-model="newfeature.properties.typeTerrain">-->
-<!--                      <option value=null selected>Choisir un type</option>-->
-<!--                      <option v-for="(type , index) in types" :key="index" :value=type >{{type}}</option>-->
-<!--                    </select>-->
-<!--                  </td>-->
-<!--                </tr>-->
-<!--                <tr>-->
-<!--                  <th>Appartient à</th>-->
-<!--                  <td>-->
-<!--                    <select v-model="newfeature.properties.apartient">-->
-<!--                      <option value=null selected>Libre</option>-->
-<!--                      <option v-for="(provider , index) in filteredProvider" :key="index" :value=provider >{{provider}}</option>-->
-<!--                    </select>-->
-<!--                  </td>-->
-<!--                </tr>-->
+                <tr>
+                  <th>Type</th>
+                  <td>
+                    <select v-model="newfeature.properties.typeTerrain">
+                      <option value=null >Choisir un type</option>
+                      <option v-for="(type , index) in types" :key="index" :value=type.value >{{type.libelle}}</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Appartient à</th>
+                  <td>
+                    <select v-model="newfeature.properties.apartient">
+                      <option value=null selected>Libre</option>
+                      <option v-for="(provider , index) in providers" :key="index" :value=provider.id_prestataire >{{provider.nom}}</option>
+                    </select>
+                  </td>
+                </tr>
 
               </tbody>
 
@@ -83,6 +83,8 @@ import {LImageOverlay, LMap, LMarker, LPolygon, LTileLayer} from "vue2-leaflet";
 import 'leaflet/dist/leaflet.css';
 import InfoPanelEdition from "@/components/Map2D/infoPanelEdition.vue";
 import {createEmp, deleteEmp, getAllEmp, updateEmpInfo} from '../../services/mapPrestataire.service.js';
+import {getPrestataires,} from "@/services/prestataire.service";
+import {getMap2DType} from "@/services/map2D.service";
 
 export default {
   name: 'Map2D-edition',
@@ -98,38 +100,22 @@ export default {
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     center: [47.74915674062442-((47.74915674062442-47.74737489408103)/2.0) ,6.800086498260499-((6.800086498260499-6.804184913635255)/2.0)],
     cartebounds: [[47.74915674062442, 6.800086498260499],[47.74737489408103 , 6.804184913635255]],
-    //size 0,001781847, 0,004098415
-    //center 47.74826581735272, 6.802135705947877
-    //corner top left 47.74915674062442, 6.800086498260499
-    //corner bottom right 47.74737489408103 , 6.804184913635255
-    //corner top right 47.74915674062442, 6.804184913635255
-    //corner bottom left 47.74737489408103 , 6.800086498260499
-
     markerLatLng: [51.504, -0.159],
     newPolygon:[],
-    // newfeature: {
-    //     "geometry": [],
-    //     "properties": {
-    //       "id": null,
-    //       "name": null,
-    //       "description": null,
-    //       "typeTerrain": null,
-    //       "apartient": null,
-    //     }
-    //   },
     newfeature: {
-      "geometry": [],
-      "properties": {
-        "id": null,
-        "name": null,
-        "description": null,
-      }
-    },
+        "geometry": [],
+        "properties": {
+          "id": null,
+          "name": null,
+          "description": null,
+          "typeTerrain": null,
+          "apartient": null,
+        }
+      },
     modeEditor:false,
-    couleurOption:["yellow","orange","blue","yellow"],
-    types: ["forrain" , "scene"],
-    filteredProvider: [],
-    providers:[["Calixte","Raclette","Zekeriya"],["Mhammed","Enzo","Dalia","Merguez"]],
+    couleurOption:["yellow","orange","blue","purple","cyan","brown","pink"],
+    types: [],
+    providers:[],
     features:[],
     featureSelected : null,
     couleur: [],
@@ -138,20 +124,35 @@ export default {
   }),
   created() {
 
+    getPrestataires().then((response) => {
+      response.forEach((prestataire) => {
+
+        console.log(prestataire)
+        this.providers.push(prestataire)
+      })
+    })
+
+    getMap2DType().then((response) => {
+      console.log(response)
+      response.forEach((type) => {
+        console.log(type)
+        this.types.push(type)
+      })
+    })
+
 
     getAllEmp().then((response) => {
       console.log(response)
       response.forEach((emp) => {
-        const ugly = []
-        emp.matricepoints.matricepoints.forEach((point) => {
-          ugly.push(this.uglycoo(point))
-        })
         const data = {
-          "geometry": ugly,
+          "geometry": emp.matricepoints.matricepoints,
           "properties": {
             "id": emp.id_emplacement,
             "name": emp.nom,
             "description": emp.description,
+            "typeTerrain": emp.id_type,
+            "apartient": emp.prestataire_id
+            ,
           }
         }
         this.features.push(data)
@@ -165,40 +166,17 @@ export default {
   }
   ,
   watch: {
-    // 'newfeature.properties.typeTerrain': function () {
-    //   this.filterProvider();
-    // }
+    newfeature: {
+      handler: function () {
+        console.log(this.newfeature)
+      },
+      deep: true
     }
-,
+  },
   methods: {
 
 
-    prettycoo(coo) {
-      const centerx = 47.74826581735272
-      const centery = 6.802135705947877
 
-      let clone = coo.slice(0)
-      coo = clone
-
-      coo[0] = coo[0] - centerx
-      coo[1] = coo[1] - centery
-
-      coo[0] = coo[0] * 10000
-      coo[1] = coo[1] * 10000
-      return coo
-    },
-
-    uglycoo(coo) {
-      const centerx = 47.74826581735272
-      const centery = 6.802135705947877
-
-      coo[0] = coo[0] / 10000
-      coo[1] = coo[1] / 10000
-
-      coo[0] = coo[0] + centerx
-      coo[1] = coo[1] + centery
-      return coo
-    },
 
 
     closePanel() {
@@ -224,92 +202,20 @@ export default {
       } else {
         document.querySelector('.vue2leaflet-map').classList.remove('newzone');
       }
-    },
-    filterProvider() {
-      for (let i = 0; i < this.types.length; i++) {
-        if (this.types[i] === this.newfeature.properties.typeTerrain) {
-          this.filteredProvider = this.providers[i];
-
-        }
-      }
-    },
-    getLatLngMarker(coordinates){
-      // let area = 0;
-      // let x = 0;
-      // let y = 0;
-      // let prev = coordinates[coordinates.length - 1];
-      //
-      // coordinates.forEach(coord => {
-      //   const cur = coord;
-      //   const f = (prev[0] * cur[1]) - (cur[0] * prev[1]);
-      //   x += (prev[0] + cur[0]) * f;
-      //   y += (prev[1] + cur[1]) * f;
-      //   area += f;
-      //   prev = cur;
-      // });
-      //
-      // area /= 2;
-      // x /= (area * 6);
-      // y /= (area * 6);
-      // return [x, y]; // Les coordonnées sont dans l'ordre [lat, lng]
-
-
-      if (coordinates.length === 0) {
-        return null;
-      }
-
-      // Initialise les sommes des coordonnées en x et en y
-      let sumX = 0;
-      let sumY = 0;
-
-      // Parcours de toutes les coordonnées dans la liste
-      for (let i = 0; i < coordinates.length; i++) {
-        sumX += coordinates[i][0];
-        sumY += coordinates[i][1];
-      }
-
-      // Calcule la moyenne des coordonnées en x et en y
-      const centerX = sumX / coordinates.length;
-      const centerY = sumY / coordinates.length;
-
-      return [centerX, centerY];
-
-    },
+    }
+    ,
     async addPolygon() {
       if (this.newPolygon.length > 2) {
         this.newPolygon.push(this.newPolygon[0])
         this.newfeature.geometry = this.newPolygon
         this.features.push(this.newfeature)
-        var center = this.getLatLngMarker(this.newPolygon)
-
-        center = this.prettycoo(center)
-        const n = this.newPolygon.length
-        var pretty = []
-        for (let i = 0; i < n; i++) {
-          //ne pas faire le dernier point
-          if (i === (n - 1))
-            break
-          pretty.push(this.prettycoo(this.newPolygon[i]))
-        }
-
-        //corner top left 47.74915674062442, 6.800086498260499
-        //corner bottom right 47.74737489408103 , 6.804184913635255
-        //corner top right 47.74915674062442, 6.804184913635255
-        //corner bottom left 47.74737489408103 , 6.800086498260499
-
-        console.log("top  left" , this.prettycoo([47.74915674062442, 6.800086498260499]))
-        console.log("bottom right" , this.prettycoo([47.74737489408103 , 6.804184913635255]))
-        console.log("top right" , this.prettycoo([47.74915674062442, 6.804184913635255]))
-        console.log("bottom left" , this.prettycoo([47.74737489408103 , 6.800086498260499]))
 
         const dataemp= {
-              name : "emp_" + this.newfeature.properties.name,
+              name : this.newfeature.properties.name,
               description : this.newfeature.properties.description,
-              posx : center[0],
-              posy : 10,
-              posz : center[1],
-              rota : 0,
-              matricepoints : pretty,
+              prestaire_id : this.newfeature.properties.apartient,
+              type_id : this.newfeature.properties.typeTerrain,
+              matricepoints : this.newfeature.geometry,
         }
         console.log("before",dataemp)
         await createEmp(dataemp)
@@ -330,28 +236,28 @@ export default {
       this.featureSelected = feature;
 
     },
-    updateFeatures(feature) {
-      if (feature.properties.apartient == null) {
-        feature.properties.apartient = this.provider.id
-      } else {
-        feature.properties.apartient = null;
-      }
-      this.couleur = []
-      this.features.forEach((feature) => {
-        this.couleur.push(this.polygonOption(feature))
-      })
-
-      this.closePanel()
-
-
-    },
+    // updateFeatures(feature) {
+    //   if (feature.properties.apartient == null) {
+    //     feature.properties.apartient = this.provider.id
+    //   } else {
+    //     feature.properties.apartient = null;
+    //   }
+    //   this.couleur = []
+    //   this.features.forEach((feature) => {
+    //     this.couleur.push(this.polygonOption(feature))
+    //   })
+    //
+    //   this.closePanel()
+    //
+    //
+    // },
     addCoordinates(event) {
       if (this.modeEditor)
         this.newPolygon.push([event.latlng.lat, event.latlng.lng])
     },
     polygonOption(feature) {
       for (let i = 0; i < this.types.length; i++) {
-        if (this.types[i] === feature.properties.typeTerrain) {
+        if (this.types[i].value === feature.properties.typeTerrain) {
           return this.couleurOption[i];
         }
       }
@@ -373,6 +279,9 @@ export default {
         uuid: feature.properties.id,
         nom: newfeature.properties.name,
         description: newfeature.properties.description,
+        type_id: newfeature.properties.typeTerrain,
+        prestataire_id: newfeature.properties.apartient,
+        matricepoints: newfeature.geometry
       })
       this.features.splice(this.features.indexOf(feature), 1)
       this.features.push(newfeature)

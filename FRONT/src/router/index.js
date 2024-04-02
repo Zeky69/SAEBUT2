@@ -88,6 +88,12 @@ const routes = [
         component: ()=>import ('../views/MaPage.vue')
       },
       {
+        path: 'map',
+        name: 'prestataire.map',
+        component: ()=>import ('../components/Map2D/Map2D.vue')
+
+      },
+      {
         path:'*',
         name: 'presta.notFound,',
         component: () => import('../views/NotFound.vue')
@@ -114,6 +120,11 @@ const routes = [
       {
         path: 'prestataires',
         component: ()=>import ('../views/AdminPrestataire.vue')
+      },
+      {
+        path: 'map',
+        name: 'admin.map',
+        component: ()=>import ('../views/Map2DAdmin.vue')
       },
 
       {

@@ -14,28 +14,24 @@
           <th>Description</th>
           <td><input v-model=newfeature.properties.description type="text" name="description" id="description"></td>
         </tr>
-<!--        <tr>-->
+        <tr>
 
-<!--          <th>Type terrain</th>-->
-<!--          <td>-->
-<!--          <select v-model=newfeature.properties.typeTerrain name="types" id="types">-->
-<!--            <option v-for="(type , index) in types"  :key="index" :value=type :selected="type === feature.properties.typeTerrain">{{type}}</option>-->
-<!--          </select>-->
-<!--          </td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--          <th>Propriétaire</th>-->
-<!--          <td>-->
-<!--          <select v-model=newfeature.properties.apartient name="providers" id="providers">-->
-<!--            <option value=null :selected="feature.properties.apartient === null">Libre</option>-->
-<!--            <option v-for="(provider , index) in filteredProvider" :key="index" :value=provider :selected="provider ===feature.properties.apartient" >{{provider}}</option>-->
-<!--          </select>-->
-<!--          </td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--          <th>Surface</th>-->
-<!--          <td>{{calculatePolygonArea(convertCoordinatesToMeters(feature.geometry))}} m²</td>-->
-<!--        </tr>-->
+          <th>Type terrain</th>
+          <td>
+          <select v-model=newfeature.properties.typeTerrain name="types" id="types">
+            <option v-for="(type , index) in types"  :key="index" :value=type.value :selected="type.value == feature.properties.typeTerrain">{{type.libelle}}</option>
+          </select>
+          </td>
+        </tr>
+        <tr>
+          <th>Propriétaire</th>
+          <td>
+          <select v-model=newfeature.properties.apartient name="providers" id="providers">
+            <option value=null :selected="feature.properties.apartient === null">Libre</option>
+            <option v-for="(provider , index) in providers" :key="index" :value=provider.id_prestataire :selected="provider.id_prestataire == feature.properties.apartient" >{{provider.nom}}</option>
+          </select>
+          </td>
+        </tr>
         </tbody>
       </table>
 
@@ -60,8 +56,8 @@ export default {
       "id": this.feature.properties.id,
       "name": this.feature.properties.name,
       "description": this.feature.properties.description,
-      // "typeTerrain": this.feature.properties.typeTerrain,
-      // "apartient": this.feature.properties.apartient,
+     "typeTerrain": this.feature.properties.typeTerrain,
+     "apartient": this.feature.properties.apartient,
     }
   }
   }
@@ -74,8 +70,8 @@ export default {
         "id": null,
         "name": null,
         "description": null,
-        // "typeTerrain": null,
-        // "apartient": null,
+         "typeTerrain": null,
+       "apartient": null,
       }
     },
     filteredProvider: []
@@ -83,11 +79,7 @@ export default {
 
 ,
   watch: {
-    // 'newfeature.properties.typeTerrain': function () {
-    //   // Watch for changes in newfeature.properties.typeTerrain
-    //   // and update filteredProvider accordingly
-    //   this.filterProvider();
-    // },
+
     'feature': function (){
       this.newfeature ={
         "geometry": this.feature.geometry,
@@ -95,10 +87,11 @@ export default {
           "id": this.feature.properties.id,
           "name": this.feature.properties.name,
           "description": this.feature.properties.description,
-          // "typeTerrain": this.feature.properties.typeTerrain,
-          // "apartient": this.feature.properties.apartient,
+           "typeTerrain": this.feature.properties.typeTerrain,
+           "apartient": this.feature.properties.apartient,
         }
       }
+      console.log(this.newfeature);
 
     }
   },
@@ -111,43 +104,7 @@ export default {
     },
     delPolygon(){
       this.$emit("del-feature", this.feature);
-    }
-
-  ,
-    filterProvider(){
-      for (let i = 0; i < this.types.length; i++) {
-        if(this.types[i] === this.newfeature.properties.typeTerrain){
-          this.filteredProvider = this.providers[i];
-
-        }
-      }
-    }
-  ,
-    convertCoordinatesToMeters(coordinates) {
-      const EARTH_RADIUS = 6371000;
-
-      return coordinates.map(coord => {
-        const latitude = coord[0] * (Math.PI / 180);
-        const longitude = coord[1] * (Math.PI / 180);
-
-        const x = EARTH_RADIUS * Math.cos(latitude) * Math.cos(longitude);
-        const y = EARTH_RADIUS * Math.cos(latitude) * Math.sin(longitude);
-
-        return [x, y];
-      });
     },
-    calculatePolygonArea(coordinates) {
-  const n = coordinates.length;
-  let area = 0;
-
-  for (let i = 0; i < n - 1; i++) {
-    area += (coordinates[i][0] * coordinates[i + 1][1]) - (coordinates[i + 1][0] * coordinates[i][1]);
-  }
-
-  area = Math.abs(area) / 2.0;
-
-  return parseInt(area+"");
-},
 
 },
 }

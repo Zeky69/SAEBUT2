@@ -22,27 +22,6 @@ const getManyEmp = async (req) => {
 
 };
 
-const getBatdebug2 = async (req,res) => {
-    const client = await pool.connect();
-    let result = [];
-    try {
-        // Récupérer tous les batiments
-        const getAllBatimentQuery = 'SELECT * FROM batiment';
-        result = await client.query(getAllBatimentQuery);
-
-        return result.rows
-
-
-    } catch (error) {
-        console.error('Erreur lors de la récupération des batiments :', error);
-
-    } finally {
-        client.release();
-
-    }
-
-};
-
 
 const getAllEmp = async (req) => {
     const client = await pool.connect();
@@ -60,26 +39,6 @@ const getAllEmp = async (req) => {
     }
 }
 
-const getoneEmp = async (req) => {
-    const client = await pool.connect();
-    let name = req.query.name;
-    let posx = req.query.posx;
-    let posz = req.query.posz;
-    let emps = [];
-    try {
-        // Récupérer tous les batiments
-        const getOneEmpQuery = 'SELECT * FROM emplacement WHERE nom = $1 AND posx = $2 AND posz = $3';
-        const getOneEmpValues = [name, posx, posz];
-        emps = await client.query(getOneEmpQuery, getOneEmpValues);
-
-    } catch (error) {
-        console.error('Erreur lors de la récupération des emplacements :', error);
-    }
-    finally {
-        client.release();
-        return emps.rows;
-    }
-}
 
 const getEmpUUID = async (req) => {
     const client = await pool.connect();
@@ -101,73 +60,37 @@ const getEmpUUID = async (req) => {
 }
 
 
-const getBatType = async (req) => {
+const getEmpType = async (req) => {
     const client = await pool.connect();
-    let result = [];
+    let result = null;
     try {
         // Récupérer tous les batiments
         const getAllBatimentQuery = 'SELECT * from type';
         result = await client.query(getAllBatimentQuery);
+        return result.rows;
+
     } catch (error) {
         console.error('Erreur lors de la récupération des batiments :', error);
     } finally {
         client.release();
-        return result.rows;
-    }
-}
-
-const updateBatStatus = async (req) => {
-    const client = await pool.connect();
-    let {uuid} = req
-    try {
-        let res;
-        let sql = "UPDATE batiment SET status = $1 WHERE id_batiment = $2 RETURNING *";
-        res = await client.query(sql, ["accepted", uuid]);
-        console.log("Modification réussie du batiment avec id" + uuid);
-        return res.rows;
-    } catch (err) {
-        console.log(err);
-        return err;
+        return result;
     }
 }
 
 
 
-const createbat = async (req, callback) => {
 
-    const {nom, name,emp_uuid, posx, posy, posz,rota, prestataire, description ,status, type } = req.body;
-    const client = await pool.connect();
-    try {
-        // Insérer le nouveau batiment dans la table batiment
-        const insertBatimentQuery = 'INSERT INTO batiment (id_batiment,description,nom, name, status, id_emplacement, posx, posy, posz, rota, prestataire_id, type_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8,$9, $10,$11 ,$12) RETURNING *';
-        const uuid_bat = uuidv4();
-        const insertBatimentValues = [uuid_bat ,description,nom,name,status, emp_uuid, posx, posy, posz, rota, 1 , type];
-        const result = await client.query(insertBatimentQuery, insertBatimentValues);
-
-        // Récupérer le batiment inséré
-        const newBatiment = result.rows[0];
-
-        // Appeler le callback avec le nouveau batiment
-        callback(null, newBatiment);
-    } catch (error) {
-        console.error('Erreur lors de l\'ajout du batiment :', error);
-        // Appeler le callback avec l'erreur
-        callback(error, null);
-    }finally {
-        client.release();
-    }
-};
 
 
 const createEmp = async (req, callback) => {
-    const { name, description , posx, posy, posz, rota, matricepoints } = req.body;
+    const { name, description , matricepoints , type_id , prestaire_id} = req.body;
     const client = await pool.connect();
 
     try {
         const uuid_emp = uuidv4();
         // Insérer le nouveau batiment dans la table batiment
-        const insertEmpQuery = 'INSERT INTO emplacement (id_emplacement, description ,nom , posx, posy, posz, rotationx, matricepoints) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *';
-        const insertEmpValues = [uuid_emp ,description,name, posx, posy, posz, rota, {matricepoints}];
+        const insertEmpQuery = 'INSERT INTO emplacement(id_emplacement, description ,nom , matricepoints, prestataire_id , id_type) VALUES ($1, $2, $3, $4 , $5 ,$6) RETURNING *';
+        const insertEmpValues = [uuid_emp ,description,name, {matricepoints} ,prestaire_id , type_id];
         const result = await client.query(insertEmpQuery, insertEmpValues);
 
         // Récupérer le batiment inséré
@@ -209,12 +132,12 @@ const deleteEmp = async (id) => {
 
 const updateEmp = async (req) => {
     const client = await pool.connect();
-    let { uuid, description, nom } = req.body;
+    let { uuid, description, nom , type_id, prestataire_id , matricepoints} = req.body;
 
     try {
         let res;
-        let sql = "UPDATE emplacement SET description = $1, nom = $2 WHERE id_emplacement = $3 RETURNING *";
-        res = await client.query(sql, [description, nom, uuid]);
+        let sql = "UPDATE emplacement SET description = $1, nom = $2 , id_type= $3, prestataire_id = $4 , matricepoints= $5  WHERE id_emplacement = $6 RETURNING *";
+        res = await client.query(sql, [description, nom, type_id, prestataire_id , {matricepoints}, uuid]);
         console.log("Modification réussie de l'emplacement avec id" + uuid);
         return res.rows;
     } catch (err) {
@@ -227,194 +150,22 @@ const updateEmp = async (req) => {
 }
 
 
-const updateEmpFree =async  (req,callback) => {
-    let uuid = req.uuid;
-    let batid = req.batid;
-    const client = await pool.connect();
-    try {
-        if(batid !== 0){
-            const updateBatQuery = 'UPDATE emplacement SET batiment_id = $1 WHERE id_emplacement = $2';
-            const updateBatValues = [batid, uuid];
-            await client.query(updateBatQuery, updateBatValues);
-        }
-        else{
-            const updateBatQuery = 'UPDATE emplacement SET batiment_id = $1 WHERE id_emplacement = $2';
-            const updateBatValues = [null,uuid];
-            await client.query(updateBatQuery, updateBatValues);
-        }
-        return callback(null, "success");
-    }catch (error) {
-        console.error('Erreur lors de la mise à jour de l\'emplacement :', error);
-        // Appeler le callback avec l'erreur
-        callback(error, null);
-
-    }
-    finally{
-        client.release();
-    }
-};
-
-const getBatempUUID = async (req) => {
-    const uuid = req;
-    const client = await pool.connect();
-    let result = [];
-    try {
-        // Récupérer tous les batiments
-        const getAllBatimentQuery = 'SELECT * FROM batiment WHERE id_emplacement = $1';
-        const getAllBatimentValues = [uuid];
-        result = await client.query(getAllBatimentQuery, getAllBatimentValues);
-    } catch (error) {
-        console.error('Erreur lors de la récupération des batiments :', error);
-    } finally {
-        client.release();
-        return result.rows;
-    }
-}
-
-const getBatUUID = async (req) => {
-    const uuid = req;
-    const client = await pool.connect();
-    let result = [];
-    try {
-        // Récupérer tous les batiments
-        const getAllBatimentQuery = 'SELECT * FROM batiment WHERE batiment.id_batiment = $1';
-        const getAllBatimentValues = [uuid];
-        result = await client.query(getAllBatimentQuery, getAllBatimentValues);
-    }
-    catch (error) {
-        console.error('Erreur lors de la récupération des batiments :', error);
-    }
-    finally {
-        client.release();
-        return result.rows;
-    }
-}
-
-const getBatdebug = async () => {
-    const client = await pool.connect();
-    let result = [];
-    try {
-        // Récupérer tous les batiments
-        const getAllBatimentQuery = 'SELECT * FROM batiment';
-        result = await client.query(getAllBatimentQuery);
-    }
-    catch (error) {
-        console.error('Erreur lors de la récupération des batiments :', error);
-    }
-    finally {
-        client.release();
-        return result.rows;
-    }
-
-};
-
-const getManybat = async (req) => {
-    let filtre = req.query.name;
-    let bats = [];
-    const client = await pool.connect();
-    try {
-
-        const getManyBatimentQuery = 'SELECT * FROM batiment WHERE name LIKE $1';
-        const getManyBatimentValues = ['%' + filtre + '%'];
-
-        bats = await client.query(getManyBatimentQuery, getManyBatimentValues);
-
-    }
-    catch (error) {
-        console.error('Erreur lors de la récupération des batiments :', error);
-    }
-    finally {
-        client.release();
-        return bats.rows;
-    }
-}
-
-
-const getAllBat = async (req) => {
-    const client = await pool.connect();
-    let result = [];
-    try {
-        // Récupérer tous les batiments
-        const getAllBatimentQuery = 'SELECT * FROM batiment';
-        result = await client.query(getAllBatimentQuery);
-    }
-    catch (error) {
-        console.error('Erreur lors de la récupération des batiments :', error);
-    }
-    finally {
-        client.release();
-        return result.rows;
-    }
-
-}
-
-const getOnebat = async (req) => {
-    const { name, posx, posz } = req.query;
-    let bats = [];
-    const client = await pool.connect();
-    try {
-
-            const getOneBatimentQuery = 'SELECT * FROM batiment WHERE name = $1 AND posx = $2 AND posz = $3';
-            const getOneBatimentValues = [name, posx, posz];
-
-            bats = await client.query(getOneBatimentQuery, getOneBatimentValues);
-
-
-    }
-    catch (error) {
-        console.error('Erreur lors de la récupération des batiments :', error);
-
-    }
-    finally {
-        client.release();
-        return bats.rows;
-    }
-}
 
 
 
 
-
-
-const deletebat = async (req) => {
-    let id_batiment = req.uuid
-    const client = await pool.connect();
-    try {
-        const deleteBatimentQuery = 'DELETE FROM batiment WHERE id_batiment = $1';
-        const deleteBatimentValues = [id_batiment];
-        await client.query(deleteBatimentQuery, deleteBatimentValues);
-    }
-    catch (error) {
-        console.error('Erreur lors de la suppression du batiment :', error);
-    }
-    finally {
-        client.release();
-    }
-}
 
 
 
 
 
 module.exports = {
-    getBatUUID,
-    getBatempUUID,
+
     getEmpUUID,
-    getBatdebug2,
-    getBatdebug,
     getManyEmp,
     getAllEmp,
-    getoneEmp,
-    getOnebat,
     createEmp,
     deleteEmp,
-    updateEmpFree,
-    getAllBat,
-    getManybat,
-    createbat,
-    deletebat,
-    getBatType,
     updateEmp,
-    updateBatStatus,
 }
 

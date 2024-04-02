@@ -1,53 +1,6 @@
 const pool = require("../database/db.js")
 
 
-const getToilette = async (req,res) => {
-    const client = await pool.connect();
-    try {
-        const toiletteQuery = 'SELECT * FROM toilette';
-        const toilettes = await client.query(toiletteQuery);
-
-        const toilette = toilettes.rows;
-        console.log("toilette",toilette);
-        return toilette;
-    } catch (error) {
-        console.log("error",error);
-        return error;
-    }
-    finally {
-        client.release();
-    }
-}
-
-const getAllEmplacementWithBatiment = async (req,res) => {
-    const client = await pool.connect();
-    try {
-        const emplacementQuery = 'SELECT b.nom , b.description , t.marker , t.id_type , emplacement.matricePoints , b.prestataire_id FROM emplacement INNER JOIN public.batiment b on emplacement.id_emplacement = b.id_emplacement INNER JOIN public.type t on t.id_type = b.type_id';
-        const res = await client.query(emplacementQuery);
-        return res.rows;
-    } catch (error) {
-        console.log("error",error);
-        return error;
-    }
-    finally {
-        client.release();
-    }
-}
-
-const getAllScenes = async (req,res) => {
-    const client = await pool.connect();
-    try {
-        const sceneQuery = 'SELECT * FROM scene';
-        const res = await client.query(sceneQuery);
-        return res.rows;
-    } catch (error) {
-        console.log("error",error);
-        return error;
-    }
-    finally {
-        client.release();
-    }
-}
 
 
 const getType = async (req,res) => {
@@ -65,11 +18,26 @@ const getType = async (req,res) => {
     }
 }
 
+const getTerrainWithPrestataire = async (req,res) => {
+    const client = await pool.connect();
+    try {
+        const terrainQuery = 'select nom , id_emplacement, description ,t.id_type ,prestataire_id , matricepoints , t.marker from emplacement inner join public.type t on t.id_type = emplacement.id_type  where prestataire_id is not null';
+        const res = await client.query(terrainQuery);
+        return res.rows;
+    } catch (error) {
+        console.log("error",error);
+        return error;
+    }
+    finally {
+        client.release();
+    }
+
+}
+
+
 module.exports = {
-    getToilette,
-    getAllEmplacementWithBatiment,
-    getAllScenes,
-    getType
+    getType,
+    getTerrainWithPrestataire
 }
 
 

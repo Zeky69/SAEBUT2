@@ -121,7 +121,6 @@ CREATE TABLE categorie_produit(
 CREATE TABLE tags(
    id_tag VARCHAR(50),
    libelle VARCHAR(50),
-   id_batiment VARCHAR(50),
    PRIMARY KEY(id_tag)
 );
 
@@ -140,45 +139,43 @@ CREATE TABLE tags(
 
 CREATE TABLE emplacement(
     id_emplacement VARCHAR(50),
+    id_type VARCHAR(50),
     nom VARCHAR(50),
     description VARCHAR(255),
-    posx DECIMAL(24,17),
-    posy DECIMAL(24,17),
-    posz DECIMAL(24,17),
-    rotationx INT,
     matricePoints JSON,
-    batiment_id VARCHAR(50),
+    prestataire_id INT,
+    FOREIGN KEY (id_type) REFERENCES type(id_type),
     PRIMARY KEY(id_emplacement)
 );
 
 
-    CREATE TABLE batiment(
-         id_batiment VARCHAR(50),
-         description VARCHAR(255),
-         nom VARCHAR(50),
-         name VARCHAR(50),
-         status VARCHAR(50),
-         posx DECIMAL(24,17),
-         posy DECIMAL(24,17),
-         posz DECIMAL(24,17),
-         rota DECIMAL(24,17),
-         prestataire_id INT NOT NULL,
-         image_path TEXT,
-         type_id VARCHAR(50),
-         id_emplacement VARCHAR(50) NOT NULL UNIQUE,
-        use_Resa BOOLEAN default true,
-         PRIMARY KEY(id_batiment),
-         FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
-         FOREIGN KEY(type_id) REFERENCES type(id_type),
-         FOREIGN KEY(prestataire_id) REFERENCES prestataire(id_prestataire)
-    );
+--     CREATE TABLE batiment(
+--          id_batiment VARCHAR(50),
+--          description VARCHAR(255),
+--          nom VARCHAR(50),
+--          name VARCHAR(50),
+--          status VARCHAR(50),
+--          posx DECIMAL(24,17),
+--          posy DECIMAL(24,17),
+--          posz DECIMAL(24,17),
+--          rota DECIMAL(24,17),
+--          prestataire_id INT NOT NULL,
+--          image_path TEXT,
+--          type_id VARCHAR(50),
+--          id_emplacement VARCHAR(50) NOT NULL UNIQUE,
+--         use_Resa BOOLEAN default true,
+--          PRIMARY KEY(id_batiment),
+--          FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
+--          FOREIGN KEY(type_id) REFERENCES type(id_type),
+--          FOREIGN KEY(prestataire_id) REFERENCES prestataire(id_prestataire)
+--     );
 
 
 
 
     CREATE TABLE reservation(
         id_reservation SERIAL,
-        id_batiment VARCHAR(50) NOT NULL,
+        id_emplacement VARCHAR(50) NOT NULL,
         id_prestataire INT NOT NULL,
         ouverture timestamp,
         duree varchar(50),
@@ -188,7 +185,7 @@ CREATE TABLE emplacement(
         color VARCHAR(50),
         status VARCHAR(50),
         PRIMARY KEY(id_reservation),
-        FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment),
+        FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
         FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)
     );
 
@@ -197,14 +194,14 @@ CREATE TABLE emplacement(
        id_event VARCHAR(50),
        description VARCHAR(255),
        nom VARCHAR(50),
-       id_batiment VARCHAR(50) NOT NULL,
+       id_emplacement VARCHAR(50) NOT NULL,
        color VARCHAR(50),
        status VARCHAR(50),
        start_date timestamp,
        end_date timestamp,
        id_prestataire INT NOT NULL,
        PRIMARY KEY(id_event),
-       FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment)
+       FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement)
     );
 
 

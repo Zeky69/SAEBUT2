@@ -15,7 +15,7 @@ exports.getToilette = async (req,res) => {
 
 exports.getAllEmplacementWithBatiment = async (req,res) => {
     try{
-        let response = await Map2DService.getAllEmplacementWithBatiment();
+        let response = await Map2DService.getTerrainWithPrestataire();
         if(response){
             return res.status(200).send(response);
     }
