@@ -11,19 +11,16 @@
 
     <div>
       <Map2DAdmin v-if="isMapView2D" />
-      <Map3DAdmin v-else />
     </div>
   </div>
 </template>
 
 <script>
 import Map2DAdmin from '../components/Map2D/Map2Dedition.vue';
-import Map3DAdmin from '../components/Map3D/Map3DAdmin.vue';
 
 export default {
   components: {
     Map2DAdmin,
-    Map3DAdmin
   },
   data() {
     return {

@@ -61,9 +61,6 @@ const routes = [
     path: '/panier',
     name: 'panier',
     component: () => import(/* webpackChunkName: "about" */ '../views/PanierView.vue')
-  }, {path: '/map3DUser',
-    name: 'map3DUser',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Map3DUser.vue')
   },
   {
     path: '/restauration',
