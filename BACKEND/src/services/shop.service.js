@@ -93,7 +93,7 @@ async function getRandomArticles(){
 async function getCommandes(){
     const client = await pool.connect();
     try{
-        const query = `SELECT * from commande;`
+        const query = `SELECT * from commande JOIN LATERAL ( SELECT * FROM ligneCommandeArticle WHERE id_commande = commande.id_commande) lca ON true; )`
 
         const res = await client.query(query)
         console.log("Récupération des commandes");
@@ -109,7 +109,7 @@ async function getCommandes(){
 async function getCommande(id_commande){
     const client = await pool.connect();
     try{
-        const query = `SELECT * from commande
+        const query = `SELECT * from commande join ligneCommandeArticle on commande.id_commande = ligneCommandeArticle.id_commande
         WHERE id_commande=$1;`;
 
         const res = await client.query(query,[id_commande])
@@ -273,6 +273,8 @@ module.exports ={
     getArticle,
     getAllCategorie,
     getCategorie,
+    getCommandes,
+    getCommande,
     getRandomArticles,
     getCategorieByproduct,
     setCommande,

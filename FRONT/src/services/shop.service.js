@@ -47,7 +47,7 @@ async function getArticlesByPrestataire(id) {
 }
 
 async function getArticlesByCategorieFromAPI(id) {
-    return getRequest(url+`/categorie/articles/${id}`, 'getArticlesByCategorie')
+    return getRequest(url+`articles/${id}`, 'getArticlesByCategorie')
 }
 
 async function getArticlesByCategorie(id) {
@@ -66,6 +66,7 @@ async function getCommandesFromAPI() {
 }
 
 async function getCommandes() {
+    console.log('getCommandes front')
     try {
         let answer = await getCommandesFromAPI();
         return answer;
@@ -93,7 +94,7 @@ async function updateCommandeLigneFromAPI(id, idligne) {
     return postRequest(url+`/commande/${id}/ligne/${idligne}`, 'updateCommandeLigne')
 }
 
-async function updateCommandeLigne(id, idligne, data) {
+async function updateCommandeLigne(id, idligne) {
     try {
         let answer = await updateCommandeLigneFromAPI(id, idligne);
         return answer;
@@ -187,6 +188,7 @@ getArticles,
     getArticle,
     getCommande,
     getCommandes,
+    updateCommandeLigne,
     getAllCategorie,
     getRandomArticles,
     getCategorieByProduct,

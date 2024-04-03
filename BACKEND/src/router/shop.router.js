@@ -11,7 +11,7 @@ router.get('/articles/prestataire/:id',shopController.getArticlesByPrestataire)
 
 
 router.get('/categorie',shopController.getAllCategorie)
-router.get('/categorie/articles/:id',shopController.getArticlesByCategorie)
+router.get('/articles/:id',shopController.getArticlesByCategorie)
 router.get('/categorie/:id',shopController.getCategorie)
 
 

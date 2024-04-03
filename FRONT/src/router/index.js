@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import store from "@/store";
 import utilisateur from "@/services/utilisateur";
 
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -127,6 +128,11 @@ const routes = [
         name: 'prestataire.map',
         component: ()=>import ('../components/Map2D/Map2D.vue')
 
+      },
+      {
+        path: 'produits',
+        name: 'prestataire.produits',
+        component: ()=>import ('../components/Prestatire/ListecommandePrestataire.vue')
       },
       {
         path:'*',

@@ -10,9 +10,7 @@
         </thead>
         <tbody>
         <tr v-for="(item, index) in commandes" :key="index" @click="viewCommandDetails(item)">
-          <td>{{ item.numero_commande }}</td>
-          <td>{{ item.nom_client }}</td>
-          <td>{{ item.prix_total }}</td>
+          <td>{{ item.id_commande }}</td>
         </tr>
         </tbody>
       </table>
@@ -21,8 +19,9 @@
 </template>
 
 <script>
-import adminService from "@/services/admin.service";
 import PageTitre from "@/components/Admin/PageTitre.vue";
+import shopService from "@/services/shop.service";
+
 
 export default {
   name: "AdminCommande",
@@ -40,10 +39,9 @@ export default {
     };
   },
   methods: {
-    fetchCommandes() {
-      adminService.getCommandes().then((response) => {
-        this.commandes = response.data;
-      });
+    async loadCommandes() {
+      this.commandes = await shopService.getCommandes();
+      console.log("Commandes récupérées :", this.commandes);
     },
     viewCommandDetails(commande) {
       // Affichez les détails de la commande, par exemple en mettant à jour la route ou en ouvrant un modal.
@@ -51,7 +49,8 @@ export default {
     },
   },
   mounted() {
-    this.fetchCommandes();
-  },
+    this.loadCommandes();
+  }
 };
+
 </script>
