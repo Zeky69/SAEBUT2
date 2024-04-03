@@ -151,12 +151,38 @@ INSERT INTO commande (id_user,date_commande) VALUES
 
 
 INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom,date) VALUES
-('151',1,1,2,'Zekeriya','Akburak','{"date":["2024-01-16"]}'),
-('15415',1,2,1,'Mhammed','Akburak','{"date":["2024-01-16"]}'),
-('5415',1,3,1,'Enzo','LeRaptor','{"date":["2024-01-15","2024-01-16"]}');
+('151',1,1,2,'Zekeriya','Akburak',NOW()),
+('15415',1,2,1,'Mhammed','Akburak',NOW()),
+('5415',1,3,1,'Enzo','LeRaptor',NOW());
 
 INSERT INTO ligneCommandeArticle(id_commande , id_produit , quantite) VALUES
-(1,1,5);
+(1,1,5),
+(2,1,2),
+(3,2,1);
 
+
+SELECT count(uuid) as nbr_billet_vendus, date FROM ligneCommandeBillet
+group by date;
+
+SELECT p.nom, sum(lca.quantite) as quantiteTotaleArticle, p.prix, p.prix*sum(lca.quantite) as prixTotalArticle
+FROM ligneCommandeArticle lca
+    JOIN produit p ON lca.id_produit = p.id_produit
+                                 group by p.id_produit
+;
+
+SELECT b.title, count(lcb.uuid) as quantiteTotaleBillet, b.price, b.price*count(lcb.uuid) as prixTotalBillet
+FROM ligneCommandeBillet lcb
+JOIN billet b ON lcb.id_billet = b.id
+    group by b.id, b.title, b.price
+;
+
+SELECT libelle_categorie, SUM(produitVendu.totalVenteProduit) as totalVenteCategorie
+from categorie_produit
+join (
+    SELECT p.categorie_id, p.prix*sum(l.quantite) as totalVenteProduit from lignecommandearticle l
+    join produit p on l.id_produit = p.id_produit
+    group by p.id_produit)
+produitVendu on categorie_produit.id_categorie = produitVendu.categorie_id
+group by id_categorie;
 
 

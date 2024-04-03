@@ -60,14 +60,23 @@
 
       </h2>
     </div>
+    <div>
+      <MyLineChart :data="ticketChartData" ></MyLineChart>
+      <Bar :data="articleChartData" ></Bar>
+      <Bar :data="ticketChartData2" ></Bar>
+      <Pie :data="categoryChartData" ></Pie>
+    </div>
   </div>
 </template>
 <script>
 import { mapActions, mapState } from "vuex";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
-
-import { Doughnut } from 'vue-chartjs'
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
+import {Line, Bar, Doughnut, Pie} from 'vue-chartjs'
 import PageTitre from "./PageTitre.vue";
+
+import statistiquesService from "@/services/statistiques.service";
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -75,8 +84,49 @@ ChartJS.register(ArcElement, Tooltip, Legend)
 export default {
   name: 'AdminInfoTemporaire',
   computed: {
-    ...mapState(['token', 'fname', 'lname', 'group_id', 'user_id', 'email'])
-  }, data: () => ({
+    ...mapState(['token', 'fname', 'lname', 'group_id', 'user_id', 'email']),
+    ticketChartData() {
+      return {
+        labels: this.ticketData.map(data => new Date(data.date).toISOString()),
+        datasets: [{
+          label: 'Nombre de billets vendus',
+          borderColor: 'rgb(75, 192, 192)',
+          data: this.ticketData.map(data => data.nbr_billet_vendus)
+        }]
+      };
+    },
+    articleChartData() {
+      return {
+        labels: this.topArticles.map(article => article.nom),
+        datasets: [{
+          label: 'Quantité totale vendue',
+          backgroundColor: 'rgb(255, 99, 132)',
+          data: this.topArticles.map(article => article.quantitetotalearticle)
+        }]
+      };
+    },
+    ticketChartData2() {
+      return {
+        labels: this.topTickets.map(ticket => ticket.title),
+        datasets: [{
+          label: 'Quantité totale vendue',
+          backgroundColor: 'rgb(54, 162, 235)',
+          data: this.topTickets.map(ticket => ticket.quantitetotalebillet)
+        }]
+      };
+    },
+    categoryChartData() {
+      return {
+        labels: this.topCategories.map(category => category.libelle_categorie),
+        datasets: [{
+          label: 'Total vente par catégorie',
+          backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)', 'rgb(75, 192, 192)'],
+          data: this.topCategories.map(category => category.totalventecategorie)
+        }]
+      };
+    },
+  },
+  data: () => ({
     data: {
       datasets: [{
         data: [0.5909,0.4091],
@@ -85,12 +135,18 @@ export default {
     },
     options :{
       rotation: -100,
-
-    }
+    },
+    ticketData: [],
+    topArticles: [],
+    topTickets: [],
+    topCategories: []
   }),
   components: {
     PageTitre,
-    Doughnut
+    Doughnut,
+    MyLineChart: Line,
+    Bar,
+    Pie
   },
   methods: {
     ...mapActions(['logout']),
@@ -98,18 +154,65 @@ export default {
       this.$router.replace('/login');
       this.logout();
     },
-    async renderDonutChart() {
-      const ctx = document.getElementById('donutChart').getContext('2d');
-
-      this.gradient = await ctx.createLinearGradient(0, 0, 0, 100);
-      this.gradient.addColorStop(0, 'rgb(178, 94, 231)'); // #B25EE7
-      this.gradient.addColorStop(1, 'rgb(217, 69, 69)'); // #D94545
-
+    async getTicketData() {
+      try {
+        let response = await statistiquesService.getVenteBilletParDate();
+        if (!response.error) {
+          this.ticketData = response;
+          console.log("ticket "+this.ticketData);
+        } else {
+          console.log("Erreur lors de la récupération des réservations");
+        }
+      } catch (e) {
+        console.error(e);
+      }
     },
-    mounted() {
-      this.renderDonutChart();
+    async getTopArticles() {
+      try {
+        let response = await statistiquesService.getVenteArticle();
+        if (!response.error) {
+          this.topArticles = response;
+          console.log("article "+this.topArticles);
+        } else {
+          console.log("Erreur lors de la récupération des réservations");
+        }
+      } catch (e) {
+        console.error(e);
+      }
     },
-  }
+    async getTopTickets() {
+      try {
+        let response = await statistiquesService.getVenteBilletParType();
+        if (!response.error) {
+          this.topTickets = response;
+          console.log("top ticket "+this.topTickets);
+        } else {
+          console.log("Erreur lors de la récupération des réservations");
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    async getTopCategories() {
+      try {
+        let response = await statistiquesService.getVenteParCategorie();
+        if (!response.error) {
+          this.topCategories = response;
+          this.topCategories.map(category => console.log("cat "+category.libelle_categorie))
+        } else {
+          console.log("Erreur lors de la récupération des réservations");
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  },
+  mounted() {
+    this.getTicketData();
+    this.getTopArticles();
+    this.getTopTickets();
+    this.getTopCategories();
+  },
 }
 </script>
 
