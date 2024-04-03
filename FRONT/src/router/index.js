@@ -169,9 +169,12 @@ const routes = [
           }, {
           path: ':idprestataire',
             component : () => import('../components/Admin/AdminEditPrestataire.vue')
-          }
-
+          },
         ]
+      },
+      {
+        path: 'profil',
+        component: () => import("../views/AdminProfil.vue")
       },
       {
         path: 'map',

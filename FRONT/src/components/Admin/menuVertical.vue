@@ -10,10 +10,10 @@
         </div>
       </div>
       <div class="profil-container" :style="{ background: 'linear-gradient(90deg,' + color1 + ' 0%, '+ color2 +' 100%)' }">
-        <img src="@/assets/menu/stephane.jpg" alt="">
+        <img :src="getImage(path)" alt="">
         <div class="profil-info">
           <span class="profil-info-name">{{lname}} {{fname}}</span>
-          <span class="profil-info-role">Organisateur</span>
+          <span class="profil-info-role">{{role}}</span>
         </div>
       </div>
       <ul class="ul-container">
@@ -60,6 +60,7 @@
 
 <script>
 import {mapActions, mapState} from "vuex";
+import {getImage} from "@/services/image.service";
 
 export default {
   name: 'MenuVertical',
@@ -70,6 +71,7 @@ export default {
     },color1 : String,
     color2:String,
     role : String,
+    path :String
   },
   computed :{
     ...mapState(['lname','fname'])
@@ -79,6 +81,7 @@ export default {
     activeIndex: 0,
   }),
   methods: {
+    getImage,
     ...mapActions(['logout']),
     deconnexion(){
       this.$router.replace('/');
