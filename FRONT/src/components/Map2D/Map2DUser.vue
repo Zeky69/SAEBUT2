@@ -77,7 +77,7 @@ import {
 } from 'leaflet';
 import InfoPanelUser from "@/components/Map2D/infoPanelUser.vue";
 import barSelect from "@/components/barSelect.vue";
-import {getMap2DBat, getMap2DType} from "@/services/map2D.service";
+import {getAllEmpWithPrestataire, getMap2DType} from "@/services/map2D.service";
 
 
 delete Icon.Default.prototype._getIconUrl;
@@ -108,7 +108,7 @@ export default {
     });
 
 
-    getMap2DBat().then((response) => {
+    getAllEmpWithPrestataire().then((response) => {
 
       console.log(response)
 

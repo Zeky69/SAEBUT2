@@ -67,7 +67,7 @@ export default {
           id_prestataire: this.id_prestataire,
           nom: this.nom,
           commentaire: this.commentaire,
-          note: this.rating[0],
+          note: this.rating[0]-1,
           }).then((res) => {
             console.log(res);
             this.commentaires.push(res);

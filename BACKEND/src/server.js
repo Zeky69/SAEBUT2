@@ -6,7 +6,6 @@ const fileUpload = require('express-fileupload');
 const prestaRoutes = require('./router/prestataires.router');
 const adminRoutes = require('./router/admin.router');
 const userRoutes = require('./router/utilisateur.router');
-const mapPrestatairesRoutes = require('./router/mapPrestataires.router')
 const sceneRoutes = require('./router/scnene.router');
 const map2DRoutes = require('./router/map2D.router');
 const bodyParser = require('body-parser');
@@ -61,7 +60,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/prestataires", prestaRoutes);
 app.use("/map2D", map2DRoutes);
 app.use("/admin", adminRoutes);
-app.use("/mapPrestataires", mapPrestatairesRoutes);
 app.use("/scene", sceneRoutes);
 app.use("/user", userRoutes);
 app.use("/reservation", resaRoutes);
