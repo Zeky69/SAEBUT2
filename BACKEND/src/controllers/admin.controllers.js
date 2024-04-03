@@ -8,8 +8,7 @@ exports.getAllUsers = async (req, res) => {
         if (users.length === 0) {
           return res.status(404).json({ message: 'Aucun utilisateur trouvé' });
         }
-        console.log(users)
-    
+
         res.status(200).json(users);
       } catch (error) {
         console.error('Erreur lors de la récupération des utilisateurs :', error);
@@ -38,6 +37,19 @@ exports.updatePrestataireStatus = async (req, res) => {
         res.status(500).json({ message: 'Erreur serveur' });
     }
 }
+
+exports.removePrestataireProfile = async (req, res) => {
+    try {
+        const { user_id, prestataire_id } = req.params;
+        await adminService.removePrestataire(user_id, prestataire_id);
+
+        res.status(200).json({ success: true, message: 'Profil prestataire supprimé avec succès.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Une erreur est survenue lors de la suppression du profil prestataire.' });
+    }
+};
+
 exports.saveUser = (req, res) => {
     adminService.createUser(req,(error,data)=>{
         if (error) {

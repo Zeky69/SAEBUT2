@@ -93,16 +93,6 @@ CREATE TABLE categorie_produit(
 	PRIMARY KEY(id_categorie)
 );
 
-CREATE TABLE produit(
-   id_produit SERIAL,
-   nom VARCHAR(50),
-   prix NUMERIC(5,2),
-   stock INT,
-   photo VARCHAR(50),
-   categorie_id INT,
-   FOREIGN KEY(categorie_id) REFERENCES categorie_produit(id_categorie),
-   PRIMARY KEY(id_produit)
-);
 
 CREATE TABLE type(
    id_type VARCHAR(50),
@@ -135,6 +125,20 @@ CREATE TABLE prestataire(
    FOREIGN KEY(etat_id) REFERENCES ETAT(etat_id)
 );
 
+CREATE TABLE produit(
+                        id_produit SERIAL,
+                        nom VARCHAR(50),
+                        prix NUMERIC(5,2),
+                        stock INT,
+                        photo VARCHAR(50),
+                        categorie_id INT,
+                        prestataire_id INT,
+                        FOREIGN KEY(categorie_id) REFERENCES categorie_produit(id_categorie),
+                        FOREIGN KEY(prestataire_id) REFERENCES prestataire(id_prestataire),
+                        PRIMARY KEY(id_produit)
+);
+
+
 CREATE TABLE emplacement(
     id_emplacement VARCHAR(50),
     id_type VARCHAR(50),
@@ -143,6 +147,7 @@ CREATE TABLE emplacement(
     matricePoints JSON,
     prestataire_id INT,
     use_Resa BOOLEAN default true,
+    accepted BOOLEAN default false,
     FOREIGN KEY (id_type) REFERENCES type(id_type),
     PRIMARY KEY(id_emplacement)
 );
@@ -282,6 +287,7 @@ CREATE TABLE ligneCommandeBillet(
    id_commande INT NOT NULL,
    id_produit INT NOT NULL,
    quantite INT NOT NULL,
+   valide BOOLEAN NOT NULL,
    PRIMARY KEY(id_commande, id_produit),
    FOREIGN KEY(id_produit) REFERENCES produit(id_produit)
  );

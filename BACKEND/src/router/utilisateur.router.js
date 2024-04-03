@@ -78,7 +78,10 @@ router.post(
 router.get("/prestataire/:id", userController.getPrestataireObject);
 
 router.get(
-  "/:token",
+  "/:token",(req,res,next)=>{
+    console.log("Token reçu")
+    next()
+  },
   userMiddlewares.verifyTokenMiddleware,
   userController.getInformationWithToken
 );

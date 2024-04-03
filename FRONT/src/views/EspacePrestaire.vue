@@ -2,7 +2,7 @@
 
   <div class="app">
     <div class="menu-vertical">
-      <menu-vertical :list-menu="ListMenu" role="Prestataire" color1="#688e96" color2="#315377"/>
+      <menu-vertical :list-menu="ListMenu" role="Prestataire" color1="#688e96" color2="#315377" :path="path"/>
     </div>
     <div class="body-container">
       <router-view></router-view>
@@ -19,6 +19,7 @@ export default {
   name: 'EspacePrestataire',
   components: {MenuVertical},
   data: () => ({
+    path:"",
     ListMenu: [
       {
         title: "Tableau de bord",
@@ -47,16 +48,23 @@ export default {
     ]
   }),
   computed: {
-    ...mapState(['token','fname','lname','group_id','user_id','email'])
+    ...mapState(['token','fname','lname','group_id','user_id','email','prestataireObject'])
   },
   methods:{
-    ...mapActions(['logout']),
+    ...mapActions(['logout','getPrestataireObject']),
     deconnexion(){
       this.logout();
-    }
+    },
+    async getInformation() {
+      await this.getPrestataireObject(this.user_id);
+      const presta = this.prestataireObject;
+
+      this.path = presta.photo_profil;
+
+    },
   },
   mounted() {
-    console.log(this.group_id)
+    this.getInformation()
   }
 }
 </script>

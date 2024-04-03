@@ -1,5 +1,6 @@
 const pool = require("../database/db.js")
 const { v4: uuidv4 } = require('uuid');
+const {query} = require("express");
 
 
 
@@ -19,10 +20,10 @@ const getType = async (req,res) => {
     }
 }
 
-const getTerrainWithPrestataire = async (req,res) => {
+const getTerrainWithPrestataireValid = async (req,res) => {
     const client = await pool.connect();
     try {
-        const terrainQuery = 'select nom , id_emplacement, description ,t.id_type ,prestataire_id , matricepoints , t.marker from emplacement inner join public.type t on t.id_type = emplacement.id_type  where prestataire_id is not null';
+        const terrainQuery = 'select nom , id_emplacement, description ,t.id_type ,prestataire_id , matricepoints , t.marker from emplacement inner join public.type t on t.id_type = emplacement.id_type  where prestataire_id is not null and accepted = true ';
         const res = await client.query(terrainQuery);
         return res.rows;
     } catch (error) {
@@ -105,12 +106,68 @@ const deleteEmp = async (id) => {
 
 const updateEmp = async (req) => {
     const client = await pool.connect();
-    let { uuid, description, nom , type_id, prestataire_id , matricepoints} = req.body;
+    let uuid = req.params.id;
+    let { description, nom , type_id, prestataire_id , matricepoints ,accept} = req.body;
+    let sqlQuery = "UPDATE emplacement SET";
+    let sqlValues = [];
+    let sqlParams = [];
+    let i = 1;
+    if (description) {
+        sqlParams.push(`description = $${i}`);
+        sqlValues.push(description);
+        i++;
+    }
+    if (nom) {
+        sqlParams.push(`nom = $${i}`);
+        sqlValues.push(nom);
+        i++;
+    }
+    if (type_id) {
+        sqlParams.push(`id_type = $${i}`);
+        sqlValues.push(type_id);
+        i++;
+    }
+    if (prestataire_id) {
+        sqlParams.push(`prestataire_id = $${i}`);
+        sqlValues.push(prestataire_id);
+        i++;
+    }
+    if (matricepoints) {
+        sqlParams.push(`matricepoints = $${i}`);
+        sqlValues.push(matricepoints);
+        i++;
+    }
+    if (accept) {
+        sqlParams.push(`accepted = $${i}`);
+        sqlValues.push(accept);
+        i++;
+    }
+    sqlQuery += " " + sqlParams.join(", ") + " WHERE id_emplacement = $"+i+" RETURNING *";
+
+    sqlValues.push(uuid);
+    try {
+        let res;
+        res = await client.query(sqlQuery, sqlValues);
+        console.log("Modification réussie de l'emplacement avec id" + uuid);
+        return res.rows;
+    } catch (err) {
+        console.log(err);
+        return err;
+
+}
+    finally {
+        client.release();
+
+    }
+}
+
+const updateEmpPresataire = async (uuid,description, nom ) => {
+    const client = await pool.connect();
 
     try {
         let res;
-        let sql = "UPDATE emplacement SET description = $1, nom = $2 , id_type= $3, prestataire_id = $4 , matricepoints= $5  WHERE id_emplacement = $6 RETURNING *";
-        res = await client.query(sql, [description, nom, type_id, prestataire_id , {matricepoints}, uuid]);
+        let sql = "UPDATE emplacement SET description = $1, nom = $2 WHERE id_emplacement = $3 RETURNING *";
+        res = await client.query(sql, [description, nom, uuid]);
         console.log("Modification réussie de l'emplacement avec id" + uuid);
         return res.rows;
     } catch (err) {
@@ -124,14 +181,139 @@ const updateEmp = async (req) => {
 
 
 
+//verifier si l'emplacement apartient au prestataire
+
+const isLocationBelongsToProvider = async (id_emplacement , prestataire_id) => {
+    const client = await pool.connect();
+
+
+    try {
+        let res;
+        let sql = "SELECT * FROM emplacement WHERE id_emplacement = $1 AND prestataire_id = $2";
+        res = await client.query(sql, [id_emplacement, prestataire_id]);
+        return res.rows.length > 0;
+    }
+    catch (err) {
+        console.log(err);
+        return false;
+    }
+    finally {
+        client.release();
+    }
+
+}
+
+
+
+
+const askEmp = async (id_prestataire,id_emplacement) => {
+    const client = await pool.connect();
+
+
+    try {
+        let res;
+        let sql = "UPDATE emplacement SET prestataire_id = $1 , accepted = false WHERE id_emplacement = $2 RETURNING *";
+        res = await client.query(sql, [id_prestataire, id_emplacement]);
+        console.log("Modification réussie de l'emplacement avec id" + id_emplacement);
+        return res.rows;
+    } catch (err) {
+        console.log(err);
+        return err;
+
+    }finally {
+        client.release();
+    }
+
+}
+
+
+const acceptEmp = async (id_emplacement) => {
+    const client = await pool.connect();
+
+
+    try {
+        let res;
+        let sql = "UPDATE emplacement SET accepted = true WHERE id_emplacement = $2 RETURNING *";
+        res = await client.query(sql, [id_emplacement]);
+        return res.rows;
+    } catch (err) {
+        console.log(err);
+        return err;
+
+    }finally {
+        client.release();
+    }
+
+}
+
+const refuseEmp = async (id_emplacement) => {
+    const client = await pool.connect();
+    try {
+        let res;
+        let sql = "UPDATE emplacement SET prestataire_id = null , accepted = false WHERE id_emplacement = $2 RETURNING *";
+        res = await client.query(sql, [id_emplacement]);
+        return res.rows;
+    }
+    catch (err) {
+        console.log(err);
+        return
+    }
+    finally {
+        client.release();
+    }
+}
+
+const checkEmpIsFree = async (id_emplacement) => {
+    const client = await pool.connect();
+    try {
+        let res;
+        let sql = "SELECT * FROM emplacement WHERE id_emplacement = $1 AND prestataire_id IS NULL";
+        res = await client.query(sql, [id_emplacement]);
+        return res.rows.length > 0;
+    }
+    catch (err) {
+        console.log(err);
+        return false;
+    }
+    finally {
+        client.release();
+    }
+
+}
+
+const freeEmp = async (id_emplacement) => {
+    const client = await pool.connect();
+    try {
+        let res;
+        let sql = "UPDATE emplacement SET prestataire_id = null , accepted = false WHERE id_emplacement = $1 RETURNING *";
+        res = await client.query(sql, [id_emplacement]);
+        return res.rows;
+    }
+    catch (err) {
+        console.log(err);
+        return
+    }
+    finally {
+        client.release();
+    }
+}
+
+
 
 module.exports = {
     getType,
-    getTerrainWithPrestataire,
+    getTerrainWithPrestataireValid,
     getAllEmp,
     createEmp,
     deleteEmp,
     updateEmp,
+    askEmp,
+    acceptEmp,
+    refuseEmp,
+    checkEmpIsFree,
+    isLocationBelongsToProvider,
+    updateEmpPresataire,
+    freeEmp
 }
 
 

@@ -36,7 +36,7 @@ INSERT INTO UTILISATEURS(FIRST_NAME,LAST_NAME,email,Date_Created,Group_Id) VALUE
 		                                     (3,'$2b$10$Q6WR1IlxWBcityVVNbO2p.ehl3vuLtRKnN2klfpSR6xQpASf9cIIu');
 
 
-INSERT INTO prestataire( description, nom, id_user, etat_id ,photo_profil) VALUES ('Drake le meilleur chanteur','Drake','3',2,'drake.png');
+INSERT INTO prestataire( description, nom, id_user, etat_id ,photo_profil) VALUES ('Drake le meilleur chanteur','Drake','3',2,'drake.jpeg');
 
 
 INSERT INTO tags VALUES ('1', 'accessible handicapé'),
@@ -112,12 +112,12 @@ INSERT INTO produit (nom, prix, stock, categorie_id,photo) VALUES
 
 
 -- Ajout des produits pour la catégorie 'Accessoires'
-INSERT INTO produit (nom, prix, stock, categorie_id, photo) VALUES
-    ('Coque de téléphone artistique', 12.99, 40, 4,'coque_telephone.png'),
-    ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png'),
-    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png'),
-    ('Étui à lunettes original', 8.49, 50, 4,'etui.png'),
-    ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png');
+INSERT INTO produit (nom, prix, stock, categorie_id, photo,prestataire_id) VALUES
+    ('Coque de téléphone artistique', 12.99, 40, 4,'coque_telephone.png',1),
+    ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png',1),
+    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png',2),
+    ('Étui à lunettes original', 8.49, 50, 4,'etui.png',2),
+    ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png',1);
 
 
 
@@ -155,10 +155,8 @@ INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom,dat
 ('15415',1,2,1,'Mhammed','Akburak',NOW()),
 ('5415',1,3,1,'Enzo','LeRaptor',NOW());
 
-INSERT INTO ligneCommandeArticle(id_commande , id_produit , quantite) VALUES
-(1,1,5),
-(2,1,2),
-(3,2,1);
+INSERT INTO ligneCommandeArticle(id_commande , id_produit ,valide, quantite) VALUES
+(1,1,false,5);
 
 
 SELECT count(uuid) as nbr_billet_vendus, date FROM ligneCommandeBillet
