@@ -4,11 +4,11 @@ const sendEmail = require("../services/SendMail");
 const shopService = require("../services/shop.service");
 const userService = require("../services/utilisateur.service");
 
-exports.getArticles = async (req, res) => {
+exports.getArticle = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const articles = await shopService.getArticles(id);
+    const articles = await shopService.getArticle(id);
 
     if (!articles) {
       return res.status(404).send("Aucun article trouvé pour cette catégorie.");
@@ -20,6 +20,104 @@ exports.getArticles = async (req, res) => {
     return res.status(500).send("Erreur lors de la récupération des articles");
   }
 };
+
+exports.getAllArticles = async (req, res) => {
+    try {
+        const articles = await shopService.getAllArticles();
+
+        if (!articles) {
+        return res.status(404).send("Aucun article trouvé.");
+        }
+
+        return res.status(200).json(articles);
+    } catch (error) {
+        console.error("Controller encountered an unexpected error: ", error);
+        return res.status(500).send("Erreur lors de la récupération des articles");
+    }
+}
+
+exports.getArticlesByPrestataire = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const articles = await shopService.getArticlesByPrestataire(id);
+
+        if (!articles) {
+        return res.status(404).send("Aucun article trouvé pour ce prestataire.");
+        }
+
+        return res.status(200).json(articles);
+    } catch (error) {
+        console.error("Controller encountered an unexpected error: ", error);
+        return res.status(500).send("Erreur lors de la récupération des articles");
+    }
+}
+
+exports.getArticlesByCategorie = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const articles = await shopService.getArticlesByCategorie(id);
+
+        if (!articles) {
+        return res.status(404).send("Aucun article trouvé pour cette catégorie.");
+        }
+
+        return res.status(200).json(articles);
+    } catch (error) {
+        console.error("Controller encountered an unexpected error: ", error);
+        return res.status(500).send("Erreur lors de la récupération des articles");
+    }
+}
+
+exports.getCommandes = async (req, res) => {
+    try {
+        const commandes = await shopService.getCommandes();
+
+        if (!commandes) {
+        return res.status(404).send("Aucune commande trouvée.");
+        }
+
+        return res.status(200).json(commandes);
+    } catch (error) {
+        console.error("Controller encountered an unexpected error: ", error);
+        return res.status(500).send("Erreur lors de la récupération des commandes");
+    }
+}
+
+exports.getCommande = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const commande = await shopService.getCommande(id);
+
+        if (!commande) {
+        return res.status(404).send("Aucune commande trouvée.");
+        }
+
+        return res.status(200).json(commande);
+    } catch (error) {
+        console.error("Controller encountered an unexpected error: ", error);
+        return res.status(500).send("Erreur lors de la récupération des commandes");
+    }
+}
+
+exports.updateCommandeLigne = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const commande = await shopService.updateCommandeLigne(id);
+
+        if (!commande) {
+        return res.status(404).send("Aucune commande trouvée.");
+        }
+
+        return res.status(200).json(commande);
+    } catch (error) {
+        console.error("Controller encountered an unexpected error: ", error);
+        return res.status(500).send("Erreur lors de la récupération des commandes");
+    }
+}
 
 exports.getRandomArticles = async (req, res) => {
   console.log("ici");

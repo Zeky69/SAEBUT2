@@ -4,12 +4,63 @@ const pool = require('../database/db');
 const { v4: uuidv4 } = require('uuid');
 
 
-async function getArticles(id_categorie){
+async function getAllArticles(){
+    const client = await pool.connect();
+    try{
+        const query = `SELECT * from produit;`
+
+        const res = await client.query(query)
+        console.log("Récupération des articles réussis");
+        return res.rows;
+    }catch(err){
+        console.log("Echec récupération des articles")
+        console.log(err)
+    }finally{
+        client.release();
+    }
+}
+
+async function getArticlesByPrestataire(id_prestataire){
+    const client = await pool.connect();
+    try{
+        const query = `SELECT * from produit
+        WHERE id_prestataire=$1;`;
+
+        const res = await client.query(query,[id_prestataire])
+        console.log("Récupération des articles réussis");
+        return res.rows;
+    }catch(err){
+        console.log("Echec récupération des articles")
+        console.log(err)
+    }finally{
+        client.release();
+    }
+}
+
+async function getArticle(id_produit){
+    const client = await pool.connect();
+    try{
+        const query = `SELECT * from produit
+        WHERE id_produit=$1;`;
+
+        const res = await client.query(query,[id_produit])
+        console.log("Récupération de l'article réussis");
+        return res.rows[0];
+    }catch(err){
+        console.log("Echec récupération de l'article")
+        console.log(err)
+    }finally{
+        client.release();
+    }
+}
+
+
+async function getArticlesByCategorie(id_categorie){
     const client = await pool.connect();
     try{
         const query = `SELECT * from produit
         WHERE categorie_id=$1;`;
-        
+
         const res = await client.query(query,[id_categorie])
         console.log("Récupération des articles réussis");
         return res.rows;
@@ -38,6 +89,62 @@ async function getRandomArticles(){
         client.release();
     }
 }
+
+async function getCommandes(){
+    const client = await pool.connect();
+    try{
+        const query = `SELECT * from commande;`
+
+        const res = await client.query(query)
+        console.log("Récupération des commandes");
+        return res.rows;
+    }catch(err){
+        console.log("Echec récupération des commandes")
+        console.log(err)
+    }finally{
+        client.release();
+    }
+}
+
+async function getCommande(id_commande){
+    const client = await pool.connect();
+    try{
+        const query = `SELECT * from commande
+        WHERE id_commande=$1;`;
+
+        const res = await client.query(query,[id_commande])
+        console.log("Récupération des commandes");
+        return res.rows[0];
+    }catch(err){
+        console.log("Echec récupération des commandes")
+        console.log(err)
+    }finally{
+        client.release();
+    }
+}
+
+
+async function updateCommandeLigne(id_commande,id_produit) {
+    //valider une ligne de commande
+    const client = await pool.connect();
+    try {
+        const query = `UPDATE ligneCommandeArticle
+                       SET valide= true
+                       WHERE id_commande = $1
+                         AND id_produit = $2;`;
+
+        const res = await client.query(query, [id_commande, id_produit])
+        console.log("Validation de la ligne de commande réussie");
+        return true;
+    }
+    catch (err) {
+        console.log("Echec validation de la ligne de commande")
+        console.log(err)
+        return false;
+    }
+}
+
+
 
 async function getAllCategorie(){
     const client = await pool.connect();
@@ -160,7 +267,10 @@ async function setCommandeLineBillet(id_commande,id_billet,subId,nom,prenom, dat
 
 
 module.exports ={
-    getArticles,
+    getAllArticles,
+    getArticlesByCategorie,
+    getArticlesByPrestataire,
+    getArticle,
     getAllCategorie,
     getCategorie,
     getRandomArticles,
