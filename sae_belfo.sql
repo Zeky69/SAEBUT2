@@ -273,7 +273,7 @@ CREATE TABLE ligneCommandeBillet(
    subId INT NOT NULL,
    nom VARCHAR(100),
    prenom VARCHAR(100),
-   date timestamp,
+   date JSON,
    PRIMARY KEY(uuid),
    FOREIGN KEY(id_billet,subId) REFERENCES sousBillet(id_billet,subId)
  );
