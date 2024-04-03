@@ -2,13 +2,13 @@ import {getRequest, postRequest} from "@/services/axios.service";
 
 const url='/shop';
 
-async function getArticlesFromAPI(id) {
-    return getRequest(url+`/articles/${id}`, 'getArticles')
+async function getArticleFromAPI(id) {
+    return getRequest(url+`/articles/${id}`, 'getArticle')
 }
 
-async function getArticles(id) {
+async function getArticle(id) {
     try {
-        let answer = await getArticlesFromAPI(id);
+        let answer = await getArticleFromAPI(id);
         console.log(answer)
         return answer;
     } catch (error) {
@@ -16,6 +16,95 @@ async function getArticles(id) {
         throw error;
     }
 }
+
+async function getArticlesFromAPI() {
+    return getRequest(url+'/articles', 'getArticles')
+}
+
+async function getArticles() {
+    try {
+        let answer = await getArticlesFromAPI();
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des articles', error.message);
+        throw error;
+    }
+}
+
+async function getArticlesByPrestataireFromAPI(id) {
+    return getRequest(url+`/articles/prestataire/${id}`, 'getArticlesByPrestataire')
+}
+
+async function getArticlesByPrestataire(id) {
+    try {
+        let answer = await getArticlesByPrestataireFromAPI(id);
+        return answer;
+    }
+    catch (error) {
+        console.error('Erreur lors de la récupération des articles', error.message);
+        throw error;
+    }
+}
+
+async function getArticlesByCategorieFromAPI(id) {
+    return getRequest(url+`articles/${id}`, 'getArticlesByCategorie')
+}
+
+async function getArticlesByCategorie(id) {
+    try {
+        let answer = await getArticlesByCategorieFromAPI(id);
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des articles', error.message);
+        throw error;
+    }
+}
+
+
+async function getCommandesFromAPI() {
+    return getRequest(url+'/commande', 'getCommandes')
+}
+
+async function getCommandes() {
+    console.log('getCommandes front')
+    try {
+        let answer = await getCommandesFromAPI();
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des commandes', error.message);
+        throw error;
+    }
+}
+
+async function getCommandeFromAPI(id) {
+    return getRequest(url+`/commande/${id}`, 'getCommande')
+}
+
+async function getCommande(id) {
+    try {
+        let answer = await getCommandeFromAPI(id);
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des commandes', error.message);
+        throw error;
+    }
+}
+
+async function updateCommandeLigneFromAPI(id, idligne) {
+    return postRequest(url+`/commande/${id}/ligne/${idligne}`, 'updateCommandeLigne')
+}
+
+async function updateCommandeLigne(id, idligne) {
+    try {
+        let answer = await updateCommandeLigneFromAPI(id, idligne);
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des commandes', error.message);
+        throw error;
+    }
+}
+
+
 
 async function getRandomArticlesFromAPI() {
     return getRequest(url+'/random', 'getRandomArticles')
@@ -94,6 +183,12 @@ export async function createCommandeWithoutAccount(data) {
 export default {
 getArticles,
     getCategorie,
+    getArticlesByCategorie,
+    getArticlesByPrestataire,
+    getArticle,
+    getCommande,
+    getCommandes,
+    updateCommandeLigne,
     getAllCategorie,
     getRandomArticles,
     getCategorieByProduct,
