@@ -4,4 +4,7 @@
 /BACKEND/src/node_modules/
 BACKEND/src/.env
 
+package-lock.json
+
 FRONT/src/services/axios.service.js
+FRONT/src/components/Map3D/MapTest.vue

@@ -1,49 +1,133 @@
 //prestataire.services.js
-
-const fs = require('fs');
-const path = require('path');
 const { v4: uuidv4 } = require('uuid');
-const filePath = path.join(__dirname, '..','prestataires.json');
+const pool = require("../database/db.js")
+const bcrypt = require("bcrypt")
+const saltRounds = 10;
 
-const createUser = (prenom,nom,callback) => {
-    let users = [];
-    try {
-        const data = fs.readFileSync(filePath, 'utf8');
-        const dataStr = data.toString();
-        users = JSON.parse(dataStr);
-    } catch (errorLecture) {
-        console.log(errorLecture);
-    }
-    const newUser = {id: uuidv4(), nom: nom , prenom: prenom};
-    users.push(newUser);
-    try {
-        fs.writeFileSync(filePath, JSON.stringify(users));
-        callback(null, "success");
-    } catch (errorEcriture) {
-        callback(errorEcriture, null);
-    }
-};
 
-const getAllUsers = (req) => {
-    let users = [];
-    let filtre = req.body.filtre;
+
+
+const getPrestatairesEtatAccepte = async () => {
+    let resultat = null;
+    const client = await pool.connect();
     try {
-        const data = fs.readFileSync(filePath, 'utf8');
-        const dataStr = data.toString();
-        temp = JSON.parse(dataStr);
-        for (let i = 0; i < temp.length; i++) {
-            if (temp[i].nom.includes(filtre) ){
-                users.push(temp[i]);
-            }
-        }
-    } catch (errorLecture) {
-        console.log(errorLecture);
+        let sql = 'select * from prestataire WHERE etat_id = 2 and nom != $1 ORDER BY id_prestataire ASC';
+        resultat = await client.query(sql,["belforaine"]);
+        return resultat.rows;
     }
-    return users;
+    catch (error) {
+        console.log(error);
+        return error;
+    }
+    finally {
+        client.release();
+    }
 }
 
+const getPrestatairesTypes = async () => {
+    let resultat = null;
+    const client = await pool.connect();
+    try {
+        let sql = 'SELECT DISTINCT t.libelle , t.id_type , emplacement.prestataire_id FROM emplacement INNER JOIN public.type t on t.id_type = emplacement.id_type WHERE emplacement.id_emplacement in (SELECT id_emplacement from emplacement WHERE emplacement.prestataire_id is not null);';        resultat = await client.query(sql);
+        return resultat.rows;
+    }
+    catch (error) {
+        console.log(error);
+        return error;
+    }
+    finally {
+        client.release();
+    }
+}
+
+const getPrestataireById = async (id) => {
+    let resultat = null;
+    const client = await pool.connect();
+    try {
+        let sql = 'select * from prestataire WHERE id_prestataire = $1';
+        let values = [id];
+        resultat = await client.query(sql, values);
+        console.log("resultat",resultat.rows);
+        return resultat.rows;
+    }
+    catch (error) {
+        console.log("error",error);
+        return error;
+    }
+    finally {
+        client.release();
+    }
+}
+
+
+const updatePrestatairePage = async (prestataire) => {
+
+    const client = await pool.connect();
+    try {
+        let sql = 'UPDATE prestataire SET page_info = $1 WHERE id_prestataire = $2';
+        let values = [prestataire.page_info,prestataire.id_prestataire];
+        await client.query(sql, values);
+        return true;
+    }
+    catch (error) {
+        console.log(error);
+        return false;
+    }
+    finally {
+        client.release();
+    }
+
+}
+
+async function updateUserProfile(user_id, nomEntreprise, description,photoDeProfil,prenom,nom,motDePasse,email){
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+
+    let query = `UPDATE prestataire 
+        SET nom=$1, description=$2, photo_profil=$3
+        WHERE id_user=$4;`;
+
+    let res = await client.query(query, [
+      nomEntreprise,
+      description,
+      photoDeProfil,
+      user_id,
+    ]);
+
+    query = `UPDATE utilisateurs
+        SET LAST_NAME=$1, FIRST_NAME=$2, email=$3
+        WHERE user_id=$4;`;
+
+    res = await client.query(query, [nom, prenom, email, user_id]);
+
+    if (motDePasse) {
+      const hashedPassword = bcrypt.hashSync(motDePasse, saltRounds);
+
+      query = `UPDATE MOTS_DE_PASSE_UTILISATEURS 
+            SET Password=$1 where user_id=$2;`;
+
+      res = await client.query(query, [hashedPassword, user_id]);
+    }
+    await client.query("COMMIT");
+
+    console.log("Insertion réussit !");
+  } catch (err) {
+    await client.query("ROLLBACK");
+    console.log(err);
+  } finally {
+    client.release();
+  }
+}
+
+
+
+
 module.exports = {
-    createUser : createUser,
-    getAllUsers : getAllUsers
+    updateUserProfile,
+    getPrestataireById : getPrestataireById,
+    updatePrestatairePage :updatePrestatairePage,
+    getPrestatairesEtatAccepte :getPrestatairesEtatAccepte,
+    getPrestatairesTypes :getPrestatairesTypes
 }
 

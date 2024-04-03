@@ -1,14 +1,14 @@
 <template>
   <div class="custom-select" :tabindex="tabindex" @blur="open = false">
     <div class="selected" :class="{ open: open }" @click="open = !open">
-      {{ selected }}
+      {{ selected.libelle }}
     </div>
     <div class="items" :class="{ selectHide: !open }">
       <div @click="
-          selected = 'Toutes les catégories';
+          selected = {value: '', libelle: 'Toutes les catégories'};
           open = false;
-          $emit('input', '');
-        "> {{defaults}}</div>
+          $emit('input', {value: '', libelle: 'Toutes les catégories'});
+        "> {{defaults.libelle}}</div>
       <div
           v-for="(option, i) of options"
           :key="i"
@@ -18,7 +18,7 @@
           $emit('input', option);
         "
       >
-        {{ option }}
+        {{ option.libelle }}
       </div>
     </div>
   </div>
@@ -32,9 +32,9 @@ export default {
       required: true,
     },
     default: {
-      type: String,
+      type: Object,
       required: false,
-      default: '',
+      default: null,
     },
     tabindex: {
       type: Number,

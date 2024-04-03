@@ -4,24 +4,27 @@
       <div class="navbar-content">
         <div class="menu-top">
           <div class="menu-burger">
-          <button >
-            <img :src="require('@/assets/icons/menu-burger.svg')" @click="navOpen=!navOpen" class="i" alt="">
-          </button>
+            <button>
+              <img :src="require('@/assets/icons/menu-burger.svg')" @click="navOpen = !navOpen" class="i" alt="">
+            </button>
           </div>
           <div class="title" @click="menuClicked(0)">
             <img :src="require('@/assets/logoWF2W.png')" class="logo" alt="">
             <h1>BELFORAINE</h1>
           </div>
           <div class="icons">
-            <img :src="require('@/assets/icons/panier.svg')" @click="menuClicked('/panier')"   class="i" alt="">
+            <TranslateTool/>
+            <img :src="require('@/assets/icons/panier.svg')" @click="menuClicked('/panier')" class="i" alt="">
           </div>
         </div>
         <div class="menu-text--wrapper" v-show="navOpen">
           <div class="menu-text">
-            <a v-for="(text, index) in Object.entries(navBarTitles)" :key="index" @click="menuClicked(text[1])">{{ text[0] }}</a>
+            <a v-for="(text, index) in Object.entries(navBarTitles)" :key="index" @click="menuClicked(text[1])">{{ text[0]
+            }}</a>
           </div>
           <div class="scrolled-icons">
-            <img :src="require('@/assets/icons/panier.svg')" @click="menuClicked('/panier')"   class="i" alt="">
+            <TranslateTool />
+            <img :src="require('@/assets/icons/panier.svg')" @click="menuClicked('/panier')" class="i" alt="">
           </div>
         </div>
       </div>
@@ -30,23 +33,27 @@
 </template>
 
 <script>
+
+import TranslateTool from '@/components/TranslateTool.vue';
 export default {
   name: 'NavBar',
   data: () => ({
     isTransparent: false,
     isHomePage: false,
     navOpen: true,
-    prevScrollpos : 0,
+    prevScrollpos: 0,
     scrolled: false,
     navBarTitles: {
       'Accueil': '/',
-      'Attractions': '/attraction',
       'Restauration': '/restauration',
       'Boutique': '/boutique',
       'Billetterie': '/billetterie',
-      'Organisateurs': '/organisateurs'
+      'Organisateurs': '/organisateurs',
     }
   }),
+  components:{
+    TranslateTool
+  },
   methods: {
     menuClicked(path) {
       if (window.innerWidth < 902) {
@@ -56,25 +63,28 @@ export default {
       });
     },
     handleScroll() {
-      if ((!this.scrolled && window.innerWidth > 902) || (this.scrolled && window.innerWidth > 1100 )) {
+      if ((!this.scrolled && window.innerWidth > 902) || (this.scrolled && window.innerWidth > 1100)) {
         this.navOpen = true;
       } else {
         this.navOpen = false;
       }
       this.scrolled = window.scrollY >= 100;
-      document.getElementsByClassName('navbar-content')[0].classList.toggle('scrolled', this.scrolled);
-      let currentScrollPos = window.pageYOffset;
+      let navbarContent = document.getElementsByClassName('navbar-content')[0];
+      if (navbarContent) {
+        navbarContent.classList.toggle('scrolled', this.scrolled);
+      } let currentScrollPos = window.pageYOffset;
+      let navbarElement = document.getElementById("navbar");
 
-      if (this.prevScrollpos > currentScrollPos || currentScrollPos < 100) {
-        document.getElementById("navbar").style.top = "0";
-      } else {
-        document.getElementById("navbar").style.top = "-200px";
-        this.navOpen = false;
+      if (navbarElement) {
+        if (this.prevScrollpos > currentScrollPos || currentScrollPos < 100) {
+          navbarElement.style.top = "0";
+        } else {
+          navbarElement.style.top = "-200px";
+          this.navOpen = false;
+        }
       }
 
       this.prevScrollpos = currentScrollPos;
-
-
     }
   },
   watch: {
@@ -84,7 +94,7 @@ export default {
     }
   },
   mounted() {
-    if ((!this.scrolled && window.innerWidth > 902) || (this.scrolled && window.innerWidth > 1100 )) {
+    if ((!this.scrolled && window.innerWidth > 902) || (this.scrolled && window.innerWidth > 1100)) {
       this.navOpen = true;
     } else {
       this.navOpen = false;
@@ -92,7 +102,7 @@ export default {
 
     window.addEventListener('scroll', this.handleScroll);
     window.addEventListener('resize', () => {
-      if ((!this.scrolled && window.innerWidth > 902) || (this.scrolled && window.innerWidth > 1100 )) {
+      if ((!this.scrolled && window.innerWidth > 902) || (this.scrolled && window.innerWidth > 1100)) {
         this.navOpen = true;
       } else {
         this.navOpen = false;
@@ -106,20 +116,22 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
 @font-face {
   font-family: 'DM Sans Medium';
   src: url('../assets/fonts/DM_Sans/static/DMSans-Medium.ttf') format('truetype');
 }
+
 @font-face {
   font-family: 'DM Sans Regular';
   src: url('../assets/fonts/DM_Sans/static/DMSans-Regular.ttf') format('truetype');
 }
+
 @keyframes menuSlideDown {
   0% {
     height: 0;
   }
+
   100% {
     height: 200px;
   }
@@ -129,7 +141,8 @@ export default {
   margin: 0;
   padding: 0;
 }
-.scrolled-icons{
+
+.scrolled-icons {
   display: none;
 }
 
@@ -147,6 +160,7 @@ export default {
   transition: all 0.3s;
 
 }
+
 .navbar-content {
   display: flex;
   flex-flow: column;
@@ -160,7 +174,7 @@ export default {
   overflow: hidden;
 }
 
-.menu-text{
+.menu-text {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -168,10 +182,10 @@ export default {
 
 .menu-text a {
   padding: 5px;
-  margin : 0 5px;
+  margin: 0 5px;
   cursor: pointer;
   font-size: 20px;
-  font-family: "DM Sans Regular" , Syne , Helvetica , sans-serif;
+  font-family: "DM Sans Regular", Syne, Helvetica, sans-serif;
 }
 
 
@@ -195,7 +209,7 @@ export default {
 
 .close {
   position: absolute;
-  transform:translateY(-200px);
+  transform: translateY(-200px);
   display: flex;
   flex-direction: column;
 }
@@ -229,7 +243,7 @@ export default {
 
 
 
-@media screen and (min-width: 1101px){
+@media screen and (min-width: 1101px) {
   .scrolled .menu-text a {
     text-align: center;
   }
@@ -243,14 +257,14 @@ export default {
     align-items: center;
   }
 
-  .scrolled .scrolled-icons{
+  .scrolled .scrolled-icons {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
 
-  .scrolled .menu-top{
+  .scrolled .menu-top {
     display: flex;
     width: fit-content;
   }
@@ -258,21 +272,23 @@ export default {
   .scrolled a {
     height: fit-content;
   }
-  .scrolled .menu-text{
+
+  .scrolled .menu-text {
     display: flex;
     width: fit-content;
   }
 
-  .scrolled .menu-text--wrapper{
+  .scrolled .menu-text--wrapper {
     display: flex;
     width: 85%;
     justify-content: space-between;
   }
 
-  .scrolled .title h1{
+  .scrolled .title h1 {
     display: none;
   }
-  .scrolled .icons{
+
+  .scrolled .icons {
     display: none;
   }
 
@@ -282,9 +298,10 @@ export default {
 
 @media screen and (min-width: 902px) {
 
-  .menu-burger{
+  .menu-burger {
     display: none;
   }
+
   .menu-text a {
     text-align: center;
   }
@@ -292,20 +309,22 @@ export default {
 
 @media screen and (min-width: 902px) and (max-width: 1100px) {
 
-  .scrolled .menu-burger{
+  .scrolled .menu-burger {
     display: flex;
   }
-  .scrolled .menu-text{
+
+  .scrolled .menu-text {
     animation: 5s forwards;
     display: flex;
     flex-direction: column;
     justify-content: center;
   }
 
-  .scrolled .navbar-content{
+  .scrolled .navbar-content {
     width: 100%;
   }
-  .scrolled .title h1{
+
+  .scrolled .title h1 {
     display: none
   }
 
@@ -313,27 +332,29 @@ export default {
 
 
 @media screen and (max-width: 902px) and (min-width: 600px) {
-  .menu-text{
+  .menu-text {
     display: flex;
     flex-direction: column;
     justify-content: center;
 
   }
+
   .menu-text a {
     text-align: center;
   }
 
-  .logo{
+  .logo {
     max-width: 100px;
   }
 
 
 
 
-  .scrolled .menu-burger{
+  .scrolled .menu-burger {
     display: flex;
   }
-  .scrolled .menu-text{
+
+  .scrolled .menu-text {
     animation: 5s forwards;
     display: flex;
     flex-direction: column;
@@ -342,20 +363,23 @@ export default {
 
   }
 
-  .scrolled .navbar-content{
+  .scrolled .navbar-content {
     width: 100%;
   }
-  .scrolled .title h1{
+
+  .scrolled .title h1 {
     display: none
   }
 
 
 }
-@media screen and (max-width: 600px)  {
-  .menu-burger{
+
+@media screen and (max-width: 600px) {
+  .menu-burger {
     display: flex;
   }
-  .menu-text{
+
+  .menu-text {
     animation: 5s forwards;
     display: flex;
     flex-direction: column;
@@ -365,21 +389,16 @@ export default {
     text-align: center;
   }
 
-  .logo{
+  .logo {
     max-width: 80px;
   }
 
-  .navbar-content{
+  .navbar-content {
     width: 100%;
   }
-  .title h1{
-display: none
+
+  .title h1 {
+    display: none
   }
 }
-
-
-
-
-
-
 </style>

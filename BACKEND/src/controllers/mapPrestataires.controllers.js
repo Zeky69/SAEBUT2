@@ -1,10 +1,9 @@
 const mapPrestatairesService =  require('../services/mapPrestataire.service')
+const {response} = require("express");
 
 // ...
 exports.getBatdebug2 = async (req,res) => {
-    console.log("debug before service");
     return await mapPrestatairesService.getBatdebug(req,(error, data) => {
-        console.log("debug after service");
         if (error) {
             return res.status(500).send("Internal error");
         }
@@ -12,10 +11,27 @@ exports.getBatdebug2 = async (req,res) => {
     });
 };
 
+exports.updatebat = async (req,res) => {
+    let info = req.body;
+
+    let reponse = await mapPrestatairesService.updateBatStatus(info);
+    if (reponse) {
+        return res.status(200).send(reponse);
+    }
+    return res.status(401).send("no info");
+}
+
+exports.getBatType = async (req,res) => {
+    let reponse = await mapPrestatairesService.getBatType(req);
+    if (reponse) {
+        return res.status(200).send(reponse);
+    }
+    return res.status(401).send("no info");
+}
+
 exports.getBatdebug= async (req,res) => {
     try {
         let info = await mapPrestatairesService.getBatdebug2();
-        console.log("info",info);
         if(info){
             return res.status(200).send(info);
         }else{
@@ -29,7 +45,6 @@ exports.getBatdebug= async (req,res) => {
 
 exports.getEmpUUID = async (req,res) => {
     let info = req.params.uuid;
-    console.log("info",info);
     let reponse = await mapPrestatairesService.getEmpUUID(info);
     if (reponse) {
         return res.status(200).send(reponse);
@@ -39,7 +54,6 @@ exports.getEmpUUID = async (req,res) => {
 
 exports.getBatUUID = async (req,res) => {
     let info = req.params.uuid;
-    console.log("info",info);
     let reponse = await mapPrestatairesService.getBatUUID(info);
     if (reponse) {
         return res.status(200).send(reponse);
@@ -49,7 +63,6 @@ exports.getBatUUID = async (req,res) => {
 
 exports.getBatempUUID = async (req,res) => {
     let info = req.params.uuid;
-    console.log("info",info);
     let reponse = await mapPrestatairesService.getBatempUUID(info);
     if (reponse) {
         return res.status(200).send(reponse);
@@ -85,7 +98,7 @@ exports.getEmp =  async (req,res) => {
 
 exports.saveEmp = (req, res) => {
     
-    mapPrestatairesService.createEmp(req,(error,data)=>{
+       mapPrestatairesService.createEmp(req,(error,data)=>{
         if (error) {
             return res.status(500).send("Internal error");
         }
@@ -93,13 +106,19 @@ exports.saveEmp = (req, res) => {
     })
 };
 
-exports.deleteEmp = (req,res) => {
-    mapPrestatairesService.deleteEmp(req, (error,data)=> {
-        if (error) {
-            return res.status(500).send("Internal error");
+exports.deleteEmp = async (req,res) => {
+    let id = req.params.id;
+    try {
+        let reponse = await mapPrestatairesService.deleteEmp(id);
+        if (reponse) {
+            return res.status(200).send(reponse);
         }
-        return res.status(200).send("emp deleted successfully");
-    })
+        return res.status(401).send("pas de reponse delete");
+    }
+     catch (error) {
+          return res.status(500).send(error.message || "Internal error");
+     }
+
 }
 
 exports.updateEmp = async (req,res) => {
@@ -110,6 +129,19 @@ exports.updateEmp = async (req,res) => {
         }
         return res.status(200).send("emp updated successfully");
     })
+}
+
+
+exports.updateEmpInfo = async (req,res) => {
+    try {
+        let reponse = await mapPrestatairesService.updateEmp(req);
+        if (reponse) {
+            return res.status(200).send(reponse);
+        }
+        return res.status(401).send("pas de reponse update");
+    }catch (error) {
+        return res.status(500).send(error.message || "Internal error");
+    }
 }
 
 
@@ -140,7 +172,6 @@ exports.getBat = async (req,res) => {
 
 exports.getBatUUID = async (req,res) => {
     let info = req.params.uuid;
-    console.log("info",info);
     let reponse = await mapPrestatairesService.getBatUUID(info);
     if (reponse) {
         return res.status(200).send(reponse);
@@ -160,7 +191,6 @@ exports.savebat = (req, res) => {
 
 exports.deletebat = (req,res) => {
     let info = req.query;
-    console.log("info",info);
     let reponse = mapPrestatairesService.deletebat(info);
     if (reponse) {
         return res.status(200).send(reponse);

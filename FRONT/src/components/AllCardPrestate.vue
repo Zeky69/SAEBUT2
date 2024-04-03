@@ -4,13 +4,13 @@
     <img class="img-background" src="../assets/pageAccueil/fond-prestate.png" alt="">
     <div class="card-container" >
       <div class="header">
-        <h1>Nos partenaires</h1>
+        <h1>{{ $t('titlepartners') }}</h1>
         <div class="filtre-container">
           <div class="search-bar">
-            <input class="search-input" placeholder="Rechercher"  type="text" v-model="filtre.nom" id="nom" name="nom">
+            <input class="search-input" :placeholder="$t('research')" type="text" v-model="filtre.nom" id="nom" name="nom">
             <img class="loupe" :src="require('@/assets/icons/loupe.svg')"  alt="loupe de recherche">
           </div>
-          <bar-select2 :options="['Attraction', 'Restaurateur','Animateur' ,'Traiteur' ]" v-model="filtre.type" :default="'Categorie'" @input="setFiltreType" ></bar-select2>
+          <bar-select2 :options="[$t('attraction'), $t('animation'), $t('caterer')]" v-model="filtre.type" :default="$t('defaultCategory')" @input="setFiltreType"></bar-select2>
         </div>
       </div>
       <div>
@@ -23,27 +23,34 @@
         <div class="card-prestate"  v-for="(prestate,index) in filterList" :key="index">
           <div class="card-prestate-container">
             <div class="card-header">
-              <img  :src="prestate.image" alt="stephan">
+              <img  :src="getImage(prestate.photo_profil)" :alt="prestate.photo_profil ? prestate.photo_profil : defaultImagePath" >
             </div>
             <div class="card-text">
-              <h3>{{prestate.name}}</h3>
+              <h3>{{prestate.nom}}</h3>
             </div>
-            <div class="card-type" :class="getColorBackground(prestate.type)">
-              <span class="cerlce" :class="getColorCercle(prestate.type)" ></span>
-              <p>{{prestate.type}}</p>
+            <div class="container-type">
+            <div v-for="(types , index) in  ListTypePrestaire" :key="index">
+              <div v-if="types.prestataire_id === prestate.id_prestataire" class="card-type" :class="getColorBackground(types.libelle)" >
+              <span class="cerlce" :class="getColorCercle(types.libelle)" ></span>
+              <p>{{types.libelle}}</p>
+              </div>
             </div>
-            <div class="card-bottom">
-              <button class="btn-card" @click="goToPrestate(prestate.id)">Voir le profil</button>
-            </div>
+
+          </div>
+          <div class="card-bottom">
+            <router-link :to="{ name: 'prestate', params: { id: prestate.id_prestataire } }">
+              <button class="btn-card">{{ $t('profile') }}</button>
+            </router-link>
           </div>
           </div>
       </div>
-        <div class="button-container">
+      </div>
+
+      <div class="button-container">
           <button class="button" @click="scrollToNextCard"><svg class="svg-icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M672 512 672 512 352 192 320 224 624 528 320 832 352 864 688 528Z"  /></svg></button>
         </div>
+
       </div>
-
-
 
 
       </div>
@@ -56,79 +63,28 @@
 
 <script>
 import BarSelect2 from "@/components/barSelect2.vue";
+import {getPrestataires, getPrestatairesTypes} from "@/services/prestataire.service";
+import {getImage} from "@/services/image.service";
 
 export default {
   name: 'AllCardPrestate',
   components: {BarSelect2},
+
   data: () => ({
       filtre: {
       nom: '',
       type: '',
     },
-    ListPresate: [
-        {
-      id: 1,
-      name: "Zekeriya Maxime",
-      type: "Animateur",
-      image: "stephane.jpg"
-    },
-      {
-        id: 2,
-        name: "Mhammed Djilsi",
-        type: "Attraction",
-        image: "stephane.jpg"
-      },
-      {
-        id: 3,
-        name: "Stephane Stefan",
-        type: "Restaurateur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 4,
-        name: "Joseph Sansèphe",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 5,
-        name: "Stephan",
-        type: "Attraction",
-        image: "stephane.jpg"
-      },
-      {
-        id: 6,
-        name: "Stephan",
-        type: "Animateur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 7,
-        name: "Stephan",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 8,
-        name: "Stephan",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 9,
-        name: "Stephan",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      },
-      {
-        id: 10,
-        name: "Stephan",
-        type: "Traiteur",
-        image: "stephane.jpg"
-      }],
+    ListPresate : null,
+    ListTypePrestaire: null,
+    ListTypePrestaireFiltred: null,
     filterList: [],
+    defaultImagePath: 'stephane.jpg'
+
+
   }),
-  methods: {
+  methods:{
+    getImage,
     goToPrestate(id){
       this.$router.push({path: '/prestate/', params: {id: id}})
     },
@@ -139,16 +95,16 @@ export default {
     getColorCercle(type) {
       const colorMap = {
         Attraction: 'attraction-color',
-        Animateur: 'animateur-color',
-        Restaurateur: 'restaurateur-color',
+        Scene: 'animateur-color',
+        Restaurant: 'restaurateur-color',
       };
       return colorMap[type] || 'default-color';
     },
     getColorBackground(type) {
       const colorMap = {
         Attraction: 'attraction-background',
-        Animateur: 'animateur-background',
-        Restaurateur: 'restaurateur-background',
+        Scene: 'animateur-background',
+        Restaurant: 'restaurateur-background',
       };
       return colorMap[type] || 'default-background';
     },
@@ -184,6 +140,16 @@ export default {
   }
 ,
   mounted() {
+
+    getPrestataires().then((response) => {
+      this.ListPresate = response;
+      this.filterList = this.ListPresate;
+    })
+
+    getPrestatairesTypes().then((response) => {
+      this.ListTypePrestaire = response;
+    })
+
     document.addEventListener('dragstart', function (event) {
       event.preventDefault();
     }, false)
@@ -236,17 +202,17 @@ export default {
 
 .card-container{
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
- height: 80%;
+  top: 10%;
+  left: 5%;
+  height: 80%;
   width: 90%;
   background: rgba(43, 66, 86, 0.30);
-  backdrop-filter: blur(10px);
   box-shadow: 0 0 4px 1px rgba(255, 255, 255, 0.50) inset;
   border-radius: 30px;
   z-index: 10;
   user-select: none;
+  backdrop-filter: blur(10px);
+
 }
 
 .img-background{
@@ -272,6 +238,13 @@ export default {
   gap: 20px;
 }
 
+
+.carousel-container::-webkit-scrollbar {
+  display: none;
+}
+
+
+
 .card-prestate {
   display: flex;
   flex-direction: column;
@@ -287,13 +260,15 @@ export default {
 }
 
 .card-prestate-container{
-  box-sizing: content-box;
+  box-sizing: border-box;
   padding: 20px;
+  width: 100%;
+  height: 100%;
 }
 
 .card-header{
   width: 100%;
-  height: 260px;
+  height: 200px;
   overflow: hidden;
   box-sizing: border-box;
 
@@ -386,6 +361,16 @@ export default {
   height: 100%;
 }
 
+.container-type{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
 .attraction-color {
   background-color: #fd2323;
 }
@@ -464,7 +449,7 @@ align-items: center;
 }
 
 .btn-card{
-  margin-top: 10px;
+  margin: 20px 0;
   padding: 5px 0 ;
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);

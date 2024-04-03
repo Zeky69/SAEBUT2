@@ -11,27 +11,31 @@ exports.validateempFilterInput = (req, res, next) => {
     next();
 }
 
+exports.validatebatTypeFilterInput = (req, res, next) => {
+    next();
+}
+
 exports.validatebatFilterInputdebug = (req, res, next) => {
-    console.log("valide bat debug middle");
     next();
 
 
 }
 
+exports.validateUpdatebatInput = (req, res, next) => {
+    next();
+}
+
 exports.validateempUUID = (req, res, next) => {
-    console.log("valide emp uuid middle");
     next();
 }
 
 exports.validateAddbatInputdebug = async (req, res, next) => {
-    console.log("valide add middle");
     next();
 }
 
 exports.validateAddempInput = async (req, res, next) => {
-    const { name, description , posx, posy, posz, rota, matricepoints } = req.body;
-    console.log("valide add emp",req.body);
-    if (!name || !description || !posx || !posy || !posz || rota === undefined || !matricepoints) {
+    const { name, description , matricepoints } = req.body;
+    if (!name || !description ||  !matricepoints) {
         return res.status(400).send("Un des champs est nul");
     }
     next();
@@ -53,8 +57,15 @@ exports.validatebatUUID = (req, res, next) => {
 
 exports.validateUpdateempInput = (req, res, next) => {
     const { uuid, batid } = req.body;
-    console.log("valide up",req.body);
     if (!uuid) {
+        return res.status(400).send("Un des champs est nul");
+    }
+    next();
+}
+
+exports.validateUpdateempInfoInput = (req, res, next) => {
+    const { uuid, nom , description } = req.body;
+    if (!uuid || !nom || !description) {
         return res.status(400).send("Un des champs est nul");
     }
     next();

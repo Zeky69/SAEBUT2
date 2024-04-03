@@ -20,12 +20,12 @@
               <input type="password" class="inputFormulaire" :class="{ 'invalid': isInvalidCredentials }"  placeholder="Mot de passe" v-model="password">
               <span class="faux"></span>
             </div>
-              <a>Mot de passe oublié ?</a>
+              <router-link to="/forget-password"><p style="text-decoration: none; color: #FFFFFF; font-size: 14px">Mot de passe oublié ?</p></router-link>
             </div>
             <div class="boutton">
             <p class="connexion_btn" @click="connect()">Connexion</p>
               <hr />
-              <p id="Inscription">Inscription</p>
+              <p id="Inscription" @click="$router.push('/register')">Inscription</p>
 
 
             </div>
@@ -60,11 +60,6 @@ export default {
     password:"",
     isInvalidCredentials: false,
   }),mounted() {
-    if(this.group_id===1){
-      this.$router.replace('/admin');
-    }else if(this.group_id===2){
-      this.$router.replace('/prestataire');
-    }
     document.addEventListener("keydown", this.handleEnterKey);
   },
 
@@ -76,7 +71,7 @@ export default {
     async connect(){
       console.log(this.login)
       var data =
-          {"login" : this.login,
+          {"email" : this.login,
             "password" :this.password};
       await this.loginUser(data);
       if(this.group_id===2){

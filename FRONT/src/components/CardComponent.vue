@@ -3,7 +3,7 @@
     <card>
       <div class="card-wrapper">
         <figure>
-          <img src="../assets/fete-foraine.jpg" alt="" />
+          <img src="@/assets/fete-foraine.jpg" alt="" />
         </figure>
         <div class="card-body">
           <h2>{{ title }}</h2>

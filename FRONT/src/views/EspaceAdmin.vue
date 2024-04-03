@@ -2,10 +2,10 @@
 
   <div class="app">
   <div class="menu-vertical">
-    <menu-vertical :list-menu="ListMenu"/>
+    <menu-vertical :list-menu="ListMenu" role="Organisateur" color1="#553C65" color2="#2B4256"/>
   </div>
   <div class="body-container">
-    <router-view ></router-view>
+    <router-view></router-view>
   </div>
   </div>
 
@@ -13,7 +13,7 @@
 
 <script>
 import {mapActions, mapState} from "vuex";
-import MenuVertical from "@/components/menuVertical.vue";
+import MenuVertical from "@/components/Admin/menuVertical.vue";
 
 export default {
   name: 'EspaceAdmin',
@@ -37,8 +37,8 @@ data: () => ({
       path: "/admin/prestataires",
     },
     {
-      title: "Statistiques",
-      path: "/admin/statistiques",
+      title: "map",
+      path: "/admin/map",
     },
     {
       title: "Profil",
@@ -53,15 +53,11 @@ data: () => ({
   methods:{
     ...mapActions(['logout']),
     deconnexion(){
-      this.$router.replace('/login');
       this.logout();
     }
   },
   mounted() {
     console.log(this.group_id)
-    if (this.group_id !== 1) {
-      this.$router.replace('/login');
-    }
   }
 }
 </script>
