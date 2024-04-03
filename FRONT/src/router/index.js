@@ -155,7 +155,17 @@ const routes = [
       },
       {
         path: 'prestataires',
-        component: ()=>import ('../views/AdminPrestataire.vue')
+        component : () => import('../views/AdminPresta.vue'),
+        children:[
+          {
+            path:'/',
+            component: ()=>import ('../components/Admin/AdminPrestataire.vue')
+          }, {
+          path: '/:idprestataire',
+            component : () => import('../components/Admin/AdminEditPrestataire.vue')
+          }
+
+        ]
       },
       {
         path: 'map',
