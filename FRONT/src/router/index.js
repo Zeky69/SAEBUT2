@@ -216,6 +216,13 @@ router.beforeEach(async (to, from, next) => {
         }
       }
     } else {
+      await store.dispatch('getInformationFromToken', store.state.token);
+
+      if(store.state.group_id === 1){
+        next("/admin")
+      } else if(store.state.group_id === 2){
+        next("/prestataire")
+      }
       next();
     }
   } else {
