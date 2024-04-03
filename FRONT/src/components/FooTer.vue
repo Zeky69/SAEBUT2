@@ -13,10 +13,10 @@
     </svg>
     </div>
     <div class="newsletter">
-      <p>Inscrivez-vous à la Newsletter de <strong>Belforaine</strong></p>
+      <p v-html="$t('footer.newsletter')"></p>
       <div class="formulaire">
-        <input type="text" placeholder="Entrez votre adresse e-mail" id="input">
-        <button id="btnS">S'inscrire</button>
+        <input type="text" :placeholder="$t('footer.newsletterPlaceholder')" id="input">
+        <button id="btnS" v-t="'footer.newsletterButton'"></button>
       </div>
     </div>
     <div class="logo">
@@ -27,25 +27,25 @@
     </div>
     <div class="rubrique">
       <div class="contenuRubriques">
-        <h3>Informations légales</h3>
-        <router-link to="/mentions-legales" class="link">Mentions légales</router-link>
+        <h3 v-t="'footer.legalInfos'"></h3>
+        <router-link to="/mentions-legales" class="link" v-t="'footer.legalNotice'"></router-link>
         <router-link to="/copyright" class="link">Copyright</router-link>
-        <router-link to="/utilisation-cookies" class="link">Utilisation des cookies</router-link>
-        <router-link to="/modifier-preferences-cookies" class="link">Modifier vos préférences de cookies</router-link>
+        <router-link to="/cookies" class="link" v-t="'footer.cookiesUsage'"></router-link>
+        <router-link to="/utilisation-cookies" class="link" v-t="'footer.modifyCookiesUsage'"></router-link>
       </div>
       <div class="contenuRubriques">
-        <h3>Rubriques</h3>
-        <router-link to="/" class="link">Accueil</router-link>
-        <router-link to="/attraction" class="link">Découvrez nos attractions</router-link>
-        <router-link to="/restauration" class="link">Un petit creux ? Réservez une table !</router-link>
-        <router-link to="/boutique" class="link">Notre boutique</router-link>
-        <router-link to="/billetterie" class="link">Achetez vos billets</router-link>
+        <h3 v-t="'footer.sections'"></h3>
+        <router-link to="/" class="link" v-t="'footer.accueil'"></router-link>
+        <router-link to="/attraction" class="link" v-t="'footer.attractionDiscoveries'"></router-link>
+        <router-link to="/restauration" class="link" v-t="'footer.restaurantHungry'"></router-link>
+        <router-link to="/boutique" class="link" v-t="'footer.ourShop'"></router-link>
+        <router-link to="/billetterie" class="link" v-t="'footer.buyTickets'"></router-link>
       </div>
       <div class="contenuRubriques">
-        <h3>+ Encore !</h3>
-        <router-link to="/a-propos" class="link">Qui sommes-nous ?</router-link>
-        <router-link to="/contact" class="link">Contactez-nous</router-link>
-        <router-link to="/login" class="link">Connectez-vous</router-link>
+        <h3 v-t="'footer.evenMore'"></h3>
+        <router-link to="/a-propos" class="link" v-t="'footer.whoAreWe'"></router-link>
+        <router-link to="/contact" class="link" v-t="'footer.contactUs'"></router-link>
+        <router-link to="/login" class="link" v-t="'footer.connectYou'"></router-link>
       </div>
     </div>
   </div>

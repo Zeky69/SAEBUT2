@@ -42,6 +42,8 @@ INSERT INTO prestataire( description, nom, id_user, etat_id ,photo_profil) VALUE
 INSERT INTO tags VALUES ('1', 'accessible handicapé'),
                         ('2', 'wifi'),
                         ('3', 'point d eau'),
+
+                        /* tags pour gérer l'affluence (s'attribuent automatiquement en fct du nombre de réservation*/
                         ('4', 'surchargé'),
                         ('5', 'modéré'),
                         ('6', 'libre');
@@ -77,7 +79,7 @@ INSERT INTO categorie_produit(libelle_categorie,description,image) VALUES
     ('Vêtements', 'Exprimez votre style avec nos vêtements tendance et originaux.','vetement.png'),
     ('Peluches', 'Adoptez des compagnons doux et câlins qui éveilleront votre enfant intérieur.','peluches.png'),
     ('Accessoires', 'Les petits détails qui font la différence : accessoires audacieux pour des moments mémorables.','accessoires.jpg');
-    
+
     select * from categorie_produit;
 
 select * from categorie_produit;
@@ -87,7 +89,7 @@ INSERT INTO produit (nom, prix, stock, categorie_id,photo) VALUES
     ('Stylo magique', 2.99, 100, 1,'stylo_magique.png'),
     ('Tasse enchantée', 9.99, 50, 1,'tasse_magique.png'),
     ('Porte-clés lumineux', 4.49, 75, 1,'porte_cle_lumineux.png'),
-    ('Carnet de notes féerique', 6.99, 60, 1,'carnet_note.png'),    
+    ('Carnet de notes féerique', 6.99, 60, 1,'carnet_note.png'),
 	('Stylo en métal gravé', 5.99, 50, 1,'stylo_grave.png'),
     ('Mug isotherme avec couvercle', 14.99, 40, 1,'mug.png');
 

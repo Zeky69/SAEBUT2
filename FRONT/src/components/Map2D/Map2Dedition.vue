@@ -82,9 +82,8 @@
 import {LImageOverlay, LMap, LMarker, LPolygon, LTileLayer} from "vue2-leaflet";
 import 'leaflet/dist/leaflet.css';
 import InfoPanelEdition from "@/components/Map2D/infoPanelEdition.vue";
-import {createEmp, deleteEmp, getAllEmp, updateEmpInfo} from '../../services/mapPrestataire.service.js';
 import {getPrestataires,} from "@/services/prestataire.service";
-import {getMap2DType} from "@/services/map2D.service";
+import {getMap2DType, getAllEmp, createEmp, deleteEmp, updateEmp} from "@/services/map2D.service";
 
 export default {
   name: 'Map2D-edition',
@@ -275,7 +274,7 @@ export default {
       this.closePanel()
     },
     editFeature(feature, newfeature) {
-      updateEmpInfo({
+      updateEmp({
         uuid: feature.properties.id,
         nom: newfeature.properties.name,
         description: newfeature.properties.description,

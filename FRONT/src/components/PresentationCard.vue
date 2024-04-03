@@ -85,6 +85,7 @@ export default {
   padding: 1% 2%;
   color: #553C65;
   border-radius: 10px;
+  text-align:center;
 }
 
 @media screen and (max-width: 1030px) {

@@ -155,7 +155,17 @@ const routes = [
       },
       {
         path: 'prestataires',
-        component: ()=>import ('../views/AdminPrestataire.vue')
+        component : () => import('../views/AdminPresta.vue'),
+        children:[
+          {
+            path:'/',
+            component: ()=>import ('../components/Admin/AdminPrestataire.vue')
+          }, {
+          path: '/:idprestataire',
+            component : () => import('../components/Admin/AdminEditPrestataire.vue')
+          }
+
+        ]
       },
       {
         path: 'map',
@@ -216,6 +226,13 @@ router.beforeEach(async (to, from, next) => {
         }
       }
     } else {
+      await store.dispatch('getInformationFromToken', store.state.token);
+
+      if(store.state.group_id === 1){
+        next("/admin")
+      } else if(store.state.group_id === 2){
+        next("/prestataire")
+      }
       next();
     }
   } else {

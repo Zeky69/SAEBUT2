@@ -10,7 +10,7 @@
             <input class="search-input" :placeholder="$t('research')" type="text" v-model="filtre.nom" id="nom" name="nom">
             <img class="loupe" :src="require('@/assets/icons/loupe.svg')"  alt="loupe de recherche">
           </div>
-          <bar-select2 :options="[$t('attraction'), $t('animation'), $t('caterer')]" v-model="filtre.type" :default="$t('defaultCategory')" @input="setFiltreType"></bar-select2>
+          <bar-select2 :options="[$t('attraction'), $t('animation'), $t('caterer')]" v-model="filtre.type" :default="$t('categoryPrestates')" @input="setFiltreType"></bar-select2>
         </div>
       </div>
       <div>
