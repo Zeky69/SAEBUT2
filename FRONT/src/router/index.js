@@ -161,7 +161,7 @@ const routes = [
             path:'/',
             component: ()=>import ('../components/Admin/AdminPrestataire.vue')
           }, {
-          path: '/:idprestataire',
+          path: ':idprestataire',
             component : () => import('../components/Admin/AdminEditPrestataire.vue')
           }
 
