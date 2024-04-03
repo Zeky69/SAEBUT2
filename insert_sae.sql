@@ -40,31 +40,5 @@ INSERT INTO droits_de_groupes VALUES(1, 1, '1'),
                                     (5, 3, '1'),
                                     (6,3,'4');
 
-INSERT INTO menus VALUES (1, 'Accueil', 1),
-                         (2, 'Attractions', 2),
-                         (3, 'Restauration', 3),
-                         (4, 'Boutique', 4),
-                         (5, 'Billetterie', 5),
-                         (6, 'Organisateurs', 6),
-                         (7, 'Mon espace', 7),
-                         (8, 'Gérer', 8);
-
-INSERT INTO droits_de_menus VALUES (1, 3, 1),
-                                   (2, 3, 2),
-                                   (3, 3, 3),
-                                   (4, 3, 4),
-                                   (5, 3, 5),
-                                   (6, 3, 6),
-                                   (7, 2, 7),
-                                   (8, 2, 1),
-                                   (9, 1, 8),
-                                   (10, 1, 1);
-
-SELECT * FROM menus
-    right join droits_de_menus ON menus.id = droits_de_menus.menu_id
-    right join utilisateurs ON droits_de_menus.group_id = utilisateurs.group_id
-;
-
-
 
 

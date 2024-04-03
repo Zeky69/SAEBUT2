@@ -65,26 +65,6 @@ CREATE TABLE DROITS_DE_GROUPES(
     Right_Id INTEGER REFERENCES DROITS(Id)
 ); -- On peut avoir plusieurs droits pour un element (ex : le menu accueil visible par tous)
 
-CREATE TABLE MENUS(
-    Id SERIAL PRIMARY KEY,
-    Nom_Menu VARCHAR(255) NOT NULL,
-    Ordre_Affichage INTEGER NOT NULL
-);
-
-CREATE TABLE ELEMENTS_DE_MENU(
-    Id SERIAL PRIMARY KEY,
-    Nom_Element VARCHAR(255) NOT NULL,
-    Ordre_Affichage INTEGER NOT NULL,
-    Lien VARCHAR(255) NOT NULL,
-    Menu_ID INTEGER REFERENCES MENUS(Id) ON DELETE CASCADE
-);
-
-CREATE TABLE DROITS_DE_MENUS(
-    Id SERIAL PRIMARY KEY,
-    Group_Id INTEGER NOT NULL REFERENCES GROUPES(Id),
-    Menu_ID INTEGER REFERENCES MENUS(Id) ON DELETE CASCADE
-);
-
 CREATE TABLE produit(
    id_produit VARCHAR(50),
    nom VARCHAR(50),
@@ -208,6 +188,27 @@ CREATE TABLE possède(
    FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement)
 );
 
+CREATE TABLE widgetText(
+    id SERIAL PRIMARY KEY,
+    texte TEXT,
+    id_prestaEmplacement int,
+    FOREIGN KEY(id_prestaEmplacement) REFERENCES possède(id)
+);
+
+CREATE TABLE widgetImage(
+    id SERIAL PRIMARY KEY,
+    imageLink varchar(255),
+    id_prestaEmplacement int,
+    FOREIGN KEY(id_prestaEmplacement) REFERENCES possède(id)
+);
+
+CREATE TABLE widgetFichier(
+    id SERIAL PRIMARY KEY,
+    fichierLink varchar(255),
+    id_prestaEmplacement int,
+    FOREIGN KEY(id_prestaEmplacement) REFERENCES possède(id)
+);
+
 CREATE TABLE accueil(
    id_scene VARCHAR(50),
    id_intervenant VARCHAR(50),
@@ -232,13 +233,3 @@ CREATE TABLE taggue(
    FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
    FOREIGN KEY(id_tag) REFERENCES tags(id_tag)
 );
-
-
-
-
-
-
-
-
-
-
