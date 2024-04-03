@@ -38,6 +38,24 @@ exports.updatePrestataireStatus = async (req, res) => {
         res.status(500).json({ message: 'Erreur serveur' });
     }
 }
+
+exports.removePrestataireProfile = async (req, res) => {
+    try {
+        console.log("ici")
+        const { user_id, prestataire_id } = req.params;
+        console.log(user_id)
+        console.log(prestataire_id)
+
+
+        await adminService.removePrestataire(user_id, prestataire_id);
+
+        res.status(200).json({ success: true, message: 'Profil prestataire supprimé avec succès.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Une erreur est survenue lors de la suppression du profil prestataire.' });
+    }
+};
+
 exports.saveUser = (req, res) => {
     adminService.createUser(req,(error,data)=>{
         if (error) {

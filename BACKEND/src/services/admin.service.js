@@ -19,6 +19,7 @@ async function getAllUsers() {
         from prestataire
         INNER JOIN ETAT e on e.etat_id = prestataire.etat_id
         INNER JOIN UTILISATEURS u on u.user_id = prestataire.id_user
+        WHERE u.group_id !=1
         ORDER BY etat_libelle ASC;`);
     return res.rows;
   } catch (err) {
@@ -88,6 +89,41 @@ async function refusePrestataire(id) {
     console.log(`Prestataire refusé avec succès (ID: ${id})`);
   } catch (err) {
     console.error("Refus du prestataire échoué:", err);
+  } finally {
+    client.release();
+  }
+}
+
+async function removePrestataire(user_id, prestataire_id) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    await client.query("DELETE FROM reservation WHERE id_prestataire = $1;", [
+      prestataire_id,
+    ]);
+    await client.query("DELETE FROM commentaire WHERE id_prestataire = $1;", [
+      prestataire_id,
+    ]);
+    await client.query(
+      "UPDATE emplacement SET prestataire_id = NULL WHERE prestataire_id = $1;",
+      [prestataire_id]
+    );
+    await client.query("DELETE FROM prestataire WHERE id_prestataire = $1;", [
+      prestataire_id,
+    ]);
+
+    await client.query(
+      "DELETE FROM MOTS_DE_PASSE_UTILISATEURS WHERE User_Id = $1;",
+      [user_id]
+    );
+    await client.query("DELETE FROM UTILISATEURS WHERE User_Id = $1;", [
+      user_id,
+    ]);
+    await client.query("COMMIT");
+    console.log("Suppression réussie !");
+  } catch (err) {
+    await client.query("ROLLBACK");
+    console.error("Erreur lors de la suppression :", err);
   } finally {
     client.release();
   }
@@ -171,4 +207,5 @@ module.exports = {
   getAllUsers: getAllUsers,
   deleteUser: deleteUser,
   changeUser: changeUser,
+  removePrestataire,
 };
