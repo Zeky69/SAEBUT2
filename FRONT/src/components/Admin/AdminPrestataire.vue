@@ -35,7 +35,7 @@
 
               <template v-else-if="item.etat_id === 3">
                 <!-- État: Refusé -->
-                <button class="accept-btn" @click="reAcceptUser(item)">Re-Accepter</button>
+                <button class="accept-btn" @click="manageUser(item.id_user, item.id_prestataire, 2)">Re-Accepter</button>
               </template>
 
               <template v-else-if="item.etat_id === 1">
@@ -126,9 +126,6 @@ export default {
         console.error("Error managing user:", error);
       }
     },
-    reAcceptUser(user) {
-      console.log("Re-accepting user:", user);
-    },
   },
   created() {
     this.fetchUsers();
@@ -177,7 +174,6 @@ $dark-gray: black;
     padding: 0.5rem;
     font-size: inherit;
     border-radius: 4px;
-    appearance: listbox;
     text-align: center;
     transition: all 0.2s ease-in-out;
 
