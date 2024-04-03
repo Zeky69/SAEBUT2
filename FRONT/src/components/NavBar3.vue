@@ -19,8 +19,7 @@
         </div>
         <div class="menu-text--wrapper" v-show="navOpen">
           <div class="menu-text">
-            <a v-for="(text, index) in Object.entries(navBarTitles)" :key="index" @click="menuClicked(text[1])">{{ text[0]
-            }}</a>
+            <a v-for="(path, key) in navBarTitles" :key="key" @click="menuClicked(path)">{{ $t(`navbar.${key}`) }}</a>
           </div>
           <div class="scrolled-icons">
             <TranslateTool />
@@ -44,11 +43,11 @@ export default {
     prevScrollpos: 0,
     scrolled: false,
     navBarTitles: {
-      'Accueil': '/',
-      'Restauration': '/restauration',
-      'Boutique': '/boutique',
-      'Billetterie': '/billetterie',
-      'Organisateurs': '/organisateurs',
+      'home': '/',
+      'restaurant': '/restauration',
+      'shop': '/boutique',
+      'tickets': '/billetterie',
+      'organizers': '/organisateurs',
     }
   }),
   components:{
