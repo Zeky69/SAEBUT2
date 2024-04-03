@@ -3,7 +3,7 @@
 <template>
   <div class="all-container">
     <div class="dotted"></div>
-    <div class="title-container"><h1 class="title">Carte &nbsp;<span>Interactive</span></h1></div>
+    <div class="title-container"><h1 class="title">{{ $t('map2D.title') }}</h1></div>
   <div class="map">
     <div class="filtre-container">
       <div class="info-panel-user info-panel-close">
@@ -11,13 +11,13 @@
       </div>
       <div class="filtre-head">
       <div class="search-bar">
-        <input class="search-input" placeholder="Rechercher événement"  type="text" v-model="filtre.nom" id="nom" name="nom">
+        <input class="search-input" :placeholder="$t('map2D.placeholderSearch')"  type="text" v-model="filtre.nom" id="nom" name="nom">
         <img class="loupe" :src="require('@/assets/icons/loupe.svg')" alt="loupe de recherche">
       </div>
         <div class="selector-container">
         <bar-select
           :options="types"
-          :default="{value: '', libelle: 'Toutes les catégories'}"
+          :default="{value: '', libelle: $t('map2D.allCategories')}"
           class="select"
           @input="updatetype"
       />
@@ -397,8 +397,6 @@ option {
 .vert{
   background-color: #00ff00;
 }
-
-.
 
 .title-container{
   width: 100%;

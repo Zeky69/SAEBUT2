@@ -6,20 +6,20 @@
       <div  v-for="(item , index) in items" :key="index" class="card">
         <div class="card-head" >
           <div class="title-card">
-            <h1 class="card-billet-title">{{item.title}}</h1>
-            <h2 class="card-billet-subtitle">{{item.day}} jour{{item.day >1 ? 's':''}}</h2>
+            <h1 class="card-billet-title">{{ $t('passBillet.title', { type: item.title }) }}</h1>
+            <h2 class="card-billet-subtitle">{{ item.day }} {{ $t('passBillet.day', { s: item.day > 1 ? 's' : '' }) }}</h2>
           </div>
-          <p class="price">{{item.price}}€</p>
+          <p class="price">{{ $t('passBillet.price', { price: item.price }) }}</p>
         </div>
         <hr>
         <div class="card-body">
           <div class="list-container">
             <ul class="list-info">
-              <li v-for="(i , index) in item.listInfo" :key="index" >{{i}}</li>
+              <li v-for="(i , index) in item.listInfo" :key="index" >{{ $t(`passBillet.listInfo.${i}`) }}</li>
             </ul>
           </div>
           <router-link :to="{ name: 'billetterieid', params: { idselect: item.id } }">
-            <button class="btn-card">Ajouter au panier</button>
+            <button class="btn-card">{{ $t('addToCart') }}</button>
           </router-link>
         </div>
       </div>
@@ -40,25 +40,25 @@ export default {
     items:[
         {
       id: '1',
-      title: 'Billet Basic',
+      title: 'Basic',
       price: 24.99,
       day: 1,
-      listInfo: ['Accès au parc'],
+      listInfo: ['accesParc'],
 
     },
     {
       id: '2',
-      title: 'Billet Fast',
+      title: 'Fast',
       price: 34.99,
       day: 1,
-      listInfo: ['Accès au parc' , 'Accès sans attente aux attractions'],
+      listInfo: ['accesParc' , 'accesSansAttente'],
     },
     {
       id: '3',
-      title: 'Billet Premium',
+      title: 'Premium',
       price: 59.99,
       day: 2,
-      listInfo: ['Accès au parc' , 'Accès sans attente aux attractions' , 'Des goodies offerts'],
+      listInfo: ['accesParc' , 'accesSansAttente' , 'goodiesOfferts'],
     },
     ]
   }),

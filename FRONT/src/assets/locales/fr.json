@@ -5,13 +5,82 @@
     "welcomeBelforaine": "Bienvenue à Belforaine, <span style=\"color:#553C65\"><br>le paradis du futur !</span>",
     "futureMagic": "Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences inspirantes et divertissement sans fin fusionnent. Plongez dans la magie que nous réserve le futur, le tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !",
     "learnMoreButton": "Plus d'information",
-    "ridesExperience": "Plus que des manèges, une expérience qui tourne la magie à l'infini !",
+    "ridesExperience": "Plus que des manèges, une expérience <br> <span style=\"color:#553C65\"> qui tourne la magie à l'infini ! </span>",
     "titlepartners": "Nos partenaires",
     "research": "Rechercher",
-    "defaultCategory": "Catégorie",
+    "categoryPrestates": "Catégorie",
     "attraction": "Attraction",
     "animation": "Animateur",
     "caterer": "Traiteur",
-    "profile": "Voir le profil"
+    "profile": "Voir le profil",
+    "addToCart": "Ajouter au panier",
+
+    "passBillet": {
+        "title": "Billet {type}",
+        "day": "jour{s}",
+        "price": "{price}€",
+        "listInfo": {
+          "accesParc": "Accès au parc",
+          "accesSansAttente": "Accès sans attente aux attractions",
+          "goodiesOfferts": "Des goodies offerts"
+        }
+      },
+
+      "presentationCards": [
+        {
+          "title": "Rejoignez la Belforaine LAN Fest !",
+          "content": "Des tournois de jeu inoubliables vous attendent à LAN Fest, le paradis des gamers à Belforaine. Défiez vos amis, mesurez vos compétences et plongez dans l'action multijoueur ultime !",
+          "buttonText": "Je fonce !"
+        },
+        {
+          "title": "Découvrez nos aventures !",
+          "content": "Nos attractions sont en constante évolution. Des montagnes russes trépidantes aux spectacles surprenants, plongez dans un univers en perpétuelle transformation.",
+          "buttonText": "Je veux essayer !"
+        },
+        {
+          "title": "Goûtez aux Saveurs du Futur",
+          "content": "Nos restaurants vous transportent dans le futur culinaire avec des plats innovants, des saveurs exotiques et des expériences de restauration uniques.",
+          "buttonText": "Réserver une table"
+        }
+      ],
+
+    "map2D": {
+    "title": "Carte Interactive",
+    "placeholderSearch": "Rechercher un événement",
+    "allCategories": "Toutes les catégories"
+    },
+
+    "footer" : {
+        "newsletter": "Inscrivez-vous à la Newsletter de <strong>Belforaine</strong>",
+        "newsletterPlaceholder": "Entrez votre adresse e-mail",
+        "newsletterButton": "S'inscrire",
+        "legalInfos": "Informations légales",
+        "legalNotice": "Mentions légales",
+        "cookiesUsage": "Utilisation des cookies",
+        "modifyCookiesUsage": "Modifier les paramètres des cookies",
+
+        "sections": "Rubriques",
+        "accueil": "Accueil",
+        "attractionDiscoveries": "Découvrez nos attractions",
+        "restaurantHungry": "Un petit creux ? Réservez une table !",
+        "ourShop": "Notre boutique",
+        "buyTickets": "Achetez vos billets",
+
+
+        "evenMore": "+ Encore !",
+        "whoAreWe": "Qui sommes-nous ?",
+        "contactUs": "Contactez-nous",
+        "connectYou": "Connectez-vous"
+    },
+
+
+    "navbar": {
+      "home": "Accueil",
+      "restaurant": "Restauration",
+      "shop": "Boutique",
+      "tickets": "Billetterie",
+      "organizers": "Organisateurs"
+    }
+    
 }
   
