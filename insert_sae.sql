@@ -36,7 +36,7 @@ INSERT INTO UTILISATEURS(FIRST_NAME,LAST_NAME,email,Date_Created,Group_Id) VALUE
 		                                     (3,'$2b$10$Q6WR1IlxWBcityVVNbO2p.ehl3vuLtRKnN2klfpSR6xQpASf9cIIu');
 
 
-INSERT INTO prestataire( description, nom, id_user, etat_id ,photo_profil) VALUES ('Drake le meilleur chanteur','Drake','3',2,'drake.png');
+INSERT INTO prestataire( description, nom, id_user, etat_id ,photo_profil) VALUES ('Drake le meilleur chanteur','Drake','3',2,'drake.jpeg');
 
 
 INSERT INTO tags VALUES ('1', 'accessible handicapé'),
