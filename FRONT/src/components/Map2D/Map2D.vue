@@ -34,7 +34,7 @@ import {LImageOverlay, LMap, LPolygon, LTileLayer} from "vue2-leaflet";
 import 'leaflet/dist/leaflet.css';
 import InfoPanel from "@/components/Map2D/infoPanel.vue";
 import {mapState} from "vuex";
-import {getAllEmp, updateEmpInfo} from "@/services/mapPrestataire.service";
+import {getAllEmp, updateEmp} from "@/services/map2D.service";
 
 export default {
   name: 'Map2D',
@@ -61,7 +61,7 @@ export default {
   async created() {
     await this.$store.dispatch('getPrestataireObject', this.user_id)
     getAllEmp().then((response) => {
-      console.log(response)
+      console.log("emp", response)
       response.forEach((emp) => {
         const data = {
           "geometry": emp.matricepoints.matricepoints,
@@ -105,7 +105,7 @@ export default {
         feature.properties.apartient = null;
       }
 
-      updateEmpInfo({
+      updateEmp({
         uuid: feature.properties.id,
         nom: feature.properties.name,
         description: feature.properties.description,

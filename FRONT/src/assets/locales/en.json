@@ -8,12 +8,79 @@
     "ridesExperience": "More than just rides, an experience <br> <span style=\"color:#553C65\"> that spins magic infinitely!</span>",
     "titlepartners": "Our Partners",
     "research": "Search",
-    "defaultCategory": "Category",
+    "categoryPrestates": "Category",
     "attraction": "Ride",
     "animation": "Animator",
     "caterer": "Caterer",
-    "profile": "Check the profile"
+    "profile": "Check the profile",
+    "addToCart": "Add to cart",
 
 
-    
+    "passBillet": {
+      "title": "{type} Pass",
+      "day": "day{s}",
+      "price": "{price}€",
+      "listInfo": {
+        "accesParc": "Access to the park",
+        "accesSansAttente": "Wait-free access to attractions",
+        "goodiesOfferts": "Free goodies"
+      }
+    },
+
+    "presentationCards": [
+      {
+        "title": "Join the Belforaine LAN Fest!",
+        "content": "Unforgettable gaming tournaments await you at LAN Fest, the gamer's paradise in Belforaine. Challenge your friends, measure your skills and dive into the ultimate multiplayer action!",
+        "buttonText": "I'm in!"
+      },
+      {
+        "title": "Discover our adventures!",
+        "content": "Our attractions are constantly evolving. From thrilling roller coasters to surprising shows, dive into a universe in constant transformation.",
+        "buttonText": "I want to try!"
+      },
+      {
+        "title": "Taste the Flavors of the Future",
+        "content": "Our restaurants take you into the culinary future with innovative dishes, exotic flavors and unique dining experiences.",
+        "buttonText": "Book a table"
+      }
+    ],
+
+
+    "map2D": {
+      "title": "Interactive Map",
+      "placeholderSearch": "Search for an event",
+      "allCategories": "All categories"
+    },
+
+    "footer" : {
+      "newsletter": "Sign up to the Newsletter of <strong>Belforaine</strong>",
+      "newsletterPlaceholder": "Enter your email address",
+      "newsletterButton": "Sign up",
+      "legalInfos": "Legal information",
+      "legalNotice": "Legal notices",
+      "cookiesUsage": "Cookies usage",
+      "modifyCookiesUsage": "Modify cookies settings",
+
+      "sections": "Sections",
+      "accueil": "Home",
+      "attractionDiscoveries": "Discover our attractions",
+      "restaurantHungry": "Hungry? Book a table!",
+      "ourShop": "Our shop",
+      "buyTickets": "Buy your tickets",
+  
+      "evenMore": "Even more!",
+      "whoAreWe": "Who are we?",
+      "contactUs": "Contact us",
+      "connectYou": "Log in"
+    },
+
+
+    "navbar": {
+      "home": "Home",
+      "restaurant": "Catering",
+      "shop": "Shop",
+      "tickets": "Tickets",
+      "organizers": "Organizers"
+    }
+
   }

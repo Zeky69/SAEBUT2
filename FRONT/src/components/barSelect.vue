@@ -5,10 +5,10 @@
     </div>
     <div class="items" :class="{ selectHide: !open }">
       <div @click="
-          selected = {value: '', libelle: 'Toutes les catégories'};
+          selected = {value: '', libelle: $t('map2D.allCategories')};
           open = false;
-          $emit('input', {value: '', libelle: 'Toutes les catégories'});
-        "> {{defaults.libelle}}</div>
+          $emit('input', {value: '', libelle: $t('map2D.allCategories')});
+        "> {{ $t('map2D.allCategories') }}</div>
       <div
           v-for="(option, i) of options"
           :key="i"

@@ -30,12 +30,12 @@
             <td>
               <template v-if="item.etat_id === 2">
                 <!-- État: Accepté -->
-                <button class="edit-btn">Edit</button>
+                <button class="edit-btn" @click="editPresta(item.id_user)">Edit</button>
               </template>
 
               <template v-else-if="item.etat_id === 3">
                 <!-- État: Refusé -->
-                <button class="accept-btn" @click="reAcceptUser(item)">Re-Accepter</button>
+                <button class="accept-btn" @click="manageUser(item.id_user, item.id_prestataire, 2)">Re-Accepter</button>
               </template>
 
               <template v-else-if="item.etat_id === 1">
@@ -90,6 +90,10 @@ export default {
     }
   },
   methods: {
+    editPresta(user_id){
+      this.$router.replace("/admin/prestataires/"+user_id)
+
+    },
     fetchUsers() {
       adminService
         .getAllUsers()
@@ -125,9 +129,6 @@ export default {
       } catch (error) {
         console.error("Error managing user:", error);
       }
-    },
-    reAcceptUser(user) {
-      console.log("Re-accepting user:", user);
     },
   },
   created() {
@@ -177,7 +178,6 @@ $dark-gray: black;
     padding: 0.5rem;
     font-size: inherit;
     border-radius: 4px;
-    appearance: listbox;
     text-align: center;
     transition: all 0.2s ease-in-out;
 
