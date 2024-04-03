@@ -99,23 +99,7 @@ CREATE TABLE categorie_produit(
 );
 
 
-    CREATE TABLE produit(
-       id_produit SERIAL,
-       nom VARCHAR(50),
-       prix NUMERIC(5,2),
-       stock INT,
-       photo VARCHAR(50),
-       categorie_id INT,
-       FOREIGN KEY(categorie_id) REFERENCES categorie_produit(id_categorie),
-       PRIMARY KEY(id_produit)
-    );
 
-    CREATE TABLE type(
-       id_type VARCHAR(50),
-       libelle VARCHAR(50),
-       marker VARCHAR(50),
-       PRIMARY KEY(id_type)
-    );
 
 
 CREATE TABLE tags(
@@ -136,6 +120,26 @@ CREATE TABLE tags(
        FOREIGN KEY(id_user) REFERENCES UTILISATEURS(User_Id),
        FOREIGN KEY(etat_id) REFERENCES ETAT(etat_id)
     );
+
+CREATE TABLE produit(
+                        id_produit SERIAL,
+                        nom VARCHAR(50),
+                        prix NUMERIC(5,2),
+                        stock INT,
+                        photo VARCHAR(50),
+                        categorie_id INT,
+                        prestataire_id INT,
+                        FOREIGN KEY(categorie_id) REFERENCES categorie_produit(id_categorie),
+                        FOREIGN KEY(prestataire_id) REFERENCES prestataire(id_prestataire),
+                        PRIMARY KEY(id_produit)
+);
+
+CREATE TABLE type(
+                     id_type VARCHAR(50),
+                     libelle VARCHAR(50),
+                     marker VARCHAR(50),
+                     PRIMARY KEY(id_type)
+);
 
 CREATE TABLE emplacement(
     id_emplacement VARCHAR(50),
@@ -286,6 +290,7 @@ CREATE TABLE billet(
            id_commande INT NOT NULL,
            id_produit INT NOT NULL,
            quantite INT NOT NULL,
+           valide BOOLEAN NOT NULL,
            PRIMARY KEY(id_commande, id_produit),
            FOREIGN KEY(id_produit) REFERENCES produit(id_produit)
      );

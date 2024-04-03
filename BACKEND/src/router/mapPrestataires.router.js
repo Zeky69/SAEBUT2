@@ -18,13 +18,13 @@ router.delete('/emp/:id', mapPrestatairesMiddlewares.validateDelempInput , mapPr
 router.patch('/emp', mapPrestatairesMiddlewares.validateUpdateempInput , mapPrestatairesControllers.updateEmp);
 router.patch('/emp/info', mapPrestatairesMiddlewares.validateUpdateempInfoInput , mapPrestatairesControllers.updateEmpInfo);
 
-router.get('/bat', mapPrestatairesMiddlewares.validatebatFilterInput, mapPrestatairesControllers.getBat);
+//router.get('/bat', mapPrestatairesMiddlewares.validatebatFilterInput, mapPrestatairesControllers.getBat);
 
-router.get('/bat/type',mapPrestatairesMiddlewares.validatebatTypeFilterInput, mapPrestatairesControllers.getBatType);
+//router.get('/bat/type',mapPrestatairesMiddlewares.validatebatTypeFilterInput, mapPrestatairesControllers.getBatType);
 
-router.get('/bat/:uuid', mapPrestatairesMiddlewares.validatebatUUID, mapPrestatairesControllers.getBatUUID);
+//router.get('/bat/:uuid', mapPrestatairesMiddlewares.validatebatUUID, mapPrestatairesControllers.getBatUUID);
 
-router.get('/bat/emp/:uuid', mapPrestatairesMiddlewares.validebatempUUID, mapPrestatairesControllers.getBatempUUID);
+//router.get('/bat/emp/:uuid', mapPrestatairesMiddlewares.validebatempUUID, mapPrestatairesControllers.getBatempUUID);
 
 
 

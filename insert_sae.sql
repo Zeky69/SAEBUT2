@@ -110,12 +110,12 @@ INSERT INTO produit (nom, prix, stock, categorie_id,photo) VALUES
 
 
 -- Ajout des produits pour la catégorie 'Accessoires'
-INSERT INTO produit (nom, prix, stock, categorie_id, photo) VALUES
-    ('Coque de téléphone artistique', 12.99, 40, 4,'coque_telephone.png'),
-    ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png'),
-    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png'),
-    ('Étui à lunettes original', 8.49, 50, 4,'etui.png'),
-    ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png');
+INSERT INTO produit (nom, prix, stock, categorie_id, photo,prestataire_id) VALUES
+    ('Coque de téléphone artistique', 12.99, 40, 4,'coque_telephone.png',1),
+    ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png',1),
+    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png',2),
+    ('Étui à lunettes original', 8.49, 50, 4,'etui.png',2),
+    ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png',1);
 
 
 
@@ -153,8 +153,8 @@ INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom,dat
 ('15415',1,2,1,'Mhammed','Akburak','{"date":["2024-01-16"]}'),
 ('5415',1,3,1,'Enzo','LeRaptor','{"date":["2024-01-15","2024-01-16"]}');
 
-INSERT INTO ligneCommandeArticle(id_commande , id_produit , quantite) VALUES
-(1,1,5);
+INSERT INTO ligneCommandeArticle(id_commande , id_produit ,valide, quantite) VALUES
+(1,1,false,5);
 
 
 
