@@ -174,7 +174,6 @@ $dark-gray: black;
     padding: 0.5rem;
     font-size: inherit;
     border-radius: 4px;
-    appearance: listbox;
     text-align: center;
     transition: all 0.2s ease-in-out;
 
