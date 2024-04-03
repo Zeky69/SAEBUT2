@@ -93,16 +93,7 @@ CREATE TABLE categorie_produit(
 	PRIMARY KEY(id_categorie)
 );
 
-CREATE TABLE produit(
-   id_produit SERIAL,
-   nom VARCHAR(50),
-   prix NUMERIC(5,2),
-   stock INT,
-   photo VARCHAR(50),
-   categorie_id INT,
-   FOREIGN KEY(categorie_id) REFERENCES categorie_produit(id_categorie),
-   PRIMARY KEY(id_produit)
-);
+
 
 CREATE TABLE type(
    id_type VARCHAR(50),
@@ -136,24 +127,18 @@ CREATE TABLE prestataire(
 );
 
 CREATE TABLE produit(
-                        id_produit SERIAL,
-                        nom VARCHAR(50),
-                        prix NUMERIC(5,2),
-                        stock INT,
-                        photo VARCHAR(50),
-                        categorie_id INT,
-                        prestataire_id INT,
-                        FOREIGN KEY(categorie_id) REFERENCES categorie_produit(id_categorie),
-                        FOREIGN KEY(prestataire_id) REFERENCES prestataire(id_prestataire),
-                        PRIMARY KEY(id_produit)
+    id_produit SERIAL,
+    nom VARCHAR(50),
+    prix NUMERIC(5,2),
+    stock INT,
+    photo VARCHAR(50),
+    categorie_id INT,
+    prestataire_id INT NOT NULL,
+    FOREIGN KEY(categorie_id) REFERENCES categorie_produit(id_categorie),
+    FOREIGN KEY (prestataire_id) REFERENCES prestataire(id_prestataire),
+    PRIMARY KEY(id_produit)
 );
 
-CREATE TABLE type(
-                     id_type VARCHAR(50),
-                     libelle VARCHAR(50),
-                     marker VARCHAR(50),
-                     PRIMARY KEY(id_type)
-);
 
 CREATE TABLE emplacement(
     id_emplacement VARCHAR(50),

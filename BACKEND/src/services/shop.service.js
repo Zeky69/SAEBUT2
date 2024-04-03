@@ -91,25 +91,27 @@ async function getRandomArticles(){
 }
 
 async function getCommandes(){
+    console.log("getCommandes service back")
     const client = await pool.connect();
     try{
-        const query = `SELECT * from commande JOIN LATERAL ( SELECT * FROM ligneCommandeArticle WHERE id_commande = commande.id_commande) lca ON true; )`
+        const query = `SELECT * from commande JOIN ligneCommandeArticle on commande.id_commande = ligneCommandeArticle.id_commande 
+        JOIN produit on ligneCommandeArticle.id_produit = produit.id_produit;`
 
-        const res = await client.query(query)
-        console.log("Récupération des commandes");
-        return res.rows;
-    }catch(err){
-        console.log("Echec récupération des commandes")
-        console.log(err)
-    }finally{
-        client.release();
-    }
-}
+                const res = await client.query(query)
+                console.log("Récupération des commandes");
+                return res.rows;
+            }catch(err){
+                console.log("Echec récupération des commandes")
+                console.log(err)
+            }finally{
+                client.release();
+            }
+        }
 
-async function getCommande(id_commande){
-    const client = await pool.connect();
-    try{
-        const query = `SELECT * from commande join ligneCommandeArticle on commande.id_commande = ligneCommandeArticle.id_commande
+        async function getCommande(id_commande){
+            const client = await pool.connect();
+            try{
+                const query = `SELECT * from commande join ligneCommandeArticle on commande.id_commande = ligneCommandeArticle.id_commande
         WHERE id_commande=$1;`;
 
         const res = await client.query(query,[id_commande])
@@ -231,8 +233,8 @@ async function setCommande(iduser){
 async function setCommandeLineArticle(id_commande,id_produit,quantite){
     const client = await pool.connect();
     try{
-        let sql = `INSERT INTO ligneCommandeArticle (id_commande, id_produit, quantite) VALUES ($1, $2, $3);`;
-        let values = [id_commande,id_produit,quantite];
+        let sql = `INSERT INTO ligneCommandeArticle (id_commande, id_produit, quantite,valide) VALUES ($1, $2, $3, $4);`;
+        let values = [id_commande,id_produit,quantite,false];
         let result = await client.query(sql, values);
         return true;
 

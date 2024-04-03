@@ -34,6 +34,9 @@ export default new Vuex.Store({
     },
     getPrestataireObject(state){
       return state.prestataireObject;
+    },
+    getUserId(state){
+        return state.user_id;
     }
   },
   mutations: {

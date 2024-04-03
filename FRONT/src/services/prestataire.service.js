@@ -3,7 +3,9 @@ const url='/prestataires/';
 
 
 async function getPrestataire(id) {
-    return await getRequest('/prestataires/' + id, 'getPrestataireId')
+    const response = await getRequest('/prestataires/' + id, 'getPrestataireId');
+    console.log("response",response)
+    return response;
 }
 
 async function updatePage(prestataire){
@@ -18,6 +20,8 @@ async function getPrestataires(){
 
 
  async  function getPrestataireObject(idUser){
+    console.log("idUser",idUser)
+    console.log("allo)")
     return await getRequest('/user/prestataire/'+idUser,'getPrestataireObject')
 
 }
@@ -41,13 +45,12 @@ async function getPrestatairesTypes(){
     return await getRequest('/prestataires/types', 'getPrestatairesTypes')
 }
 
-export {
+export default{
     updatePrestataire,
     getPrestataire,
     updatePage,
     getPrestataires,
     getPrestataireObject,
     getPrestatairesTypes
-
 }
 
