@@ -64,7 +64,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.group_id)
     this.getInformation()
   }
 }

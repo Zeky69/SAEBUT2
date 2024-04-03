@@ -46,7 +46,6 @@ async function acceptPrestataire(user_id, prestataire_id) {
 
     const hashedPassword = bcrypt.hashSync(mdp, saltRounds);
 
-    console.log(mdp);
     const queryUpdate =
       "UPDATE prestataire SET etat_id = 2 WHERE id_prestataire = $1;";
     const queryInsertPassword = `INSERT INTO MOTS_DE_PASSE_UTILISATEURS(user_id, password) VALUES ($1, $2);`;

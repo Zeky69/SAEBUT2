@@ -60,7 +60,6 @@ data: () => ({
       await this.getPrestataireObject(this.user_id);
       const presta = this.prestataireObject;
 
-      console.log(presta)
 
       this.path = presta.photo_profil;
 
@@ -68,7 +67,6 @@ data: () => ({
   },
   mounted() {
     this.getInformation();
-    console.log(this.group_id)
   }
 }
 </script>

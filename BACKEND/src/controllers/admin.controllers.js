@@ -8,8 +8,7 @@ exports.getAllUsers = async (req, res) => {
         if (users.length === 0) {
           return res.status(404).json({ message: 'Aucun utilisateur trouvé' });
         }
-        console.log(users)
-    
+
         res.status(200).json(users);
       } catch (error) {
         console.error('Erreur lors de la récupération des utilisateurs :', error);
@@ -41,12 +40,7 @@ exports.updatePrestataireStatus = async (req, res) => {
 
 exports.removePrestataireProfile = async (req, res) => {
     try {
-        console.log("ici")
         const { user_id, prestataire_id } = req.params;
-        console.log(user_id)
-        console.log(prestataire_id)
-
-
         await adminService.removePrestataire(user_id, prestataire_id);
 
         res.status(200).json({ success: true, message: 'Profil prestataire supprimé avec succès.' });

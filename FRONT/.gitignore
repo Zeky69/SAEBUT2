@@ -4,6 +4,8 @@ node_modules
 /BACKEND/.package-lock.json
 /FRONT/.package-lock.json
 
+*/.package-lock.json
+
 # local env files
 .env.local
 .env.*.local

@@ -35,7 +35,6 @@ exports.validateEventUUID = (req, res, next) => {
 }
 
 exports.validateAddEventInput = async (req, res, next) => {
-    console.log("validateAddEventInput");
     next();
 }
 

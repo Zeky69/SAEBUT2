@@ -5,7 +5,6 @@ const scneneService = require('../services/scene.services');
 
 exports.getScene = async (req,res) => {
     let reponse = await scneneService.getScene(req);
-    console.log("reponse controller",reponse);
     if (reponse) {
         return res.status(200).send(reponse);
     }
@@ -15,7 +14,6 @@ exports.getScene = async (req,res) => {
 
 exports.getSceneUUID = async (req,res) => {
     let info = req.params.uuid;
-    console.log("info",info);
     let reponse = await scneneService.getSceneUUID(info);
     if (reponse) {
         return res.status(200).send(reponse);
@@ -43,7 +41,6 @@ exports.saveScene = async (req,res) => {
 
 exports.deleteScene = (req, res) => {
     let info = req.query;
-    console.log("info",info);
     let reponse = scneneService.deleteScene(info);
     if (reponse) {
         return res.status(200).send(reponse);
@@ -54,7 +51,6 @@ exports.deleteScene = (req, res) => {
 
 exports.getEvent = async (req,res) => {
     let reponse = await scneneService.getEvent(req);
-    console.log("reponse controller",reponse);
     if (reponse) {
         return res.status(200).send(reponse);
     }
@@ -64,7 +60,6 @@ exports.getEvent = async (req,res) => {
 
 exports.getEventUUID = async (req,res) => {
     let info = req.params.uuidEvent;
-    console.log("info",info);
     let reponse = await scneneService.getEventUUID(info);
     if (reponse) {
         return res.status(200).send(reponse);
@@ -88,7 +83,6 @@ exports.saveEvent = async (req,res) => {
 
 exports.deleteEvent = (req, res) => {
     let info = req.params.uuidEvent;
-    console.log("info",info);
     let reponse = scneneService.deleteEvent(info);
     if (reponse) {
         return res.status(200).send(reponse);

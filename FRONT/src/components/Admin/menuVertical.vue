@@ -84,8 +84,9 @@ export default {
     getImage,
     ...mapActions(['logout']),
     deconnexion(){
-      this.$router.replace('/');
       this.logout();
+      this.$router.replace('/');
+
     }
   },
   created() {

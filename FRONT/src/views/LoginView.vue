@@ -69,7 +69,6 @@ export default {
   methods:{
     ...mapActions(['loginUser']),
     async connect(){
-      console.log(this.login)
       var data =
           {"email" : this.login,
             "password" :this.password};
@@ -88,7 +87,6 @@ export default {
         }
 
       }
-      console.log(this.token);
     },
 
     handleEnterKey(event) {

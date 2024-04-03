@@ -7,7 +7,6 @@ const bcrypt = require("bcrypt");
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  console.log(req.body);
 
   try {
     const user = await userService.loginUser(email, password);
@@ -15,7 +14,6 @@ exports.login = async (req, res) => {
       return res.status(401).send("Utilisateur non trouvé");
     }
     const token = jwt.sign(user, jwtSecret, { expiresIn: "24h" });
-    console.log(user);
     let oui = {
       token,
       id: user.user_id,
@@ -23,8 +21,8 @@ exports.login = async (req, res) => {
       lname: user.last_name,
       email: user.email,
       group_id: user.group_id,
+
     };
-    console.log(oui);
 
     return res.status(200).json({
       token,
