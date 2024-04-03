@@ -142,6 +142,7 @@ CREATE TABLE emplacement(
     description VARCHAR(255),
     matricePoints JSON,
     prestataire_id INT,
+    use_Resa BOOLEAN default true,
     FOREIGN KEY (id_type) REFERENCES type(id_type),
     PRIMARY KEY(id_emplacement)
 );
@@ -161,7 +162,7 @@ CREATE TABLE emplacement(
 --          image_path TEXT,
 --          type_id VARCHAR(50),
 --          id_emplacement VARCHAR(50) NOT NULL UNIQUE,
---         use_Resa BOOLEAN default true,
+--          use_Resa BOOLEAN default true,
 --          PRIMARY KEY(id_batiment),
 --          FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
 --          FOREIGN KEY(type_id) REFERENCES type(id_type),
@@ -272,7 +273,7 @@ CREATE TABLE ligneCommandeBillet(
    subId INT NOT NULL,
    nom VARCHAR(100),
    prenom VARCHAR(100),
-   date JSON,
+   date timestamp,
    PRIMARY KEY(uuid),
    FOREIGN KEY(id_billet,subId) REFERENCES sousBillet(id_billet,subId)
  );
