@@ -84,7 +84,9 @@ import {getImage,uploadImage,deleteImage} from "@/services/image.service"
 
 export default {
   name: 'EditComponents',
+  props:['user_id'],
   data: () => ({
+
     nomEntreprise: '',
     description: '',
     photoDeProfil: '',
@@ -92,6 +94,7 @@ export default {
     photoChoisiName:'',
     prenom: '',
     nom: '',
+    email:'',
     motDePasse: '',
     isEditing: false, // New state to track editing mode
     showPassword:false,
@@ -99,7 +102,7 @@ export default {
     file:null
   }),
   computed: {
-    ...mapState(['lname', 'fname', 'email', 'user_id', 'prestataireObject']),
+    ...mapState(['prestataireObject']),
   },
   methods: {
     ...mapActions(['getPrestataireObject']),
@@ -110,13 +113,16 @@ export default {
       this.nomEntreprise = presta.nom;
       this.description = presta.description;
 
+      this.prenom = presta.first_name;
+      this.nom = presta.last_name;
+      this.email = presta.email;
+
       this.photoDeProfil = presta.photo_profil;
       this.photoChoisiName = this.photoDeProfil;
       this.photoDeProfilChoisi = getImage(this.photoChoisiName);
 
 
-      this.prenom = this.fname;
-      this.nom = this.lname;
+
     },
     onFileSelected(eve) {
       this.file = eve.target.files[0];
@@ -161,8 +167,11 @@ export default {
         motDePasse:this.motDePasse
       };
 
+
       try {
+        var prestataire = {lname: this.nom, fname: this.prenom, email: this.email}
         await updatePrestataire(this.user_id,data)
+        this.$store.commit('updatePrestaInfo',prestataire)
         this.isEditing=false;
       } catch (error) {
         console.error("Error managing user:", error);

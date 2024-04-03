@@ -63,6 +63,10 @@ export default new Vuex.Store({
     },
     setPrestataireObject(state, prestataire){
       state.prestataireObject = prestataire;
+    }, updatePrestaInfo(state, prestataire){
+      state.fname = prestataire.fname;
+      state.lname = prestataire.lname;
+      state.email = prestataire.email;
     }
   },
   actions: {

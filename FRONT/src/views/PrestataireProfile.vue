@@ -1,16 +1,21 @@
 <template>
   <div class="PrestataireProfile">
     <PageTitre title="Modification profil"/>
-    <EditComponents></EditComponents>
+    <EditComponents :user_id="user_id"></EditComponents>
   </div>
 </template>
 
 <script>
 import PageTitre from "@/components/Admin/PageTitre.vue";
 import EditComponents from "@/components/Prestatire/EditComponents.vue";
+import {mapState,} from "vuex";
+
 
 export default {
   name: 'PrestataireProfile',
+  computed: {
+    ...mapState(['user_id']),
+  },
   components:{
     PageTitre,
     EditComponents
