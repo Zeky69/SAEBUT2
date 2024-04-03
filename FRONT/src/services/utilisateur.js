@@ -69,7 +69,7 @@ async function ChangePassword(token, password){
 }
 
 async function getInformationFromTokenAPI(token){
-    return getRequest(url+`/${token}`,"GetInformation")
+    return getRequest(url+`/${token}`,"GetInformation" )
 }
 
 async function getInformationFromToken(token) {
@@ -97,7 +97,6 @@ async function VerifyToken(token) {
         if (response.error) {
             throw new Error(response.data.error);
         }
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error('Erreur lors de la récupération des informations depuis le token:', error.message);
@@ -109,6 +108,17 @@ async function getPrestataireObjectAPI(id_user){
     return getRequest(url+`/prestataire/${id_user}`,"GetPrestataireObject")
 }
 
+
+export const authHeader = () => {
+
+    let token = JSON.parse(localStorage.getItem('token'));
+    let header = {}
+    if (token ) {
+        header['x-xsrf-token'] = token;
+    }
+    return header;
+}
+
 export default {
     Login,
     getInformationFromToken,
@@ -116,5 +126,5 @@ export default {
     Register,
     Forget,
     VerifyToken,
-    ChangePassword
+    ChangePassword,
 }

@@ -1,4 +1,4 @@
-import {getRequest,patchRequest} from "@/services/axios.service";
+import {getRequest,patchRequest, deleteRequest} from "@/services/axios.service";
 const url='/admin'
 
 async function getAllUserFromAPI() {
@@ -29,9 +29,28 @@ async function managePresta(data, prestataire_id) {
     }
 }
 
+async function deletePrestaFromApi(user_id, prestataire_id){
+    return deleteRequest(url+`/manage-prestataire/${user_id}/${prestataire_id}`,'DeletePresta');
+}
+async function deletePresta(user_id, prestataire_id) {
+    try {
+        console.log(user_id)
+        console.log(prestataire_id)
+        console.log('les id')
+
+        const response = await deletePrestaFromApi(user_id, prestataire_id);
+        console.log("suppression reussi")
+        return response;
+    } catch (error) {
+        console.error("Error managing prestataire:", error);
+        throw error;
+    }
+}
+
 
 
 export default {
     getAllUsers,
-    managePresta
+    managePresta,
+    deletePresta
 }

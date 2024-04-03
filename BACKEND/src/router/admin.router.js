@@ -11,6 +11,9 @@ router.get('/', adminController.getAllUsers );
 //gere prestataire
 router.patch('/manage-prestataire/:prestataire_id', adminController.updatePrestataireStatus);
 
+router.delete('/manage-prestataire/:user_id/:prestataire_id', adminController.removePrestataireProfile);
+
+
 
 //enregistre un utilisateur
 router.post('/add', adminMiddlewares.validateUserToAddInput,adminController.saveUser);

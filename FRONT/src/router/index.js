@@ -169,9 +169,12 @@ const routes = [
           }, {
           path: ':idprestataire',
             component : () => import('../components/Admin/AdminEditPrestataire.vue')
-          }
-
+          },
         ]
+      },
+      {
+        path: 'profil',
+        component: () => import("../views/AdminProfil.vue")
       },
       {
         path: 'map',
@@ -212,44 +215,43 @@ router.beforeEach(async (to, from, next) => {
   const routeRecord = to.matched.find(record => record.meta.group_id !== undefined);
   const group_id = routeRecord ? routeRecord.meta.group_id : null;
 
-
-  if (store.state.token) {
-    await store.dispatch('getInformationFromToken', store.state.token);
-    if (requiresAuth) {
-      if (group_id === store.state.group_id) {
-        next();
-      } else {
-        switch (store.state.group_id) {
-          case 1:
-            next('/admin');
-            break;
-          case 2:
-            next('/prestataire');
-            break;
-          default:
-            next('/');
-            break;
-        }
-      }
-    } else {
-      await store.dispatch('getInformationFromToken', store.state.token);
-
-      if(store.state.group_id === 1){
-        next("/admin")
-      } else if(store.state.group_id === 2){
-        next("/prestataire")
-      }
-      next();
-    }
-  } else {
+  if (!store.state.token) {
     if (requiresAuth) {
       next('/login');
     } else {
       next();
     }
+    return;
+  }
+
+  await store.dispatch('getInformationFromToken', store.state.token);
+
+  if (requiresAuth) {
+    if (group_id === store.state.group_id) {
+      next();
+    } else {
+      switch (store.state.group_id) {
+        case 1:
+          next('/admin');
+          break;
+        case 2:
+          next('/prestataire');
+          break;
+        default:
+          next('/');
+          break;
+      }
+    }
+  } else {
+    if (store.state.group_id === 1) {
+      next("/admin");
+    } else if (store.state.group_id === 2) {
+      next("/prestataire");
+    } else {
+      next();
+    }
   }
 });
-
 
 
 

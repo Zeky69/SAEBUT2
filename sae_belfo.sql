@@ -94,7 +94,6 @@ CREATE TABLE categorie_produit(
 );
 
 
-
 CREATE TABLE type(
    id_type VARCHAR(50),
    libelle VARCHAR(50),
@@ -148,6 +147,7 @@ CREATE TABLE emplacement(
     matricePoints JSON,
     prestataire_id INT,
     use_Resa BOOLEAN default true,
+    accepted BOOLEAN default false,
     FOREIGN KEY (id_type) REFERENCES type(id_type),
     PRIMARY KEY(id_emplacement)
 );

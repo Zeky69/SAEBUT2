@@ -22,7 +22,7 @@
 
       </l-polygon>
         <div class="info-panel info-panel-close">
-        <info-panel v-if="featureSelected!=null" @update-feature="updateFeatures" @close-panel="closePanel" :prestataire="prestataireObject" :feature="featureSelected"> </info-panel>
+        <info-panel v-if="featureSelected!=null" @update-feature="updateFeatures"  @ask="askGetEmp" @free="freeMyEmp" @close-panel="closePanel"  :prestataire="prestataireObject" :feature="featureSelected"> </info-panel>
 
         </div>
   </l-map>
@@ -34,7 +34,7 @@ import {LImageOverlay, LMap, LPolygon, LTileLayer} from "vue2-leaflet";
 import 'leaflet/dist/leaflet.css';
 import InfoPanel from "@/components/Map2D/infoPanel.vue";
 import {mapState} from "vuex";
-import {getAllEmp, updateEmp} from "@/services/map2D.service";
+import {getAllEmp, updateInfoEmpPrestataire , askEmp , freeEmp} from "@/services/map2D.service";
 
 export default {
   name: 'Map2D',
@@ -70,7 +70,8 @@ export default {
             "name": emp.nom,
             "description": emp.description,
             "typeTerrain": emp.id_type,
-            "apartient": emp.prestataire_id
+            "apartient": emp.prestataire_id,
+            "accepet": emp.accept
             ,
           }
         }
@@ -105,13 +106,10 @@ export default {
         feature.properties.apartient = null;
       }
 
-      updateEmp({
-        uuid: feature.properties.id,
+      updateInfoEmpPrestataire(feature.properties.id
+          ,{
         nom: feature.properties.name,
         description: feature.properties.description,
-        type_id: feature.properties.typeTerrain,
-        prestataire_id: feature.properties.apartient,
-        matricepoints: feature.geometry
       })
       this.couleur = []
       this.features.forEach((feature)=>{
@@ -124,15 +122,34 @@ export default {
 
     }
     ,
+    askGetEmp(feature){
+      askEmp(feature.properties.id).then(
+          (response) => {
+            console.log(response)
+          }
+      )
+
+      this.closePanel()
+    },
+
+    freeMyEmp(feature){
+      freeEmp(feature.properties.id).then(
+          (response) => {
+            console.log(response)
+          }
+      )
+      this.closePanel()
+    },
 
     polygonOption(feature){
-      const isPrestataire = feature.properties.apartient == this.prestataireObject.id_prestataire;
+      const isPrestataire = feature.properties.apartient === this.prestataireObject.id_prestataire;
+      const isAccept = feature.properties.accepet;
       const isNullApartient = feature.properties.apartient === null;
 
-      return isPrestataire ? '#77ff1c' :
-          (isNullApartient ) ? '#0a5df6' :
-                  '#ff2b2b';
-
+      return isPrestataire && isAccept  ? '#309600' :
+          isPrestataire && !isAccept ? '#beff63' :
+              isNullApartient? '#0a5df6' :
+                          '#ff2b2b';
 
     }
 

@@ -74,7 +74,6 @@ export default new Vuex.Store({
   },
   actions: {
     async loginUser({commit}, data) {
-      console.log(data);
       try {
         let response = await userService.Login(data);
         if (!response.error) {
@@ -94,6 +93,7 @@ export default new Vuex.Store({
     async getInformationFromToken({commit}, data) {
       try {
         let response = await userService.getInformationFromToken(data)
+        console.log("Login probleme",response);
         if (!response.error) {
           commit('setUserInformation', response)
         } else {

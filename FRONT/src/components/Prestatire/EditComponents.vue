@@ -17,15 +17,17 @@
       <div class="edit-content card">
         <h2>Informations personnelles</h2>
 
+
+
         <!-- Label and Input for Nom de l'entreprise -->
-        <div class="input-content">
+        <div v-if="editPrestaInfo===true" class="input-content">
           <label for="nomEntreprise">Nom de l'entreprise:</label>
           <input type="text" :disabled="!isEditing" v-model="nomEntreprise" placeholder="Entrez le nom de l'entreprise"
                  id="nomEntreprise">
         </div>
 
         <!-- Label and Input for Description -->
-        <div class="input-content">
+        <div v-if="editPrestaInfo===true" class="input-content">
           <label for="description">Description:</label>
           <input type="text" :disabled="!isEditing" v-model="description" placeholder="Entrez la description"
                  id="description">
@@ -84,7 +86,16 @@ import {getImage,uploadImage,deleteImage} from "@/services/image.service"
 
 export default {
   name: 'EditComponents',
-  props:['user_id'],
+  props: {
+    user_id: {
+      type: Number,
+      required: true
+    },
+    editPrestaInfo: {
+      type: Boolean,
+      default: true
+    },
+  },
   data: () => ({
 
     nomEntreprise: '',

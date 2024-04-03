@@ -7,7 +7,6 @@ const jwtSecret = "djilsietmaxime";
 exports.validateLoginInput = (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    console.log("oui");
     return res.status(400).send("Email et password sont nuls");
   }
   if (!validator.isEmail(email)) {
@@ -63,3 +62,47 @@ exports.verifyTokenMiddleware = (req, res, next) => {
     next();
   });
 };
+
+exports.verifyToken = (req, res, next) => {
+    const token = req.headers['x-xsrf-token'];
+    if (!token) {
+      console.log("Token non fourni");
+      return res.status(401).send("Token non fourni");
+    }
+
+    jwt.verify(token, jwtSecret, (err, decoded) => {
+        if (err) {
+            console.log("Token invalide");
+            return res.status(403).send("Token invalide");
+        }
+
+        req.user = decoded;
+        console.log("Token validé");
+        next();
+    }
+    );
+}
+
+
+exports.verifyisAdmin = (req, res, next) => {
+    if (req.user.group_id > 1) {
+        return res.status(403).send("Vous n'êtes pas autorisé à accéder à cette ressource");
+    }
+    next();
+}
+
+exports.verifyisPrestataire = (req, res, next) => {
+    if (req.user.group_id > 2) {
+        return res.status(403).send("Vous n'êtes pas autorisé à accéder à cette ressource");
+    }
+    next();
+}
+
+exports.getPrestaireId = async  (req, res, next) => {
+  if(req.user.group_id === 2 ){
+    req.prestataire = await userService.getPrestataireObject(req.user.id);
+  }
+  next()
+
+}
+

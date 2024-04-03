@@ -27,8 +27,7 @@
     </div>
     <div class="infoPanel-footer">
 
-      <button v-if="(feature.properties.apartient === null || feature.properties.apartient === prestataire.id_prestataire )  " @click="btnClicked">{{feature.properties.apartient === null ? "Réserver" : "Libérer"}} </button>
-      <button v-else disabled> Réserver </button>
+      <button v-if="(feature.properties.apartient === null || (feature.properties.apartient === prestataire.id_prestataire && feature.properties.accept ) )  " @click="btnClicked"  :disabled="feature.properties.apartient !== prestataire.id_prestataire && feature.properties.apartient !== null  ">{{feature.properties.apartient === null  ? "Réserver" : feature.properties.accept && feature.properties.apartient === prestataire.id_prestataire ? "Liberer" : !feature.properties.accept && feature.properties.apartient === prestataire.id_prestataire ? "En attente ": "Indisponible" }} </button>
 
       <button @click="closePanel">Fermer</button>
   </div>
@@ -43,7 +42,11 @@ export default {
     closePanel() {
       this.$emit("close-panel");
     },btnClicked() {
-      this.$emit("update-feature", this.feature);
+      if(this.feature.properties.apartient === null){
+        this.$emit("ask", this.feature.id);
+      }else if (this.feature.properties.apartient === this.prestataire.id_prestataire ){
+        this.$emit("free", this.feature.id);
+      }
     },
     convertCoordinatesToMeters(coordinates) {
       const EARTH_RADIUS = 6371000;

@@ -10,7 +10,6 @@ async function getAllToiletteFromAPI(){
 
 async function getAllToilettes() {
     let answer = await getAllToiletteFromAPI()
-    console.log("return front",answer)
     return answer
 }
 

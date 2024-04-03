@@ -34,6 +34,21 @@ const axiosAgent = axios.create({
     baseURL: baseURL
 });
 
+axiosAgent.interceptors.request.use(function (config) {
+    //set token in header
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers['x-xsrf-token'] = token;
+    }
+
+
+
+    return config;
+}, function (error) {
+    // Do something with request error
+    return Promise.reject(error)
+})
+
 
 
 function handleError(serviceName, err) {

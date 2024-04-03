@@ -333,7 +333,6 @@ function start(){
     scene.add(ambientLight);
 
     animate();
-    console.log("start" + batiment);
     //creation d'un cube pour scene2
 
     const geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -395,7 +394,6 @@ function onMouseClick(event) {
     if (selectedObject) {
         var id_asset = asset.find(x => x.name === selectedObject.name)._id;
         if (selectedObject.name.slice(-3) == "bat") {
-            console.log("bat");
             if(selectab.length == 0 && id_asset != undefined){
                 selectedObject.material.color.setHex(0xff0000);
                 var info = {obj: selectedObject,id: id_asset, mat: originmat, col: origineColor}
@@ -409,7 +407,6 @@ function onMouseClick(event) {
                     selectedObject = undefined
                 }
                 else{
-                    console.log("un objet est deja select")
                     selectedObject = undefined
                 }
             }
