@@ -79,8 +79,106 @@
       "home": "Home",
       "restaurant": "Catering",
       "shop": "Shop",
-      "tickets": "Tickets",
+      "tickets": "Ticketing",
       "organizers": "Organizers"
+    },
+
+
+    "choice_ticket": {
+      "title": "Choose your ticket",
+      "day": "day",
+      "days": "days",
+      "characteristics": {
+        "basic": "Basic Pass",
+        "fast": "Fast Pass",
+        "premium": "Premium Pass",
+        "access_park": "Park access",
+        "access_attractions": "Access to attractions",
+        "access_restaurant": "Restaurant access",
+        "access_shop": "Shop access",
+        "priority_access": "Priority access",
+        "free_goodies": "Free goodies"
+      },
+      "description" : {
+        "basic": "Enjoy the magic of Belforaine for a whole day.",
+        "fast" : "Enjoy the magic of Belforaine for a whole day with priority access to the attractions.",
+        "premium" : "Enjoy the magic of Belforaine for 2 days with priority access to attractions and free goodies at the entrance."
+      },
+      "quantity": "Choose your number of tickets",
+      "adult": "Adult (15+)",
+      "adultOnlyText": "Adult",
+      "kidOnlyText": "Kid",
+      "kid":"Kid (0-15)",
+      "dateSelection": {
+        "title": "Choose the date of your visit",
+        "days" : {
+          "monday": "Monday",
+          "tuesday": "Tuesday",
+          "wednesday": "Wednesday",
+          "thursday": "Thursday",
+          "friday": "Friday",
+          "saturday": "Saturday",
+          "sunday": "Sunday"
+        },
+        "months" : {
+          "january": "January",
+          "february": "February",
+          "march": "March",
+          "april": "April",
+          "may": "May",
+          "june": "June",
+          "july": "July",
+          "august": "August",
+          "september": "September",
+          "october": "October",
+          "november": "November",
+          "december": "December"
+        }
+
+      },
+      "validThe": "Valid as of ",
+      "Subtotal": "Sous-total"
+    },
+
+    "cartPage": {
+      "cart": "Cart",
+      "myCart": "My Cart",
+      "informations": "Information",
+      "recap": "Summary",
+      "payment": "Payment",
+      "total": "Total Amount",
+      "emptyCart": "This cart seems a bit empty, could you add something to it?",
+      "paymentMethod": "You will be able to choose your payment method later",
+      "buttons" : {
+        "validateCart": "Validate my cart",
+        "continueShopping": "Continue shopping",
+        "continue": "Continue",
+        "previous": "Previous",
+        "cancel": "Cancer",
+        "confirm": "Confirm and proceed to checkout"
+      },
+      "billingInformation": "Billing Information",
+      "billingInformationText": "Enter the tickets' informations",
+      "placeholders": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "address": "Address",
+        "cp": "Postal Code",
+        "city": "City",
+        "country": "Country",
+        "email": "Email"
+      },
+      "paymentPage": {
+        "sentenceOfRat" : "Make a transfer to zek.akburak@gmail.com on PayPal",
+        "continue": "I made the transfer",
+        "cancel": "I'm broke"
+      },
+      "finalPage" : {
+        "orderPlaced": "Your order was successfully completed, and we are delighted to have been able to meet your expectations.",
+        "returnToHome": "Return to the home page",
+        "ticketsPreview": "Preview of your tickets",
+        "ticketNumber" : "Ticket number"
+      }
     }
 
   }

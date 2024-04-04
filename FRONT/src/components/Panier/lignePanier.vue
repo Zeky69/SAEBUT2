@@ -26,7 +26,7 @@
         </g>
     </g>
 </svg>
-          Valide le {{getDate}}</span>
+          {{ $t('choice_ticket.validThe') }} {{getDate}}</span>
       </div>
     </div>
     <div class="action" v-if="trash">
@@ -43,6 +43,7 @@
     <div class="list-container" v-for="(item ,index) in items" :key="index ">
       <svg class="human grid-1" fill="#000000" height="800px" width="800px" version="1.2" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
            viewBox="-69 0 117 256" xml:space="preserve">
+      path d="M-10.9,4.9c11.3,0,20.5,9.2,20.5,20.5S0.4,45.9-10.9,45.9s-20.5-9.2-20.5-20.5S-22.2,4.9-10.9,4.9z M14.9,51.2h-51.2)"
 <path d="M-10.9,4.9c11.3,0,20.5,9.2,20.5,20.5S0.4,45.9-10.9,45.9s-20.5-9.2-20.5-20.5S-22.2,4.9-10.9,4.9z M14.9,51.2h-51.2
 	c-14.2,0-25.6,11.4-25.6,25.6v62.6c0,4.9,3.9,9,9,9s9-3.9,9-9V81.9c0-1.4,1.2-2.6,2.6-2.6s2.6,1.2,2.6,2.6v155.2
 	c0,7.7,5.7,14,12.8,14s12.8-6.3,12.8-14v-88.5c0-1.4,1.2-2.6,2.6-2.6c1.4,0,2.6,1.2,2.6,2.6v88.5c0,7.7,5.7,14,12.8,14
@@ -57,14 +58,14 @@
 
     <div class="line"></div>
     <div class="total-container">
-      <span class=" grid-2 total-text">Sous-total</span>
+      <span class=" grid-2 total-text">{{ $t('Subtotal') }}</span>
       <span class="grid-5 total-price">{{total}}€</span>
     </div>
   </div>
 
 
 </div>
-</template>ide du 10/11/2023
+</template>
 
 
 <script >

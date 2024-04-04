@@ -80,7 +80,106 @@
       "shop": "Boutique",
       "tickets": "Billetterie",
       "organizers": "Organisateurs"
+    },
+
+    "choice_ticket": {
+      "title": "Choisissez votre billet",
+      "day": "jour",
+      "days": "jours",
+      "price": "Prix",
+      "characteristics": {
+        "basic": "Billet Basic",
+        "fast": "Billet Fast",
+        "premium": "Billet Premium",
+        "access_park": "Accès au parc",
+        "access_attractions": "Accès aux attractions",
+        "access_restaurant": "Accès au restaurant",
+        "access_shop": "Accès à la boutique",
+        "priority_access": "Accès prioritaire",
+        "free_goodies": "Goodies offerts"
+      },
+      "description" : {
+        "basic": "Profitez de la magie de Belforaine toute une journée.",
+        "fast" : "Profitez de la magie de Belforaine toute une journée avec un accès prioritaire aux attractions.",
+        "premium" : "Profitez de la magie de Belforaine pendant 2 jours avec un accès prioritaire aux attractions et des goodies offerts à l'entrée."
+      },
+      "quantity": "Choisissez votre nombre de billets",
+      "adult": "Adulte (15+)",
+      "kid":"Enfant (0-15)",
+      "adultOnlyText": "Adulte",
+      "kidOnlyText": "Enfant",
+      "dateSelection": {
+        "title" : "Choisissez votre date de visite",
+        "days": {
+          "monday": "Lundi",
+          "tuesday": "Mardi",
+          "wednesday": "Mercredi",
+          "thursday": "Jeudi",
+          "friday": "Vendredi",
+          "saturday": "Samedi",
+          "sunday": "Dimanche"
+        },
+        "months": {
+          "january": "Janvier",
+          "february": "Février",
+          "march": "Mars",
+          "april": "Avril",
+          "may": "Mai",
+          "june": "Juin",
+          "july": "Juillet",
+          "august": "Août",
+          "september": "Septembre",
+          "october": "Octobre",
+          "november": "Novembre",
+          "december": "Décembre"
+        }
+      },
+      "validThe": "Valide le "
+    },
+
+
+    "cartPage": {
+      "cart": "Panier",
+      "myCart": "Mon panier",
+      "informations": "Informations",
+      "recap": "Récapitulatif",
+      "payment": "Paiement",
+      "total": "Montant total",
+      "emptyCart": "Ce panier semble un peu vide, pourriez-vous y ajouter quelque chose ?",
+      "paymentMethod": "Vous pourrez choisir votre méthode de paiement plus tard",
+      "buttons" : {
+        "validateCart": "Valider mon panier",
+        "continueShopping": "Continuer mes achats",
+        "continue": "Continuer",
+        "previous": "Précédent",
+        "cancel": "Annuler",
+        "confirm": "Confirmer et passer au paiement"
+      },
+      "billingInformation": "Informations de facturation",
+      "billingInformationText": "Saisissez les informations des billets",
+      "placeholders": {
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "address": "Adresse",
+        "cp": "Code postal",
+        "city": "Ville",
+        "country": "Pays",
+        "email": "Adresse e-mail"
+      },
+      "paymentPage": {
+        "sentenceOfRat" : "Faire un virement à zek.akburak@gmail.com sur PayPal",
+        "continue": "J'ai fait le virement",
+        "cancel": "J'ai pas d'argent"
+      },
+      "finalPage" : {
+        "orderPlaced": "Votre commande a été exécutée avec succès, et nous sommes ravis d'avoir pu répondre à vos attentes",
+        "returnToHome": "Retour à l'accueil",
+        "ticketsPreview": "Aperçu des billets",
+        "ticketNumber": "Numéro de billet"
+      }
     }
     
+
+
 }
   

@@ -3,18 +3,18 @@
   <div class="root">
     <div class="navbar-height"></div>
 
-    <step-panier v-if="stepPanier !==5" :items="['Panier','Informations','Récapitulatif','Paiement']" :step=stepPanier ></step-panier>
+    <step-panier v-if="stepPanier !==5" :items="[$t('cartPage.cart'),$t('cartPage.informations'),$t('cartPage.recap'),$t('cartPage.payment')]" :step="stepPanier"></step-panier>
 
     <div v-if="stepPanier ===1" class="all-conatiner">
 
   <div class="panier-container">
-    <h1 class="title">Mon Panier</h1>
+    <h1 class="title">{{ $t('cartPage.myCart') }}</h1>
 
     <div class="panier-body">
 
    <ligne-panier v-for="(item, index) in elements" :key="index"  :items="item.donnees" @delete-item="deleteItem" :have-date="item.date !== null"></ligne-panier>
       <div v-if="elements.length ===0" class="empty">
-        <h2>Ce panier semble un peu vide, tu pourrais y ajouter quelque chose ?</h2>
+        <h2>{{ $t('cartPage.emptyCart') }}</h2>
 
       </div>
 

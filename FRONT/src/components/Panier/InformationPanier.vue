@@ -3,24 +3,24 @@
   <div class="all-container-information">
     <div class="contenu-all">
       <div class="container-acheteur">
-        <h1>1. Information de Facturation</h1>
+        <h1>1. {{ $t('cartPage.billingInformation') }}</h1>
         <div>
-        <input placeholder="Nom" type="text" class="nom input-info" v-model="informationAchateur.nom" >
-        <input placeholder="Prenom" type="text" class="prenom input-info" v-model="informationAchateur.prenom" >
+        <input :placeholder="$t('cartPage.placeholders.lastName')" type="text" class="nom input-info" v-model="informationAchateur.nom" >
+        <input :placeholder="$t('cartPage.placeholders.firstName')" type="text" class="prenom input-info" v-model="informationAchateur.prenom" >
         </div>
         <div>
-        <input placeholder="Email" type="text" class="email input-info" v-model="informationAchateur.email" >
+        <input :placeholder="$t('cartPage.placeholders.email')" type="text" class="email input-info" v-model="informationAchateur.email" >
         </div>
         <div class="tets">
-        <input placeholder="Adresse" type="text" class="adresse input-info" v-model="informationAchateur.adresse" >
-        <input placeholder="Code postal" type="text" class="codePostal input-info" v-model="informationAchateur.codePostal" >
-        <input placeholder="Ville" type="text" class="ville input-info" v-model="informationAchateur.ville" >
-        <input placeholder="Pays" type="text" class="pays input-info" v-model="informationAchateur.pays" >
+        <input :placeholder="$t('cartPage.placeholders.address')" type="text" class="adresse input-info" v-model="informationAchateur.adresse" >
+        <input :placeholder="$t('cartPage.placeholders.cp')" type="text" class="codePostal input-info" v-model="informationAchateur.codePostal" >
+        <input :placeholder="$t('cartPage.placeholders.city')" type="text" class="ville input-info" v-model="informationAchateur.ville" >
+        <input :placeholder="$t('cartPage.placeholders.country')" type="text" class="pays input-info" v-model="informationAchateur.pays" >
         </div>
       </div>
 
       <div class="container-billet">
-        <h1>2. Saisissez les informations des billets</h1>
+        <h1>2. {{ $t('cartPage.billingInformationText') }}</h1>
         <div class="container-billet2">
           <div class="billet" v-for="(item, index) in billetInformation" :key="index">
             <div class="titre-billet">
@@ -31,16 +31,16 @@
             <h3>{{item.item.header.day}} Jour {{ item.item.header.day === 1 ? '' :'s'}} </h3>
             <p>({{getDate(item.item)}})</p>
             </div>
-            <input placeholder="Nom" type="text" class="nom input-info" v-model="item.nom" >
-            <input placeholder="Prenom" type="text" class="prenom input-info" v-model="item.prenom" >
+            <input :placeholder="$t('cartPage.placeholders.lastName')" type="text" class="nom input-info" v-model="item.nom" >
+            <input :placeholder="$t('cartPage.placeholders.firstName')" type="text" class="prenom input-info" v-model="item.prenom" >
           </div>
         </div>
       </div>
       <button @click="continuer">
-        Continuer
+        {{ $t('cartPage.buttons.continue') }}
       </button>
       <button @click="retour">
-        Retour
+        {{ $t('cartPage.buttons.previous') }}
       </button>
 
     </div>
