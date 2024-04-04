@@ -58,7 +58,7 @@
 
     <div class="line"></div>
     <div class="total-container">
-      <span class=" grid-2 total-text">{{ $t('Subtotal') }}</span>
+      <span class=" grid-2 total-text">{{ $t('choice_ticket.Subtotal') }}</span>
       <span class="grid-5 total-price">{{total}}€</span>
     </div>
   </div>
