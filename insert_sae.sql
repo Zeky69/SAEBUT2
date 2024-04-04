@@ -162,6 +162,8 @@ INSERT INTO emplacement (id_emplacement,id_type,nom,description,matricePoints,pr
 ('3','3','Scene 1','Description Scene 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',4,false,true),
 ('4','4','Stand 1','Description Stand 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',4,false,true);
 
+INSERT INTO contenuhomepage VALUES (1,'Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences inspirantes et divertissement sans fin fusionnent. Plongez dans la magie que nous réserve le futur, le tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !');
+
 
 SELECT email from utilisateurs
 JOIN public.commande c on utilisateurs.user_id = c.id_user
