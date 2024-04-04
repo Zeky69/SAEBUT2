@@ -60,6 +60,12 @@ router.put('/profil/:id',prestaController.updateUserProfile)
  *           description: Erreur interne du serveur lors de la mise à jour du profil utilisateur
  */
 
+router.get('/services/update/:id',prestaController.updateServiceState)
+
+
+router.get('/services/:id',prestaController.getPrestatairesServices)
+
+
 router.put('/updatePage', prestaController.updatePrestatairePage);
 
 router.get('/types', prestaController.getPrestatairesTypes); //a changer de place
