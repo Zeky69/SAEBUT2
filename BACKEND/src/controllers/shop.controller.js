@@ -159,9 +159,11 @@ exports.getCommande = async (req, res) => {
 
 exports.updateCommandeLigne = async (req, res) => {
     const id = req.params.id;
+    const idligne = req.params.idligne;
+    console.log("controller update ligne")
 
     try {
-        const commande = await shopService.updateCommandeLigne(id);
+        const commande = await shopService.updateCommandeLigne(id, idligne);
 
         if (!commande) {
         return res.status(404).send("Aucune commande trouvée.");

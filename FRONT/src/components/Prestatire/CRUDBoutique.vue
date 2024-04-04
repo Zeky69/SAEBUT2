@@ -9,6 +9,7 @@
         <tr>
           <th>Nom</th>
           <th>Categorie</th>
+          <th>Stock</th>
           <th>Prix</th>
           <th>Actions</th>
         </tr>
@@ -17,6 +18,7 @@
         <tr v-for="article in articles" :key="article.id_produit">
           <td>{{ article.nom }}</td>
           <td>{{ getNomCategorie(article.categorie_id) }}</td>
+          <td>{{ article.stock }}</td>
           <td>{{ article.prix }}</td>
 
           <td>
