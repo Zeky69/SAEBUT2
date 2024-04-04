@@ -86,6 +86,9 @@ INSERT INTO categorie_produit(libelle_categorie,description,image) VALUES
 
 select * from categorie_produit;
 
+INSERT INTO service (id_type_service, id_prestataire, etat) VALUES
+	(1,1,true),(1,2,true),(1,3,true),(1,4,true),(1,5,true),(2,1,true),(2,2,true),(2,3,true);
+
 -- Ajout des produits pour la catégorie 'Goodies'
 INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
     ('Stylo magique', 2.99, 100, 1,'stylo_magique.png',4),
@@ -120,9 +123,8 @@ INSERT INTO produit (nom, prix, stock, categorie_id, photo,prestataire_id) VALUE
     ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png',3),
     ('Étui à lunettes original', 8.49, 50, 4,'etui.png',4),
     ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png',2);
-
-
-
+    
+    
 INSERT INTO billet(title,description,price,day,path) VALUES
 ('Billet Basic','Profitez de la magie de Belforaine toute une journée.',24.99,1,'billet_basic.png'),
 ('Billet Fast','Profitez de la magie de Belforaine toute une journée avec un accès prioritaire aux attractions.',34.99,1,'billet_fast.png'),
