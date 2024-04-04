@@ -28,6 +28,10 @@ async function addConnexionTodayFromAPI() {
 
 }
 
+async function getVenteArticleParIdPrestataireFromAPI(id) {
+    return getRequest(baseUrl+'/venteArticle/'+id, 'GET')
+}
+
 async function getVenteBilletParDate() {
     try {
         let answer = await getVenteBilletParDateFromAPI();
@@ -51,6 +55,16 @@ async function getVenteBilletParType() {
 async function getVenteArticle() {
     try {
         let answer = await getVenteArticleFromAPI();
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des ventes d\'articles', error.message);
+        throw error;
+    }
+}
+
+async function getVenteArticleParIdPrestataire(id) {
+    try {
+        let answer = await getVenteArticleParIdPrestataireFromAPI(id);
         return answer;
     } catch (error) {
         console.error('Erreur lors de la récupération des ventes d\'articles', error.message);
@@ -94,6 +108,7 @@ export default {
     getVenteBilletParDate,
     getVenteBilletParType,
     getVenteArticle,
+    getVenteArticleParIdPrestataire,
     getVenteParCategorie,
     getConnextionToday,
 }

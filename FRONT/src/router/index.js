@@ -223,6 +223,11 @@ const routes = [
         component: ()=>import ('../components/Admin/EditorHomePage.vue')
       },
       {
+       path:'commandes' ,
+        name: 'admin.commandes',
+        component: ()=> import('../components/Admin/AdminCommande.vue')
+      },
+      {
         path:'*',
         name: 'admin.notFound,',
         component: () => import('../views/NotFound.vue')

@@ -17,15 +17,27 @@ async function getVenteBilletParDate() {
     }
 }
 
-async function getVenteArticle() {
+async function getVenteArticle(req) {
     const client = await pool.connect();
     try {
-        const query = `SELECT p.nom, sum(lca.quantite) as quantiteTotaleArticle, p.prix, p.prix*sum(lca.quantite) as prixTotalArticle
+        let res;
+        if (req.params.id){
+            const query = `SELECT p.nom, sum(lca.quantite) as quantiteTotaleArticle, p.prix, p.prix*sum(lca.quantite) as prixTotalArticle
+                       FROM ligneCommandeArticle lca
+                                JOIN produit p ON lca.id_produit = p.id_produit
+                       where prestataire_id = $1
+                       group by p.id_produit
+                        ;`;
+            res = await client.query(query, [req.params.id]);
+        } else {
+            const query = `SELECT p.nom, sum(lca.quantite) as quantiteTotaleArticle, p.prix, p.prix*sum(lca.quantite) as prixTotalArticle
                        FROM ligneCommandeArticle lca
                                 JOIN produit p ON lca.id_produit = p.id_produit
                        group by p.id_produit
-        ;`;
-        const res = await client.query(query);
+                        ;`;
+            res = await client.query(query);
+        }
+
         return res.rows;
     } catch (error) {
         console.error("Erreur lors de la récupération des ventes de billets par type: ", error);

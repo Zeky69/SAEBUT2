@@ -10,6 +10,7 @@ router.get("/", (req, res) => {
 router.get("/venteBilletParDate", userController.getVenteBilletParDate);
 router.get("/venteBilletParType", userController.getVenteBilletParType);
 router.get("/venteArticle", userController.getVenteArticle);
+router.get("/venteArticle/:id", userController.getVenteArticle);
 router.get("/venteParCatetorie", userController.getVenteParCategorie);
 
 router.post("/addConnexionToday", userController.addConnexionToday);
