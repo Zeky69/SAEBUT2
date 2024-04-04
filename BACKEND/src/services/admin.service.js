@@ -208,6 +208,36 @@ const changeUser = (req, callback) => {
   }
 };
 
+
+
+const getContenueHomePage = async () => {
+    const client = await pool.connect();
+    try {
+        const res = await client.query("SELECT * FROM contenuHomePage;");
+        return res.rows[0].contenu;
+    } catch (err) {
+        console.log("Récupération données impossible -> " + err);
+    } finally {
+        client.release();
+    }
+
+}
+
+const setHomePage = async (contenu) => {
+    const client = await pool.connect();
+    try {
+        const query = "UPDATE contenuHomePage SET contenu = $1 where id_contenu = 1";
+        const res = await client.query(query, [contenu]);
+        return "Parfait";
+    }
+    catch (err) {
+        console.log("Récupération données impossible -> " + err);
+    } finally {
+        client.release();
+    }
+
+}
+
 module.exports = {
   acceptPrestataire,
   refusePrestataire,
@@ -216,4 +246,6 @@ module.exports = {
   deleteUser: deleteUser,
   changeUser: changeUser,
   removePrestataire,
+    getContenueHomePage,
+  setHomePage
 };

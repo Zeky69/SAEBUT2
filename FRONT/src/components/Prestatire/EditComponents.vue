@@ -88,7 +88,6 @@ export default {
   name: 'EditComponents',
   props: {
     user_id: {
-      type: String,
       required: true
     },
     editPrestaInfo: {

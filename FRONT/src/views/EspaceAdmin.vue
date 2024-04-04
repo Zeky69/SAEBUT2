@@ -25,26 +25,43 @@ data: () => ({
     {
       title: "Tableau de bord",
       path: "/admin",
+      img: "fas fa-tachometer-alt",
     },
     {
       title: "Commandes",
       path: "/admin/commandes",
-    },
+      img: "fas fa-shopping-cart",
+
+    },/*
     {
       title: "Produits",
       path: "/admin/produits",
-    },
+      img: "fas fa-store",
+
+    },*/
     {
       title: "Prestataires",
       path: "/admin/prestataires",
+      img: "fas fa-users",
+
     },
     {
-      title: "map",
+      title: "Map",
       path: "/admin/map",
+      img: "fas fa-map",
+
+
     },
     {
+      title:"Page D'accueil",
+      path:"/admin/homepage",
+      img: "fas fa-home",
+
+    },    {
       title: "Profil",
       path: "/admin/profil",
+      img: "fas fa-user-alt",
+
     }
 
   ]
