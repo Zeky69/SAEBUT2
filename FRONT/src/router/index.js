@@ -199,7 +199,11 @@ const routes = [
         name: 'admin.map',
         component: ()=>import ('../views/Map2DAdmin.vue')
       },
-
+      {
+        path: 'homepage'
+        ,name: 'admin.homepage',
+        component: ()=>import ('../components/Admin/EditorHomePage.vue')
+      },
       {
         path:'*',
         name: 'admin.notFound,',
@@ -245,7 +249,7 @@ router.beforeEach(async (to, from, next) => {
   await store.dispatch('getInformationFromToken', store.state.token);
 
   if (requiresAuth) {
-    if (group_id === store.state.group_id) {
+    if (group_id == store.state.group_id) {
       next();
     } else {
       switch (store.state.group_id) {
@@ -261,9 +265,9 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
-    if (store.state.group_id === 1) {
+    if (store.state.group_id == 1) {
       next("/admin");
-    } else if (store.state.group_id === 2) {
+    } else if (store.state.group_id == 2) {
       next("/prestataire");
     } else {
       next();

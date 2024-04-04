@@ -9,7 +9,6 @@
       <div class="mini-card-content">
         <p>{{ content }}</p>
       </div>
-      <p class="btns">{{ buttonText }}</p>
     </div>
   </div>
 </template>

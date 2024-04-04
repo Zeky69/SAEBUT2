@@ -7,7 +7,7 @@
       <div class="contenuHautDePage">
         <h1 v-html="$t('exploreExtraordinary')"></h1>
         <p v-html="$t('enjoyMoments')"></p>
-        <a style="position: relative;" class="boutton" @click="goto">{{ $t('ticketButton') }}</a>
+        <a style="position: relative;" class="boutton" @click="goto('/billetterie')">{{ $t('ticketButton') }}</a>
       </div>
     </div>
     <img src="../assets/overlay.svg" class="overlay-image">
@@ -22,10 +22,9 @@
       <div class="droite">
         <div class="textePresentatif">
           <h2 v-html="$t('welcomeBelforaine')"></h2>
-          <p>
-            {{ $t('futureMagic')}}
-          </p>
-          <a class="boutton" >{{ $t('learnMoreButton') }}</a>
+          <div class="textePresentatifp" v-html="donnee">
+          </div>
+          <a @click="goto('/organisateurs')" class="boutton" >{{ $t('learnMoreButton') }}</a>
         </div>
       </div>
       </div>
@@ -48,14 +47,23 @@ import Map2DUser from "@/components/Map2D/Map2DUser.vue";
 import AllCardPrestate from "@/components/AllCardPrestate.vue";
 import MultipleCards from "@/views/MultipleCards.vue";
 import PassBillet from "@/components/Billeterie/passBillet.vue";
+import {getHomePage} from "@/services/admin.service";
 
 export default {
   name: 'HomePage',
   components: {PassBillet, AllCardPrestate, Map2DUser,MultipleCards},
-  methods: {
-    goto(){
-      this.$router.push('/billetterie');
+  data() {
+    return {
+      donnee: null,
     }
+  },
+  methods: {
+    goto(path){
+      this.$router.push(path);
+    }
+  },
+  async created() {
+    this.donnee = await getHomePage()
   }
 }
 </script>
@@ -176,19 +184,16 @@ export default {
   align-items: center;
   font-family: Syne;
   color: #1b1b1b;
-
+  font-family: "DM Sans Regular";
+  font-size: 25px ;
 }
 
 .textePresentatif h2 {
-  font-size: 50px;
-}
-
-.textePresentatif p {
-  font-family: "DM Sans Regular";
-  font-size: 25px;
-  text-align: justify;
+  font-size: 50px !important;
 
 }
+
+
 
 .droite .boutton {
   color: white;

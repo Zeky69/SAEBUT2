@@ -43,6 +43,7 @@ DROP TABLE IF EXISTS commande CASCADE;
 DROP TABLE IF EXISTS ligneCommandeArticle CASCADE;
 DROP TABLE IF EXISTS ligneCommandeBillet CASCADE;
 DROP TABLE IF EXISTS date_belforaine CASCADE;
+DROP TABLE IF EXISTS contenuHomePage CASCADE;
 
 
 CREATE TABLE GROUPES(
@@ -321,4 +322,11 @@ CREATE TABLE disponibilite(
    FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
    FOREIGN KEY(date_reservation) REFERENCES crenaux(date_reservation)
 );
+
+CREATE TABLE contenuHomePage(
+    id_contenu SERIAL,
+    contenu TEXT,
+    PRIMARY KEY(id_contenu)
+    );
+
 
