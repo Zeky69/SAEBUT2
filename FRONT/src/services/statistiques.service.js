@@ -18,6 +18,10 @@ async function getVenteParCategorieFromAPI() {
     return getRequest(baseUrl+'/venteParCatetorie', 'GET')
 }
 
+async function getVenteArticleParIdPrestataireFromAPI(id) {
+    return getRequest(baseUrl+'/venteArticle/'+id, 'GET')
+}
+
 async function getVenteBilletParDate() {
     try {
         let answer = await getVenteBilletParDateFromAPI();
@@ -48,6 +52,16 @@ async function getVenteArticle() {
     }
 }
 
+async function getVenteArticleParIdPrestataire(id) {
+    try {
+        let answer = await getVenteArticleParIdPrestataireFromAPI(id);
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des ventes d\'articles', error.message);
+        throw error;
+    }
+}
+
 async function getVenteParCategorie() {
     try {
         let answer = await getVenteParCategorieFromAPI();
@@ -62,5 +76,6 @@ export default {
     getVenteBilletParDate,
     getVenteBilletParType,
     getVenteArticle,
-    getVenteParCategorie
+    getVenteParCategorie,
+    getVenteArticleParIdPrestataire
 }
