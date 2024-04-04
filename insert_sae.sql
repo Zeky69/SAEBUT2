@@ -169,3 +169,7 @@ INSERT INTO emplacement (id_emplacement,id_type,nom,description,matricePoints,pr
 ('2','2','Attraction 1','Description Attraction 1','[[0,0],[0,1],[1,1],[1,0]]',3,true,true),
 ('3','3','Scene 1','Description Scene 1','[[0,0],[0,1],[1,1],[1,0]]',4,false,true),
 ('4','4','Stand 1','Description Stand 1','[[0,0],[0,1],[1,1],[1,0]]',4,false,true);
+
+SELECT * FROM lignecommandebillet where uuid = '151';
+
+update reservation set id_ticket_client= where id_reservation=$2

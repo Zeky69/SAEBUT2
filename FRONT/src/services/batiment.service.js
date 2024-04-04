@@ -5,8 +5,11 @@ async function updateDisplayToAPI(data) {
 
 }
 async function getBatByIdPrestataireToAPI(id) {
-    console.log(id)
     return await getRequest('/batiment/' + id, 'getBatByIdPrestataire')
+}
+
+async function getAllBatimentToAPI(){
+    return await getRequest('/batiment', 'getAllBatiment')
 }
 
 async function updateDisplay(data) {
@@ -21,7 +24,7 @@ async function updateDisplay(data) {
     }
 }
 
-export async function getBatByIdPrestataire(id) {
+async function getBatByIdPrestataire(id) {
     try {
         let answer = await getBatByIdPrestataireToAPI(id)
         console.log("Réponse du back",answer)
@@ -33,7 +36,20 @@ export async function getBatByIdPrestataire(id) {
     }
 }
 
+async function getAllBatiment(){
+    try {
+        let answer = await getAllBatimentToAPI()
+        console.log("Réponse du back",answer)
+        return answer
+    } catch (error) {
+        console.error('Erreur lors de la récupération des batiments :', error.message);
+        throw error; // Vous pouvez choisir de gérer l'erreur ici ou la remonter à l'appelant
+    }
+}
+
+
 export default {
     getBatByIdPrestataire,
-    updateDisplay
+    updateDisplay,
+    getAllBatiment
 }

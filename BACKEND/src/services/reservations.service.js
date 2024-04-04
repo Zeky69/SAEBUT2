@@ -35,7 +35,7 @@ async function getAllResaById (req,callback) {
     let id_bat = req.params.id_bat;
     const client = await pool.connect();
     try{
-        const query = `select ouverture,duree, id_emplacement, id_client, count(id_reservation) as amount,(SELECT id_reservation  from reservation r2 where id_emplacement=$1 AND id_client IS NOT NULL AND r1.ouverture=r2.ouverture AND r1.duree=r2.duree LIMIT 1)  from reservation r1 where id_emplacement=$1 AND id_client IS NOT NULL GROUP BY ouverture,duree, id_emplacement, id_client ORDER BY ouverture ASC`;
+        const query = `select ouverture,duree, id_emplacement, id_ticket_client, count(id_reservation) as amount,(SELECT id_reservation  from reservation r2 where id_emplacement=$1 AND id_ticket_client IS NOT NULL AND r1.ouverture=r2.ouverture AND r1.duree=r2.duree LIMIT 1)  from reservation r1 where id_emplacement=$1 AND id_ticket_client IS NOT NULL GROUP BY ouverture,duree, id_emplacement, id_ticket_client ORDER BY ouverture ASC`;
         res = await client.query(query,[id_bat]);
         for (let i = 0; i < res.rows.length; i++) {
             res.rows[i].ouverture = res.rows[i].ouverture.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' , year: 'numeric', month: 'numeric', day: 'numeric', hour : "2-digit", minute:"2-digit" });
@@ -52,7 +52,7 @@ async function getAllDispoById (req,callback) {
     let id_bat = req.params.id_bat;
     const client = await pool.connect();
     try{
-        const query = `select nom, description, color, status, id_prestataire, ouverture,duree, id_emplacement, id_client, count(id_reservation) as amount,(SELECT id_reservation  from reservation r2 where id_emplacement=$1 AND id_client IS NULL AND r1.ouverture=r2.ouverture AND r1.duree=r2.duree LIMIT 1)  from reservation r1 where id_emplacement=$1 AND id_client IS NULL GROUP BY ouverture,duree, id_emplacement, id_client,nom, description, color, status,id_prestataire ORDER BY ouverture ASC`;
+        const query = `select nom, description, color, status, id_prestataire, ouverture,duree, id_emplacement, id_ticket_client, count(id_reservation) as amount,(SELECT id_reservation  from reservation r2 where id_emplacement=$1 AND id_ticket_client IS NULL AND r1.ouverture=r2.ouverture AND r1.duree=r2.duree LIMIT 1)  from reservation r1 where id_emplacement=$1 AND id_ticket_client IS NULL GROUP BY ouverture,duree, id_emplacement, id_ticket_client,nom, description, color, status,id_prestataire ORDER BY ouverture ASC`;
         res = await client.query(query,[id_bat]);
         for (let i = 0; i < res.rows.length; i++) {
             res.rows[i].ouverture = res.rows[i].ouverture.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' , year: 'numeric', month: 'numeric', day: 'numeric', hour : "2-digit", minute:"2-digit" });
@@ -111,12 +111,23 @@ async function reserver(req, callback){
     let id_reservation = req.body.id_dispo;
     const client = await pool.connect();
     try{
-        let query = `select * from reservation where id_reservation=$1`;
-         res = await client.query(query, [id_reservation]);
-        query = `update reservation set id_client=$1 where id_reservation=$2`;
-        res = await client.query(query, [id_client, id_reservation]);
+        let query = `SELECT * FROM lignecommandebillet where uuid = $1;`;
+        res = await client.query(query, [id_client]);
+        if (res.rows.length!==0){
+            query = `select * from reservation where id_reservation=$1`;
+            res = await client.query(query, [id_reservation]);
+            if (res.rows.length!==0){
+                query = `update reservation set id_ticket_client=$1 where id_reservation=$2`;
+                res = await client.query(query, [id_client, id_reservation]);
+                callback(null,"c good");
+            } else {
+                callback("ce crénaux n'existe pas", null)
+            }
 
-        callback(null,"c good");
+        }
+        else {
+            callback("ce billet n'existe pas", null)
+        }
     }catch(err){
         callback(err,null);
     }finally{
@@ -142,7 +153,7 @@ async function deleteResaById(req, callback){
     let id_reservation = req.body.id_resa;
     const client = await pool.connect();
     try{
-        const query = `UPDATE reservation SET id_client=NULL WHERE id_reservation=$1`;
+        const query = `UPDATE reservation SET id_ticket_client=NULL WHERE id_reservation=$1`;
         res = await client.query(query, [id_reservation]);
         callback(null,"c good");
     }catch(err){

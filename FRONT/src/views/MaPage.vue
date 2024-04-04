@@ -17,6 +17,7 @@
         :id_prestataire="idPrestataire.toString()"
         :mode="mode"
         :nom="batiment.nom"
+        :uuidTicket="idPrestataire.toString()"
         :display="batiment.use_resa"
         @updateDisplay="updateDisplay($event)"></reservationComponent>
   </div>
@@ -42,7 +43,8 @@ export default {
     urlImage: null,
     nom: '',
     idPrestataire: -1,
-    batimentPrestataire: []
+    batimentPrestataire: [],
+    uuidTicket: ""
 
   }),
   computed: {

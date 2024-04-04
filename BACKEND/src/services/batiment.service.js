@@ -38,7 +38,22 @@ async function updateDisplay(req, callback){
     }
 }
 
+async function getAllBatiment(req, callback){
+    const client = await pool.connect();
+    let display=false;
+    try {
+        let query = `SELECT * FROM emplacement;`;
+        res = await client.query(query);
+        callback(null, res.rows);
+    } catch (err) {
+        callback(err, null);
+    } finally {
+        client.release();
+    }
+}
+
 module.exports = {
     getBatByIdPrestataire,
-    updateDisplay
+    updateDisplay,
+    getAllBatiment
 }
