@@ -258,7 +258,10 @@ router.beforeEach(async (to, from, next) => {
     return;
   }
 
-  await store.dispatch('getInformationFromToken', store.state.token);
+  if(store.state.token && !store.state.user_id){
+    await store.dispatch('getInformationFromToken', store.state.token);
+  }
+
 
   if (requiresAuth) {
     if (group_id == store.state.group_id) {

@@ -10,7 +10,7 @@
   </template>
 
   <script>
-  import {mapState,mapActions} from "vuex";
+  import {mapState} from "vuex";
   import NavBar from '../src/components/NavBar3.vue';
   import FooTer from '../src/components/FooTer.vue'
 
@@ -25,19 +25,6 @@
         return !this.token && this.$route.name !== 'login';
       }
     },
-    methods: {
-      ...mapActions(['getInformationFromToken']),
-      async getInfo() {
-        console.log("Appel à getInformationFromToken");
-        await this.getInformationFromToken(this.token);
-        console.log("getInformationFromToken terminé, appel de getInfo");
-      }
-    },
-    created() {
-      if (this.token) {
-        this.getInfo();
-      }
-    }
   };
   </script>
 
