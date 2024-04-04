@@ -79,6 +79,7 @@ export default {
     if(orders && acheteur){
       this.order = JSON.parse(orders);
       this.order.acheteur = JSON.parse(acheteur);
+      console.log(this.order)
       createCommandeWithoutAccount(this.order).then(
           (res) => {
             this.billets = res;
