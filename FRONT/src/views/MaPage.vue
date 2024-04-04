@@ -89,7 +89,7 @@
 
   <span v-if="mode === '2'">
     <div v-if="showBoutique">
-      <button class="btn tkt">Redirection vers la boutique du prestataire</button>
+      <button class="btn tkt">Redirection vers la boutique de {{prestataire.nom}}</button>
 
     </div>
 
@@ -324,7 +324,8 @@ export default {
 }
 
 .btn.tkt{
-  background-color: #0d45a5;
+  background-color: rgba(77, 82, 166, 0.87);
+  padding: 1%;
   margin: 2%;
 }
 
@@ -334,7 +335,7 @@ export default {
   justify-content: space-between;
   flex-direction: row;
   background-color: rgba(255, 255, 255, 0.479);
-  border: 2px solid rgba(77, 82, 166, 0.87);;
+  border: 2px solid rgba(77, 82, 166, 0.87);
   font-size: 20px;
   margin-top: 1%;
   padding: 3%;
