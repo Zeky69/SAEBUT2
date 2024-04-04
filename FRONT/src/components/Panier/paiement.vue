@@ -1,10 +1,10 @@
 
 <template>
 <div class="all-container-paiement">
-  <p> Faire un virement a zek.akburak@gmail.com sur PayPal</p>
+  <p>{{ $t('cartPage.paymentPage.sentenceOfRat') }}</p>
   <div class="group-btn">
-  <button @click="continuer">J'ai fais mon virement</button>
-  <button @click="annuler">J'ai pas d'argent</button>
+  <button @click="continuer">{{ $t('cartPage.paymentPage.continue') }}</button>
+  <button @click="annuler">{{ $t('cartPage.paymentPage.cancel') }}</button>
   </div>
 </div>
 

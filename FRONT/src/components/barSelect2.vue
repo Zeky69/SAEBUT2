@@ -5,19 +5,15 @@
     </div>
     <div class="items" :class="{ selectHide: !open }">
       <div @click="
-          selected = defaults;
-          open = false;
-          $emit('input', '');
-        "> {{defaults}}</div>
-      <div
-          v-for="(option, i) of options"
-          :key="i"
-          @click="
-          selected = option;
-          open = false;
-          $emit('input', option);
-        "
-      >
+    selected = defaults;
+  open = false;
+  $emit('input', '');
+  "> {{ defaults }}</div>
+      <div v-for="(option, i) of options" :key="i" @click="
+    selected = option;
+  open = false;
+  $emit('input', option);
+  ">
         {{ option }}
       </div>
     </div>
@@ -46,12 +42,20 @@ export default {
     return {
       defaults: this.default,
       selected: this.default
-          ? this.default
-          : this.options.length > 0
-              ? this.options[0]
-              : null,
+        ? this.default
+        : this.options.length > 0
+          ? this.options[0]
+          : null,
       open: false,
     };
+  },
+  watch: {
+    '$i18n.locale': function () {
+      this.defaults = this.$t(this.default); 
+      this.selected = this.$t(this.default) 
+      ? this.$t(this.default) : this.options.length > 0 
+      ? this.$t(this.options[0]) : null;
+    }
   },
   mounted() {
     this.$emit("input", '');
@@ -60,13 +64,11 @@ export default {
 </script>
 
 <style scoped>
-
-
-
 @keyframes menuSlideDown {
   0% {
     height: 0;
   }
+
   100% {
     height: 120px;
   }
@@ -101,7 +103,7 @@ export default {
 }
 
 .custom-select .selected.open {
-  border-color:  rgba(255, 255, 255, 0.4) rgba(255, 255, 255, 0.4) transparent rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.4) rgba(255, 255, 255, 0.4) transparent rgba(255, 255, 255, 0.4);
   border-radius: 0 25px 0 0;
 
 }
@@ -149,7 +151,7 @@ export default {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.selected{
+.selected {
   text-align: center;
 }
 
@@ -157,5 +159,4 @@ export default {
   display: none;
 
 }
-
 </style>

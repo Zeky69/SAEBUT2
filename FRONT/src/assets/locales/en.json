@@ -79,8 +79,134 @@
       "home": "Home",
       "restaurant": "Catering",
       "shop": "Shop",
-      "tickets": "Tickets",
+      "tickets": "Ticketing",
       "organizers": "Organizers"
+    },
+
+
+    "choice_ticket": {
+      "title": "Choose your ticket",
+      "day": "day",
+      "days": "days",
+      "characteristics": {
+        "basic": "Basic Pass",
+        "fast": "Fast Pass",
+        "premium": "Premium Pass",
+        "access_park": "Park access",
+        "access_attractions": "Access to attractions",
+        "access_restaurant": "Restaurant access",
+        "access_shop": "Shop access",
+        "priority_access": "Priority access",
+        "free_goodies": "Free goodies"
+      },
+      "description" : {
+        "basic": "Enjoy the magic of Belforaine for a whole day.",
+        "fast" : "Enjoy the magic of Belforaine for a whole day with priority access to the attractions.",
+        "premium" : "Enjoy the magic of Belforaine for 2 days with priority access to attractions and free goodies at the entrance."
+      },
+      "quantity": "Choose your number of tickets",
+      "adult": "Adult (15+)",
+      "adultOnlyText": "Adult",
+      "kidOnlyText": "Kid",
+      "kid":"Kid (0-15)",
+      "dateSelection": {
+        "title": "Choose the date of your visit",
+        "days" : {
+          "monday": "Monday",
+          "tuesday": "Tuesday",
+          "wednesday": "Wednesday",
+          "thursday": "Thursday",
+          "friday": "Friday",
+          "saturday": "Saturday",
+          "sunday": "Sunday"
+        },
+        "months" : {
+          "january": "January",
+          "february": "February",
+          "march": "March",
+          "april": "April",
+          "may": "May",
+          "june": "June",
+          "july": "July",
+          "august": "August",
+          "september": "September",
+          "october": "October",
+          "november": "November",
+          "december": "December"
+        }
+
+      },
+      "validThe": "Valid as of ",
+      "Subtotal": "Sous-total"
+    },
+
+    "cartPage": {
+      "cart": "Cart",
+      "myCart": "My Cart",
+      "informations": "Information",
+      "recap": "Summary",
+      "payment": "Payment",
+      "total": "Total Amount",
+      "emptyCart": "This cart seems a bit empty, could you add something to it?",
+      "paymentMethod": "You will be able to choose your payment method later",
+      "buttons" : {
+        "validateCart": "Validate my cart",
+        "continueShopping": "Continue shopping",
+        "continue": "Continue",
+        "previous": "Previous",
+        "cancel": "Cancer",
+        "confirm": "Confirm and proceed to checkout"
+      },
+      "billingInformation": "Billing Information",
+      "billingInformationText": "Enter the tickets' informations",
+      "placeholders": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "address": "Address",
+        "cp": "Postal Code",
+        "city": "City",
+        "country": "Country",
+        "email": "Email"
+      },
+      "paymentPage": {
+        "sentenceOfRat" : "Make a transfer to zek.akburak@gmail.com on PayPal",
+        "continue": "I made the transfer",
+        "cancel": "I'm broke"
+      },
+      "finalPage" : {
+        "orderPlaced": "Your order was successfully completed, and we are delighted to have been able to meet your expectations.",
+        "returnToHome": "Return to the home page",
+        "ticketsPreview": "Preview of your tickets",
+        "ticketNumber" : "Ticket number"
+      }
+    },
+
+    "organisateursPage": {
+      "title": "Organizers",
+      "subtitle": "Discover the masterminds behind the Belforaine project!",
+      "storytime": {
+        "p1": "In the heart of the Territoire de Belfort, within the beautiful Bourgogne-Franche-Comté region, an exceptional phenomenon emerges: Belforaine. The bold idea of this ephemeral amusement park germinated in the visionary mind of a group of five local entrepreneurs, passionate about innovation and entertainment. Inspired by the cultural and historical richness of the region, they dreamed of creating an immersive experience that combines the past and the future, highlighting heritage while embracing the most recent technological advances.",
+        "p2": "But Belforaine is not limited to fun. It also serves as a platform for brilliant minds in the field of computer science. The park hosts cutting-edge conferences, frenetic LAN parties, and lively discussions with the greatest minds in business. Renowned entrepreneurs, eminent businessmen and businesswomen share their visions of the digital future, creating a space where innovation blends harmoniously with entertainment.",
+        "p3": "Thus, Belforaine was born from the union of tradition and modernity, creating an ephemeral space where visitors can immerse themselves in a world where history meets the future, where technology pushes the limits and where fun goes hand in hand with learning. Much more than a simple amusement park, Belforaine has become an unmissable cultural experience, leaving an indelible mark on the landscape of contemporary entertainment."
+      },
+      "bigText": "The TeamForaine",
+      "organisateurs": [
+        {
+          "message": "Back-end and front-end developer of the project, I worked on the design and functionalities, the API and the security of the site"
+        },
+        {
+          "message": "Back-end and front-end developer of the project, I worked on the implementation of the 3D MAP in ThreeJS"
+        },
+        {
+          "message": "Back-end and front-end developer of the project, I worked on the implementation of functionalities, security and design"
+        },
+        {
+          "message": "Back-end developer of the project, I worked on the database and the API"
+        },
+        {
+          "message": "Mainly front-end developer and SCRUM master, I worked on the design and functionalities of the site as well as the project management"
+        }
+      ]
     }
 
   }

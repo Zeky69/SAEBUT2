@@ -44,14 +44,22 @@ export default {
   },
   data() {
     return {
-      defaults: this.default,
       selected: this.default
           ? this.default
           : this.options.length > 0
               ? this.options[0]
-              : null,
+              : {value: '', libelle: this.$t('map2D.allCategories')},
       open: false,
     };
+  },
+  watch: {
+    '$i18n.locale': function() {
+      this.selected = this.default
+          ? this.default
+          : this.options.length > 0
+              ? this.options[0]
+              : {value: '', libelle: this.$t('map2D.allCategories')};
+    }
   },
   mounted() {
     this.$emit("input", '');

@@ -2,13 +2,13 @@
   <div class="billetterie-container">
     <div class="navbar-height"></div>
     <div class="body-container">
-      <h1 class="title-body">Billetterie</h1>
+      <h1 class="title-body">{{ $t('navbar.tickets') }}</h1>
       <choice-billet ref="choiceBillet" :items=items :idselect="idselect" @selected="setSelected"></choice-billet>
       <choice-date ref="dateComponent" v-if="selected!=null" :dates="dates" :day="selected.day" @selected="selectedDate"></choice-date>
       <choice-quantity ref="choiceQuantity" v-if="selected!=null && dateSelected.length === selected.day" :quantity="5" @selected="selectedQuantity"></choice-quantity>
       <div v-if="panier.length !==0 && selected!=null && dateSelected.length === selected.day"  class="details">
         <ligne-panier  :items="panier"  :trash="false"></ligne-panier>
-        <button @click="addPanierCookie" class="btn-add">Ajouter au panier</button>
+        <button @click="addPanierCookie" class="btn-add">{{ $t('addToCart') }}</button>
       </div>
 
 
@@ -32,50 +32,69 @@ export default defineComponent({
     if (this.idselect !== undefined){
       this.selected = this.items.find((item) => item.id === this.idselect);
     }
+    this.setTranslatedItems();
   },
-  data: () => ({
-    idselect: null,
-    items: [
-      {
-      id: '1',
-      title: 'Billet Basic',
-      price: 24.99,
-      day: 1,
-      description: 'Profitez de la magie de Belforaine toute une journée.',
-      caracteristic: ['Accès au parc'],
-      type: "billet",
-      path: require('@/assets/Panier/image-pass.png'),
-    },{
-      id: '2',
-      title: 'Billet Fast',
-      price: 34.99,
-      day: 1,
-      description: 'Profitez de la magie de Belforaine toute une journée avec un accès prioritaire aux attractions.',
-      caracteristic: ['Accès au parc' , 'Accès prioritaire aux attractions'],
-      type: "billet",
-      path: require('@/assets/Panier/image-pass.png'),
-    },{
-      id: '3',
-      title: 'Billet Premium',
-      price: 59.99,
-      day: 2,
-      description: 'Profitez de la magie de Belforaine pendant 2 jours avec un accès prioritaire aux attractions et des goodies offerts à l\'entrée. ',
-      caracteristic: ['Accès au parc' , 'Accès prioritaire aux attractions' , 'Des goodies offerts à l\'entrée'],
-      type: "billet",
-      path: require('@/assets/Panier/image-pass.png'),
+  data() {
+    return {
+      idselect: null,
+      items: [],
+      dates:["2024-01-15" , "2024-01-16" , "2024-01-17"],
+      panier: [],
+      dateSelected: [],
+      quantitySelected: [0,0],
+      selected: null,
+      renderComponent: true,
     }
-
-    ],
-    dates:["2024-01-15" , "2024-01-16" , "2024-01-17"],
-    panier: [],
-    dateSelected: [],
-    quantitySelected: [0,0],
-    selected: null,
-    renderComponent: true,
-  }),watch: {
-
+  },
+  
+  watch: {
+    '$i18n.locale': function() {
+      this.setTranslatedItems();
+    }
   },
   methods: {
+    setTranslatedItems() {
+      this.items = [
+        {
+          id: '1',
+          title: this.$t('choice_ticket.characteristics.basic'),
+          price: 24.99,
+          day: 1,
+          description: this.$t('choice_ticket.description.basic'),
+          caracteristic: [this.$t('choice_ticket.characteristics.access_park')],
+          type: "billet",
+          path: require('@/assets/Panier/image-pass.png'),
+        },
+        {
+          id: '2',
+          title: this.$t('choice_ticket.characteristics.fast'),
+          price: 34.99,
+          day: 1,
+          description: this.$t('choice_ticket.description.fast'),
+          caracteristic: [
+            this.$t('choice_ticket.characteristics.access_park'),
+            this.$t('choice_ticket.characteristics.priority_access')
+          ],
+          type: "billet",
+          path: require('@/assets/Panier/image-pass.png'),
+        },
+        {
+          id: '3',
+          title: this.$t('choice_ticket.characteristics.premium'),
+          price: 59.99,
+          day: 2,
+          description: this.$t('choice_ticket.description.premium'),
+          caracteristic: [
+            this.$t('choice_ticket.characteristics.access_park'),
+            this.$t('choice_ticket.characteristics.priority_access'),
+            this.$t('choice_ticket.characteristics.free_goodies')
+          ],
+          type: "billet",
+          path: require('@/assets/Panier/image-pass.png'),
+        }
+      ];
+    },
+
     scrollToComponent(componentRef) {
       if (componentRef && componentRef.$el) {
         this.$nextTick(() => {

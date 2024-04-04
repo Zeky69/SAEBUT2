@@ -2,10 +2,10 @@
 
 <template>
   <div class="choice-quantity">
-    <h1>Choisissez votre nombre de billets</h1>
+    <h1>{{ $t('choice_ticket.quantity' )}}</h1>
     <div class="quantity-container">
     <div >
-      <h2>Adulte (15+)</h2>
+      <h2>{{ $t('choice_ticket.adult' )}}</h2>
       <div class="line-quantity">
         <div  v-for="(item, index) in quantity" :key="index" @click="selectedQuantity(item-1,0)" :class="selected[0]===item-1? 'quantity-card selected':'quantity-card'">
           <span class="quantity-number">{{item-1}}</span>
@@ -13,7 +13,7 @@
       </div>
     </div>
       <div>
-      <h2>Enfant (0-15)</h2>
+      <h2>{{ $t('choice_ticket.kid' )}}</h2>
         <div class="line-quantity">
 
         <div :class="selected[1]===item-1? 'quantity-card selected':'quantity-card'" v-for="(item, index) in quantity" :key="index" @click="selectedQuantity(item-1,1)">
