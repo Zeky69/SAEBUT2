@@ -39,12 +39,16 @@ data: () => ({
       path: "/admin/prestataires",
     },
     {
-      title: "map",
+      title: "Map",
       path: "/admin/map",
     },
     {
       title: "Profil",
       path: "/admin/profil",
+    },
+    {
+      title:"Page D'accueil",
+      path:"/admin/homepage"
     }
 
   ]

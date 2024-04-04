@@ -48,8 +48,40 @@ async function deletePresta(user_id, prestataire_id) {
 }
 
 
+async function getHomePageFromAPI(){
+    return getRequest(url+'/homepage','GetHomePage')
+}
+
+export async function getHomePage() {
+    try {
+        let answer = await getHomePageFromAPI();
+        return answer;
+    } catch (error) {
+        console.error('Erreur de la récupération des utilisateurs', error.message);
+        throw error;
+    }
+}
+
+async function setHomePageFromAPI(data){
+    return patchRequest(url+'/homepage',data,'SetHomePage');
+}
+
+export async function setHomePage(data) {
+    try {
+        const response = await setHomePageFromAPI({"homepage":data});
+        return response;
+    } catch (error) {
+        console.error("Error setting homepage:", error);
+        throw error;
+    }
+}
+
+
+
 export default {
     getAllUsers,
     managePresta,
     deletePresta,
+    getHomePage,
+    setHomePage
 }

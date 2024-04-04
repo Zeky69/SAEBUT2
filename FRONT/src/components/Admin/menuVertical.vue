@@ -17,7 +17,7 @@
         </div>
       </div>
       <ul class="ul-container">
-        <li v-for="(item, index) in ListMenu" :key="index" :class="{ active: index === activeIndex }">
+        <li v-for="(item, index) in ListMenu" :key="index" :class="{ active: index === activeIndex } ">
           <div class="li-container">
             <div class="li-icon">
               <svg width="40" height="34" viewBox="0 0 40 34" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -29,7 +29,7 @@
             </div>
           </div>
         </li>
-        <li class="follow" style="" >&nbsp;</li>
+        <li class="follow" :style="{ top: calculateTopPosition }" >&nbsp;</li>
       </ul>
       <div class="logout-container">
         <button class="btn-logout" @click="deconnexion">
@@ -75,7 +75,20 @@ export default {
     path :String
   },
   computed :{
-    ...mapState(['lname','fname'])
+    ...mapState(['lname','fname']),
+      // Calculer la position verticale en fonction de l'index de l'élément actif
+      calculateTopPosition() {
+        const basePath = this.pathbase;
+        const currentPath = this.$route.path.replace(basePath, "");
+        const currentPathParts = currentPath.split("/");
+        let activeindex = this.ListMenu.findIndex(item => {
+          const itemPath = item.path.replace(basePath, "");
+          const itemPathParts = itemPath.split("/");
+          return currentPathParts[0] === itemPathParts[0];
+        });
+
+        return activeindex >= 0 ? `${ -(this.ListMenu.length - activeindex) * 4}rem` : '0';
+      }
   },
   data : () =>({
     open: false,
@@ -283,28 +296,13 @@ li {
   background: linear-gradient(269deg, #D6D5E4 55.12%, #EDD1FF 99.7%, #F4E3FF 99.7%);
   z-index: -1;
 }
+
+
 li {
   &.follow{
     transition: top 0.2s ease-in;
   }
-  &:nth-child(1).active ~ .follow {
-    top: -23.9rem;
-  }
-  &:nth-child(2).active ~ .follow {
-    top: -19.9rem;
-  }
-  &:nth-child(3).active ~ .follow {
-    top: -15.9rem;
-  }
-  &:nth-child(4).active ~ .follow {
-    top: -11.9rem;
-  }
-  &:nth-child(5).active ~ .follow {
-    top: -7.9rem;
-  }
-  &:nth-child(6).active ~ .follow {
-    top: -3.9rem;
-  }
+
 }
 .follow:before,
 .follow:after {
