@@ -12,7 +12,11 @@ DROP TABLE if exists toilette CASCADE;
 DROP TABLE if exists disponibilite CASCADE;
 DROP TABLE if exists taggue CASCADE;
 
-DROP TABLE if exists prestataire CASCADE;
+DROP TABLE if exists prestataire CASCADE; 
+DROP TABLE if exists type_service CASCADE;
+DROP TABLE if exists service CASCADE;
+
+
 DROP TABLE if exists client CASCADE;
 DROP TABLE if exists produit CASCADE;
 DROP TABLE if exists intervenant CASCADE;
@@ -125,6 +129,24 @@ CREATE TABLE prestataire(
    FOREIGN KEY(etat_id) REFERENCES ETAT(etat_id)
 );
 
+CREATE TABLE type_service(
+   id_type_service SERIAL,
+   nom VARCHAR(255),
+   PRIMARY KEY(id_type_service)
+
+);
+
+CREATE TABLE service(
+   id_service SERIAL,
+   id_type_service INT,
+   id_prestataire INT,
+   etat BOOL,
+   PRIMARY KEY(id_service),
+   FOREIGN KEY(id_prestataire) REFERENCES prestataire(id_prestataire),
+   FOREIGN KEY(id_type_service) REFERENCES type_service(id_type_service),
+   UNIQUE(id_prestataire, id_type_service)
+);
+
 CREATE TABLE produit(
     id_produit SERIAL,
     nom VARCHAR(50),
@@ -149,6 +171,7 @@ CREATE TABLE emplacement(
     use_Resa BOOLEAN default true,
     accepted BOOLEAN default false,
     FOREIGN KEY (id_type) REFERENCES type(id_type),
+    FOREIGN KEY (prestataire_id) REFERENCES prestataire(id_prestataire),
     PRIMARY KEY(id_emplacement)
 );
 
@@ -278,7 +301,7 @@ CREATE TABLE ligneCommandeBillet(
    subId INT NOT NULL,
    nom VARCHAR(100),
    prenom VARCHAR(100),
-   date JSON,
+   date DATE NOT NULL DEFAULT CURRENT_DATE,
    PRIMARY KEY(uuid),
    FOREIGN KEY(id_billet,subId) REFERENCES sousBillet(id_billet,subId)
  );

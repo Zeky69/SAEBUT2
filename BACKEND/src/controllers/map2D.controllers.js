@@ -53,6 +53,7 @@ exports.updateEmpPresataire = async (req, res) => {
     let {nom , description} = req.body
     try {
         let reponse = await Map2DService.updateEmpPresataire(id,description, nom);
+        console.log(reponse)
         if (reponse) {
             return res.status(200).send(reponse);
         }
@@ -90,25 +91,23 @@ exports.updateEmp = async (req,res) => {
         return res.status(500).send(error.message || "Internal error");
     }
 }
-
-exports.askEmp =  async (req, res) => {
+exports.askEmp = async (req, res) => {
     let id_emplacement = req.params.id;
-    let id_prestataire = req.user.prestataire.id_prestataire;
-    try {
+    let id_prestataire = req.prestataire.id_prestataire;
+    console.log('id_prestataire', id_prestataire);
+    console.log('id_emplacement', id_emplacement);
 
-        let reponse  = await Map2DService.askEmp(id_prestataire,id_emplacement);
+    try {
+        let reponse = await Map2DService.askEmp(id_prestataire, id_emplacement);
         if (reponse) {
             return res.status(200).send(reponse);
+        } else {
+            return res.status(401).send("pas de reponse ask");
         }
-
-        return res.status(401).send("pas de reponse ask");
-
-
+    } catch (e) {
+        return res.status(500).send(e.message || "Internal error");
     }
-    catch (e){
-        return res.status(500).send(error.message || "Internal error")
-    }
-}
+};
 
 
 
@@ -152,5 +151,6 @@ exports.freeEmp = async (req, res) => {
         return res.status(500).send(error.message || "Internal error")
     }
 }
+
 
 

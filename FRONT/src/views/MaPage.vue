@@ -13,10 +13,10 @@
   <div v-for="(batiment,index) in batimentPrestataire" :key="index">
     <reservationComponent
         v-if="idPrestataire !==-1"
-        :nom="batiment.nom"
-        :id_prestataire="idPrestataire"
-        :id_bat="batiment.id_batiment"
+        :id_bat="batiment.id_emplacement"
+        :id_prestataire="idPrestataire.toString()"
         :mode="mode"
+        :nom="batiment.nom"
         :display="batiment.use_resa"
         @updateDisplay="updateDisplay($event)"></reservationComponent>
   </div>
@@ -29,7 +29,7 @@ import PrestateComponent from "@/components/Prestatire/Prestate.vue";
 import {getPrestataire, updatePage} from "@/services/prestataire.service";
 import {getImage} from "@/services/image.service";
 import CommentaireComponent from "@/components/Commentaire.vue";
-import batService, {getBatByIdPrestataire} from "@/services/batiment.service";
+import batService from "@/services/batiment.service";
 import ReservationComponent from "@/components/reservation.vue";
 
 export default {
@@ -59,9 +59,7 @@ export default {
           this.urlImage = getImage(this.prestataire.photo_profil);
           this.nom = this.prestataire.nom
           this.idPrestataire = parseInt(this.prestataire.id_prestataire);
-          getBatByIdPrestataire(this.idPrestataire).then((res) => {
-            this.batimentPrestataire =  res
-          })
+          this.recupererBatimentPrestataire();
         }else if (res && res.length === 0){
           this.$router.push('/').catch(() => {
           });
@@ -76,11 +74,8 @@ export default {
               this.prestataire = this.$store.state.prestataireObject;
               this.nom = this.prestataire.nom;
               this.idPrestataire = parseInt(this.prestataire.id_prestataire);
-              this.urlImage =getImage(this.prestataire.photo_profil)
-              console.log(this.urlImage)
-              getBatByIdPrestataire(this.idPrestataire).then((res) => {
-                this.batimentPrestataire =  res
-              })
+              this.urlImage = getImage(this.prestataire.photo_profil)
+              this.recupererBatimentPrestataire();
             }
           )
        }
@@ -88,9 +83,8 @@ export default {
           this.prestataire = this.$store.state.prestataireObject;
           this.nom = this.prestataire.nom;
           this.idPrestataire = parseInt(this.prestataire.id_prestataire);
-
           this.urlImage =getImage(this.prestataire.photo_profil)
-
+         this.recupererBatimentPrestataire();
         }
         this.mode = '1';
      }
@@ -106,11 +100,22 @@ export default {
       this.mode = mode;
     },
     valide(Page){
-      console.log(Page)
       this.prestataire.page_info = Page;
       updatePage( this.prestataire).then((res) => {
         console.log(res);
       });
+    },
+    async recupererBatimentPrestataire(){
+      try {
+        let response = await batService.getBatByIdPrestataire(this.idPrestataire)
+        if (response.error) {
+          console.log("Erreur lors de la récupération des batiments");
+        } else {
+          this.batimentPrestataire = response;
+        }
+      } catch (e) {
+        console.error("An error occurred:", e);
+      }
     },
     async updateDisplay(id_bat){
       try {

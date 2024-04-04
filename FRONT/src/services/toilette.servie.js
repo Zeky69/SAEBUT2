@@ -3,7 +3,6 @@ import {getRequest, postRequest,deleteRequest} from "@/services/axios.service"
 
 async function getAllToiletteFromAPI(){
     let answer = await getRequest('/toilette/', 'GETALLTOILETTE')
-    console.log("return front api",answer)
     return answer
 }
 

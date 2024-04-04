@@ -14,7 +14,7 @@ const batRoutes = require('./router/batiment.router')
 const imageRoutes = require('./router/image.router')
 const commentaireRoutes = require('./router/commentaire.router')
 const shopRoutes = require('./router/shop.router')
-
+const statistiquesRoutes = require('./router/statistiques.router')
 const cors = require('cors');
 const path = require("path");
 
@@ -68,14 +68,7 @@ app.use("/batiment", batRoutes);
 app.use('/image', imageRoutes);
 app.use('/shop',shopRoutes);
 app.use('/commentaire',commentaireRoutes);
-
-
-
-
-
-
-
-
+app.use('/statistiques', statistiquesRoutes);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);

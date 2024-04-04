@@ -7,7 +7,7 @@
       <img class="img" :src="profileImage" alt="Profile Image" />
       <h2>{{ name }}</h2>
       <p>{{ message }}</p>
-      <a :href='"mailto:" + email' @click="contactPerson">Contacter</a>
+      <a :href='"mailto:" + email' @click="contactPerson">{{ $t('organisateursPage.buttonContact') }}</a>
     </div>
   </div>
 </div>

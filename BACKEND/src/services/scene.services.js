@@ -152,9 +152,7 @@ const saveEvent = async (req) => {
         const eventQuery = 'INSERT INTO event (id_event,description,nom,id_batiment,color,status,start_date,end_date, id_prestataire) VALUES ($1,$2,$3,$4,$5,$6,$7,$8, $9) RETURNING *';
         const events = await client.query(eventQuery, [uuid, info.description, info.nom, info.id_scene, info.couleur, info.etat, info.date_debut, info.date_fin, info.id_prestataire]);
 
-        console.log("l'event a bien été créé");
         const event = events.rows[0];
-        console.log("event", event);
         return event;
     } catch (error) {
         console.log("error", error);

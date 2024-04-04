@@ -26,7 +26,6 @@ async function ChangePasswordFROMAPI(token,data){
 async function Login(data) {
     try {
         let answer = await LoginFromApi(data);
-        console.log(answer)
         return answer;
     } catch (error) {
         console.error('Erreur lors du login', error.message);
@@ -75,7 +74,6 @@ async function getInformationFromTokenAPI(token){
 async function getInformationFromToken(token) {
     try {
         let information = await getInformationFromTokenAPI(token);
-        console.log(information);
         return information;
     } catch (error) {
         console.error('Erreur lors de la récupération des informations depuis le token', error.message);

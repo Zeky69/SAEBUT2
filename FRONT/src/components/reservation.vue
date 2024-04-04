@@ -99,7 +99,7 @@ export default defineComponent({
       try {
         let response = await RestauService.deleteResa({"id_resa":id})
         if (response.error) {
-          console.log("Erreur lors de l'annulation' d'une reservation");
+          console.log("Erreur lors de l'annulation d'une reservation");
         } else {
           await this.getReservation()
           await this.getDisponibilite()
@@ -135,7 +135,7 @@ export default defineComponent({
     async checkForm() {
       try {
         //TO DO: check input and check authentication
-        let response = await RestauService.postDispo({"date":this.newDispoDate, "id_bat":this.id_bat, "duree":this.newDispoDuree})
+        let response = await RestauService.postDispo({"date":this.newDispoDate, "id_bat":this.id_bat, "duree":this.newDispoDuree, "id_prestataire":this.id_prestataire})
         if (response.error) {
           console.log("Erreur lors de la création des disponibilités");
         } else {

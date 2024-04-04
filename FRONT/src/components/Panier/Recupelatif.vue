@@ -2,7 +2,7 @@
   <div class="all-container-recup">
     <div class="information-all">
       <div class="information">
-        <h2>Information de Facturation:</h2>
+        <h2>{{ $t('cartPage.billingInformation') }}</h2>
 
         <div class="ligne"> <span>{{order.acheteur.prenom}}&nbsp;</span> <span>{{order.acheteur.nom}}</span></div>
         <div class="ligne"><span>{{order.acheteur.email}}</span></div>
@@ -33,15 +33,15 @@
               <li>{{item.item.header.title}}</li>
               <li>{{item.item.header.subtitle}}</li>
               <li>{{item.item.price}}€  </li>
-              <li>Nom:&nbsp;{{item.nom}} </li>
-              <li>Prenom: {{item.prenom}}</li>
+              <li>{{ $t('cartPage.placeholders.lastName') }} : {{item.nom}} </li>
+              <li>{{ $t('cartPage.placeholders.firstName') }} : {{item.prenom}}</li>
             </ul>
         </div>
       </div>
-      <p class="total">Total: {{total}}€</p>
+      <p class="total">{{ $t('cartPage.total') }} : {{total}}€</p>
       <div class="list-info-container">
-      <button  class="btn-next" @click="continuer" >Passer au paimemant</button>
-      <button class="btn-next"  @click="annuler">Annuler</button>
+      <button  class="btn-next" @click="continuer" >{{ $t('cartPage.buttons.confirm') }}</button>
+      <button class="btn-next"  @click="annuler">{{ $t('cartPage.buttons.previous') }}</button>
       </div>
     </div>
 

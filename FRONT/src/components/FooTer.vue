@@ -43,7 +43,7 @@
       </div>
       <div class="contenuRubriques">
         <h3 v-t="'footer.evenMore'"></h3>
-        <router-link to="/a-propos" class="link" v-t="'footer.whoAreWe'"></router-link>
+        <router-link to="/organisateurs" class="link" v-t="'footer.whoAreWe'"></router-link>
         <router-link to="/contact" class="link" v-t="'footer.contactUs'"></router-link>
         <router-link to="/login" class="link" v-t="'footer.connectYou'"></router-link>
       </div>

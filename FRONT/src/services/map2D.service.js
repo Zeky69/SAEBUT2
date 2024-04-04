@@ -135,6 +135,8 @@ async function freeEmp(id){
 
 
 
+
+
 export {
     getMap2DType,
     getAllEmpWithPrestataire,

@@ -3,21 +3,21 @@
 <template>
 
   <div class="all-container-fin">
-    <h1 class="succes">Votre commande a été exécutée avec succès, et nous sommes ravis d'avoir pu répondre à vos attentes</h1>
+    <h1 class="succes">{{ $t('cartPage.finalPage.orderPlaced') }}</h1>
     <svg class="svgm" width="100px" height="100px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke="rgba(22, 162, 104, 0.87)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     <router-link to="/">
-      <button class="btn-add">Retour à l'accueil</button>
+      <button class="btn-add">{{ $t('cartPage.finalPage.returnToHome') }}</button>
     </router-link>
     <div v-if="billets && billets.length >0">
-      <h1>Voici vos billets : </h1>
+      <h1>{{ $t('cartPage.finalPage.ticketsPreview') }} : </h1>
       <div v-for="(uuid, index) in billets" :key="index" class="qrcode-container">
         <canvas :id="'canvas' + index" class="qrcode"></canvas>
         <div class="header-qr">
           <h1>{{uuid.nom}}&nbsp;{{uuid.prenom}}</h1>
           <p>{{getBilletInforamtion(uuid)}}</p>
-          <h2>Numero de billet: {{ uuid.uuid }} </h2>
+          <h2>{{ $t('cartPage.finalPage.ticketNumber') }} : {{ uuid.uuid }} </h2>
 
         </div>
       </div>

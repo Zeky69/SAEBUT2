@@ -12,16 +12,16 @@
     </div>
       <div class="line"></div>
       <div class="total">
-        <span class="total-text">Montant Total</span>
+        <span class="total-text">{{  $t('cartPage.total') }}</span>
         <span class="total-price">{{total.toFixed(2)}}€</span>
       </div>
     </div>
     <div class="information-container">
-    <span class="information">Vous pourrez choisir votre méthode de paiement plus tard</span>
+    <span class="information">{{ $t('cartPage.paymentMethod') }}</span>
     </div>
     <div class="footer-container">
-      <button class="btn-validate" @click="setStep(2)" :disabled="items.length === 0">Valider mon panier</button>
-      <button class="btn-continue" @click="gotoShop">Continuer mes achats</button>
+      <button class="btn-validate" @click="setStep(2)" :disabled="items.length === 0">{{ $t('cartPage.buttons.validateCart') }}</button>
+      <button class="btn-continue" @click="gotoShop">{{ $t('cartPage.buttons.continueShopping') }}</button>
     </div>
 
 

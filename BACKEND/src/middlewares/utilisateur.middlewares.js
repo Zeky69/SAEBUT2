@@ -100,7 +100,9 @@ exports.verifyisPrestataire = (req, res, next) => {
 
 exports.getPrestaireId = async  (req, res, next) => {
   if(req.user.group_id === 2 ){
-    req.prestataire = await userService.getPrestataireObject(req.user.id);
+    let result = await userService.getPrestataireObject(req.user.id);
+    req.prestataire = result[0];
+
   }
   next()
 

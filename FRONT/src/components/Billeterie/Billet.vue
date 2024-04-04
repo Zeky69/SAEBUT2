@@ -3,14 +3,14 @@
 
 
 
-    <h1 class="title-billet">Choisissez votre billet</h1>
+  <h1 class="title-billet">{{ $t('choice_ticket.title') }}</h1>
     <div class="card-container">
 
       <div  v-for="(item, index) in items" :key="index" :class="selected!=null && selected.id === item.id ? 'active card': 'card'"  @click="selection(item)">
         <div class="header-card">
           <div class="header-title-container">
           <span class="title-card">{{item.title}}</span>
-          <span class="day-card">{{item.day}} jour{{item.day>1?'s':''}} </span>
+          <span class="day-card">{{ item.day }} {{ item.day > 1 ? $t('choice_ticket.days') : $t('choice_ticket.day') }}</span>
           </div>
           <div class="price-container">
           <span class="price-card">{{item.price}}€</span>

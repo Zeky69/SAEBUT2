@@ -1,21 +1,16 @@
 
-
 <template>
-
   <div class="choice-date-container">
-    <h1>Sélectionnez votre date</h1>
+    <h1>{{ $t('choice_ticket.dateSelection.title') }}</h1>
     <div class="date-container">
       <div :class="dateSelected.includes(date)? 'date-card selected':'date-card'" v-for="(date, index) in dateParse" @click="selectedDate(date)" :key="index">
-
-        <span class="date-day">{{jours[date.getDay()]}}</span>
-        <span class="date-number">{{date.getDate()}}</span>
-        <span class="date-month">{{Mois[date.getMonth()]}}</span>
-        <span class="date-year">{{date.getFullYear()}}</span>
+        <span class="date-day">{{ $t(`choice_ticket.dateSelection.days.${jours[date.getDay()]}`) }}</span>
+        <span class="date-number">{{ date.getDate() }}</span>
+        <span class="date-month">{{ $t(`choice_ticket.dateSelection.months.${Mois[date.getMonth()]}`) }}</span>
+        <span class="date-year">{{ date.getFullYear() }}</span>
       </div>
     </div>
-
   </div>
-
 </template>
 
 <script>
@@ -33,14 +28,14 @@ export default {
       required: true,
     }
   },
-  data: () =>  ({
-    dateParse: [],
-    dateSelected: [],
-    jours: ["Dimanche" , "Lundi" , "Mardi" , "Mercredi" , "Jeudi" , "Vendredi" , "Samedi"],
-    Mois: ["Janvier" , "Février" , "Mars" , "Avril" , "Mai" , "Juin" , "Juillet" , "Août" , "Septembre" , "Octobre" , "Novembre" , "Décembre"],
-
-
-  }),
+  data() {
+    return {
+      dateParse: [],
+      dateSelected: [],
+      jours: Object.keys(this.$t('choice_ticket.dateSelection.days')),
+      Mois: Object.keys(this.$t('choice_ticket.dateSelection.months')),
+    };
+  },
   computed: {
   },
   methods: {

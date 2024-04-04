@@ -38,6 +38,8 @@ INSERT INTO UTILISATEURS(FIRST_NAME,LAST_NAME,email,Date_Created,Group_Id) VALUE
 
 INSERT INTO prestataire( description, nom, id_user, etat_id ,photo_profil) VALUES ('Drake le meilleur chanteur','Drake','3',2,'drake.jpeg');
 
+INSERT INTO type_service(nom) VALUES ('Commentaire'),
+                        ('Boutique');
 
 INSERT INTO tags VALUES ('1', 'accessible handicapé'),
                         ('2', 'wifi'),
@@ -84,6 +86,9 @@ INSERT INTO categorie_produit(libelle_categorie,description,image) VALUES
 
 select * from categorie_produit;
 
+INSERT INTO service (id_type_service, id_prestataire, etat) VALUES
+	(1,1,true),(1,2,true),(1,3,true),(1,4,true),(1,5,true),(2,1,true),(2,2,true),(2,3,true);
+
 -- Ajout des produits pour la catégorie 'Goodies'
 INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
     ('Stylo magique', 2.99, 100, 1,'stylo_magique.png',4),
@@ -96,31 +101,30 @@ INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
 
 -- Ajout des produits pour la catégorie 'Vêtements'
 INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
-    ('T-shirt graphique', 19.99, 30, 2,'t-shirt-graphique.png',6),
-    ('Sweat à capuche confort', 39.99, 20, 2,'sweat-capuche.png',6),
-    ('Chaussettes colorées', 8.99, 50, 2,'chaussette-coloré.png',4),
-    ('Casquette brodée', 14.99, 40, 2,'casquette-brode.png',4);
+    ('T-shirt graphique', 19.99, 30, 2,'t-shirt-graphique.png',1),
+    ('Sweat à capuche confort', 39.99, 20, 2,'sweat-capuche.png',2),
+    ('Chaussettes colorées', 8.99, 50, 2,'chaussette-coloré.png',2),
+    ('Casquette brodée', 14.99, 40, 2,'casquette-brode.png',3);
 
 -- Ajout des produits pour la catégorie 'Peluches'
 INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
-    ('Peluche licorne magique', 29.99, 15, 3,'peluche_licorne.png',4),
-    ('Ours en peluche câlin', 24.99, 20, 3,'ours_calin.png',6),
-    ('Doudou éléphant doux', 19.99, 25, 3,'peluche_elephan.png',6),
-    ('Peluche dragon rigolo', 34.99, 12, 3,'peluche_dragon.png',6),
-	('Peluche ourson géant', 39.99, 20, 3,'peluche_ourson.png',6),
-    ('Peluche chaton réaliste', 16.99, 35, 3,'peluche_chaton.png',6);
+    ('Peluche licorne magique', 29.99, 15, 3,'peluche_licorne.png',2),
+    ('Ours en peluche câlin', 24.99, 20, 3,'ours_calin.png',1),
+    ('Doudou éléphant doux', 19.99, 25, 3,'peluche_elephan.png',3),
+    ('Peluche dragon rigolo', 34.99, 12, 3,'peluche_dragon.png',3),
+	('Peluche ourson géant', 39.99, 20, 3,'peluche_ourson.png',3),
+    ('Peluche chaton réaliste', 16.99, 35, 3,'peluche_chaton.png',2);
 
 
 -- Ajout des produits pour la catégorie 'Accessoires'
 INSERT INTO produit (nom, prix, stock, categorie_id, photo,prestataire_id) VALUES
-    ('Coque de téléphone artistique', 12.99, 40, 4,'coque_telephone.png',4),
-    ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png',4),
-    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png',6),
-    ('Étui à lunettes original', 8.49, 50, 4,'etui.png',6),
-    ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png',4);
-
-
-
+    ('Coque de téléphone artistique', 12.99, 40, 4,'coque_telephone.png',1),
+    ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png',2),
+    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png',3),
+    ('Étui à lunettes original', 8.49, 50, 4,'etui.png',4),
+    ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png',2);
+    
+    
 INSERT INTO billet(title,description,price,day,path) VALUES
 ('Billet Basic','Profitez de la magie de Belforaine toute une journée.',24.99,1,'billet_basic.png'),
 ('Billet Fast','Profitez de la magie de Belforaine toute une journée avec un accès prioritaire aux attractions.',34.99,1,'billet_fast.png'),
@@ -150,13 +154,18 @@ INSERT INTO commande (id_user,date_commande) VALUES
 
 
 
-INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom,date) VALUES
-('151',1,1,2,'Zekeriya','Akburak','{"date":["2024-01-16"]}'),
-('15415',1,2,1,'Mhammed','Akburak','{"date":["2024-01-16"]}'),
-('5415',1,3,1,'Enzo','LeRaptor','{"date":["2024-01-15","2024-01-16"]}');
+select * from emplacement;
+
+INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom) VALUES
+('151',1,1,2,'Zekeriya','Akburak'),
+('15415',1,2,1,'Mhammed','Akburak'),
+('5415',1,3,1,'Enzo','LeRaptor');
 
 INSERT INTO ligneCommandeArticle(id_commande , id_produit ,valide, quantite) VALUES
 (1,1,false,5);
 
-
-
+INSERT INTO emplacement (id_emplacement,id_type,nom,description,matricePoints,prestataire_id,use_Resa,accepted) VALUES
+('1','1','Restaurant 1','Description Restaurant 1','[[0,0],[0,1],[1,1],[1,0]]',3,false,true),
+('2','2','Attraction 1','Description Attraction 1','[[0,0],[0,1],[1,1],[1,0]]',3,true,true),
+('3','3','Scene 1','Description Scene 1','[[0,0],[0,1],[1,1],[1,0]]',4,false,true),
+('4','4','Stand 1','Description Stand 1','[[0,0],[0,1],[1,1],[1,0]]',4,false,true);

@@ -24,9 +24,11 @@ Ces trois cas sont traités par une unique fonction handleError().
 
 
 const baseURL =
-    process.env.NODE_ENV === 'production'
-        ? 'https://api.codeky.fr'
-        : 'http://localhost:3000';
+    process.env.NODE_ENV === 'development'
+        ? 'http://localhost:3000'
+        : 'https://api.codeky.fr';
+
+
 
 // creation d'un agent axios, avec une config. pour atteindre l'API
 const axiosAgent = axios.create({

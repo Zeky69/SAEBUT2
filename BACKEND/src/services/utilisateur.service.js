@@ -110,7 +110,6 @@ async function getInformationWithToken(token) {
     if (err) {
       console.error("Erreur de décodage du token :");
     } else {
-      console.log("Token décodé :", decoded);
       response = {
         id: decoded.user_id,
         fname: decoded.first_name,
@@ -172,7 +171,6 @@ async function generatePasswordResetToken(email) {
 async function updateUserPassword(userId, hashedPassword) {
   const client = await pool.connect();
 
-  console.log(userId);
 
   try {
     const query =
