@@ -69,6 +69,7 @@ export default {
       type: Array,
       required: true,
     },color1 : String,
+    pathbase : String,
     color2:String,
     role : String,
     path :String
@@ -90,17 +91,30 @@ export default {
     }
   },
   created() {
-    this.activeIndex = this.ListMenu.findIndex(
-      (item) => item.path === this.$route.path
-    );
+    const basePath = this.pathbase;
+    const currentPath = this.$route.path.replace(basePath, "");
+    const currentPathParts = currentPath.split("/");
+
+    this.activeIndex = this.ListMenu.findIndex(item => {
+      const itemPath = item.path.replace(basePath, "");
+      const itemPathParts = itemPath.split("/");
+      return currentPathParts[0] === itemPathParts[0];
+    });
   },
   watch: {
     $route() {
-      this.activeIndex = this.ListMenu.findIndex(
-        (item) => item.path === this.$route.path
-      );
+      const basePath = this.pathbase;
+      const currentPath = this.$route.path.replace(basePath, "");
+      const currentPathParts = currentPath.split("/");
+
+      this.activeIndex = this.ListMenu.findIndex(item => {
+        const itemPath = item.path.replace(basePath, "");
+        const itemPathParts = itemPath.split("/");
+        return currentPathParts[0] === itemPathParts[0];
+      });
     },
   },
+
 
 
 

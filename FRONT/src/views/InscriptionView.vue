@@ -7,51 +7,51 @@
           <span v-if="isRegister">
             <div class="validate">
               <img src="@/assets/logo/check.svg" id="check">
-              <p>Votre inscription a été enregistré un admin va traiter votre demande</p>
-              <span>Vous allez être rediriger dans quelques instants à la page d'accueil</span>
+              <p>{{ $t('login-signup-forgottenpass.signup.validation') }}</p>
+              <span>{{ $t('login-signup-forgottenpass.signup.redirection') }}</span>
             </div>
           </span>
 
           <span v-else>
             <div class="formulaire-top">
-              <h2>Inscription Prestataire</h2>
+              <h2>{{ $t('login-signup-forgottenpass.signup.title2') }}</h2>
             </div>
 
             <div class="formulaire-contenu">
               <div class="register">
                 <div class="register-champ">
-                  <p>Nom</p>
-                  <input type="text" class="inputFormulaire" placeholder="Entrez votre nom" v-model="nom" required>
-                  <span v-if="!nom && showErrors" class="error-message">Le champ Nom est obligatoire</span>
+                  <p>{{ $t('login-signup-forgottenpass.signup.lastName') }}</p>
+                  <input type="text" class="inputFormulaire" :placeholder="$t('login-signup-forgottenpass.signup.placeholders.lastName')" v-model="nom" required>
+                  <span v-if="!nom && showErrors" class="error-message">{{ $t('login-signup-forgottenpass.signup.errors[1]') }}</span>
                 </div>
 
                 <div class="register-champ">
-                  <p>Prénom</p>
-                  <input type="text" class="inputFormulaire" placeholder="Entrez votre prénom" v-model="prenom" required>
-                  <span v-if="!prenom && showErrors" class="error-message">Le champ Prénom est obligatoire</span>
+                  <p>{{ $t('login-signup-forgottenpass.signup.firstName') }}</p>
+                  <input type="text" class="inputFormulaire" :placeholder="$t('login-signup-forgottenpass.signup.placeholders.firstName')" v-model="prenom" required>
+                  <span v-if="!prenom && showErrors" class="error-message">{{ $t('login-signup-forgottenpass.signup.errors[2]') }}</span>
                 </div>
 
                 <div class="register-champ">
-                  <p>E-mail</p>
-                  <input type="text" class="inputFormulaire" placeholder="Entrez votre adresse e-mail" v-model="email" required>
-                  <span v-if="!email && showErrors" class="error-message">Le champ E-mail est obligatoire</span>
+                  <p>{{ $t('login-signup-forgottenpass.signup.email') }}</p>
+                  <input type="text" class="inputFormulaire" :placeholder="$t('login-signup-forgottenpass.signup.placeholders.email')" v-model="email" required>
+                  <span v-if="!email && showErrors" class="error-message">{{ $t('login-signup-forgottenpass.signup.errors[0]') }}</span>
                 </div>
 
                 <div class="register-champ">
-                  <p>Description (facultatif)</p>
-                  <input type="text" class="inputFormulaire"  placeholder="Adresse e-mail" v-model="description">
+                  <p>{{ $t('login-signup-forgottenpass.signup.description') }}</p>
+                  <input type="text" class="inputFormulaire" :placeholder="$t('login-signup-forgottenpass.signup.placeholders.description')" v-model="description">
                 </div>
 
                 <div class="register-champ">
-                  <p>Numéro Siret</p>
-                  <input type="text" class="inputFormulaire" placeholder="Adresse e-mail" v-model="siret" required>
-                  <span v-if="!siret && showErrors" class="error-message">Le champ Numéro Siret est obligatoire</span>
+                  <p>{{ $t('login-signup-forgottenpass.signup.siret') }}</p>
+                  <input type="text" class="inputFormulaire" :placeholder="$t('login-signup-forgottenpass.signup.placeholders.siret')" v-model="siret" required>
+                  <span v-if="!siret && showErrors" class="error-message">{{ $t('login-signup-forgottenpass.signup.errors[3]') }}</span>
                 </div>
 
                 <span class="error-message" id="back-error"></span>
 
                 <div class="boutton" @click="registerUser">
-                  <p id="Inscription" :disabled="!areFieldsFilled">Inscription</p>
+                  <p id="Inscription" :disabled="!areFieldsFilled">{{ $t('login-signup-forgottenpass.signup.button') }}</p>
                 </div>
               </div>
             </div>
@@ -61,6 +61,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import util from "@/services/utilisateur";

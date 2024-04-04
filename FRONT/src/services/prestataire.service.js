@@ -45,12 +45,43 @@ export async function getPrestatairesTypes(){
     return await getRequest('/prestataires/types', 'getPrestatairesTypes')
 }
 
+export async function getPrestatairesServicesFromAPI(id_prestataire){
+    return await getRequest(url+`/services/${id_prestataire}`, 'getPrestatairesServices')
+}
+
+export async function getPrestatairesServices(id_prestataire){
+    try {
+        const response = await getPrestatairesServicesFromAPI(id_prestataire);
+        return response;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des services : ", error);
+        throw error;
+    }
+}
+
+export async function updateServiceStateFromAPI(id_prestataire){
+    return await getRequest(url+`/services/update/${id_prestataire}`, 'updateStateServ')
+}
+
+
+async function updateServiceState(id) {
+    try {
+        let answer = await updateServiceStateFromAPI(id)
+        return answer
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour de la disponibilité :', error.message);
+        throw error;
+    }
+}
+
 export default{
     updatePrestataire,
     getPrestataire,
     updatePage,
     getPrestataires,
     getPrestataireObject,
-    getPrestatairesTypes
+    getPrestatairesTypes,
+    getPrestatairesServices,
+    updateServiceState
 }
 
