@@ -126,16 +126,16 @@ CREATE TABLE prestataire(
 );
 
 CREATE TABLE produit(
-                        id_produit SERIAL,
-                        nom VARCHAR(50),
-                        prix NUMERIC(5,2),
-                        stock INT,
-                        photo VARCHAR(50),
-                        categorie_id INT,
-                        prestataire_id INT,
-                        FOREIGN KEY(categorie_id) REFERENCES categorie_produit(id_categorie),
-                        FOREIGN KEY(prestataire_id) REFERENCES prestataire(id_prestataire),
-                        PRIMARY KEY(id_produit)
+    id_produit SERIAL,
+    nom VARCHAR(50),
+    prix NUMERIC(5,2),
+    stock INT,
+    photo VARCHAR(50),
+    categorie_id INT,
+    prestataire_id INT NOT NULL,
+    FOREIGN KEY(categorie_id) REFERENCES categorie_produit(id_categorie),
+    FOREIGN KEY (prestataire_id) REFERENCES prestataire(id_prestataire),
+    PRIMARY KEY(id_produit)
 );
 
 

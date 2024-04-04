@@ -85,39 +85,39 @@ INSERT INTO categorie_produit(libelle_categorie,description,image) VALUES
 select * from categorie_produit;
 
 -- Ajout des produits pour la catégorie 'Goodies'
-INSERT INTO produit (nom, prix, stock, categorie_id,photo) VALUES
-    ('Stylo magique', 2.99, 100, 1,'stylo_magique.png'),
-    ('Tasse enchantée', 9.99, 50, 1,'tasse_magique.png'),
-    ('Porte-clés lumineux', 4.49, 75, 1,'porte_cle_lumineux.png'),
-    ('Carnet de notes féerique', 6.99, 60, 1,'carnet_note.png'),
-	('Stylo en métal gravé', 5.99, 50, 1,'stylo_grave.png'),
-    ('Mug isotherme avec couvercle', 14.99, 40, 1,'mug.png');
+INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
+    ('Stylo magique', 2.99, 100, 1,'stylo_magique.png',4),
+    ('Tasse enchantée', 9.99, 50, 1,'tasse_magique.png',4),
+    ('Porte-clés lumineux', 4.49, 75, 1,'porte_cle_lumineux.png',4),
+    ('Carnet de notes féerique', 6.99, 60, 1,'carnet_note.png',4),
+	('Stylo en métal gravé', 5.99, 50, 1,'stylo_grave.png',4),
+    ('Mug isotherme avec couvercle', 14.99, 40, 1,'mug.png',4);
 
 
 -- Ajout des produits pour la catégorie 'Vêtements'
-INSERT INTO produit (nom, prix, stock, categorie_id,photo) VALUES
-    ('T-shirt graphique', 19.99, 30, 2,'t-shirt-graphique.png'),
-    ('Sweat à capuche confort', 39.99, 20, 2,'sweat-capuche.png'),
-    ('Chaussettes colorées', 8.99, 50, 2,'chaussette-coloré.png'),
-    ('Casquette brodée', 14.99, 40, 2,'casquette-brode.png');
+INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
+    ('T-shirt graphique', 19.99, 30, 2,'t-shirt-graphique.png',1),
+    ('Sweat à capuche confort', 39.99, 20, 2,'sweat-capuche.png',2),
+    ('Chaussettes colorées', 8.99, 50, 2,'chaussette-coloré.png',2),
+    ('Casquette brodée', 14.99, 40, 2,'casquette-brode.png',3);
 
 -- Ajout des produits pour la catégorie 'Peluches'
-INSERT INTO produit (nom, prix, stock, categorie_id,photo) VALUES
-    ('Peluche licorne magique', 29.99, 15, 3,'peluche_licorne.png'),
-    ('Ours en peluche câlin', 24.99, 20, 3,'ours_calin.png'),
-    ('Doudou éléphant doux', 19.99, 25, 3,'peluche_elephan.png'),
-    ('Peluche dragon rigolo', 34.99, 12, 3,'peluche_dragon.png'),
-	('Peluche ourson géant', 39.99, 20, 3,'peluche_ourson.png'),
-    ('Peluche chaton réaliste', 16.99, 35, 3,'peluche_chaton.png');
+INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
+    ('Peluche licorne magique', 29.99, 15, 3,'peluche_licorne.png',2),
+    ('Ours en peluche câlin', 24.99, 20, 3,'ours_calin.png',1),
+    ('Doudou éléphant doux', 19.99, 25, 3,'peluche_elephan.png',3),
+    ('Peluche dragon rigolo', 34.99, 12, 3,'peluche_dragon.png',3),
+	('Peluche ourson géant', 39.99, 20, 3,'peluche_ourson.png',3),
+    ('Peluche chaton réaliste', 16.99, 35, 3,'peluche_chaton.png',2);
 
 
 -- Ajout des produits pour la catégorie 'Accessoires'
 INSERT INTO produit (nom, prix, stock, categorie_id, photo,prestataire_id) VALUES
     ('Coque de téléphone artistique', 12.99, 40, 4,'coque_telephone.png',1),
-    ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png',1),
-    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png',2),
-    ('Étui à lunettes original', 8.49, 50, 4,'etui.png',2),
-    ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png',1);
+    ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png',2),
+    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png',3),
+    ('Étui à lunettes original', 8.49, 50, 4,'etui.png',4),
+    ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png',2);
 
 
 
