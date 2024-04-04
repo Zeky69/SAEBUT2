@@ -294,15 +294,16 @@ CREATE TABLE billet(
  );
 
 CREATE TABLE ligneCommandeBillet(
-   uuid VARCHAR(100) NOT NULL,
-   id_commande INT NOT NULL,
-   id_billet INT NOT NULL,
-   subId INT NOT NULL,
-   nom VARCHAR(100),
-   prenom VARCHAR(100),
-   date DATE NOT NULL DEFAULT CURRENT_DATE,
-   PRIMARY KEY(uuid),
-   FOREIGN KEY(id_billet,subId) REFERENCES sousBillet(id_billet,subId)
+    uuid VARCHAR(100) NOT NULL,
+    id_commande INT NOT NULL,
+    id_billet INT NOT NULL,
+    subId INT NOT NULL,
+    nom VARCHAR(100),
+    prenom VARCHAR(100),
+    date DATE NOT NULL DEFAULT CURRENT_DATE,
+    PRIMARY KEY(uuid),
+    FOREIGN KEY(id_commande) REFERENCES commande(id_commande),
+    FOREIGN KEY(id_billet,subId) REFERENCES sousBillet(id_billet,subId)
  );
 
  CREATE TABLE ligneCommandeArticle(

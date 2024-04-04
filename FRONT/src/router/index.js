@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from "@/store";
 import utilisateur from "@/services/utilisateur";
+import RestauService from "@/services/reservation";
 
 
 Vue.use(VueRouter)
@@ -98,13 +99,24 @@ const routes = [
     path: '/restauration',
     name: 'restauration',
     meta: { requiresAuth: false, group_id: 3 },
-    component: () => import(/* webpackChunkName: "about" */ '../views/ReservationView.vue')
-  },{
+    component: () => import('../views/ReservationView.vue')
+  },
+  {
+    path: '/restauration/:idDelete',
+    name: 'restauration',
+    meta: { requiresAuth: false, group_id: 3 },
+    component: () => import( '../views/ReservationView.vue'),
+    beforeEnter: (to, from, next) => {
+        RestauService.deleteResa({"id_resa":to.params.idDelete})
+        next();
+    }
+  },
+  {
     path: '/search',
     name: 'search',
     meta: { requiresAuth: false, group_id: 3 },
     component: () => import('../views/SearchVue.vue')
-    },
+  },
   {
     path: '/prestataire',
     component: () => import('../views/EspacePrestaire.vue'),
