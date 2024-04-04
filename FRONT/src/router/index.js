@@ -132,7 +132,25 @@ const routes = [
       {
         path: 'produits',
         name: 'prestataire.produits',
-        component: ()=>import ('../components/Prestatire/CRUDBoutique.vue')
+        meta: { requiresAuth: true, group_id: 2 },
+        component: ()=>import ('../components/Prestatire/GestionBoutiquePresta.vue'),
+        children: [
+          {
+            path: '',
+            name: 'prestataire.produits',
+            component: ()=>import ('../components/Prestatire/CRUDBoutique.vue')
+          },
+          {
+            path: '/prestataire/produits/crud',
+            name: 'Crudboutique',
+            component: ()=>import ('../components/Prestatire/CRUDBoutique.vue')
+          },
+          {
+            path: '/prestataire/produits/commandes',
+            name: 'Listcommande',
+            component: ()=>import ('../components/Prestatire/ListecommandePrestataire.vue')
+          }
+            ]
       },
       {
         path:'*',

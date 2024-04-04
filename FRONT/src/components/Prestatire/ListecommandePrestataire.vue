@@ -32,6 +32,8 @@
                   <th>Quantité</th>
                   <th>Prix unitaire</th>
                   <th>Prix total</th>
+                  <th>Status</th>
+                  <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -40,6 +42,11 @@
                   <td>{{ ligne.quantite }}</td>
                   <td>{{ ligne.prix }} €</td>
                   <td>{{ ligne.prix * ligne.quantite }} €</td>
+                  <td>{{ ligne.valide }} </td>
+                  <td>
+                    <button @click="" >   </button>
+                  </td>
+
                 </tr>
                 </tbody>
               </table>
