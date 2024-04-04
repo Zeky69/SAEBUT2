@@ -51,6 +51,7 @@
       <l-map style="width:1000px ; height: 800px" :min-zoom="19" :max-zoom="21" :zoom="zoom" :max-bounds="cartebounds" :center="center" ref="map">
         <l-tile-layer :url="url" ></l-tile-layer>
         <l-image-overlay :url="'map2D.png'" :bounds="cartebounds"></l-image-overlay>
+        <v-marker-cluster>
         <l-marker v-for="(feature,index) in filteredFeature" :key="index"  :lat-lng="getLatLngMarker(feature.geometry)" @click="openPanel(feature)" @close-panel="closePanel">
           <l-icon
               :icon-size="[40, 40]"
@@ -58,6 +59,8 @@
               :icon-url="getIconUrl(feature)"
           />
         </l-marker>
+        </v-marker-cluster>
+
 
       </l-map>
     </div>
@@ -70,6 +73,8 @@
 
 <script>
 import {LImageOverlay, LMap,LIcon, LMarker, LTileLayer} from "vue2-leaflet";
+import Vue2LeafletMarkercluster from "vue2-leaflet-markercluster"
+
 import 'leaflet/dist/leaflet.css';
 
 import {
@@ -94,6 +99,7 @@ export default {
     barSelect,
     LImageOverlay,
     LMap ,
+    'v-marker-cluster': Vue2LeafletMarkercluster,
     LIcon,
     LTileLayer,
     LMarker,
@@ -248,7 +254,8 @@ export default {
 
 <style scoped>
 
-
+@import "~leaflet.markercluster/dist/MarkerCluster.css";
+@import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
 /* Largeur de la barre de défilement */
 ::-webkit-scrollbar {
   width: 9px;
