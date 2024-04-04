@@ -23,12 +23,9 @@
 <script>
 
 import router from '@/router';
-import CrudBoutique from "@/components/Prestatire/CRUDBoutique.vue";
-import Boutique from "@/components/Prestatire/ListecommandePrestataire.vue";
 
 export default {
   name:'BoutiqueVue',
-  components: {CrudBoutique,Boutique},
   data: () => ({
     path:"",
     crudPath: "/prestataire/produits/crud",
