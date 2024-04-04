@@ -6,6 +6,11 @@ var router = express.Router();
 
 router.get('/random',shopController.getRandomArticles)
 router.get('/articles/:id',shopController.getArticle)
+router.post('/articles',shopController.createArticle)
+router.put('/articles/:id',shopController.updateArticle)
+router.delete('/articles/:id',shopController.deleteArticle)
+
+
 router.get('/articles',shopController.getAllArticles)
 router.get('/articles/prestataire/:id',shopController.getArticlesByPrestataire)
 

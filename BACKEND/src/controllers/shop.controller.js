@@ -70,6 +70,61 @@ exports.getArticlesByCategorie = async (req, res) => {
     }
 }
 
+exports.createArticle = async (req, res) => {
+    const article = req.body;
+
+    try {
+        const newArticle = await shopService.createArticle(article);
+
+        if (!newArticle) {
+        return res.status(404).send("Erreur lors de la création de l'article.");
+        }
+
+        return res.status(200).json(newArticle);
+    } catch (error) {
+        console.error("Controller encountered an unexpected error: ", error);
+        return res.status(500).send("Erreur lors de la création de l'article");
+    }
+}
+
+exports.updateArticle = async (req, res) => {
+    const id = req.params.id;
+    const article = req.body;
+    console.log("controller modif")
+    console.log(article)
+    console.log(id)
+
+    try {
+        const updatedArticle = await shopService.updateArticle(id, article);
+
+        if (!updatedArticle) {
+        return res.status(404).send("Erreur lors de la mise à jour de l'article.");
+        }
+
+        return res.status(200).json(updatedArticle);
+    } catch (error) {
+        console.error("Controller encountered an unexpected error: ", error);
+        return res.status(500).send("Erreur lors de la mise à jour de l'article");
+    }
+}
+
+exports.deleteArticle = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const deletedArticle = await shopService.deleteArticle(id);
+
+        if (!deletedArticle) {
+        return res.status(404).send("Erreur lors de la suppression de l'article.");
+        }
+
+        return res.status(200).json(deletedArticle);
+    } catch (error) {
+        console.error("Controller encountered an unexpected error: ", error);
+        return res.status(500).send("Erreur lors de la suppression de l'article");
+    }
+}
+
 exports.getCommandes = async (req, res) => {
     try {
         const commandes = await shopService.getCommandes();

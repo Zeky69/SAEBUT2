@@ -7,29 +7,29 @@
           <span v-if="isRegister">
             <div class="validate">
               <img src="@/assets/logo/check.svg" id="check">
-              <p>Votre mot de passe a bien été modifié</p>
-              <span>Vous allez être rediriger dans quelques instants vers la page de connexion</span>
+              <p>{{ $t('login-signup-forgottenpass.passwordReset.success') }}</p>
+              <span>{{ $t('login-signup-forgottenpass.passwordReset.redirection') }}</span>
             </div>
           </span>
 
           <span v-else>
             <div class="formulaire-top">
-              <h2>Changez votre mot de passe</h2>
+              <h2>{{ $t('login-signup-forgottenpass.passwordReset.title') }}</h2>
             </div>
 
             <div class="formulaire-contenu">
               <div class="register">
-                <p style="text-align: center; font-size: 20px">Veuillez renseignez votre nouveau mot de passe</p>
+                <p style="text-align: center; font-size: 20px">{{ $t('login-signup-forgottenpass.passwordReset.newPassword') }}</p>
 
                 <div class="register-champ">
-                  <p>Mot de passe</p>
-                  <input type="password" class="inputFormulaire" placeholder="Entrez votre mot de passe" v-model="password" required>
-                  <span v-if="!password && showErrors" class="error-message">Le champ mot de passe est obligatoire</span>
+                  <p>{{ $t('login-signup-forgottenpass.login.password') }}</p>
+                  <input type="password" class="inputFormulaire" :placeholder="$t('login-signup-forgottenpass.signup.placeholders.password')" v-model="password" required>
+                  <span v-if="!password && showErrors" class="error-message">{{ $t('login-signup-forgottenpass.passwordReset.errorPassword') }}</span>
                 </div>
                 <span class="error-message" id="back-error"></span>
 
                 <div class="boutton" @click="ChangePassword">
-                  <p id="Inscription" :disabled="!areFieldsFilled">Changer le mot de passe</p>
+                  <p id="Inscription" :disabled="!areFieldsFilled">{{ $t('login-signup-forgottenpass.passwordReset.button') }}</p>
                 </div>
               </div>
             </div>
@@ -39,6 +39,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import util from "@/services/utilisateur";

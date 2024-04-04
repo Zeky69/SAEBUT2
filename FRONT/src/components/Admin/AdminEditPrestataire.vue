@@ -23,7 +23,7 @@
 
 
       <div class="services" v-if="emplacements.length > 0">
-        <page-titre :title="`Services de ${nomPresta}`"></page-titre>
+        <page-titre :title="`Gestions du service reservation pour ${nomPresta}`"></page-titre>
         <table>
           <thead>
           <tr>
@@ -54,6 +54,37 @@
         </table>
       </div>
 
+      <div class="services" v-if="services.length > 0">
+        <page-titre :title="`Gestions des services pour ${nomPresta}`"></page-titre>
+        <table>
+          <thead>
+          <tr>
+            <th>Nom du service</th>
+            <th>Etat</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="serv in services" :key="serv.id_service">
+            <td :class="{'red': !serv.etat}">{{serv.nom}}</td>
+
+            <td>
+              <template v-if="serv.etat === false">
+                <button class="accept-btn" @click="updateServiceState(serv.id_service)">Activer</button>
+              </template>
+
+              <template v-else>
+                <button class="reject-btn" @click="updateServiceState(serv.id_service)">Desactiver</button>
+              </template>
+
+            </td>
+
+
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+
       <page-titre :title="`Modification de la page de ${nomPresta}`"></page-titre>
       <prestate :prestate="prestataire" :mode="mode" p ref="prestate"  @change-mode="changeMode"  @valide="valide"></prestate>
     </div>
@@ -68,6 +99,7 @@ import {mapActions, mapState} from "vuex";
 import {updatePage} from "@/services/prestataire.service";
 import batimentService from "@/services/batiment.service";
 import adminService from "@/services/admin.service";
+import prestataireService from "@/services/prestataire.service";
 export default {
   name: "AdminEditPresta",
   components:{
@@ -83,7 +115,8 @@ export default {
       nomPresta: null,
       mode: '1',
       showConfirmation: false,
-      emplacements: []
+      emplacements: [],
+      services: []
 
     };
   },
@@ -115,6 +148,20 @@ export default {
         console.log(res);
       });
     },
+    async updateServiceState(id){
+      try {
+        let response = await prestataireService.updateServiceState(id)
+        if (response.error) {
+        console.log("Erreur lors de la mise à jour des services");
+      } else {
+        this.services = await prestataireService.getPrestatairesServices(this.idPrestataire)
+        console.log("Mise à jour de l'affichage");
+      }
+    } catch (e) {
+      console.error("An error occurred:", e);
+    }
+
+    },
 
     async getInformation() {
       await this.getPrestataireObject(this.idUser);
@@ -123,6 +170,8 @@ export default {
       this.idPrestataire = this.prestataire.id_prestataire;
 
       this.emplacements = await batimentService.getBatByIdPrestataire(this.idPrestataire)
+      this.services = await prestataireService.getPrestatairesServices(this.idPrestataire)
+
       console.log(this.emplacements)
     }, async updateServ(id){
       try {
@@ -137,7 +186,7 @@ export default {
         console.error("An error occurred:", e);
       }
 
-    }
+    },
 
   }
 }

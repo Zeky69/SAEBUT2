@@ -164,6 +164,67 @@ async function getAllCategorie(){
     }
 }
 
+async function createArticle(article){
+    const client = await pool.connect();
+    try{
+        const query = `INSERT INTO produit ( nom, prix, stock, categorie_id, prestataire_id)
+        VALUES ($1, $2, $3, $4, $5);`;
+        
+        const res = await client.query(query,[article.nom, article.prix, article.stock, article.categorie_id, article.id_prestataire])
+        console.log("Création de l'article réussie");
+        return true;
+    }catch(err){
+        console.log("Echec création de l'article")
+        console.log(err)
+        return false;
+    }finally{
+        client.release();
+    }
+}
+
+async function updateArticle(id,article){
+    const client = await pool.connect();
+    try{
+
+        const query = `UPDATE produit
+        SET nom=$1, categorie_id=$2, prix=$3, stock=$4, prestataire_id=$5
+        WHERE id_produit=$6 RETURNING *; `;
+        
+        const res = await client.query(query,[article.nom, article.categorie_id, article.prix, article.stock, article.prestataire_id, article.id_produit])
+        console.log("Mise à jour de l'article réussie");
+        console.log(res.rows)
+        return true;
+    }catch(err){
+        console.log("Echec mise à jour de l'article")
+        console.log(err)
+        return false;
+    }finally{
+        client.release();
+    }
+}
+
+async function deleteArticle(id_produit){
+    const client = await pool.connect();
+    try{
+        const query = `DELETE from produit
+        WHERE id_produit=$1;`;
+
+        const res = await client.query(query,[id_produit])
+        console.log("Suppression de l'article réussie");
+        return true;
+    }catch(err){
+        console.log("Echec suppression de l'article")
+        console.log(err)
+        return false;
+    }finally{
+        client.release();
+    }
+
+}
+
+
+
+
 async function getCategorie(id_categorie){
     const client = await pool.connect();
     try{
@@ -273,6 +334,9 @@ module.exports ={
     getArticlesByCategorie,
     getArticlesByPrestataire,
     getArticle,
+    createArticle,
+    updateArticle,
+    deleteArticle,
     getAllCategorie,
     getCategorie,
     getCommandes,
