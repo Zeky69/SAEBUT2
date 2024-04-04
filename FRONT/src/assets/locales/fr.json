@@ -208,7 +208,18 @@
         }
       ],
       "buttonContact": "Contacter"
+    },
+
+    "shopView": {
+      "title": "10 ANS !",
+      "subtitle": "Célébrez les 10 ans de la Belforaine en vous offrant nos meilleurs goodies à <br> <strong>des prix imbattables !</strong>",
+      "subButton": "J'en profite !",
+      "welcome": "Bienvenue à la boutique <span> de Belforaine </span>",
+      "bestSales": "Nos meilleurs ventes",
+      "accroche": "Votre bonheur à portée de main",
+      "category": "Catégorie"
     }
+
 
 
 }

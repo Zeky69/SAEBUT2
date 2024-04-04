@@ -10,7 +10,7 @@
     </div>
     <div class="card-bottom">
       <h3>{{ price }}€</h3>
-      <button  @click="addPanierCookie" class="button-shop">Ajouter au panier</button>
+      <button  @click="addPanierCookie" class="button-shop">{{ $t('addToCart') }}</button>
     </div>
   </div>
 </template>

@@ -208,6 +208,16 @@
         }
       ],
       "buttonContact": "Contact me"
+    },
+
+    "shopView": {
+      "title": "10 YEARS!",
+      "subtitle": "Celebrate 10 years of Belforaine by treating yourself to our best goodies at <br> <strong>unbeatable prices!</strong>",
+      "subButton": "I'm in!",
+      "welcome": "Welcome to <span>the Belforaine</span> shop",
+      "bestSales": "Our best sellers",
+      "accroche": "Your happiness within reach",
+      "category": "Category"
     }
 
   }
