@@ -158,7 +158,6 @@ export default {
         let response = await statistiquesService.getVenteBilletParDate();
         if (!response.error) {
           this.ticketData = response;
-          console.log("ticket "+this.ticketData);
         } else {
           console.log("Erreur lors de la récupération des réservations");
         }
@@ -171,7 +170,6 @@ export default {
         let response = await statistiquesService.getVenteArticle();
         if (!response.error) {
           this.topArticles = response;
-          console.log("article "+this.topArticles);
         } else {
           console.log("Erreur lors de la récupération des réservations");
         }
@@ -184,7 +182,6 @@ export default {
         let response = await statistiquesService.getVenteBilletParType();
         if (!response.error) {
           this.topTickets = response;
-          console.log("top ticket "+this.topTickets);
         } else {
           console.log("Erreur lors de la récupération des réservations");
         }

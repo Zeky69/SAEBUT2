@@ -117,6 +117,12 @@ const routes = [
     meta: { requiresAuth: false, group_id: 3 },
     component: () => import('../views/SearchVue.vue')
   },
+    {
+      path: '/contact',
+      name: 'contact',
+      meta: { requiresAuth: false, group_id: 3 },
+      component: () => import('../views/ContactView.vue')
+    },
   {
     path: '/prestataire',
     component: () => import('../views/EspacePrestaire.vue'),
@@ -215,6 +221,11 @@ const routes = [
         path: 'homepage'
         ,name: 'admin.homepage',
         component: ()=>import ('../components/Admin/EditorHomePage.vue')
+      },
+      {
+       path:'commandes' ,
+        name: 'admin.commandes',
+        component: ()=> import('../components/Admin/AdminCommande.vue')
       },
       {
         path:'*',

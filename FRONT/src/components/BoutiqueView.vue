@@ -23,11 +23,10 @@
 
     <h2 class="accroche">{{ $t('shopView.accroche') }}</h2>
 
-    <div class="categorie">
-      <div v-for="(cat, index) in category" :key="index" class="categorie-content" :style="{ backgroundImage: 'url(' + setImage(cat.image) + ')', before: { backgroundImage: 'url(' + setImage(cat.image) + ')' } }" @click="navigateToCategory(cat.id_categorie)">
-
-     <p>{{ cat.libelle_categorie }}</p>
-      </div>
+    <div class="prestataire">
+        <div v-for="(prest, index) in prestataire" :key="index" class="categorie-content" :style="{ backgroundImage: 'url(' + setImage(prest.photo_profil) + ')', before: { backgroundImage: 'url(' + setImage(prest.photo_profil) + ')' } }" @click="navigateToPrestataire(prest.id_prestataire)">
+          <p>{{ prest.nom }}</p>
+        </div>
     </div>
 
   </div>
@@ -37,13 +36,15 @@
 
 import BestSell from "@/components/BestSell.vue";
 import shopService from "@/services/shop.service";
+import prestataireService from "@/services/prestataire.service";
 
 import {getImage} from "@/services/image.service"
 export default {
   name : 'BoutiqueView',
   data : ()=> ({
   category:[],
-    listArticles:[],
+  listArticles:[],
+  prestataire: [],
   }),
   components:{
     BestSell
@@ -51,12 +52,18 @@ export default {
     navigateToCategory(categoryId) {
       this.$router.push({ name: 'articleShop',params:{id:categoryId}});
     },
+    navigateToPrestataire(prestataireId) {
+      this.$router.push({ name: 'articleShop',params:{id:prestataireId}});
+    },
     setImage(url){
       return getImage(url);
     },async getArticles() {
       try{
         this.category = await shopService.getAllCategorie();
+        this.prestataire = await prestataireService.getPrestataires();
+        console.log("prestataire",this.prestataire)
         this.listArticles = await shopService.getRandomArticles()
+        console.log("boutique random",this.listArticles)
 
       }catch (err){
         console.error("Error fetching articles:", err);
@@ -64,6 +71,9 @@ export default {
     }
   },created() {
     this.getArticles()
+  },
+  mounted() {
+    window.scrollTo(0, 0);
   }
 }
 </script>
@@ -222,6 +232,16 @@ export default {
   color: white;
   text-align: center;
 }
+
+.prestataire {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px; /* Adjust the gap as needed */
+}
+
+
+
 
 
 </style>

@@ -24,7 +24,7 @@ exports.getVenteBilletParType = async (req, res) => {
 
 exports.getVenteArticle = async (req, res) => {
     try {
-        const result = await statistiquesService.getVenteArticle();
+        const result = await statistiquesService.getVenteArticle(req);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);

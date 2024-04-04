@@ -6,6 +6,7 @@
         <h2 class="EffetViolet">Bienvenue, <br> {{ lname }} {{ fname }}</h2>
       </div>
       <div class="Perfomance">
+        <Bar :data="articleChartData" ></Bar>
       </div>
     </div>
   </div>
@@ -13,19 +14,52 @@
 </template>
 <script>
 import {mapActions, mapState} from "vuex";
-
+import statistiquesService from "@/services/statistiques.service";
+import {Bar} from "vue-chartjs";
+import {Chart, registerables} from "chart.js";
+Chart.register(...registerables);
 export default {
   name: 'AdminInfoTemporaire',
+  components: {Bar},
   computed: {
-    ...mapState(['token', 'fname', 'lname', 'group_id', 'user_id', 'email'])
+    ...mapState(['token', 'fname', 'lname', 'group_id', 'user_id', 'email']),
+    articleChartData() {
+      return {
+        labels: this.topArticles.map(article => article.nom),
+        datasets: [{
+          label: 'Quantité totale vendue',
+          backgroundColor: 'rgb(255, 99, 132)',
+          data: this.topArticles.map(article => article.quantitetotalearticle)
+        }]
+      };
+    },
   },
+  data: () => ({
+    topArticles: [],
+  }),
   methods: {
     ...mapActions(['logout']),
     deconnexion() {
       this.$router.replace('/login');
       this.logout();
     },
+    async getTopArticles() {
+      try {
+        let response = await statistiquesService.getVenteArticleParIdPrestataire(this.user_id);
+        if (!response.error) {
+          this.topArticles = response;
+          console.log("article "+this.topArticles);
+        } else {
+          console.log("Erreur lors de la récupération des réservations");
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
   },
+  mounted() {
+    this.getTopArticles();
+  }
 };
 </script>
 
