@@ -144,17 +144,9 @@ INSERT INTO date_belforaine (date_evenement) VALUES
 ('2024-01-16'),
 ('2024-01-17');
 
-
-
-
-
 INSERT INTO commande (id_user,date_commande) VALUES
 (2,now());
 
-
-
-
-select * from emplacement;
 
 INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom) VALUES
 ('151',1,1,2,'Zekeriya','Akburak'),
@@ -171,4 +163,7 @@ INSERT INTO emplacement (id_emplacement,id_type,nom,description,matricePoints,pr
 ('4','4','Stand 1','Description Stand 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',4,false,true);
 
 
-INSERT INTO contenuhomepage VALUES (1,'Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences inspirantes et divertissement sans fin fusionnent. Plongez dans la magie que nous réserve le futur, le tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !')
+SELECT email from utilisateurs
+JOIN public.commande c on utilisateurs.user_id = c.id_user
+JOIN public.lignecommandebillet l on c.id_commande = l.id_commande
+WHERE uuid = '151'
