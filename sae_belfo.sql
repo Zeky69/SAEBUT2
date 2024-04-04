@@ -170,6 +170,7 @@ CREATE TABLE emplacement(
     use_Resa BOOLEAN default true,
     accepted BOOLEAN default false,
     FOREIGN KEY (id_type) REFERENCES type(id_type),
+    FOREIGN KEY (prestataire_id) REFERENCES prestataire(id_prestataire),
     PRIMARY KEY(id_emplacement)
 );
 

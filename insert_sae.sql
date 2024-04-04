@@ -160,29 +160,8 @@ INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom) VA
 INSERT INTO ligneCommandeArticle(id_commande , id_produit ,valide, quantite) VALUES
 (1,1,false,5);
 
-
-SELECT count(uuid) as nbr_billet_vendus, date FROM ligneCommandeBillet
-group by date;
-
-SELECT p.nom, sum(lca.quantite) as quantiteTotaleArticle, p.prix, p.prix*sum(lca.quantite) as prixTotalArticle
-FROM ligneCommandeArticle lca
-    JOIN produit p ON lca.id_produit = p.id_produit
-                                 group by p.id_produit
-;
-
-SELECT b.title, count(lcb.uuid) as quantiteTotaleBillet, b.price, b.price*count(lcb.uuid) as prixTotalBillet
-FROM ligneCommandeBillet lcb
-JOIN billet b ON lcb.id_billet = b.id
-    group by b.id, b.title, b.price
-;
-
-SELECT libelle_categorie, SUM(produitVendu.totalVenteProduit) as totalVenteCategorie
-from categorie_produit
-join (
-    SELECT p.categorie_id, p.prix*sum(l.quantite) as totalVenteProduit from lignecommandearticle l
-    join produit p on l.id_produit = p.id_produit
-    group by p.id_produit)
-produitVendu on categorie_produit.id_categorie = produitVendu.categorie_id
-group by id_categorie;
-
-
+INSERT INTO emplacement (id_emplacement,id_type,nom,description,matricePoints,prestataire_id,use_Resa,accepted) VALUES
+('1','1','Restaurant 1','Description Restaurant 1','[[0,0],[0,1],[1,1],[1,0]]',3,false,true),
+('2','2','Attraction 1','Description Attraction 1','[[0,0],[0,1],[1,1],[1,0]]',3,true,true),
+('3','3','Scene 1','Description Scene 1','[[0,0],[0,1],[1,1],[1,0]]',4,false,true),
+('4','4','Stand 1','Description Stand 1','[[0,0],[0,1],[1,1],[1,0]]',4,false,true);

@@ -10,13 +10,14 @@
       <prestate-component :prestate="prestataire" :mode="mode" p ref="prestate"  @change-mode="changeMode"  @valide="valide"/>
     </div>
   </div>
+  <p>id: {{batimentPrestataire}}</p>
   <div v-for="(batiment,index) in batimentPrestataire" :key="index">
     <reservationComponent
         v-if="idPrestataire !==-1"
-        :nom="batiment.nom"
-        :id_prestataire="idPrestataire"
-        :id_bat="batiment.id_batiment"
+        :id_bat="batiment.id_emplacement"
+        :id_prestataire="idPrestataire.toString()"
         :mode="mode"
+        :nom="batiment.nom"
         :display="batiment.use_resa"
         @updateDisplay="updateDisplay($event)"></reservationComponent>
   </div>
@@ -77,7 +78,6 @@ export default {
               this.nom = this.prestataire.nom;
               this.idPrestataire = parseInt(this.prestataire.id_prestataire);
               this.urlImage =getImage(this.prestataire.photo_profil)
-              console.log(this.urlImage)
               getBatByIdPrestataire(this.idPrestataire).then((res) => {
                 this.batimentPrestataire =  res
               })
@@ -106,7 +106,6 @@ export default {
       this.mode = mode;
     },
     valide(Page){
-      console.log(Page)
       this.prestataire.page_info = Page;
       updatePage( this.prestataire).then((res) => {
         console.log(res);
