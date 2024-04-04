@@ -48,9 +48,8 @@ async function deletePresta(user_id, prestataire_id) {
 }
 
 
-
 export default {
     getAllUsers,
     managePresta,
-    deletePresta
+    deletePresta,
 }

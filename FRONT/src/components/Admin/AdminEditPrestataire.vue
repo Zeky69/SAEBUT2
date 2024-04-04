@@ -17,6 +17,18 @@
       </div>
     </div>
 
+    <div v-if="showConfirm2" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="showConfirmation = false">&times;</span>
+        <p>Êtes-vous sûr de vouloir supprimer définitivement {{nomPresta}} ?</p>
+        <div class="group_btn">
+          <button class="btn redF" @click="deleteServ">Oui</button>
+          <button class="btn redP" @click="showConfirmation = false">Non</button>
+        </div>
+      </div>
+    </div>
+
+
     <div class="comp">
 
       <edit-components :user_id="idUser"></edit-components>
@@ -30,6 +42,7 @@
             <th>Nom du service</th>
             <th>Description</th>
             <th>Etat</th>
+            <th>Action</th>
           </tr>
           </thead>
           <tbody>
@@ -47,7 +60,6 @@
               </template>
 
             </td>
-
 
           </tr>
           </tbody>
@@ -78,6 +90,10 @@
 
             </td>
 
+            <td>
+                <button class="btn redF" @click="delSer(serv.id_service)">Supprimer</button>
+
+            </td>
 
           </tr>
           </tbody>
@@ -116,8 +132,9 @@ export default {
       mode: '1',
       showConfirmation: false,
       emplacements: [],
-      services: []
-
+      services: [],
+      idServ:null,
+      showConfirm2:false
     };
   },
   created() {
@@ -134,6 +151,18 @@ export default {
         const response = await adminService.deletePresta(this.idUser, this.idPrestataire);
         console.log('Suppression réussie:', response);
         this.$router.push('/admin/prestataires');
+      } catch (error) {
+        console.error("Erreur lors de la suppression du prestataire:", error);
+      }
+      this.showConfirmation = false;
+    },   async deleteServ() {
+      try {
+        console.log(this.idServ)
+        const response = await prestataireService.deleteServ(this.idServ, this.idPrestataire);
+        this.showConfirm2 =false;
+        this.services = await prestataireService.getPrestatairesServices(this.idPrestataire)
+
+        console.log('Suppression réussie:', response);
       } catch (error) {
         console.error("Erreur lors de la suppression du prestataire:", error);
       }
@@ -160,6 +189,10 @@ export default {
     } catch (e) {
       console.error("An error occurred:", e);
     }
+
+    },delSer(id){
+      this.idServ= id;
+      this.showConfirm2=true;
 
     },
 

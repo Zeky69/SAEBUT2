@@ -3,6 +3,8 @@
 const express = require('express');
 const prestaController = require('../controllers/prestataires.controllers');
 const prestaMiddlewares = require('../middlewares/prestataire.middlewares');
+const userMiddlewares = require('../middlewares/utilisateur.middlewares')
+
 var router = express.Router();
 
 router.get('/', prestaController.getPrestatairesEtatAccepte); //a changer de place 
@@ -62,8 +64,15 @@ router.put('/profil/:id',prestaController.updateUserProfile)
 
 router.get('/services/update/:id',prestaController.updateServiceState)
 
+router.post('/services/:idPresta', userMiddlewares.verifyToken,prestaController.addService)
+
+
+router.get('/noservices/:id',prestaController.getPrestatairesUnattribuedServices)
+
 
 router.get('/services/:id',prestaController.getPrestatairesServices)
+
+router.delete('/services/:idServ/:idPresta',userMiddlewares.verifyToken,prestaController.removeService)
 
 
 router.put('/updatePage', prestaController.updatePrestatairePage);
