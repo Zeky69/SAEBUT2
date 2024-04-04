@@ -97,6 +97,10 @@ async function removePrestataire(user_id, prestataire_id) {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
+    await client.query("DELETE FROM service WHERE id_prestataire = $1;", [
+      prestataire_id,
+    ]);
+
     await client.query("DELETE FROM reservation WHERE id_prestataire = $1;", [
       prestataire_id,
     ]);
@@ -104,9 +108,14 @@ async function removePrestataire(user_id, prestataire_id) {
       prestataire_id,
     ]);
     await client.query(
-      "UPDATE emplacement SET prestataire_id = NULL WHERE prestataire_id = $1;",
+      "UPDATE emplacement SET prestataire_id = NULL and accepted=false WHERE prestataire_id = $1;",
       [prestataire_id]
     );
+
+    await client.query("DELETE FROM produit WHERE prestataire_id = $1;", [
+      prestataire_id,
+    ]);
+
     await client.query("DELETE FROM prestataire WHERE id_prestataire = $1;", [
       prestataire_id,
     ]);

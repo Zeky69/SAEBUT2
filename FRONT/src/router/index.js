@@ -132,7 +132,7 @@ const routes = [
       {
         path: 'produits',
         name: 'prestataire.produits',
-        component: ()=>import ('../components/Prestatire/ListecommandePrestataire.vue')
+        component: ()=>import ('../components/Prestatire/CRUDBoutique.vue')
       },
       {
         path:'*',
