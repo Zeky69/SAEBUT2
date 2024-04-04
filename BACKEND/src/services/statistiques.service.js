@@ -93,8 +93,8 @@ async function getConnextionToday(){
 async function addConnexionToday(){
     const client = await pool.connect();
     try {
-        const query = `INSERT INTO visiteursite (date_visite) VALUES ($1);`;
-        await client.query(query, [new Date().toISOString().split('T')[0]]);
+        const query = `INSERT INTO visiteursite (date_visite) VALUES (now()::date);`;
+        await client.query(query, );
         return true;
     } catch (error) {
         console.error("Erreur lors de l'ajout de la connexion: ", error);
