@@ -2,7 +2,7 @@
 
   <div class="app">
     <div class="menu-vertical">
-      <menu-vertical :list-menu="ListMenu" role="Prestataire" color1="#688e96" color2="#315377" :path="path"/>
+      <menu-vertical :list-menu="ListMenu" :pathbase="pathbase" role="Prestataire" color1="#688e96" color2="#315377" :path="path"/>
     </div>
     <div class="body-container">
       <router-view></router-view>
@@ -20,6 +20,7 @@ export default {
   components: {MenuVertical},
   data: () => ({
     path:"",
+    pathbase: "/prestataire/",
     ListMenu: [
       {
         title: "Tableau de bord",
