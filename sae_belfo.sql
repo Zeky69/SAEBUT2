@@ -140,6 +140,7 @@ CREATE TABLE service(
    id_service SERIAL,
    id_type_service INT,
    id_prestataire INT,
+   etat BOOL,
    PRIMARY KEY(id_service),
    FOREIGN KEY(id_prestataire) REFERENCES prestataire(id_prestataire),
    FOREIGN KEY(id_type_service) REFERENCES type_service(id_type_service),

@@ -86,8 +86,8 @@ INSERT INTO categorie_produit(libelle_categorie,description,image) VALUES
 
 select * from categorie_produit;
 
-INSERT INTO service (id_type_service, id_prestataire) VALUES
-	(1,1),(1,2),(1,3),(1,4),(1,5),(2,1),(2,2),(2,3);
+INSERT INTO service (id_type_service, id_prestataire, etat) VALUES
+	(1,1,true),(1,2,true),(1,3,true),(1,4,true),(1,5,true),(2,1,true),(2,2,true),(2,3,true);
 
 -- Ajout des produits pour la catégorie 'Goodies'
 INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
