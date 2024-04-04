@@ -96,6 +96,8 @@ export default {
   methods: {
     async chargerArticles() {
       this.articles = await shopService.getArticles();
+      //filtre les article ou id_prestataire = id_prestataire
+      this.articles = this.articles.filter(article => article.id_prestataire === this.id_prestataire);
     },
     async chargerCategories() {
       this.categories = await shopService.getAllCategorie();

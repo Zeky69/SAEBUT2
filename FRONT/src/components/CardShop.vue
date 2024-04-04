@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <img :src="image" class="header-logo" />
+      <img :src="getingImage(logo)" class="header-logo" />
     </div>
     <div class="card-middle">
       <h3>{{ title }}</h3>
@@ -39,6 +39,9 @@ export default {
     this.image = getImage(this.logo);
   },
   methods: {
+    getingImage(url){
+      return getImage(url);
+    },
 
     loadPanierFromCookies() {
       const storedPanier = Cookies.get('panier');
