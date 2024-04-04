@@ -8,12 +8,10 @@
       </div>
       <div class="Perfomance">
         <div class="graphique">
-          <Doughnut :data="data" :options="options" />
+          <Doughnut :data="categoryChartData" :options="options" />
         </div>
         <div class="Perfomance-text">
-          <h2>Performances</h2>
-          <h3>59.09 %</h3>
-          <h4>40.91 %</h4>
+          <h2>Parts de vente</h2>
 
         </div>
 
@@ -56,15 +54,16 @@
     <div class="container-bottom">
       <h2>
         <h2>Performances dans le temps</h2>
-        <div class="perform-block"></div>
+        <div class="perform-block">
+          <MyLineChart :data="ticketChartData" ></MyLineChart>
+        </div>
 
       </h2>
     </div>
     <div>
-      <MyLineChart :data="ticketChartData" ></MyLineChart>
+
       <Bar :data="articleChartData" ></Bar>
       <Bar :data="ticketChartData2" ></Bar>
-      <Pie :data="categoryChartData" ></Pie>
     </div>
   </div>
 </template>
@@ -73,7 +72,7 @@ import { mapActions, mapState } from "vuex";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
-import {Line, Bar, Doughnut, Pie} from 'vue-chartjs'
+import {Line, Bar, Doughnut} from 'vue-chartjs'
 import PageTitre from "./PageTitre.vue";
 
 import statistiquesService from "@/services/statistiques.service";
@@ -87,7 +86,7 @@ export default {
     ...mapState(['token', 'fname', 'lname', 'group_id', 'user_id', 'email']),
     ticketChartData() {
       return {
-        labels: this.ticketData.map(data => new Date(data.date).toISOString()),
+        labels: this.ticketData.map(data => data.date),
         datasets: [{
           label: 'Nombre de billets vendus',
           borderColor: 'rgb(75, 192, 192)',
@@ -145,8 +144,7 @@ export default {
     PageTitre,
     Doughnut,
     MyLineChart: Line,
-    Bar,
-    Pie
+    Bar
   },
   methods: {
     ...mapActions(['logout']),
