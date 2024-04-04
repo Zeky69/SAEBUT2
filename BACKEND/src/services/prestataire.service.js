@@ -119,6 +119,52 @@ async function updateUserProfile(user_id, nomEntreprise, description,photoDeProf
   }
 }
 
+const getPrestatairesServices = async (prestataire_id) => {
+    let resultat = null;
+    const client = await pool.connect();
+    try {
+        let sql = `select * from service INNER JOIN type_service tp on tp.id_type_service= service.id_type_service where id_prestataire=$1`;
+        resultat = await client.query(sql,[prestataire_id]);
+        return resultat.rows;
+    }
+    catch (error) {
+        console.log(error);
+        return error;
+    }
+    finally {
+        client.release();
+    }
+}
+
+async function updateServiceState(id_serv){
+    const client = await pool.connect();
+    let display=false;
+
+    try {
+        await client.query('BEGIN');
+        let query = `SELECT etat
+                     FROM service
+                     WHERE id_service = $1`;
+
+        oldDisplay = await client.query(query, [id_serv]);
+        if (oldDisplay.rows[0].etat === false) {
+            display = true;
+        }
+        query = `UPDATE service
+                 SET etat=$1
+                 WHERE id_service = $2`;
+        await client.query(query, [display, id_serv]);
+        await client.query("COMMIT");
+        console.log("Update state réussit !");
+    } catch (err) {
+        await client.query("ROLLBACK");
+        console.log(err);
+    } finally {
+        client.release();
+    }    
+}
+
+
 
 
 
@@ -127,6 +173,8 @@ module.exports = {
     getPrestataireById : getPrestataireById,
     updatePrestatairePage :updatePrestatairePage,
     getPrestatairesEtatAccepte :getPrestatairesEtatAccepte,
-    getPrestatairesTypes :getPrestatairesTypes
+    getPrestatairesTypes :getPrestatairesTypes,
+    getPrestatairesServices:getPrestatairesServices,
+    updateServiceState
 }
 

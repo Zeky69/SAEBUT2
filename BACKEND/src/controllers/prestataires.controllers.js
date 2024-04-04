@@ -74,3 +74,30 @@ exports.updateUserProfile = async (req,res) => {
         res.status(500).json({ success: false, message: 'Une erreur est survenue lors de la mise à jour du profil utilisateur.' });
     }
 }
+
+exports.getPrestatairesServices = async (req,res) => {
+    let id_prestataire = req.params.id;
+    try {
+        let reponse = await prestataireService.getPrestatairesServices(id_prestataire);
+        if (reponse) {
+            return res.status(200).send(reponse);
+        }
+        return res.status(401).send("Pas d'information trouvé pour cet id");
+    }
+    catch (error) {
+        return res.status(500).send(error.message || "Internal error");
+    }
+
+}
+
+exports.updateServiceState = async (req,res) => {
+    try {
+        const { id } = req.params;
+        await prestataireService.updateServiceState(id);
+
+        res.status(200).json({ success: true, message: 'Service mis à jour avec succès.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Une erreur est survenue lors de la mise à jour du service.' });
+    }
+}

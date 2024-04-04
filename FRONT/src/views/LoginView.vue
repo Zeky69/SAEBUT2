@@ -5,27 +5,27 @@
       <div class="gauche">
         <div class="formulaire">
           <div class="formulaire-top">
-            <h2>Connexion <span style="font-weight: normal; color: gray;">- Inscription</span></h2>
+            <h2>{{ $t('login-signup-forgottenpass.login.title') }} <span style="font-weight: normal; color: gray;">- {{ $t('login-signup-forgottenpass.signup.title') }}</span></h2>
           </div>
           <div class="formulaire-contenu">
             <div class="connexion">
             <div class="Login">
-            <p>E-mail</p>
-            <input type="text" class="inputFormulaire" :class="{ 'invalid': isInvalidCredentials }" placeholder="Adresse e-mail" v-model="login">
+              <p>{{ $t('login-signup-forgottenpass.login.email') }}</p>
+              <input type="text" class="inputFormulaire" :class="{ 'invalid': isInvalidCredentials }" :placeholder="$t('login-signup-forgottenpass.signup.placeholders.email')" v-model="login">
               <span class="faux"></span>
             </div>
 
             <div class="Login">
-              <p>Mot de passe</p>
-              <input type="password" class="inputFormulaire" :class="{ 'invalid': isInvalidCredentials }"  placeholder="Mot de passe" v-model="password">
+              <p>{{ $t('login-signup-forgottenpass.login.password') }}</p>
+              <input type="password" class="inputFormulaire" :class="{ 'invalid': isInvalidCredentials }" :placeholder="$t('login-signup-forgottenpass.signup.placeholders.password')" v-model="password">
               <span class="faux"></span>
             </div>
-              <router-link to="/forget-password"><p style="text-decoration: none; color: #FFFFFF; font-size: 14px">Mot de passe oublié ?</p></router-link>
+            <router-link to="/forget-password"><p style="text-decoration: none; color: #FFFFFF; font-size: 14px">{{ $t('login-signup-forgottenpass.login.forgottenpass') }}</p></router-link>
             </div>
             <div class="boutton">
-            <p class="connexion_btn" @click="connect()">Connexion</p>
+              <p class="connexion_btn" @click="connect()">{{ $t('login-signup-forgottenpass.login.button') }}</p>
               <hr />
-              <p id="Inscription" @click="$router.push('/register')">Inscription</p>
+              <p id="Inscription" @click="$router.push('/register')">{{ $t('login-signup-forgottenpass.signup.title') }}</p>
 
 
             </div>

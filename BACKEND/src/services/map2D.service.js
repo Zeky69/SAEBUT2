@@ -245,7 +245,7 @@ const acceptEmp = async (id_emplacement) => {
 
     try {
         let res;
-        let sql = "UPDATE emplacement SET accepted = true WHERE id_emplacement = $2 RETURNING *";
+        let sql = "UPDATE emplacement SET accepted = true WHERE id_emplacement = $1 RETURNING *";
         res = await client.query(sql, [id_emplacement]);
         return res.rows;
     } catch (err) {
@@ -262,7 +262,7 @@ const refuseEmp = async (id_emplacement) => {
     const client = await pool.connect();
     try {
         let res;
-        let sql = "UPDATE emplacement SET prestataire_id = null , accepted = false WHERE id_emplacement = $2 RETURNING *";
+        let sql = "UPDATE emplacement SET prestataire_id = null , accepted = false WHERE id_emplacement = $1 RETURNING *";
         res = await client.query(sql, [id_emplacement]);
         return res.rows;
     }

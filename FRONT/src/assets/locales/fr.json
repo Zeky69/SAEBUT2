@@ -208,7 +208,69 @@
         }
       ],
       "buttonContact": "Contacter"
+    },
+
+    "shopView": {
+      "title": "10 ANS !",
+      "subtitle": "Célébrez les 10 ans de la Belforaine en vous offrant nos meilleurs goodies à <br> <strong>des prix imbattables !</strong>",
+      "subButton": "J'en profite !",
+      "welcome": "Bienvenue à la boutique <span> de Belforaine </span>",
+      "bestSales": "Nos meilleurs ventes",
+      "accroche": "Votre bonheur à portée de main",
+      "category": "Catégorie"
+    },
+
+
+    "login-signup-forgottenpass": {
+      "login": {
+        "title": "Connexion",
+        "email": "E-mail",
+        "password": "Mot de passe",
+        "button": "Se connecter",
+        "forgottenpass": "Mot de passe oublié ?"
+      },
+      "signup": {
+        "validation": "Votre inscription a été enregistrée et un administrateur va traiter votre demande",
+        "redirection": "Vous allez être redirigé dans quelques instants à la page d'accueil...",
+        "title": "Inscription",
+        "title2": "Inscription d'un prestataire",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "email": "Adresse e-mail",
+        "description": "Description (facultatif)",
+        "siret": "Numéro SIRET",
+        "button": "S'inscrire",
+        "placeholders": {
+          "lastName": "Entrez votre nom de famille",
+          "password": "Entrez votre mot de passe",
+          "firstName": "Entrez votre prénom",
+          "email": "Entrez votre adresse e-mail",
+          "description": "Entrez la raison de votre inscription",
+          "siret": "Entrez votre numéro SIRET"
+        },
+        "errors": [
+          "Veuillez entrer un prénom",
+          "Veuillez entrer un nom",
+          "Veuillez entrer une adresse e-mail",
+          "Veuillez entrer un numéro SIRET"
+        ]
+      },
+
+      "passwordReset": {
+        "title": "Réinitialisation du mot de passe",
+        "subtextBis": "Mot de passe oublié",
+        "subtext": "Votre demande a été enregistré, si vous avez un compte vous recevrez un mail d'ici quelques instants",
+        "email": "Email",
+        "button": "Réinitialiser mon mot de passe",
+        "error": "Aucun compte n'est associé à cet e-mail",
+        "success": "Votre mot de passe a été réinitialisé avec succès.",
+        "newPassword": "Veuillez entrer votre nouveau mot de passe",
+        "errorPassword": "Veuillez entrer un mot de passe",
+        "sendEmailButton": "Envoyer un e-mail de réinitialisation"
+      }
     }
+    
+
 
 
 }

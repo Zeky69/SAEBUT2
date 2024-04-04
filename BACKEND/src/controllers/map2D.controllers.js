@@ -43,7 +43,7 @@ exports.createEmp = async (req, res) => {
         if (error) {
             return res.status(500).send("Internal error");
         }
-        return res.status(200).send("emp saved successfully");
+        return res.status(200).send(data);
     })
 };
 

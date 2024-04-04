@@ -165,11 +165,7 @@ INSERT INTO ligneCommandeArticle(id_commande , id_produit ,valide, quantite) VAL
 (1,1,false,5);
 
 INSERT INTO emplacement (id_emplacement,id_type,nom,description,matricePoints,prestataire_id,use_Resa,accepted) VALUES
-('1','1','Restaurant 1','Description Restaurant 1','[[0,0],[0,1],[1,1],[1,0]]',3,false,true),
-('2','2','Attraction 1','Description Attraction 1','[[0,0],[0,1],[1,1],[1,0]]',3,true,true),
-('3','3','Scene 1','Description Scene 1','[[0,0],[0,1],[1,1],[1,0]]',4,false,true),
-('4','4','Stand 1','Description Stand 1','[[0,0],[0,1],[1,1],[1,0]]',4,false,true);
-
-SELECT * FROM lignecommandebillet where uuid = '151';
-
-update reservation set id_ticket_client= where id_reservation=$2
+('1','1','Restaurant 1','Description Restaurant 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',3,false,true),
+('2','2','Attraction 1','Description Attraction 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',3,true,true),
+('3','3','Scene 1','Description Scene 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',4,false,true),
+('4','4','Stand 1','Description Stand 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',4,false,true);

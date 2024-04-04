@@ -7,22 +7,21 @@
         <div class="sharp-image"></div>
       </div>
       <div class="text">
-        <p class="title">10 ANS !</p>
-        <p class="subtitle">Célébrez les 10 ans de la Belforaine en vous
-          offrant nos meilleurs goodies à <br> <strong>des prix imbattables !</strong></p>
-        <a class="sub-button">J'en profite !</a>
+        <p class="title">{{ $t('shopView.title') }}</p>
+        <p class="subtitle" v-html="$t('shopView.subtitle')"></p>
+        <a class="sub-button">{{ $t('shopView.subButton') }}</a>
       </div>
     </div>
 
-    <h1 class="welcome">Bienvenue a la boutique <span>de Belforaine</span></h1>
+    <h1 class="welcome" v-html="$t('shopView.welcome')"></h1>
 
 
     <div class="best-vente">
-      <h2>Nos meilleurs ventes</h2>
+      <h2>{{ $t('shopView.bestSales') }}</h2>
       <BestSell :table="listArticles"/>
     </div>
 
-    <h2 class="accroche">Votre bonheur a portée de main</h2>
+    <h2 class="accroche">{{ $t('shopView.accroche') }}</h2>
 
     <div class="categorie">
       <div v-for="(cat, index) in category" :key="index" class="categorie-content" :style="{ backgroundImage: 'url(' + setImage(cat.image) + ')', before: { backgroundImage: 'url(' + setImage(cat.image) + ')' } }" @click="navigateToCategory(cat.id_categorie)">

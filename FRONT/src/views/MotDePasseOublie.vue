@@ -7,29 +7,29 @@
           <span v-if="isRegister">
             <div class="validate">
               <img src="@/assets/logo/check.svg" id="check">
-              <p>Votre demande a été enregistré, si vous avez un compte vous recevrez un mail d'ici quelques instants</p>
-              <span>Vous allez être rediriger dans quelques instants à la page d'accueil</span>
+              <p>{{ $t('login-signup-forgottenpass.passwordReset.subtext') }}</p>
+              <span>{{ $t('login-signup-forgottenpass.signup.redirection') }}</span>
             </div>
           </span>
 
           <span v-else>
             <div class="formulaire-top">
-              <h2>Mot de passe oublié</h2>
+              <h2>{{ $t('login-signup-forgottenpass.passwordReset.subtextBis') }}</h2>
             </div>
 
             <div class="formulaire-contenu">
               <div class="register">
-                <p style="text-align: center; font-size: 20px">Veuillez renseignez votre e-mail</p>
+                <p style="text-align: center; font-size: 20px">{{ $t('login-signup-forgottenpass.signup.placeholders.email') }}</p>
 
                 <div class="register-champ">
                   <p>E-mail</p>
-                  <input type="text" class="inputFormulaire" placeholder="Entrez votre adresse e-mail" v-model="email" required>
-                  <span v-if="!email && showErrors" class="error-message">Le champ E-mail est obligatoire</span>
+                  <input type="text" class="inputFormulaire" :placeholder="$t('login-signup-forgottenpass.signup.placeholders.email')" v-model="email" required>
+                  <span v-if="!email && showErrors" class="error-message">{{ $t('login-signup-forgottenpass.signup.errors[0]') }}</span>
                 </div>
                 <span class="error-message" id="back-error"></span>
 
                 <div class="boutton" @click="Forget">
-                  <p id="Inscription" :disabled="!areFieldsFilled">Envoyer e-mail de réinitialisation</p>
+                  <p id="Inscription" :disabled="!areFieldsFilled">{{ $t('login-signup-forgottenpass.passwordReset.button') }}</p>
                 </div>
               </div>
             </div>

@@ -208,6 +208,65 @@
         }
       ],
       "buttonContact": "Contact me"
+    },
+
+    "shopView": {
+      "title": "10 YEARS!",
+      "subtitle": "Celebrate 10 years of Belforaine by treating yourself to our best goodies at <br> <strong>unbeatable prices!</strong>",
+      "subButton": "I'm in!",
+      "welcome": "Welcome to <span>the Belforaine</span> shop",
+      "bestSales": "Our best sellers",
+      "accroche": "Your happiness within reach",
+      "category": "Category"
+    },
+
+    "login-signup-forgottenpass": {
+      "login": {
+        "title": "Log in",
+        "email": "Email",
+        "password": "Password",
+        "button": "Log in",
+        "forgottenpass": "Forgotten password?"
+    },
+    "signup": {
+      "validation": "Your registration has been registered and an administrator will process your request",
+      "redirection": "You will be redirected to the home page in a few seconds...",
+      "title": "Sign up",
+      "title2": "Provider registration",
+      "lastName": "Last name",
+      "firstName": "First name",
+      "email": "E-mail",
+      "description": "Description (optional)",
+      "siret": "SIRET number", 
+      "button": "Sign up",
+      "placeholders": {
+        "lastName": "Enter your last name",
+        "firstName": "Enter your first name",
+        "password": "Enter your password",
+        "email": "Enter your email address",
+        "description": "Enter the reason for your registration",
+        "siret": "Enter your SIRET number"
+      },
+      "errors": [
+        "This email address is required",
+        "This last name is required",
+        "This first name is required",
+        "This SIRET number is required"
+      ]
+    },
+
+    "passwordReset": {
+      "title": "Reset your password",
+      "subtextBis": "Forgotten password",
+      "subtext" : "Your request has been registered. If you have an account, you will receive an e-mail in a few moments.",
+      "email": "Email",
+      "button": "Reset my password",
+      "error": "This email address does not exist",
+      "success": "Your password has been reset successfully",
+      "newPassword": "Please enter your new password",
+      "errorPassword": "This password is required",
+      "sendEmailButton" : "Send the reset email"
     }
+  }
 
   }

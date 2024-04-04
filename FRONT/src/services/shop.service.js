@@ -1,4 +1,4 @@
-import {getRequest, postRequest} from "@/services/axios.service";
+import {getRequest, postRequest, putRequest, deleteRequest} from "@/services/axios.service";
 
 const url='/shop';
 
@@ -6,7 +6,7 @@ async function getArticleFromAPI(id) {
     return getRequest(url+`/articles/${id}`, 'getArticle')
 }
 
-async function getArticle(id) {
+export async function getArticle(id) {
     try {
         let answer = await getArticleFromAPI(id);
         console.log(answer)
@@ -53,6 +53,50 @@ async function getArticlesByCategorieFromAPI(id) {
 async function getArticlesByCategorie(id) {
     try {
         let answer = await getArticlesByCategorieFromAPI(id);
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des articles', error.message);
+        throw error;
+    }
+}
+
+async function addArticleFromAPI(article) {
+    return postRequest(url+'/articles', article, 'addArticle')
+}
+
+async function addArticle(article){
+    try {
+        let answer = await addArticleFromAPI(article);
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des articles', error.message);
+        throw error;
+    }
+}
+
+async function modifyArticleFromAPI(id,article) {
+    return putRequest(url+`/articles/${id}`, article, 'modifyArticle')
+}
+
+async function modifyArticle(id,article){
+    console.log(article)
+    console.log(id)
+    try {
+        let answer = await modifyArticleFromAPI(id,article);
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des articles', error.message);
+        throw error;
+    }
+}
+
+async function deleteArticleFromAPI(id) {
+    return deleteRequest(url+`/articles/${id}`, 'deleteArticle')
+}
+
+async function deleteArticle(id){
+    try {
+        let answer = await deleteArticleFromAPI(id);
         return answer;
     } catch (error) {
         console.error('Erreur lors de la récupération des articles', error.message);
@@ -180,8 +224,11 @@ export async function createCommandeWithoutAccount(data) {
 }
 
 
-export default {
-getArticles,
+export default{
+    getArticles,
+    addArticle,
+    modifyArticle,
+    deleteArticle,
     getCategorie,
     getArticlesByCategorie,
     getArticlesByPrestataire,

@@ -1,7 +1,47 @@
 
 
 <template>
+  <div>
+    <div class="admin-presta">
+        <table>
+        <thead>
+        <tr>
+          <th class="purple">Nom</th>
+          <th class="purple">Description</th>
+          <th class="purple">Type de terrain</th>
+          <th class="purple">Apartient</th>
+          <th class="purple">Accepté</th>
+          <th class="purple">Action</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(feature, index) in sortfeaturebyaccepted" :key="index" class="feature-row">
+          <td>{{ feature.properties.name }}</td>
+          <td>{{ feature.properties.description }}</td>
+          <td>{{ feature.properties.typeTerrain }}</td>
+          <td>{{ providername(feature) }}</td>
+          <td><span v-if="feature.properties.accept === true">
+            <i class="fas fa-check-circle" style="color: green;"></i>
+          </span>
+            <span v-else-if="feature.properties.accept === false">
+            <i class="fas fa-times-circle" style="color: red;"></i>
+          </span></td>
+          <td v-if="feature.properties.accept === false && feature.properties.apartient !==null">
+            <button class="accept-button" @click="acceptFeature(feature)">Accepter</button>
+            <button class="reject-button" @click="refuseFeature(feature)">Refuser</button>
+          </td>
+          <td v-else>
+            <button class="delete-button" @click="delFeature(feature)">Supprimer</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
 <div class="map-container">
+
+
+
   <l-map style="width:1000px ; height: 800px;" :min-zoom="19" :max-zoom="21" :max-bounds="cartebounds" :center="center" @click="addCoordinates">
     <l-tile-layer :url="url" ></l-tile-layer>
     <l-marker :lat-lng="markerLatLng"></l-marker>
@@ -76,6 +116,7 @@
         </div>
       </div>
 </div>
+  </div>
 </template>
 
 <script>
@@ -83,7 +124,7 @@ import {LImageOverlay, LMap, LMarker, LPolygon, LTileLayer} from "vue2-leaflet";
 import 'leaflet/dist/leaflet.css';
 import InfoPanelEdition from "@/components/Map2D/infoPanelEdition.vue";
 import {getPrestataires,} from "@/services/prestataire.service";
-import {getMap2DType, getAllEmp, createEmp, deleteEmp, updateEmp} from "@/services/map2D.service";
+import {getMap2DType, getAllEmp, createEmp, deleteEmp, updateEmp, acceptEmp, refuseEmp} from "@/services/map2D.service";
 
 export default {
   name: 'Map2D-edition',
@@ -94,6 +135,25 @@ export default {
     LTileLayer,
     LMarker,
     LPolygon
+  },
+  computed : {
+    sortfeaturebyaccepted() {
+      return this.features.slice().sort((a, b) => {
+        // Si a.accept est faux (refusé) et b.accept est vrai (accepté), placer a avant b
+        if (!a.properties.accept && b.properties.accept) {
+          return -1;
+        }
+        // Si a.accept est vrai (accepté) et b.accept est faux (refusé), placer b avant a
+        else if (a.properties.accept && !b.properties.accept) {
+          return 1;
+        }
+        // Sinon, garder l'ordre actuel
+        else {
+          return 0;
+        }
+      });
+    },
+
   },
   data: () => ({
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -109,6 +169,7 @@ export default {
           "description": null,
           "typeTerrain": null,
           "apartient": null,
+          "accept":false
         }
       },
     modeEditor:false,
@@ -131,16 +192,13 @@ export default {
     })
 
     getMap2DType().then((response) => {
-      console.log(response)
       response.forEach((type) => {
-        console.log(type)
         this.types.push(type)
       })
     })
 
 
     getAllEmp().then((response) => {
-      console.log(response)
       response.forEach((emp) => {
         const data = {
           "geometry": emp.matricepoints.matricepoints,
@@ -164,14 +222,6 @@ export default {
 
   }
   ,
-  watch: {
-    newfeature: {
-      handler: function () {
-        console.log(this.newfeature)
-      },
-      deep: true
-    }
-  },
   methods: {
 
 
@@ -208,7 +258,6 @@ export default {
       if (this.newPolygon.length > 2) {
         this.newPolygon.push(this.newPolygon[0])
         this.newfeature.geometry = this.newPolygon
-        this.features.push(this.newfeature)
 
         const dataemp= {
               name : this.newfeature.properties.name,
@@ -218,9 +267,20 @@ export default {
               matricepoints : this.newfeature.geometry,
               accept : this.newfeature.properties.accept
         }
-        console.log("before",dataemp)
-        await createEmp(dataemp)
-        console.log(JSON.stringify(this.features))
+        await createEmp(dataemp).then((response) => {
+          this.features.push({
+            "geometry": this.newPolygon,
+            "properties": {
+              "id": response.id_emplacement,
+              "name": this.newfeature.properties.name,
+              "description": this.newfeature.properties.description,
+              "typeTerrain": this.newfeature.properties.typeTerrain,
+              "apartient": this.newfeature.properties.apartient,
+              "accept": this.newfeature.properties.accept
+            }
+          }
+          )
+        })
       }
       this.switchEditor()
       this.couleur = []
@@ -228,6 +288,18 @@ export default {
         this.couleur.push(this.polygonOption(feature))
       })
 
+    },
+    providername(feature) {
+      if (feature.properties.apartient === null) {
+        return "Libre";
+      } else {
+        for (let i = 0; i < this.providers.length; i++) {
+          if (this.providers[i].id_prestataire === feature.properties.apartient) {
+            return this.providers[i].nom;
+          }
+        }
+        return "Inconnu";
+      }
     },
     openPanel(feature)
     {
@@ -286,6 +358,34 @@ export default {
       })
       this.features.splice(this.features.indexOf(feature), 1)
       this.features.push(newfeature)
+      this.couleur = []
+      this.features.forEach((feature) => {
+        this.couleur.push(this.polygonOption(feature))
+      })
+      this.closePanel()
+    },
+    acceptFeature(feature) {
+      acceptEmp(feature.properties.id).then(() => {
+        for (let i = 0; i < this.features.length; i++) {
+          if (this.features[i].properties.id === feature.properties.id) {
+            this.features[i].properties.accept = true;
+          }
+        }
+
+
+          }
+
+      )
+    },
+    refuseFeature(feature) {
+      refuseEmp(feature.properties.id).then(() => {
+        for (let i = 0; i < this.features.length; i++) {
+          if (this.features[i].properties.id === feature.properties.id) {
+            this.features[i].properties.apartient = null;
+          }
+        }
+      })
+
       this.couleur = []
       this.features.forEach((feature) => {
         this.couleur.push(this.polygonOption(feature))
@@ -395,5 +495,106 @@ export default {
   background-color: #d7d7d7;
 
 }
+
+
+.admin-presta {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+h2 {
+  color: #333;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+}
+
+thead th {
+  background-color: #745f8f;
+  color: #fff;
+  padding: 10px;
+  text-align: left;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tbody tr:hover {
+  background-color: #ddd;
+}
+
+td, th {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.purple {
+  background-color: #745f8f;
+  color: #fff;
+}
+
+.feature-row td {
+  text-align: center;
+}
+
+/* Boutons */
+button {
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #f0f0f0;
+}
+
+/* Bouton d'acceptation */
+.accept-button {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.accept-button:hover {
+  background-color: #218838;
+}
+
+/* Bouton de refus */
+.reject-button {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.reject-button:hover {
+  background-color: #c82333;
+}
+
+/* Bouton de modification */
+.edit-button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+}
+
+/* Bouton de suppression */
+.delete-button {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+
 
 </style>
