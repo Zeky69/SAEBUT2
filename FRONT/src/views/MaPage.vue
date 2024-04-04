@@ -86,7 +86,25 @@
         :display="batiment.use_resa"
         @updateDisplay="updateDisplay($event)"></reservationComponent>
   </div>
-  <commentaire-component v-if="idPrestataire !==-1" :disabled="this.$store.state.group_id ===3" :id_prestataire="idPrestataire"></commentaire-component>
+
+  <span v-if="mode === '2'">
+    <div v-if="showBoutique">
+      <button class="btn tkt">Redirection vers la boutique du prestataire</button>
+
+    </div>
+
+    <div v-if="showCom">
+      <commentaire-component v-if="idPrestataire !==-1" :disabled="this.$store.state.group_id ===3" :id_prestataire="idPrestataire"></commentaire-component>
+
+    </div>
+
+  </span>
+
+
+
+
+
+
   </div>
 </template>
 
@@ -116,10 +134,20 @@ export default {
     services: [],
     servicetoAdd:[],
     idServ: null,
-    showConfirm: false
+    showConfirm: false,
+    showShop: false,
 
   }),
-  computed: {},
+  computed: {
+    showCom() {
+      return this.services.some(e => e.id_type_service === 1 && e.etat === true);
+    },
+
+    showBoutique() {
+      return this.services.some(e => e.id_type_service === 2 && e.etat === true);
+    }
+
+  },
   created() {
 
   },
@@ -293,6 +321,11 @@ export default {
   min-width: 200px;
   border-radius: 50% ;
   aspect-ratio: 1/1;
+}
+
+.btn.tkt{
+  background-color: #0d45a5;
+  margin: 2%;
 }
 
 .rectangle{
