@@ -7,76 +7,65 @@
       </div>
       <div class="gradient-overlay"></div>
       <div class="text">
-        <p class="title">Organisateurs</p>
-        <p class="subtitle">Découvrez les têtes pensantes du projet Belforaine !</p>
+        <p class="title">{{ $t('organisateursPage.title') }}</p>
+        <p class="subtitle">{{ $t('organisateursPage.subtitle') }}</p>
       </div>
     </div>
 
     <div class="storytime">
-      <p class="p-1">Au cœur du Territoire de Belfort, au sein de la magnifique région Bourgogne-Franche-Comté, 
-        émerge un phénomène exceptionnel : Belforaine. L'idée audacieuse de ce parc d'attraction éphémère germa dans l'esprit visionnaire 
-        d'un groupe de cinq entrepreneurs locaux, passionnés par l'innovation et le divertissement. 
-        Inspirés par la richesse culturelle et historique de la région, 
-        ils rêvaient de créer une expérience immersive qui allie le passé et le futur, 
-        mettant en valeur le patrimoine tout en embrassant les avancées technologiques les plus récentes.</p>
-
-      <p class="p-2">Mais Belforaine ne se limite pas à l'amusement. Il sert également de plateforme pour les esprits brillants du domaine de l'informatique. 
-        Le parc accueille des conférences de pointe, des LAN parties frénétiques et des discussions animées avec les plus grands esprits du monde des affaires. 
-        Des entrepreneurs renommés, des businessmen et businesswomen éminents partagent leurs visions du futur numérique, créant un espace où l'innovation se 
-        mêle au divertissement de manière harmonieuse.</p>
-
-      <p class="p-3">Ainsi, Belforaine est né de l'union entre la tradition et la modernité, créant un espace éphémère où les visiteurs peuvent s'immerger dans un monde où 
-        l'histoire rencontre l'avenir, où la technologie repousse les limites et où l'amusement va de pair avec l'apprentissage. Bien plus qu'un simple parc 
-        d'attraction, Belforaine est devenu une expérience culturelle incontournable, laissant une empreinte indélébile dans le paysage du divertissement contemporain.</p>
+      <p class="p-1">{{ $t('organisateursPage.storytime.p1') }}</p>
+      <p class="p-2">{{ $t('organisateursPage.storytime.p2') }}</p>
+      <p class="p-3">{{ $t('organisateursPage.storytime.p3') }}</p>
     </div>
 
     <hr>
 
-    <p class="bigText" id="teamForaine" ><strong>La</strong> TeamForaine</p>
+    <p class="bigText" id="teamForaine"><strong>{{ $t('organisateursPage.bigText') }}</strong></p>
 
     <div class="background">
+      <div class="organisateurs-container">
+        <CardOrganisateur
+          class="row-1"
+          :profileImage="'stephane.jpg'"
+          :name="'M\'hammed Mechroubi'"
+          :message="$t('organisateursPage.organisateurs[0].message')"
+          :email="'m_hammed.mechroubi@edu.univ-fcomte.fr'"
+        />
 
+        <CardOrganisateur
+          class="row-1"
+          :profileImage="'stephane.jpg'"
+          :name="'Calixte Reymond'"
+          :message="$t('organisateursPage.organisateurs[1].message')"
+          :email="'calixte.reymond@edu.univ-fcomte.fr'"
+        />
 
-    <div class="organisateurs-container">
-  <CardOrganisateur class="row-1"
-      :profileImage="'stephane.jpg'"
-      :name="'M\'hammed Mechroubi'"
-      :message="'Back-end et front-end developer du projet, j\'ai travaillé sur le design et les fonctionnalités, l\'API et la sécurisation du site'"
-      :email="'m_hammed.mechroubi@edu.univ-fcomte.fr'"
-    />
+        <CardOrganisateur
+          class="row-2"
+          :profileImage="'stephane.jpg'"
+          :name="'Zekeriya Akburak'"
+          :message="$t('organisateursPage.organisateurs[2].message')"
+          :email="'zekeriya.akburak@edu.univ-fcomte.fr'"
+        />
 
-  <CardOrganisateur class="row-1"
-      :profileImage="'stephane.jpg'"
-      :name="'Calixte Reymond'"
-      :message="'Back-end et front-end developer du projet, j\'ai travaillé sur l\'implémentation de la MAP 3D en ThreeJS'"
-      :email="'calixte.reymond@edu.univ-fcomte.fr'"
-    />
-  <CardOrganisateur class="row-2"
-      :profileImage="'stephane.jpg'"
-      :name="'Zekeriya Akburak'"
-      :message="'Back-end et front-end developer du projet, j\'ai travaillé sur l\'implémentation des fonctionnalités, la sécurité et le design'"
-      :email="'zekeriya.akburak@edu.univ-fcomte.fr'"
-    />
+        <CardOrganisateur
+          class="row-3"
+          :profileImage="'stephane.jpg'"
+          :name="'Enzo Bellicaud'"
+          :message="$t('organisateursPage.organisateurs[3].message')"
+          :email="'enzo.bellicaud@edu.univ-fcomte.fr'"
+        />
 
-    <CardOrganisateur class="row-3"
-      :profileImage="'stephane.jpg'"
-      :name="'Enzo Bellicaud'"
-      :message="'Back-end developer du projet, j\'ai travaillé sur la base de données et l\'API'"
-      :email="'enzo.bellicaud@edu.univ-fcomte.fr'"
-    />
-
-    <CardOrganisateur class="row-3"
-      :profileImage="'stephane.jpg'"
-      :name="'Dalia Nezzar'"
-      :message="'Majoritairement front-end developer et SCRUM master, j\'ai travaillé sur le design et les fonctionnalités du site ainsi que la gestion du projet'"
-      :email="'dalia.nezzar@edu.univ-fcomte.fr'"
-    />
+        <CardOrganisateur
+          class="row-3"
+          :profileImage="'stephane.jpg'"
+          :name="'Dalia Nezzar'"
+          :message="$t('organisateursPage.organisateurs[4].message')"
+          :email="'dalia.nezzar@edu.univ-fcomte.fr'"
+        />
+      </div>
+    </div>
   </div>
-
-  </div>
-  </div>
-
-
 </template>
 
 

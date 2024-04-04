@@ -179,6 +179,34 @@
         "ticketsPreview": "Preview of your tickets",
         "ticketNumber" : "Ticket number"
       }
+    },
+
+    "organisateursPage": {
+      "title": "Organizers",
+      "subtitle": "Discover the masterminds behind the Belforaine project!",
+      "storytime": {
+        "p1": "In the heart of the Territoire de Belfort, within the beautiful Bourgogne-Franche-Comté region, an exceptional phenomenon emerges: Belforaine. The bold idea of this ephemeral amusement park germinated in the visionary mind of a group of five local entrepreneurs, passionate about innovation and entertainment. Inspired by the cultural and historical richness of the region, they dreamed of creating an immersive experience that combines the past and the future, highlighting heritage while embracing the most recent technological advances.",
+        "p2": "But Belforaine is not limited to fun. It also serves as a platform for brilliant minds in the field of computer science. The park hosts cutting-edge conferences, frenetic LAN parties, and lively discussions with the greatest minds in business. Renowned entrepreneurs, eminent businessmen and businesswomen share their visions of the digital future, creating a space where innovation blends harmoniously with entertainment.",
+        "p3": "Thus, Belforaine was born from the union of tradition and modernity, creating an ephemeral space where visitors can immerse themselves in a world where history meets the future, where technology pushes the limits and where fun goes hand in hand with learning. Much more than a simple amusement park, Belforaine has become an unmissable cultural experience, leaving an indelible mark on the landscape of contemporary entertainment."
+      },
+      "bigText": "The TeamForaine",
+      "organisateurs": [
+        {
+          "message": "Back-end and front-end developer of the project, I worked on the design and functionalities, the API and the security of the site"
+        },
+        {
+          "message": "Back-end and front-end developer of the project, I worked on the implementation of the 3D MAP in ThreeJS"
+        },
+        {
+          "message": "Back-end and front-end developer of the project, I worked on the implementation of functionalities, security and design"
+        },
+        {
+          "message": "Back-end developer of the project, I worked on the database and the API"
+        },
+        {
+          "message": "Mainly front-end developer and SCRUM master, I worked on the design and functionalities of the site as well as the project management"
+        }
+      ]
     }
 
   }
