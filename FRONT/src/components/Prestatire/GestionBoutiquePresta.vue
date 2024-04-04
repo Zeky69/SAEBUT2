@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="conten" v-if="show===true">
     <div class="segmented-picker">
       <input type="radio" id="crudboutique" name="picker" value="crudboutique" v-model="selected" @change="onPickerChange">
       <label for="crudboutique">Crudboutique</label>
@@ -15,6 +15,9 @@
     </div>
 
   </div>
+  <div class="conten" v-else>
+    Vous ne disposez pas de ce service veuillez le rajouter dans vos paramètres
+  </div>
 
 
 
@@ -23,6 +26,8 @@
 <script>
 
 import router from '@/router';
+import prestataireService from "@/services/prestataire.service";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name:'BoutiqueVue',
@@ -30,15 +35,32 @@ export default {
     path:"",
     crudPath: "/prestataire/produits/crud",
     boutiquePath: "/prestataire/produits/commandes",
-    selected: 'crudboutique'
+    selected: 'crudboutique',
+    show:true // la mettre a false quand t'as fini
 
-  }),
+  }),computed   :{
+    ...mapState(['prestataireObject','user_id']),
+  },created() {
+    this.getInformation()
+  },
   methods: {
+    ...mapActions(['getPrestataireObject']),
     onPickerChange() {
       if (this.selected === 'crudboutique') {
         router.push(this.crudPath);
       } else if (this.selected === 'listcommande') {
         router.push(this.boutiquePath);
+      }
+    },
+    async getInformation() {
+      await this.getPrestataireObject(this.user_id);
+      let idPrestataire = this.prestataireObject.id_prestataire;
+
+      let services = await prestataireService.getPrestatairesServices(idPrestataire);
+      if (Array.isArray(services) && services.length > 0) {
+        this.show = services.some(e => {
+          return e.id_type_service === 2
+        });
       }
     }
   }
@@ -47,6 +69,10 @@ export default {
 
 
 <style scoped>
+
+.conten{
+  margin: 2%;
+}
 
 .segmented-picker {
   display: flex;
