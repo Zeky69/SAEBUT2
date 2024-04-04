@@ -38,6 +38,8 @@ INSERT INTO UTILISATEURS(FIRST_NAME,LAST_NAME,email,Date_Created,Group_Id) VALUE
 
 INSERT INTO prestataire( description, nom, id_user, etat_id ,photo_profil) VALUES ('Drake le meilleur chanteur','Drake','3',2,'drake.jpeg');
 
+INSERT INTO type_service(nom) VALUES ('Commentaire'),
+                        ('Boutique');
 
 INSERT INTO tags VALUES ('1', 'accessible handicapé'),
                         ('2', 'wifi'),
