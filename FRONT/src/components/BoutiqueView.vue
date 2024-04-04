@@ -60,7 +60,7 @@ export default {
     },async getArticles() {
       try{
         this.category = await shopService.getAllCategorie();
-        this.prestataire = await prestataireService.getPrestataires();
+        this.prestataire = await prestataireService.getPrestatairesShop();
         console.log("prestataire",this.prestataire)
         this.listArticles = await shopService.getRandomArticles()
         console.log("boutique random",this.listArticles)

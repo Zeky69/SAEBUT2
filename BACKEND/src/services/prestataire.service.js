@@ -24,6 +24,27 @@ const getPrestatairesEtatAccepte = async () => {
     }
 }
 
+const getPrestatairesShop= async () => {
+    let resultat = null;
+    const client = await pool.connect();
+    try {
+        let sql = `select * from prestataire 
+        inner join service s on s.id_prestataire= prestataire.id_prestataire
+        WHERE etat_id = 2 and id_type_service = 2 and etat = true
+        ORDER BY prestataire.id_prestataire ASC`;
+        resultat = await client.query(sql);
+        return resultat.rows;
+    }
+    catch (error) {
+        console.log(error);
+        return error;
+    }
+    finally {
+        client.release();
+    }
+}
+
+
 const getPrestatairesTypes = async () => {
     let resultat = null;
     const client = await pool.connect();
@@ -255,6 +276,7 @@ module.exports = {
     updateServiceState,
     addServiceToPresta,
     removeServicePresta,
-    getPrestatairesUnatribuedServices
+    getPrestatairesUnatribuedServices,
+    getPrestatairesShop
 }
 

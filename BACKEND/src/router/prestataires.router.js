@@ -8,6 +8,8 @@ const userMiddlewares = require('../middlewares/utilisateur.middlewares')
 var router = express.Router();
 
 router.get('/', prestaController.getPrestatairesEtatAccepte); //a changer de place 
+router.get('/shop', prestaController.getPrestatairesShop); //a changer de place 
+
 
 router.put('/profil/:id',prestaController.updateUserProfile)
 /**
