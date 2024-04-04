@@ -126,7 +126,7 @@ async function getInformationWithToken(token) {
 async function getPrestataireObject(id_user) {
   const client = await pool.connect();
   try {
-    const query = `SELECT * FROM prestataire WHERE id_user=$1`;
+    const query = `SELECT * FROM prestataire INNER JOIN utilisateurs on utilisateurs.user_id = id_user WHERE id_user=$1`;
     const result = await client.query(query, [id_user]);
     return result.rows;
   } catch (err) {

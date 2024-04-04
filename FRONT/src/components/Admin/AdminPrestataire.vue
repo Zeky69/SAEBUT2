@@ -30,7 +30,7 @@
             <td>
               <template v-if="item.etat_id === 2">
                 <!-- État: Accepté -->
-                <button class="edit-btn">Edit</button>
+                <button class="edit-btn" @click="editPresta(item.id_user)">Edit</button>
               </template>
 
               <template v-else-if="item.etat_id === 3">
@@ -90,6 +90,10 @@ export default {
     }
   },
   methods: {
+    editPresta(user_id){
+      this.$router.replace("/admin/prestataires/"+user_id)
+
+    },
     fetchUsers() {
       adminService
         .getAllUsers()

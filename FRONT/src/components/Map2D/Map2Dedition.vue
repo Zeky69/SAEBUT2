@@ -150,7 +150,8 @@ export default {
             "name": emp.nom,
             "description": emp.description,
             "typeTerrain": emp.id_type,
-            "apartient": emp.prestataire_id
+            "apartient": emp.prestataire_id,
+            "accept": emp.accept
             ,
           }
         }
@@ -193,6 +194,7 @@ export default {
           "description": null,
           "typeTerrain": null,
           "apartient": null,
+          "accept": false
         }
       }
       this.modeEditor = !this.modeEditor
@@ -215,6 +217,7 @@ export default {
               prestaire_id : this.newfeature.properties.apartient,
               type_id : this.newfeature.properties.typeTerrain,
               matricepoints : this.newfeature.geometry,
+              accept : false
         }
         console.log("before",dataemp)
         await createEmp(dataemp)
@@ -274,13 +277,13 @@ export default {
       this.closePanel()
     },
     editFeature(feature, newfeature) {
-      updateEmp({
-        uuid: feature.properties.id,
+      updateEmp(feature.properties.id,{
         nom: newfeature.properties.name,
         description: newfeature.properties.description,
         type_id: newfeature.properties.typeTerrain,
         prestataire_id: newfeature.properties.apartient,
-        matricepoints: newfeature.geometry
+        matricepoints: newfeature.geometry,
+        accept: newfeature.properties.accept
       })
       this.features.splice(this.features.indexOf(feature), 1)
       this.features.push(newfeature)

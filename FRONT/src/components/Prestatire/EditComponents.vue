@@ -17,15 +17,17 @@
       <div class="edit-content card">
         <h2>Informations personnelles</h2>
 
+
+
         <!-- Label and Input for Nom de l'entreprise -->
-        <div class="input-content">
+        <div v-if="editPrestaInfo===true" class="input-content">
           <label for="nomEntreprise">Nom de l'entreprise:</label>
           <input type="text" :disabled="!isEditing" v-model="nomEntreprise" placeholder="Entrez le nom de l'entreprise"
                  id="nomEntreprise">
         </div>
 
         <!-- Label and Input for Description -->
-        <div class="input-content">
+        <div v-if="editPrestaInfo===true" class="input-content">
           <label for="description">Description:</label>
           <input type="text" :disabled="!isEditing" v-model="description" placeholder="Entrez la description"
                  id="description">
@@ -84,7 +86,18 @@ import {getImage,uploadImage,deleteImage} from "@/services/image.service"
 
 export default {
   name: 'EditComponents',
+  props: {
+    user_id: {
+      type: Number,
+      required: true
+    },
+    editPrestaInfo: {
+      type: Boolean,
+      default: true
+    },
+  },
   data: () => ({
+
     nomEntreprise: '',
     description: '',
     photoDeProfil: '',
@@ -92,6 +105,7 @@ export default {
     photoChoisiName:'',
     prenom: '',
     nom: '',
+    email:'',
     motDePasse: '',
     isEditing: false, // New state to track editing mode
     showPassword:false,
@@ -99,7 +113,7 @@ export default {
     file:null
   }),
   computed: {
-    ...mapState(['lname', 'fname', 'email', 'user_id', 'prestataireObject']),
+    ...mapState(['prestataireObject']),
   },
   methods: {
     ...mapActions(['getPrestataireObject']),
@@ -110,13 +124,16 @@ export default {
       this.nomEntreprise = presta.nom;
       this.description = presta.description;
 
+      this.prenom = presta.first_name;
+      this.nom = presta.last_name;
+      this.email = presta.email;
+
       this.photoDeProfil = presta.photo_profil;
       this.photoChoisiName = this.photoDeProfil;
       this.photoDeProfilChoisi = getImage(this.photoChoisiName);
 
 
-      this.prenom = this.fname;
-      this.nom = this.lname;
+
     },
     onFileSelected(eve) {
       this.file = eve.target.files[0];
@@ -161,8 +178,11 @@ export default {
         motDePasse:this.motDePasse
       };
 
+
       try {
+        var prestataire = {lname: this.nom, fname: this.prenom, email: this.email}
         await updatePrestataire(this.user_id,data)
+        this.$store.commit('updatePrestaInfo',prestataire)
         this.isEditing=false;
       } catch (error) {
         console.error("Error managing user:", error);

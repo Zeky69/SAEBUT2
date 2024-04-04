@@ -2,7 +2,7 @@
 
   <div class="app">
   <div class="menu-vertical">
-    <menu-vertical :list-menu="ListMenu" role="Organisateur" color1="#553C65" color2="#2B4256"/>
+    <menu-vertical :list-menu="ListMenu" role="Organisateur" color1="#553C65" color2="#2B4256" :path="path"/>
   </div>
   <div class="body-container">
     <router-view></router-view>
@@ -19,6 +19,7 @@ export default {
   name: 'EspaceAdmin',
   components: {MenuVertical},
 data: () => ({
+  path:"",
   ListMenu: [
     {
       title: "Tableau de bord",
@@ -48,16 +49,24 @@ data: () => ({
   ]
   }),
   computed: {
-    ...mapState(['token','fname','lname','group_id','user_id','email'])
+    ...mapState(['token','fname','lname','group_id','user_id','email','prestataireObject'])
   },
   methods:{
-    ...mapActions(['logout']),
+    ...mapActions(['logout','getPrestataireObject']),
     deconnexion(){
       this.logout();
-    }
+    },
+    async getInformation() {
+      await this.getPrestataireObject(this.user_id);
+      const presta = this.prestataireObject;
+
+
+      this.path = presta.photo_profil;
+
+    },
   },
   mounted() {
-    console.log(this.group_id)
+    this.getInformation();
   }
 }
 </script>

@@ -15,6 +15,10 @@ export default {
   methods:{
     continuer(){
       this.$store.dispatch("setStepPanier", 5)
+      const url = "https://paypal.me/dropcalixteair?country.x=FR&locale.x=fr_FR";
+      window.open(url, "_blank");
+
+
     },
     annuler(){
       this.$store.dispatch("setStepPanier",1)

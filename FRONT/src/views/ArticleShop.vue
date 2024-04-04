@@ -96,7 +96,7 @@ export default {
   methods:{
     getArticles(){
       ArticleShop
-          .getArticles(this.id)
+          .getArticlesByCategorie(this.id)
           .then((response) => {
             this.articles = response;
             if(this.articles.length===0) this.$router.replace("/boutique");

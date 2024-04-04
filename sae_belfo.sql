@@ -12,7 +12,11 @@ DROP TABLE if exists toilette CASCADE;
 DROP TABLE if exists disponibilite CASCADE;
 DROP TABLE if exists taggue CASCADE;
 
-DROP TABLE if exists prestataire CASCADE;
+DROP TABLE if exists prestataire CASCADE; 
+DROP TABLE if exists type_service CASCADE;
+DROP TABLE if exists service CASCADE;
+
+
 DROP TABLE if exists client CASCADE;
 DROP TABLE if exists produit CASCADE;
 DROP TABLE if exists intervenant CASCADE;
@@ -93,16 +97,6 @@ CREATE TABLE categorie_produit(
 	PRIMARY KEY(id_categorie)
 );
 
-CREATE TABLE produit(
-   id_produit SERIAL,
-   nom VARCHAR(50),
-   prix NUMERIC(5,2),
-   stock INT,
-   photo VARCHAR(50),
-   categorie_id INT,
-   FOREIGN KEY(categorie_id) REFERENCES categorie_produit(id_categorie),
-   PRIMARY KEY(id_produit)
-);
 
 CREATE TABLE type(
    id_type VARCHAR(50),
@@ -135,6 +129,38 @@ CREATE TABLE prestataire(
    FOREIGN KEY(etat_id) REFERENCES ETAT(etat_id)
 );
 
+CREATE TABLE type_service(
+   id_type_service SERIAL,
+   nom VARCHAR(255),
+   PRIMARY KEY(id_type_service)
+
+);
+
+CREATE TABLE service(
+   id_service SERIAL,
+   id_type_service INT,
+   id_prestataire INT,
+   etat BOOL,
+   PRIMARY KEY(id_service),
+   FOREIGN KEY(id_prestataire) REFERENCES prestataire(id_prestataire),
+   FOREIGN KEY(id_type_service) REFERENCES type_service(id_type_service),
+   UNIQUE(id_prestataire, id_type_service)
+);
+
+CREATE TABLE produit(
+    id_produit SERIAL,
+    nom VARCHAR(50),
+    prix NUMERIC(5,2),
+    stock INT,
+    photo VARCHAR(50),
+    categorie_id INT,
+    prestataire_id INT NOT NULL,
+    FOREIGN KEY(categorie_id) REFERENCES categorie_produit(id_categorie),
+    FOREIGN KEY (prestataire_id) REFERENCES prestataire(id_prestataire),
+    PRIMARY KEY(id_produit)
+);
+
+
 CREATE TABLE emplacement(
     id_emplacement VARCHAR(50),
     id_type VARCHAR(50),
@@ -142,7 +168,10 @@ CREATE TABLE emplacement(
     description VARCHAR(255),
     matricePoints JSON,
     prestataire_id INT,
+    use_Resa BOOLEAN default true,
+    accepted BOOLEAN default false,
     FOREIGN KEY (id_type) REFERENCES type(id_type),
+    FOREIGN KEY (prestataire_id) REFERENCES prestataire(id_prestataire),
     PRIMARY KEY(id_emplacement)
 );
 
@@ -161,7 +190,7 @@ CREATE TABLE emplacement(
 --          image_path TEXT,
 --          type_id VARCHAR(50),
 --          id_emplacement VARCHAR(50) NOT NULL UNIQUE,
---         use_Resa BOOLEAN default true,
+--          use_Resa BOOLEAN default true,
 --          PRIMARY KEY(id_batiment),
 --          FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
 --          FOREIGN KEY(type_id) REFERENCES type(id_type),
@@ -272,7 +301,7 @@ CREATE TABLE ligneCommandeBillet(
    subId INT NOT NULL,
    nom VARCHAR(100),
    prenom VARCHAR(100),
-   date JSON,
+   date DATE NOT NULL DEFAULT CURRENT_DATE,
    PRIMARY KEY(uuid),
    FOREIGN KEY(id_billet,subId) REFERENCES sousBillet(id_billet,subId)
  );
@@ -281,6 +310,7 @@ CREATE TABLE ligneCommandeBillet(
    id_commande INT NOT NULL,
    id_produit INT NOT NULL,
    quantite INT NOT NULL,
+   valide BOOLEAN NOT NULL,
    PRIMARY KEY(id_commande, id_produit),
    FOREIGN KEY(id_produit) REFERENCES produit(id_produit)
  );

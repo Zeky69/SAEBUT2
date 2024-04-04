@@ -34,6 +34,9 @@ export default new Vuex.Store({
     },
     getPrestataireObject(state){
       return state.prestataireObject;
+    },
+    getUserId(state){
+        return state.user_id;
     }
   },
   mutations: {
@@ -63,11 +66,14 @@ export default new Vuex.Store({
     },
     setPrestataireObject(state, prestataire){
       state.prestataireObject = prestataire;
+    }, updatePrestaInfo(state, prestataire){
+      state.fname = prestataire.fname;
+      state.lname = prestataire.lname;
+      state.email = prestataire.email;
     }
   },
   actions: {
     async loginUser({commit}, data) {
-      console.log(data);
       try {
         let response = await userService.Login(data);
         if (!response.error) {
@@ -87,6 +93,7 @@ export default new Vuex.Store({
     async getInformationFromToken({commit}, data) {
       try {
         let response = await userService.getInformationFromToken(data)
+        console.log("Login probleme",response);
         if (!response.error) {
           commit('setUserInformation', response)
         } else {

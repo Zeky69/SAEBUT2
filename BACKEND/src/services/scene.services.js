@@ -13,7 +13,6 @@ const getScene = async (req,res) => {
         const scenes = await client.query(sceneQuery);
 
         const scene = scenes.rows;
-        console.log("scene",scene);
         return scene;
     } catch (error) {
         console.log("error",error);
@@ -33,7 +32,6 @@ const getSceneUUID = async (uuid) => {
         const scenes = await client.query(sceneQuery,[uuidScene]);
 
         const scene = scenes.rows[0];
-        console.log("scene",scene);
         return scene;
     } catch (error) {
         console.log("error",error);
@@ -69,7 +67,6 @@ const saveScene = async (req) => {
         const scenes = await client.query(sceneQuery, [uuid, info.description, info.nom, info.name, info.posx, info.posy, info.posz, info.rota]);
 
         const scene = scenes.rows[0];
-        console.log("scene", scene);
         return scene;
     } catch (error) {
         console.log("error", error);

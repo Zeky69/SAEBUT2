@@ -1,7 +1,6 @@
 const resaService = require('../services/reservations.service');
 
 exports.test = (req, res) => {
-    console.log("test controller");
     return resaService.test(req,(error,data)=>{
         if (error) {
             console.log(error)
@@ -46,7 +45,6 @@ exports.createDispo = (req, res) => {
             console.log(error)
             return res.status(500).send("Internal error");
         }
-        console.log(data);
         return res.status(200).send("dispo created");
     });
 }
@@ -66,7 +64,6 @@ exports.deleteDispoById = (req, res) => {
             console.log(error)
             return res.status(500).send("Internal error");
         }
-        console.log(data);
         return res.status(200).send("dispo deleted");
     });
 }
@@ -77,7 +74,6 @@ exports.deleteResaById = (req, res) => {
             console.log(error)
             return res.status(500).send("Internal error");
         }
-        console.log(data);
         return res.status(200).send("resa deleted");
     });
 }
@@ -88,7 +84,6 @@ exports.getDispoByID = (req, res) => {
             console.log(error)
             return res.status(500).send("Internal error");
         }
-        console.log(data);
         return res.status(200).send(data);
     });
 }
@@ -99,7 +94,6 @@ exports.accepterDispo = (req, res) => {
             console.log(error)
             return res.status(500).send("Internal error");
         }
-        console.log(data);
         return res.status(200).send(data);
     });
 }
