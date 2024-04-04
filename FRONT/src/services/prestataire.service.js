@@ -2,18 +2,18 @@ import {getRequest, putRequest} from "@/services/axios.service"
 const url='/prestataires/';
 
 
-async function getPrestataire(id) {
+export async function getPrestataire(id) {
     const response = await getRequest('/prestataires/' + id, 'getPrestataireId');
     console.log("response",response)
     return response;
 }
 
-async function updatePage(prestataire){
+export async function updatePage(prestataire){
     return await putRequest('/prestataires/updatePage',prestataire, 'updatePage')
 }
 
 
-async function getPrestataires(){
+export async function getPrestataires(){
     return await getRequest('/prestataires', 'getPrestataires')
 }
 
@@ -30,7 +30,7 @@ function updatePrestataireFromApi(user_id,data){
     return putRequest(url+`profil/${user_id}`,data,'UpdatePrestaireInformation')
 }
 
-async function updatePrestataire(user_id,data){
+export async function updatePrestataire(user_id, data){
     try {
         const response = await updatePrestataireFromApi(user_id, data);
         return response;
@@ -41,7 +41,7 @@ async function updatePrestataire(user_id,data){
 }
 
 
-async function getPrestatairesTypes(){
+export async function getPrestatairesTypes(){
     return await getRequest('/prestataires/types', 'getPrestatairesTypes')
 }
 

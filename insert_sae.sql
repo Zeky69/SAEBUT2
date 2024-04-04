@@ -96,28 +96,28 @@ INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
 
 -- Ajout des produits pour la catégorie 'Vêtements'
 INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
-    ('T-shirt graphique', 19.99, 30, 2,'t-shirt-graphique.png',6),
-    ('Sweat à capuche confort', 39.99, 20, 2,'sweat-capuche.png',6),
-    ('Chaussettes colorées', 8.99, 50, 2,'chaussette-coloré.png',4),
-    ('Casquette brodée', 14.99, 40, 2,'casquette-brode.png',4);
+    ('T-shirt graphique', 19.99, 30, 2,'t-shirt-graphique.png',1),
+    ('Sweat à capuche confort', 39.99, 20, 2,'sweat-capuche.png',2),
+    ('Chaussettes colorées', 8.99, 50, 2,'chaussette-coloré.png',2),
+    ('Casquette brodée', 14.99, 40, 2,'casquette-brode.png',3);
 
 -- Ajout des produits pour la catégorie 'Peluches'
 INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
-    ('Peluche licorne magique', 29.99, 15, 3,'peluche_licorne.png',4),
-    ('Ours en peluche câlin', 24.99, 20, 3,'ours_calin.png',6),
-    ('Doudou éléphant doux', 19.99, 25, 3,'peluche_elephan.png',6),
-    ('Peluche dragon rigolo', 34.99, 12, 3,'peluche_dragon.png',6),
-	('Peluche ourson géant', 39.99, 20, 3,'peluche_ourson.png',6),
-    ('Peluche chaton réaliste', 16.99, 35, 3,'peluche_chaton.png',6);
+    ('Peluche licorne magique', 29.99, 15, 3,'peluche_licorne.png',2),
+    ('Ours en peluche câlin', 24.99, 20, 3,'ours_calin.png',1),
+    ('Doudou éléphant doux', 19.99, 25, 3,'peluche_elephan.png',3),
+    ('Peluche dragon rigolo', 34.99, 12, 3,'peluche_dragon.png',3),
+	('Peluche ourson géant', 39.99, 20, 3,'peluche_ourson.png',3),
+    ('Peluche chaton réaliste', 16.99, 35, 3,'peluche_chaton.png',2);
 
 
 -- Ajout des produits pour la catégorie 'Accessoires'
 INSERT INTO produit (nom, prix, stock, categorie_id, photo,prestataire_id) VALUES
-    ('Coque de téléphone artistique', 12.99, 40, 4,'coque_telephone.png',4),
-    ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png',4),
-    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png',6),
-    ('Étui à lunettes original', 8.49, 50, 4,'etui.png',6),
-    ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png',4);
+    ('Coque de téléphone artistique', 12.99, 40, 4,'coque_telephone.png',1),
+    ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png',2),
+    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png',3),
+    ('Étui à lunettes original', 8.49, 50, 4,'etui.png',4),
+    ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png',2);
 
 
 
