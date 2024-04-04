@@ -333,7 +333,6 @@ CREATE TABLE contenuHomePage(
 
 CREATE  TABLE visiteurSite(
     id_visiteur SERIAL,
-    ip VARCHAR(50),
     date_visite TIMESTAMP,
     PRIMARY KEY(id_visiteur)
     );
