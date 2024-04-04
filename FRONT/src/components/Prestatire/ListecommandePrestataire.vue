@@ -44,7 +44,13 @@
                   <td>{{ ligne.prix * ligne.quantite }} €</td>
                   <td>{{ ligne.valide }} </td>
                   <td>
-                    <button @click="" >   </button>
+                    <button v-if="ligne.valide" @click="validerligne(ligne.id_commande ,  ligne.id_produit)">
+                      Annuler
+                    </button>
+                    <button v-else @click="validerligne(ligne.id_commande ,  ligne.id_produit)">
+                      Valider
+                    </button>
+
                   </td>
 
                 </tr>
@@ -83,6 +89,7 @@ export default {
         prix_total: "Prix total",
       },
       loadcommandes: [],
+      id_commande_show: null,
       formatedComandesaft: {},
       lignesVisibles: false,
       lignes: [],
@@ -107,7 +114,24 @@ export default {
       this.lignesVisibles = !this.lignesVisibles;
       if (this.lignesVisibles) {
         this.lignes = commande.lignes;
+        this.id_commande_show = commande.id_commande;
       }
+      else {
+        this.lignes = [];
+        this.id_commande_show = null;
+      }
+    },
+    async validerligne(id_produit, id_commande) {
+      const res = await shopService.updateCommandeLigne(id_commande,id_produit);
+      console.log("ligne validée", res);
+      //modifier le status de la lignedans le front
+      this.lignes = this.lignes.map(ligne => {
+        if (ligne.id_produit === id_produit && res) {
+          ligne.valide = !ligne.valide;
+        }
+        return ligne;
+      });
+
     },
 
     async formatCommandes(commandes) {
@@ -125,6 +149,7 @@ export default {
         // Créer un nouvel objet ligne
 
         const ligne = {
+          id_commande,
           id_produit,
           prestataire_id,
           quantite,

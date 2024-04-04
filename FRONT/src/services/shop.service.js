@@ -1,4 +1,4 @@
-import {getRequest, postRequest, putRequest, deleteRequest} from "@/services/axios.service";
+import {getRequest, postRequest, putRequest, deleteRequest, patchRequest } from "@/services/axios.service";
 
 const url='/shop';
 
@@ -135,15 +135,18 @@ async function getCommande(id) {
 }
 
 async function updateCommandeLigneFromAPI(id, idligne) {
-    return postRequest(url+`/commande/${id}/ligne/${idligne}`, 'updateCommandeLigne')
+    console.log('updateCommandeLigneFromAPI', id, idligne)
+    return patchRequest(url+`/commande/${id}/ligne/${idligne}`, 'updateCommandeLigne')
 }
 
 async function updateCommandeLigne(id, idligne) {
+    console.log('updateCommandeLigne front', id, idligne)
     try {
         let answer = await updateCommandeLigneFromAPI(id, idligne);
+        console.log('updateCommandeLigne reponse front', answer)
         return answer;
     } catch (error) {
-        console.error('Erreur lors de la récupération des commandes', error.message);
+        console.error('Erreur lors modiffication de la ligne', error.message);
         throw error;
     }
 }

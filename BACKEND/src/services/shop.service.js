@@ -126,26 +126,26 @@ async function getCommandes(){
 }
 
 
-async function updateCommandeLigne(id_commande,id_produit) {
-    //valider une ligne de commande
+async function updateCommandeLigne(id_commande, id_produit) {
     const client = await pool.connect();
     try {
-        const query = `UPDATE ligneCommandeArticle
-                       SET valide= true
-                       WHERE id_commande = $1
-                         AND id_produit = $2;`;
+        const query = `
+      UPDATE ligneCommandeArticle
+      SET valide = NOT valide
+      WHERE id_commande = $1
+        AND id_produit = $2;
+    `;
 
-        const res = await client.query(query, [id_commande, id_produit])
+        const res = await client.query(query, [id_commande, id_produit]);
         console.log("Validation de la ligne de commande réussie");
         return true;
     }
     catch (err) {
-        console.log("Echec validation de la ligne de commande")
-        console.log(err)
+        console.log("Echec validation de la ligne de commande");
+        console.log(err);
         return false;
     }
 }
-
 
 
 async function getAllCategorie(){
@@ -341,6 +341,7 @@ module.exports ={
     getCategorie,
     getCommandes,
     getCommande,
+    updateCommandeLigne,
     getRandomArticles,
     getCategorieByproduct,
     setCommande,
