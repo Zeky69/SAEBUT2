@@ -4,7 +4,7 @@
     <h1>{{ $t('choice_ticket.dateSelection.title') }}</h1>
     <div class="date-container">
       <div :class="dateSelected.includes(date)? 'date-card selected':'date-card'" v-for="(date, index) in dateParse" @click="selectedDate(date)" :key="index">
-        <span class="date-day">{{ $t(`choice_ticket.dateSelection.days.${jours[date.getDay()]}`) }}</span>
+        <span class="date-day">{{ $t(`choice_ticket.dateSelection.days.${jours[date.getDay()-1]}`) }}</span>
         <span class="date-number">{{ date.getDate() }}</span>
         <span class="date-month">{{ $t(`choice_ticket.dateSelection.months.${Mois[date.getMonth()]}`) }}</span>
         <span class="date-year">{{ date.getFullYear() }}</span>
@@ -45,7 +45,11 @@ export default {
       }
       else if (this.dateSelected.length < this.day){
         this.dateSelected.push(date);
+      }else if(this.dateSelected.length === this.day){
+        this.dateSelected.splice(0,1);
+        this.dateSelected.push(date);
       }
+
       if (this.dateSelected.length === this.day){
         this.$emit('selected', this.dateSelected);
       }

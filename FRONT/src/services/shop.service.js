@@ -225,6 +225,24 @@ export async function createCommandeWithoutAccount(data) {
         throw error;
     }
 }
+async function getDateBilletFromAPI() {
+    return getRequest(url+`/date`, 'getDateBillet')
+}
+export async function getDateBillet() {
+    try {
+        let answer = await getDateBilletFromAPI();
+        let answerParsed = [];
+        for (let i = 0; i < answer.length; i++) {
+            let date = new Date(answer[i].date_evenement);
+            answerParsed.push(date);
+        }
+
+        return answerParsed;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des dates', error.message);
+        throw error;
+    }
+}
 
 
 export default{

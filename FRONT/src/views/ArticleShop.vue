@@ -77,15 +77,11 @@ export default {
     max:0,
     min:0
   }),
- async mounted() {
-    this.getArticles();
-  },
   computed:{
     filterTable(){
+      console.log("articles", this.articles);
       let filter = this.articles;
-      if(this.nameFilter){
-        filter = this.filterByName(filter);
-      }
+      filter = this.filterByName(filter);
 
       if(this.min>-1 && this.max>0)
         filter = this.filterByPrice(filter)
@@ -94,39 +90,30 @@ export default {
 
   },
   methods:{
-    getArticles(){
-      ArticleShop
-          .getArticlesByCategorie(this.id)
-          .then((response) => {
-            this.articles = response;
-            if(this.articles.length===0) this.$router.replace("/boutique");
-          })
-          .catch((error) => {
-            console.error("Error fetching articles:", error);
-
-          });
-
-      ArticleShop.getCategorie(this.id).then((response) =>{
-        this.titre = response.libelle_categorie;
-        this.description = response.description;
-        this.id_produit = response.id_produit;
-
-      }).catch((error)=>{
-        console.error("Error fetching categorie:", error);
-      });
-    },filterByName(filter){
-      if(this.nameFilter !== ''){
+    async getArticles() {
+      this.articles = await ArticleShop.getArticlesByPrestataire(this.id);
+      console.log("articles", this.articles);
+      console.log("articles", this.articles.length);
+    },
+    filterByName(filter){
         const lowerCaserName = this.nameFilter.toLowerCase();
-        return filter.filter(v => v.nom.toLowerCase().includes(lowerCaserName));
-      }
-    }, filterByPrice(filter) {
+        let temp = filter.filter(v => v.nom.toLowerCase().includes(lowerCaserName));
+        return temp;
+
+
+    },
+    filterByPrice(filter) {
       return filter.filter(v => parseInt(v.prix) >= this.min && parseInt(v.prix) <= this.max);
-    },resetFiltre(){
+    },
+    resetFiltre(){
       this.nameFilter="";
       this.min=0;
       this.max=0;
     }
-  }
+  },
+  async mounted() {
+    this.getArticles();
+  },
 }
 </script>
 

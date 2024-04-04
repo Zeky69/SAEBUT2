@@ -268,6 +268,41 @@
         "errorPassword": "Veuillez entrer un mot de passe",
         "sendEmailButton": "Envoyer un e-mail de réinitialisation"
       }
+    },
+
+
+    "contactUs": {
+      "title": "Contactez-nous",
+      "subtitle": "Vous avez des questions ou des suggestions ? Contactez-nous !",
+      "fillOut": "Remplissez le formulaire ci-dessous et nous vous répondrons dès que possible.",
+      "form": {
+        "name": "Nom",
+        "firstName": "Prénom",
+        "email": "Email",
+        "subject": "Objet",
+        "message": "Message",
+        "button": "Envoyer",
+        "placeholders": {
+          "name": "Entrez votre nom",
+          "firstName": "Entrez votre prénom",
+          "email": "Entrez votre adresse email",
+          "message": "Écrivez votre message",
+          "subject": "Entrez l'objet de votre message"
+        },
+        "modal": {
+          "title": "Message envoyé",
+          "content": "Votre message a bien été envoyé, nous vous répondrons dès que possible.",
+          "button": "Retourner à l'accueil"
+        },
+        "errors": [
+          "Veuillez entrer un nom",
+          "Veuillez entrer un prénom",
+          "Veuillez entrer une adresse e-mail",
+          "Veuillez entrer un objet",
+          "Veuillez entrer un message",
+          "Veuillez entrer une adresse e-mail valide"
+        ]
+      }
     }
     
 

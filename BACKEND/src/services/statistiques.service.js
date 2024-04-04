@@ -86,9 +86,42 @@ async function getVenteParCategorie() {
     }
 }
 
+async function getConnextionToday(){
+    const client = await pool.connect();
+    try {
+        const query = `select count(*) as visiteur from visiteursite where date_visite=now()::date`;
+        const res = await client.query(query);
+        return res.rows[0];
+    } catch (error) {
+        console.error("Erreur lors de la récupération des ventes de billets par date: ", error);
+        return null;
+    } finally {
+        client.release();
+    }
+
+}
+
+
+async function addConnexionToday(){
+    const client = await pool.connect();
+    try {
+        const query = `INSERT INTO visiteursite (date_visite) VALUES (now()::date);`;
+        await client.query(query, );
+        return true;
+    } catch (error) {
+        console.error("Erreur lors de l'ajout de la connexion: ", error);
+        return false;
+    } finally {
+        client.release();
+    }
+
+}
+
 module.exports = {
     getVenteArticle,
     getVenteBilletParDate,
     getVenteParCategorie,
-    getVenteBilletParType
+    getVenteBilletParType,
+    getConnextionToday,
+    addConnexionToday
 }

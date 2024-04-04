@@ -41,3 +41,23 @@ exports.getVenteParCategorie = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 }
+
+exports.getConnextionToday = async (req, res) => {
+    try {
+        const result = await statistiquesService.getConnextionToday();
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}
+
+exports.addConnexionToday = async (req, res) => {
+    try {
+        const result = await statistiquesService.addConnexionToday();
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}

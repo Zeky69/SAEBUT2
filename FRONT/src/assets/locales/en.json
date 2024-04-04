@@ -267,6 +267,40 @@
       "errorPassword": "This password is required",
       "sendEmailButton" : "Send the reset email"
     }
+  },
+
+  "contactUs": {
+    "title": "Contact us",
+    "subtitle": "Do you have any questions or suggestions? Contact us!",
+    "fillOut": "Fill out the form below and we will get back to you as soon as possible.",
+    "form": {
+      "name": "Name",
+      "firstName": "First name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "button": "Send",
+      "placeholders": {
+        "name": "Enter your name",
+        "firstName": "Enter your first name",
+        "email": "Enter your email address",
+        "message": "Enter your message",
+        "subject": "Enter the subject of your message"
+      },
+      "modal": {
+        "title": "Message sent",
+        "content": "Your message has been sent successfully. We will get back at you as soon as possible.",
+        "button": "Go back to the home page"
+      },
+      "errors": [
+        "This name is required",
+        "This first name is required",
+        "This email address is required",
+        "This subject is required",
+        "This message is required",
+        "The email is not valid"
+      ]
+    }
   }
 
   }

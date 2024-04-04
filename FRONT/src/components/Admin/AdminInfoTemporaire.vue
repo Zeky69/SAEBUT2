@@ -30,7 +30,7 @@
         </div>
         <div class="rubriqueChiffre">
           <div class="rubriqueChiffre-content">
-            <h2>2761</h2>
+            <h2>{{visiteurs}}</h2>
             <h3>Visiteurs</h3>
           </div>
           <img src="@/assets/pagePrestataire/personne.svg" style="max-height: 60px">
@@ -75,7 +75,7 @@ Chart.register(...registerables);
 import {Line, Bar, Doughnut} from 'vue-chartjs'
 import PageTitre from "./PageTitre.vue";
 
-import statistiquesService from "@/services/statistiques.service";
+import statistiquesService, {getConnextionToday} from "@/services/statistiques.service";
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -126,6 +126,7 @@ export default {
     },
   },
   data: () => ({
+    visiteurs: null,
     data: {
       datasets: [{
         data: [0.5909,0.4091],
@@ -210,6 +211,9 @@ export default {
     this.getTopArticles();
     this.getTopTickets();
     this.getTopCategories();
+    getConnextionToday().then((response) => {
+      this.visiteurs = response.visiteur
+    });
   },
 }
 </script>

@@ -77,6 +77,9 @@ router.post(
  */
 router.get("/prestataire/:id", userController.getPrestataireObject);
 
+
+router.post("/contact", userMiddlewares.validateContactInput, userController.sendContactViaMail);
+
 router.get(
   "/:token",(req,res,next)=>{
     console.log("Token reçu")

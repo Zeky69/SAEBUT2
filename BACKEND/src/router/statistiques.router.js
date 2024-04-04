@@ -13,4 +13,7 @@ router.get("/venteArticle", userController.getVenteArticle);
 router.get("/venteArticle/:id", userController.getVenteArticle);
 router.get("/venteParCatetorie", userController.getVenteParCategorie);
 
+router.post("/addConnexionToday", userController.addConnexionToday);
+router.get("/getConnextionToday", userController.getConnextionToday);
+
 module.exports = router;

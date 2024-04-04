@@ -1,4 +1,4 @@
-import {getRequest} from "@/services/axios.service";
+import {getRequest, postRequest} from "@/services/axios.service";
 
 const baseUrl='/statistiques'
 
@@ -16,6 +16,16 @@ async function getVenteArticleFromAPI() {
 
 async function getVenteParCategorieFromAPI() {
     return getRequest(baseUrl+'/venteParCatetorie', 'GET')
+}
+
+async function getConnextionTodayFromAPI() {
+    return getRequest(baseUrl+'/getConnextionToday', 'GET')
+
+}
+
+async function addConnexionTodayFromAPI() {
+    return postRequest(baseUrl+'/addConnexionToday', 'POST')
+
 }
 
 async function getVenteArticleParIdPrestataireFromAPI(id) {
@@ -72,10 +82,33 @@ async function getVenteParCategorie() {
     }
 }
 
+export async function getConnextionToday() {
+    try {
+        let answer = await getConnextionTodayFromAPI();
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des connexions du jour', error.message);
+        throw error;
+    }
+}
+
+export async function addConnexionToday() {
+    try {
+        let answer = await addConnexionTodayFromAPI();
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de l\'ajout d\'une connexion du jour', error.message);
+        throw error;
+    }
+}
+
+
+
 export default {
     getVenteBilletParDate,
     getVenteBilletParType,
     getVenteArticle,
+    getVenteArticleParIdPrestataire,
     getVenteParCategorie,
-    getVenteArticleParIdPrestataire
+    getConnextionToday,
 }
