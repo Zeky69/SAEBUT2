@@ -152,10 +152,10 @@ INSERT INTO commande (id_user,date_commande) VALUES
 
 
 
-INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom,date) VALUES
-('151',1,1,2,'Zekeriya','Akburak',NOW()),
-('15415',1,2,1,'Mhammed','Akburak',NOW()),
-('5415',1,3,1,'Enzo','LeRaptor',NOW());
+INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom) VALUES
+('151',1,1,2,'Zekeriya','Akburak'),
+('15415',1,2,1,'Mhammed','Akburak'),
+('5415',1,3,1,'Enzo','LeRaptor');
 
 INSERT INTO ligneCommandeArticle(id_commande , id_produit ,valide, quantite) VALUES
 (1,1,false,5);
