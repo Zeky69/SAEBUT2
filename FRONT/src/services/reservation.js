@@ -69,7 +69,6 @@ async function postResa(data) {
 
 async function deleteDispo(data) {
     try {
-        console.log(data)
         let answer = await deleteDispoToAPI(data)
         console.log("Réponse du back",answer)
         return answer

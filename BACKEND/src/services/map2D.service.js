@@ -44,7 +44,6 @@ const getAllEmp = async (req) => {
         const getAllEmpQuery = 'SELECT * FROM emplacement';
         emps = await client.query(getAllEmpQuery);
         console.log("Récupération de tous les emplacements réussie");
-        console.log(emps);
         return emps.rows;
 
     } catch (error) {
@@ -66,6 +65,8 @@ const createEmp = async (req, callback) => {
         const insertEmpQuery = 'INSERT INTO emplacement(id_emplacement, description ,nom , matricepoints, prestataire_id , id_type) VALUES ($1, $2, $3, $4 , $5 ,$6) RETURNING *';
         const insertEmpValues = [uuid_emp ,description,name, {matricepoints} ,prestaire_id , type_id];
         const result = await client.query(insertEmpQuery, insertEmpValues);
+
+
 
         // Récupérer le batiment inséré
         const newEmp = result.rows[0];
@@ -108,36 +109,47 @@ const updateEmp = async (req) => {
     const client = await pool.connect();
     let uuid = req.params.id;
     let { description, nom , type_id, prestataire_id , matricepoints ,accept} = req.body;
+    console.log(req.body);
+    console.log(uuid);
     let sqlQuery = "UPDATE emplacement SET";
     let sqlValues = [];
     let sqlParams = [];
     let i = 1;
-    if (description) {
+
+    if(prestataire_id === "null"){
+        prestataire_id = null;
+
+    }
+    if(type_id === "null"){
+        type_id = null;
+    }
+
+    if (description !== undefined) {
         sqlParams.push(`description = $${i}`);
         sqlValues.push(description);
         i++;
     }
-    if (nom) {
+    if (nom !== undefined) {
         sqlParams.push(`nom = $${i}`);
         sqlValues.push(nom);
         i++;
     }
-    if (type_id) {
+    if (type_id !== undefined) {
         sqlParams.push(`id_type = $${i}`);
         sqlValues.push(type_id);
         i++;
     }
-    if (prestataire_id) {
+    if (prestataire_id !== undefined) {
         sqlParams.push(`prestataire_id = $${i}`);
         sqlValues.push(prestataire_id);
         i++;
     }
-    if (matricepoints) {
+    if (matricepoints!== undefined) {
         sqlParams.push(`matricepoints = $${i}`);
-        sqlValues.push(matricepoints);
+        sqlValues.push({matricepoints});
         i++;
     }
-    if (accept) {
+    if (accept !== undefined) {
         sqlParams.push(`accepted = $${i}`);
         sqlValues.push(accept);
         i++;
@@ -269,6 +281,7 @@ const checkEmpIsFree = async (id_emplacement) => {
         let res;
         let sql = "SELECT * FROM emplacement WHERE id_emplacement = $1 AND prestataire_id IS NULL";
         res = await client.query(sql, [id_emplacement]);
+        console.log(res.rows)
         return res.rows.length > 0;
     }
     catch (err) {
@@ -298,6 +311,24 @@ const freeEmp = async (id_emplacement) => {
     }
 }
 
+const haveAskEmp = async (id_emplacement, id_prestataire) => {
+    const client = await pool.connect();
+    try {
+        let res;
+        let sql = "SELECT * FROM emplacement WHERE id_emplacement = $1 AND prestataire_id = $2 ";
+        res = await client.query(sql, [id_emplacement, id_prestataire]);
+        return res.rows.length > 0;
+    }
+    catch (err) {
+        console.log(err);
+        return false;
+    }
+    finally {
+        client.release();
+    }
+
+}
+
 
 
 module.exports = {
@@ -313,7 +344,8 @@ module.exports = {
     checkEmpIsFree,
     isLocationBelongsToProvider,
     updateEmpPresataire,
-    freeEmp
+    freeEmp,
+    haveAskEmp
 }
 
 

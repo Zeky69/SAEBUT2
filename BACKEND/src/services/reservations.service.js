@@ -1,19 +1,15 @@
 const pool = require("../database/db.js");
 
 async function test (req,callback) {
-    console.log("test service");
     const client = await pool.connect();
-    console.log("test connect bdd");
     try{
         const query = `select * from emplacement`;
         res = await client.query(query);
-        console.log("test query"+res.rows);
         callback(null,res.rows);
     }catch(err){
         callback(err,null);
     }finally{
         client.release();
-        console.log("test release");
     }
 }
 

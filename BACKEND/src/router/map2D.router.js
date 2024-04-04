@@ -1,7 +1,7 @@
 const express = require('express');
 const map2Dcontroller = require('../controllers/map2D.controllers');
 const { verifyisAdmin, verifyisPrestataire, getPrestaireId, verifyToken} = require("../middlewares/utilisateur.middlewares");
-const {checkEmpIsFree ,isLocationBelongsToProvider} = require("../middlewares/map2D.middlewares");
+const {checkEmpIsFree ,isLocationBelongsToProvider, haveAskEmp} = require("../middlewares/map2D.middlewares");
 
 var router = express.Router();
 
@@ -85,7 +85,7 @@ router.post('/emp/refuse/:id',verifyToken,verifyisAdmin, map2Dcontroller.refuseE
  * libérer un emplacement
  * params : id de l'emplacement
  */
-router.post('/emp/free/:id',verifyToken,verifyisPrestataire,getPrestaireId, isLocationBelongsToProvider ,map2Dcontroller.freeEmp);
+router.post('/emp/free/:id',verifyToken,verifyisPrestataire,getPrestaireId, haveAskEmp ,map2Dcontroller.freeEmp);
 
 /**
  *   get type prestations

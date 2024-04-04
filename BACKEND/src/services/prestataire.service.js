@@ -47,7 +47,6 @@ const getPrestataireById = async (id) => {
         let sql = 'select * from prestataire WHERE id_prestataire = $1';
         let values = [id];
         resultat = await client.query(sql, values);
-        console.log("resultat",resultat.rows);
         return resultat.rows;
     }
     catch (error) {
