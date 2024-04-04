@@ -10,9 +10,10 @@
   </template>
 
   <script>
-  import {mapState,mapActions} from "vuex";
+  import {mapState} from "vuex";
   import NavBar from '../src/components/NavBar3.vue';
   import FooTer from '../src/components/FooTer.vue'
+  import {addConnexionToday} from "@/services/statistiques.service";
 
   export default {
     components: {
@@ -24,19 +25,8 @@
       shouldShowNavBar() {
         return !this.token && this.$route.name !== 'login';
       }
-    },
-    methods: {
-      ...mapActions(['getInformationFromToken']),
-      async getInfo() {
-        console.log("Appel à getInformationFromToken");
-        await this.getInformationFromToken(this.token);
-        console.log("getInformationFromToken terminé, appel de getInfo");
-      }
-    },
-    created() {
-      if (this.token) {
-        this.getInfo();
-      }
+    },mounted() {
+      addConnexionToday();
     }
   };
   </script>

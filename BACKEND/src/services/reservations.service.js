@@ -1,4 +1,5 @@
 const pool = require("../database/db.js");
+const sendMail = require("./SendMail");
 
 async function test (req,callback) {
     const client = await pool.connect();
@@ -18,7 +19,7 @@ async function getAllResaByIdUser (req,callback) {
     let id_client = req.params.id_user;
     const client = await pool.connect();
     try{
-        const query = `SELECT * from reservation where id_client=$1 and id_emplacement=$2 ORDER BY ouverture ASC`;
+        const query = `SELECT * from reservation where id_ticket_client=$1 and id_emplacement=$2 ORDER BY ouverture ASC`;
         res = await client.query(query,[id_client,id_bat]);
         for (let i = 0; i < res.rows.length; i++) {
             res.rows[i].ouverture = res.rows[i].ouverture.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' , year: 'numeric', month: 'numeric', day: 'numeric', hour : "2-digit", minute:"2-digit" });
@@ -65,23 +66,6 @@ async function getAllDispoById (req,callback) {
     }
 }
 
-/*
-    CREATE TABLE reservation(
-        id_reservation SERIAL,
-        id_batiment VARCHAR(50) NOT NULL,
-        ouverture timestamp,
-        duree varchar(50),
-        id_client INT,
-        description VARCHAR(255),
-        nom VARCHAR(50),
-        color VARCHAR(50),
-        status VARCHAR(50),
-        PRIMARY KEY(id_reservation),
-        FOREIGN KEY(id_batiment) REFERENCES batiment(id_batiment),
-        FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)
-    );
- */
-
 async function createDispo (req,callback) {
     let id_bat = req.body.id_bat;
     let date = req.body.date;
@@ -117,8 +101,16 @@ async function reserver(req, callback){
             query = `select * from reservation where id_reservation=$1`;
             res = await client.query(query, [id_reservation]);
             if (res.rows.length!==0){
+                let data = res.rows[0]
                 query = `update reservation set id_ticket_client=$1 where id_reservation=$2`;
                 res = await client.query(query, [id_client, id_reservation]);
+
+                query = `SELECT email from utilisateurs
+                            JOIN public.commande c on utilisateurs.user_id = c.id_user
+                            JOIN public.lignecommandebillet l on c.id_commande = l.id_commande
+                            WHERE uuid = $1`
+                res = await client.query(query, [id_client]);
+                await sendMail.sendEmail("Reservation enregistrée", res.rows[0].email, formatResa(data));
                 callback(null,"c good");
             } else {
                 callback("ce crénaux n'existe pas", null)
@@ -133,6 +125,14 @@ async function reserver(req, callback){
     }finally{
         client.release();
     }
+}
+
+function formatResa(data) {
+    return "Votre réservation pour le " +
+        data.ouverture + "durant " + data.duree +
+        " est validée. " +
+        "\n Cliquez ici pour l'annuler : http://localhost:8081/restauration/" + data.id_reservation +
+        "\n\n Cordialement\n L'équipe Belforaine ";
 }
 
 async function deleteDispoById(req, callback){

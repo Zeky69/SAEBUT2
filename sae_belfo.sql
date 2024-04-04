@@ -8,6 +8,7 @@ DROP TABLE if exists stand CASCADE;
 DROP TABLE if exists attraction CASCADE;
 DROP TABLE if exists event CASCADE;
 DROP TABLE if exists toilette CASCADE;
+DROP TABLE if exists visiteurSite CASCADE;
 
 DROP TABLE if exists disponibilite CASCADE;
 DROP TABLE if exists taggue CASCADE;
@@ -43,6 +44,7 @@ DROP TABLE IF EXISTS commande CASCADE;
 DROP TABLE IF EXISTS ligneCommandeArticle CASCADE;
 DROP TABLE IF EXISTS ligneCommandeBillet CASCADE;
 DROP TABLE IF EXISTS date_belforaine CASCADE;
+DROP TABLE IF EXISTS contenuHomePage CASCADE;
 
 
 CREATE TABLE GROUPES(
@@ -294,15 +296,16 @@ CREATE TABLE billet(
  );
 
 CREATE TABLE ligneCommandeBillet(
-   uuid VARCHAR(100) NOT NULL,
-   id_commande INT NOT NULL,
-   id_billet INT NOT NULL,
-   subId INT NOT NULL,
-   nom VARCHAR(100),
-   prenom VARCHAR(100),
-   date DATE NOT NULL DEFAULT CURRENT_DATE,
-   PRIMARY KEY(uuid),
-   FOREIGN KEY(id_billet,subId) REFERENCES sousBillet(id_billet,subId)
+    uuid VARCHAR(100) NOT NULL,
+    id_commande INT NOT NULL,
+    id_billet INT NOT NULL,
+    subId INT NOT NULL,
+    nom VARCHAR(100),
+    prenom VARCHAR(100),
+    date DATE NOT NULL DEFAULT CURRENT_DATE,
+    PRIMARY KEY(uuid),
+    FOREIGN KEY(id_commande) REFERENCES commande(id_commande),
+    FOREIGN KEY(id_billet,subId) REFERENCES sousBillet(id_billet,subId)
  );
 
  CREATE TABLE ligneCommandeArticle(
@@ -331,3 +334,15 @@ CREATE TABLE contact(
     message TEXT,
    date_contact TIMESTAMP
 );
+CREATE TABLE contenuHomePage(
+    id_contenu SERIAL,
+    contenu TEXT,
+    PRIMARY KEY(id_contenu)
+    );
+
+CREATE  TABLE visiteurSite(
+    id_visiteur SERIAL,
+    ip VARCHAR(50),
+    date_visite TIMESTAMP,
+    PRIMARY KEY(id_visiteur)
+    );

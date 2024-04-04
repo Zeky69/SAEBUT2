@@ -23,6 +23,7 @@ import ChoiceDate from "@/components/Billeterie/choiceDate.vue";
 import ChoiceQuantity from "@/components/Billeterie/choiceQuantity.vue";
 import LignePanier from "@/components/Panier/lignePanier.vue";
 import Cookies from 'js-cookie';
+import {getDateBillet} from "@/services/shop.service";
 export default defineComponent({
   name: 'BilleterieView',
   components: {LignePanier, ChoiceQuantity, ChoiceDate, ChoiceBillet},
@@ -33,12 +34,15 @@ export default defineComponent({
       this.selected = this.items.find((item) => item.id === this.idselect);
     }
     this.setTranslatedItems();
+    getDateBillet().then((response) => {
+      this.dates.splice(0, this.dates.length, ...response)
+    });
   },
   data() {
     return {
       idselect: null,
       items: [],
-      dates:["2024-01-15" , "2024-01-16" , "2024-01-17"],
+      dates:[],
       panier: [],
       dateSelected: [],
       quantitySelected: [0,0],
@@ -113,7 +117,11 @@ export default defineComponent({
 
     },
     selectedDate(date){
-      this.dateSelected = date;
+      this.dateSelected.splice(0, this.dateSelected.length, ...date);
+      if(this.quantitySelected[0]!==0 || this.quantitySelected[1]!==0){
+        this.panier.splice(0, this.panier.length)
+        this.addPanier();
+      }
       this.scrollToComponent(this.$refs.dateComponent);
 
     },
@@ -152,7 +160,8 @@ export default defineComponent({
     addPanier(){
       if (this.quantitySelected[0]!==0){
         let listDateStringFormat = this.dateSelected.map((date) => {
-          return date.toISOString().split('T')[0];
+
+          return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
         });
 
         this.panier.push({

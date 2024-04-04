@@ -94,21 +94,24 @@ export default {
 ,
   watch: {
 
-    'feature': function (){
-      this.newfeature ={
-        "geometry": this.feature.geometry,
-        "properties": {
-          "id": this.feature.properties.id,
-          "name": this.feature.properties.name,
-          "description": this.feature.properties.description,
-           "typeTerrain": this.feature.properties.typeTerrain,
-           "apartient": this.feature.properties.apartient,
-          "accept": this.feature.properties.accept
-        }
-      }
-      console.log(this.newfeature);
+    feature: {
+      handler: function () {
 
-    }
+        this.newfeature = {
+          "geometry": this.feature.geometry,
+          "properties": {
+            "id": this.feature.properties.id,
+            "name": this.feature.properties.name,
+            "description": this.feature.properties.description,
+            "typeTerrain": this.feature.properties.typeTerrain,
+            "apartient": this.feature.properties.apartient,
+            "accept": this.feature.properties.accept
+          }
+        }
+        console.log(this.newfeature);
+      },
+      deep: true
+    },
   },
   methods: {
     closePanel() {

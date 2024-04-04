@@ -25,26 +25,33 @@ export default {
       {
         title: "Tableau de bord",
         path: "/prestataire",
+        img: "fas fa-tachometer-alt",
+
       },
       {
         title: "Ma page",
         path: "/prestataire/mypage",
+        img: "fas fa-file"
       },
       {
         title: "Produits",
         path: "/prestataire/produits",
-      },
+        img: "fas fa-store",
+      },/*
       {
         title: "Prestataires",
         path: "/prestataire/prestataires",
-      },
+      },*/
       {
         title: "Map",
         path: "/prestataire/map",
+        img: "fas fa-map"
       },
       {
         title: "Profil",
         path: "/prestataire/profil",
+        img: "fas fa-user-alt",
+
       },
     ]
   }),

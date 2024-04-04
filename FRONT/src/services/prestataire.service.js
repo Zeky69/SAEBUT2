@@ -1,4 +1,4 @@
-import {getRequest, putRequest} from "@/services/axios.service"
+import {deleteRequest, getRequest, postRequest, putRequest} from "@/services/axios.service"
 const url='/prestataires/';
 
 
@@ -59,6 +59,21 @@ export async function getPrestatairesServices(id_prestataire){
     }
 }
 
+export async function getPrestatairesNoServicesFromAPI(id_prestataire){
+    return await getRequest(url+`/noservices/${id_prestataire}`, 'getPrestatairesServices')
+}
+
+export async function getPrestatairesNoServices(id_prestataire){
+    try {
+        const response = await getPrestatairesNoServicesFromAPI(id_prestataire);
+        return response;
+    } catch (error) {
+        console.error("Erreur lors de la récupération des non services : ", error);
+        throw error;
+    }
+}
+
+
 export async function updateServiceStateFromAPI(id_prestataire){
     return await getRequest(url+`/services/update/${id_prestataire}`, 'updateStateServ')
 }
@@ -74,6 +89,40 @@ async function updateServiceState(id) {
     }
 }
 
+export async function addServiceFromAPI(id_prestataire, id_type){
+    return await postRequest(url+`/services/${id_prestataire}`,{idServ:id_type}, 'addServ')
+}
+
+
+async function addService(id_prestataire, id_type) {
+    try {
+        let answer = await addServiceFromAPI(id_prestataire, id_type)
+        return answer
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour de la disponibilité :', error.message);
+        throw error;
+    }
+}
+
+
+async function deleteServFromApi(serviceId,idPresta){
+    return deleteRequest(url+`/services/${serviceId}/${idPresta}`,'DeleteServ');
+}
+
+async function deleteServ(serviceId,idPresta) {
+    try {
+
+        const response = await deleteServFromApi(serviceId,idPresta);
+        console.log("suppression reussi")
+        return response;
+    } catch (error) {
+        console.error("Error managing prestataire:", error);
+        throw error;
+    }
+}
+
+
+
 export default{
     updatePrestataire,
     getPrestataire,
@@ -82,6 +131,9 @@ export default{
     getPrestataireObject,
     getPrestatairesTypes,
     getPrestatairesServices,
-    updateServiceState
+    updateServiceState,
+    deleteServ,
+    getPrestatairesNoServices,
+    addService
 }
 

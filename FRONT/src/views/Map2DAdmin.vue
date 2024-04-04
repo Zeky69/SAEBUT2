@@ -1,11 +1,7 @@
 <template>
 
-  <div>
-
-
-    <h1 style="padding-top: 300px">2D ADMin</h1>
-
-
+  <div class="container-map-all">
+    <PageTitre title="Map 2D interactive"></PageTitre>
     <TestMap/>
   </div>
 
@@ -14,9 +10,11 @@
 
 <script>
 import TestMap from '../components/Map2D/Map2Dedition.vue';
+import PageTitre from "@/components/Admin/PageTitre.vue";
 
 export default {
   components: {
+    PageTitre,
     TestMap
   },
 }
@@ -24,4 +22,9 @@ export default {
 
 </script>
 
-<style></style>
+<style>
+.container-map-all{
+  padding: 10px;
+  box-sizing: border-box;
+}
+</style>
