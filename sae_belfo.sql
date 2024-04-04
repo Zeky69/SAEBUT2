@@ -206,14 +206,13 @@ CREATE TABLE reservation(
     id_prestataire INT NOT NULL,
     ouverture timestamp,
     duree varchar(50),
-    id_client INT,
+    id_ticket_client VARCHAR(255),
     description VARCHAR(255),
     nom VARCHAR(50),
     color VARCHAR(50),
     status VARCHAR(50),
     PRIMARY KEY(id_reservation),
-    FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement),
-    FOREIGN KEY(id_client) REFERENCES UTILISATEURS(User_Id)
+    FOREIGN KEY(id_emplacement) REFERENCES emplacement(id_emplacement)
 );
 
 

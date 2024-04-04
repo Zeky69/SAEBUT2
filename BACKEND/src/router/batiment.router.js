@@ -4,6 +4,8 @@ const batimentMiddlewares = require('../middlewares/batiment.middlewares');
 const resaController = require("../controllers/reservations.controllers");
 var router = express.Router();
 
+router.get('/', batimentController.getAllBatiment);
+
 router.get('/:idPresta', batimentController.getBatByIdPrestataire);
 /**
  * @swagger

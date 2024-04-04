@@ -5,45 +5,51 @@
       <div v-if="mode==='1'">
         <label for="display" >Utiliser les réservations ?</label>
         <input id="display" type="checkbox" :checked="display" @click="$emit('updateDisplay', id_bat)">
-      </div>
 
-    <h2>Reservations</h2>
-    <ul>
-      <li v-for="(reservation, indexResa) in reservations" :key="indexResa">
-        {{reservation.ouverture}} - {{reservation.duree}} min | quantite : {{reservation.amount}}<button @click="deleteResaClicked(reservation.id_reservation)">Annuler</button>
-      </li>
-    </ul>
+        <h2>Reservations</h2>
+        <ul v-if="reservations.length !== 0">
+          <li v-for="(reservation, indexResa) in reservations" :key="indexResa">
+            {{reservation.ouverture}} - {{reservation.duree}} min | quantite : {{reservation.amount}}<button @click="deleteResaClicked(reservation.id_reservation)">Annuler</button>
+          </li>
+        </ul>
+        <span v-else> Vous n'avez aucune réservation ici</span>
+      </div>
+      <span id="resultatResa" v-else>
+      </span>
     </div>
+
     <div class="diponibilite">
       <h2>Disponibilités</h2>
-      <ul>
+      <ul v-if="disponibilites.length !== 0">
         <li v-for="(dispo,indexDispo) in disponibilites" :key="indexDispo">
-          {{dispo.ouverture}} - {{dispo.duree}} min | quantite : {{dispo.amount}}<button @click="reserverDate(dispo.id_reservation)">Reserver</button> <button v-if="mode==='1'" @click="deleteDispoClicked(dispo.id_reservation)">Supprimer</button>
+          {{dispo.ouverture}} - {{dispo.duree}} min | quantite : {{dispo.amount}}<button v-if="mode==='2'" @click="reserverDate(dispo.id_reservation)">Reserver</button> <button v-if="mode==='1'" @click="deleteDispoClicked(dispo.id_reservation)">Supprimer</button>
         </li>
-      <li v-if="mode==='1'"> Créer une disponibilité:
+      </ul>
+      <span v-else> Il n'y a pas de disponibilités !</span>
+      <div v-if="mode==='1'"> Créer une disponibilité:
         <div>
           <div>
             <div>
-            <label for="newDispo">Choisir le début: </label>
-            <input
-                id="newDispo"
-                type="datetime-local"
-                name="newDispo"
-                v-model="newDispoDate"
-                min="2024-06-01T08:30"
-                max="2024-06-4T23:30"
-                required />
-            <span class="validity"></span>
+              <label for="newDispo">Choisir le début: </label>
+              <input
+                  id="newDispo"
+                  type="datetime-local"
+                  name="newDispo"
+                  v-model="newDispoDate"
+                  min="2024-06-01T08:30"
+                  max="2024-06-4T23:30"
+                  required />
+              <span class="validity"></span>
             </div>
             <div>
-            <label for="appt">Choisir la durée: </label>
-            <input
-                type="time"
-                name="appt"
-                v-model="newDispoDuree"
-                min="00:00"
-                required />
-            <span class="validity"></span>
+              <label for="appt">Choisir la durée: </label>
+              <input
+                  type="time"
+                  name="appt"
+                  v-model="newDispoDuree"
+                  min="00:00"
+                  required />
+              <span class="validity"></span>
             </div>
           </div>
           <div>
@@ -51,8 +57,7 @@
           </div>
         </div>
 
-      </li>
-    </ul>
+      </div>
     </div>
   </div>
 
@@ -70,6 +75,7 @@ export default defineComponent({
     id_prestataire: String,
     mode: String,
     nom:String,
+    uuidTicket: String,
     display: Boolean
   },
   data : () => ({
@@ -147,17 +153,27 @@ export default defineComponent({
     },
 
     async reserverDate(id_dispo){
+      let message = document.getElementById("resultatResa")
+      if (this.uuidTicket===""){
+        message.innerHTML = "Veuillez indiquer l'identifiant de votre billet pour réserver"
+        message.style.color = "red"
+      } else {
         try {
-          let response = await RestauService.postResa({"id_dispo":id_dispo,"id_client":2})
+          let response = await RestauService.postResa({"id_dispo": id_dispo, "id_client": this.uuidTicket})
           if (response.error) {
+            message.innerHTML = "Erreur,  l'identifiant du billet fournit est invalide"
+            message.style.color = "red"
             console.log("Erreur lors de la réservation d'une disponibilité");
           } else {
             await this.getReservation()
             await this.getDisponibilite()
+            message.innerHTML = "Reservation effectuée, veuillez vérifiez votre adresse mail."
+            message.style.color = "green"
           }
         } catch (e) {
           console.error("An error occurred:", e);
         }
+      }
     },
 
   },

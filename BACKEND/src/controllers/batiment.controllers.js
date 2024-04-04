@@ -21,3 +21,14 @@ exports.updateDisplay = (req, res) => {
         return res.status(200).send("display updated");
     });
 }
+
+exports.getAllBatiment = (req,res) => {
+    return batimentService.getAllBatiment(req,(error,data)=>{
+        if (error) {
+            console.log(error)
+            return res.status(500).send("Internal error");
+        }
+        console.log(data);
+        return res.status(200).send(data);
+    });
+}

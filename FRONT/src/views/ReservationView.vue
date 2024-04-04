@@ -1,21 +1,28 @@
 <template >
   <div>
-    <h1 >Reservation Test</h1>
-    <reservationComponent
-        class="main"
-        :id_emp=this.id_emp
-        :user_id=this.user_id
-        :token=this.token
-        :group_id=this.group_id
-        :mode=this.mode
-        :display=this.display
-        :id_bat=this.id_bat
-        :id_prestataire=this.id_prestataire
-        :nom=this.nom
+    <h1 >Reservations</h1>
+    <label for="idTicket" style="padding-top: 150px">L'identifiant de votre ticket</label>
+    <input type="text" id="idTicket" name="idTicket" v-model="uuidTicket">
+    <ul>
+      <li v-for="(prestataire, indexPresta) in prestataires" :key="indexPresta">
+        <ul>
+          <li v-for="(batiment, indexBat) in batimentsPrestataires" :key="indexBat">
+            <reservationComponent
+                v-if="batiment.prestataire_id === prestataire.id_prestataire"
+                :id_bat="batiment.id_emplacement"
+                :id_prestataire="prestataire.id_prestataire"
+                :mode="'2'"
+                :nom="batiment.nom"
+                :uuidTicket="uuidTicket"
+                :display="batiment.use_resa"
+                @updateDisplay="updateDisplay($event)">
 
-    >
+            </reservationComponent>
 
-    </reservationComponent >
+          </li>
+        </ul>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -23,27 +30,52 @@
 import {defineComponent} from "vue";
 import { mapState} from "vuex";
 import reservationComponent from "@/components/reservation.vue";
+import batService from "@/services/batiment.service";
+import prestataireService from "@/services/prestataire.service";
 
 
 export default defineComponent({
   name: "ReservationView",
   components: {reservationComponent},
   props: {
-    //id_emp: String,
   },
   data : () => ({
-    user_id: "1", //Remettre this.user_id (celui des computed)
-    id_emp: "1", //Remettre this.id_emp (celui des props)
-    mode: "2",
-    display: true,
-    id_bat: "5f37b159-371c-4d4a-92f7-fe412a1873f8",
-    id_prestataire: "1",
-    nom: "test",
+    prestataires: [],
+    batimentsPrestataires: [],
+    uuidTicket : ""
   }),
   computed: {
     ...mapState(['token','group_id']), //Remettre ,'user_id' après le token
   },
   methods: {
+    async recupererPrestataires(){
+      try {
+        let response = await prestataireService.getPrestataires()
+        if (response.error) {
+          console.log("Erreur lors de la récupération des batiments");
+        } else {
+          this.prestataires = response;
+        }
+      } catch (e) {
+        console.error("An error occurred:", e);
+      }
+    },
+    async recupererBatimentsPrestataire(){
+      try {
+        let response = await batService.getAllBatiment()
+        if (response.error) {
+          console.log("Erreur lors de la récupération des batiments");
+        } else {
+          this.batimentsPrestataires = response;
+        }
+      } catch (e) {
+        console.error("An error occurred:", e);
+      }
+    },
+  },
+  mounted() {
+    this.recupererPrestataires()
+    this.recupererBatimentsPrestataire()
   }
 })
 </script>
