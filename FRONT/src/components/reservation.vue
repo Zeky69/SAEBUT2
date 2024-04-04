@@ -14,12 +14,13 @@
         </ul>
         <span v-else> Vous n'avez aucune réservation ici</span>
       </div>
-      <span id="resultatResa" v-else>
-      </span>
+
     </div>
 
     <div class="diponibilite">
       <h2>Disponibilités</h2>
+      <span id="resultatResa">
+      </span>
       <ul v-if="disponibilites.length !== 0">
         <li v-for="(dispo,indexDispo) in disponibilites" :key="indexDispo">
           {{dispo.ouverture}} - {{dispo.duree}} min | quantite : {{dispo.amount}}<button v-if="mode==='2'" @click="reserverDate(dispo.id_reservation)">Reserver</button> <button v-if="mode==='1'" @click="deleteDispoClicked(dispo.id_reservation)">Supprimer</button>
@@ -72,7 +73,7 @@ export default defineComponent({
   name: "reservationComponent",
   props: {
     id_bat: String,
-    id_prestataire: String,
+    id_prestataire: Number,
     mode: String,
     nom:String,
     uuidTicket: String,
@@ -187,7 +188,6 @@ export default defineComponent({
 <style scoped>
 
 .main {
-  margin: 150px;
   padding: 20px;
   border-radius: 34px;
   background: #cbbdbf;
