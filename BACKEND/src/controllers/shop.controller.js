@@ -313,7 +313,7 @@ exports.createCommandeWithoutAccount = async (req, res) => {
           element.item.subId,
           element.nom,
           element.prenom,
-          { date: element.item.date }
+           element.item.date[0]
         );
         billets.push({
           uuid: uuid,
