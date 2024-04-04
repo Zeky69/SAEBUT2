@@ -268,15 +268,18 @@ li {
 
 
 }
-.li-icon svg {
+.li-container .li-icon i {
   fill : white;
   width: 30px;
 }
-.active .li-icon svg {
-  fill : #4D52A6;
+.active .li-container .li-icon  i {
+  color : #4D52A6;
   filter: drop-shadow(0px 1px 0px rgba(0, 0, 0, 0.25));
   transition: all 0.2s ease-in;
 }
+
+
+
 .li-icon {
   grid-column: 1;
   display: flex;
@@ -327,7 +330,7 @@ a {
   text-decoration: none;
   color: white;
 }
-.active .li-a a {
+.active  .li-a a {
   color: #4D52A6;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 }

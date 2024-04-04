@@ -325,6 +325,22 @@ async function setCommandeLineBillet(id_commande,id_billet,subId,nom,prenom, dat
     }
 }
 
+async function getDateBillet(){
+    const client = await pool.connect();
+    try{
+        let sql = `SELECT * from date_belforaine;`;
+        let result = await client.query(sql);
+        return result.rows;
+
+    }catch(err){
+        console.log(err)
+        return false;
+    }finally{
+        client.release();
+    }
+
+}
+
 
 
 
@@ -346,5 +362,6 @@ module.exports ={
     getCategorieByproduct,
     setCommande,
     setCommandeLineArticle,
-    setCommandeLineBillet
+    setCommandeLineBillet,
+    getDateBillet
 }

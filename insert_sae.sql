@@ -1,6 +1,5 @@
 INSERT INTO type VALUES('1', 'Restaurant' ,'restaurant.png'),
                        ('2', 'Attraction','coaster.png'),
-                      ('3', 'Scene','stadium.png'),
                        ('4', 'Stand' , 'tent.png'),
                       ('5', 'Boutique' ,'tent.png'),
                       ('6', 'Toilettes','toilets.png');
@@ -140,9 +139,13 @@ INSERT INTO sousBillet (subId , id_billet , subtitle) VALUES
 (2,3,'Enfant');
 
 INSERT INTO date_belforaine (date_evenement) VALUES
-('2024-01-15'),
-('2024-01-16'),
-('2024-01-17');
+('2024-04-08'),
+('2024-04-09'),
+('2024-04-10'),
+('2024-04-11'),
+('2024-04-12'),
+('2024-04-13')
+;
 
 INSERT INTO commande (id_user,date_commande) VALUES
 (2,now());
@@ -159,7 +162,6 @@ INSERT INTO ligneCommandeArticle(id_commande , id_produit ,valide, quantite) VAL
 INSERT INTO emplacement (id_emplacement,id_type,nom,description,matricePoints,prestataire_id,use_Resa,accepted) VALUES
 ('1','1','Restaurant 1','Description Restaurant 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',3,false,true),
 ('2','2','Attraction 1','Description Attraction 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',3,true,true),
-('3','3','Scene 1','Description Scene 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',4,false,true),
 ('4','4','Stand 1','Description Stand 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',4,false,true);
 
 INSERT INTO contenuhomepage VALUES (1,'Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences inspirantes et divertissement sans fin fusionnent. Plongez dans la magie que nous réserve le futur, le tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !');

@@ -2,6 +2,7 @@
 
 const express = require('express');
 const shopController = require('../controllers/shop.controller')
+const {getDateBillet} = require("../controllers/shop.controller");
 var router = express.Router();
 
 router.get('/random',shopController.getRandomArticles)
@@ -31,6 +32,8 @@ router.get('/commande/:id',shopController.getCommande)
 router.patch('/commande/:id/ligne/:idligne',shopController.updateCommandeLigne)
 
 router.post('/commande',shopController.createCommandeWithoutAccount)
+
+router.get('/date',getDateBillet)
 
 
 module.exports = router;
