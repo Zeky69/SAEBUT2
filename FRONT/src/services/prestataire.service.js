@@ -17,6 +17,10 @@ export async function getPrestataires(){
     return await getRequest('/prestataires', 'getPrestataires')
 }
 
+export async function getPrestatairesShop(){
+    return await getRequest('/prestataires/shop', 'getPrestataires')
+}
+
 
 
  async  function getPrestataireObject(idUser){
@@ -134,6 +138,7 @@ export default{
     updateServiceState,
     deleteServ,
     getPrestatairesNoServices,
-    addService
+    addService,
+    getPrestatairesShop
 }
 

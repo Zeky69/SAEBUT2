@@ -365,9 +365,8 @@ CREATE TABLE contenuHomePage(
    PRIMARY KEY(id_contenu)
 );
 
-CREATE TABLE visiteurSite(
-   id_visiteur SERIAL,
-   ip VARCHAR(50),
-   date_visite TIMESTAMP,
-   PRIMARY KEY(id_visiteur)
-);
+CREATE  TABLE visiteurSite(
+    id_visiteur SERIAL,
+    date_visite TIMESTAMP,
+    PRIMARY KEY(id_visiteur)
+    );
