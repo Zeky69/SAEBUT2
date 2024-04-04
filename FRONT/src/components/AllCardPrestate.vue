@@ -97,6 +97,9 @@ export default {
         Attraction: 'attraction-color',
         Scene: 'animateur-color',
         Restaurant: 'restaurateur-color',
+        Stand: 'stand-color',
+        Toilettes: 'toilette-color',
+        Boutique: 'boutique-color',
       };
       return colorMap[type] || 'default-color';
     },
@@ -105,6 +108,9 @@ export default {
         Attraction: 'attraction-background',
         Scene: 'animateur-background',
         Restaurant: 'restaurateur-background',
+        Stand: 'stand-background',
+        Toilettes: 'toilette-background',
+        Boutique: 'boutique-background',
       };
       return colorMap[type] || 'default-background';
     },
@@ -380,7 +386,7 @@ export default {
 }
 
 .animateur-color {
-  background-color: #FF9800;
+  background-color: #ff9500;
 }
 
 .animateur-background {
@@ -394,6 +400,33 @@ export default {
 
 .restaurateur-background {
   background-color: rgba(255, 87, 34, 0.25);
+  backdrop-filter: blur(10px);
+}
+
+.stand-color {
+  background-color: #fdee3a;
+}
+
+.stand-background {
+  background-color: rgba(175, 170, 76, 0.25);
+  backdrop-filter: blur(10px);
+}
+
+.toilette-color{
+  background-color: #2196F3;
+}
+
+.toilette-background {
+  background-color: rgba(33, 150, 243, 0.25);
+  backdrop-filter: blur(10px);
+}
+
+.boutique-color {
+  background-color: #9C27B0;
+}
+
+.boutique-background {
+  background-color: rgba(156, 39, 176, 0.25);
   backdrop-filter: blur(10px);
 }
 

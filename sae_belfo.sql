@@ -8,6 +8,7 @@ DROP TABLE if exists stand CASCADE;
 DROP TABLE if exists attraction CASCADE;
 DROP TABLE if exists event CASCADE;
 DROP TABLE if exists toilette CASCADE;
+DROP TABLE if exists visiteurSite CASCADE;
 
 DROP TABLE if exists disponibilite CASCADE;
 DROP TABLE if exists taggue CASCADE;
@@ -330,4 +331,9 @@ CREATE TABLE contenuHomePage(
     PRIMARY KEY(id_contenu)
     );
 
-
+CREATE  TABLE visiteurSite(
+    id_visiteur SERIAL,
+    ip VARCHAR(50),
+    date_visite TIMESTAMP,
+    PRIMARY KEY(id_visiteur)
+    );

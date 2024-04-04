@@ -11,8 +11,8 @@ const getPrestatairesEtatAccepte = async () => {
     let resultat = null;
     const client = await pool.connect();
     try {
-        let sql = 'select * from prestataire WHERE etat_id = 2 and nom != $1 ORDER BY id_prestataire ASC';
-        resultat = await client.query(sql,["belforaine"]);
+        let sql = 'select * from prestataire WHERE etat_id = 2 ORDER BY id_prestataire ASC';
+        resultat = await client.query(sql);
         return resultat.rows;
     }
     catch (error) {
