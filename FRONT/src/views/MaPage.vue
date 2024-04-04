@@ -438,7 +438,7 @@ table {
     transition: all 0.2s ease-in-out;
 
     &:hover {
-      background-color: rgba($color: #000000, $alpha: 0.05);
+      background-color: rgba(255,255,255);
 
       td button {
         opacity: 1;
@@ -456,7 +456,7 @@ table {
     position: sticky;
     top: 0;
     padding: 1.5rem;
-    box-shadow: 0 2px 2px rgba(#000000, 0.1);
+    box-shadow: 0 2px 2px rgba(0,0,0);
     z-index: 1;
     font-weight: normal;
     color: #745f8f;
