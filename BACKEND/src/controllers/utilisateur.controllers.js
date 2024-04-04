@@ -140,3 +140,16 @@ exports.resetPasswordForm = (req, res) => {
     .status(200)
     .send("Montrer le formulaire de réinitialisation du mot de passe ici.");
 };
+
+exports.sendContactViaMail = async (req, res) => {
+  try {
+    const { nom, prenom, email, subject, message } = req.body;
+    const answer = "Bonjour, " + nom + " " + prenom + ". Vous avez envoyé un message à Belforaine, qui est le suivant : " + message + ". Nous vous répondrons dans les plus brefs délais. Cordialement, Belforaine.";
+    await userService.saveContactMessage(nom, prenom, email, subject, message);
+    sendEmail.sendEmail(subject, email, answer);
+    res.status(200).json({ message: "Message envoyé" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erreur interne du serveur" });
+  }
+}

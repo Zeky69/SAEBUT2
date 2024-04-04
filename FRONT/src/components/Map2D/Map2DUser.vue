@@ -204,11 +204,11 @@ export default {
         case '1':
           return 'cerlce orange';
         case '2':
-          return 'cerlce jaune';
+          return 'cerlce rouge';
         case '3':
           return 'cerlce rose';
         case '4':
-          return 'cerlce rouge';
+          return 'cerlce jaune';
           case '5':
           return 'cerlce vert';
           case '6':

@@ -313,7 +313,7 @@ exports.createCommandeWithoutAccount = async (req, res) => {
           element.item.subId,
           element.nom,
           element.prenom,
-          { date: element.item.date }
+           element.item.date[0]
         );
         billets.push({
           uuid: uuid,
@@ -337,3 +337,14 @@ exports.createCommandeWithoutAccount = async (req, res) => {
     return res.status(500).send("Erreur lors de la création de la commande");
   }
 };
+
+
+exports.getDateBillet = async (req, res) => {
+    try{
+        const date = await shopService.getDateBillet();
+        return res.status(200).json(date);
+    }catch (error) {
+        console.error("Controller encountered an unexpected error: ", error);
+        return res.status(500).send("Erreur lors de la récupération des dates");
+    }
+}

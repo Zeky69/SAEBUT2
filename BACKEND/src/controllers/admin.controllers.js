@@ -76,3 +76,23 @@ exports.changeUser = (req, res) => {
         return res.status(200).send("User updated successfully");
     })
 };
+
+exports.getHomePage = async (req, res) => {
+   try {
+       let reuslt = await adminService.getContenueHomePage()
+       return res.status(200).send(reuslt)
+   }catch (error) {
+       return res.status(500).send("Internal error")
+   }
+}
+
+exports.setHomePage = async (req, res) => {
+    if (!req.body) {
+        return res.status(400).send("Request body is missing");
+    }else if (!req.body.homepage) {
+        return res.status(400).send("Homepage is missing");
+    }else {
+        result = await adminService.setHomePage(req.body.homepage);
+        return res.status(200).send(result);
+    }
+}

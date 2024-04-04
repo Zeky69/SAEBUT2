@@ -11,8 +11,8 @@ const getPrestatairesEtatAccepte = async () => {
     let resultat = null;
     const client = await pool.connect();
     try {
-        let sql = 'select * from prestataire WHERE etat_id = 2 and nom != $1 ORDER BY id_prestataire ASC';
-        resultat = await client.query(sql,["belforaine"]);
+        let sql = 'select * from prestataire WHERE etat_id = 2 ORDER BY id_prestataire ASC';
+        resultat = await client.query(sql);
         return resultat.rows;
     }
     catch (error) {
@@ -136,6 +136,25 @@ const getPrestatairesServices = async (prestataire_id) => {
     }
 }
 
+const getPrestatairesUnatribuedServices = async (prestataire_id) => {
+    let resultat = null;
+    const client = await pool.connect();
+    try {
+        let sql = `select * from type_service 
+        where id_type_service not in(select service.id_type_service from service
+        where id_prestataire=$1);`;
+        resultat = await client.query(sql,[prestataire_id]);
+        return resultat.rows;
+    }
+    catch (error) {
+        console.log(error);
+        return error;
+    }
+    finally {
+        client.release();
+    }
+}
+
 async function updateServiceState(id_serv){
     const client = await pool.connect();
     let display=false;
@@ -164,8 +183,66 @@ async function updateServiceState(id_serv){
     }    
 }
 
+const addServiceToPresta = async (idPresta, idType) => {
+    const client = await pool.connect();
+
+    console.log(idPresta)
+    console.log(idType)
+    try {
+        let sql = `INSERT INTO service(id_type_service, id_prestataire, etat) VALUES($1,$2,true);`;
+        let values = [idType,idPresta];
+        await client.query(sql, values);
+        return true;
+    }
+    catch (error) {
+        console.log(error);
+        return false;
+    }
+    finally {
+        client.release();
+    }
+}
+
+const removeServicePresta = async (idService, idPresta) => {
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        
+
+        let sql = `DELETE FROM service where id_service=$1 and id_prestataire=$2 returning id_type_service;`;
+        let values = [idService,idPresta];
+        let rows = await client.query(sql, values);
+        if(! rows.rows[0].id_type_service){
+            throw new Error("Service is empty")
+
+        }
+        let id_type = rows.rows[0].id_type_service;
 
 
+        console.log(id_type)
+
+        switch(id_type){
+            case 1:
+                sql = `DELETE FROM commentaire where id_prestataire=$1;`;
+                break;
+            case 2:
+                sql = `DELETE FROM produit where prestataire_id=$1;`;
+                break;
+            default:
+                break;
+        }
+        await client.query(sql, [idPresta])
+        await client.query("COMMIT");
+        console.log("Delete service réussit !");    
+    }
+    catch (error) {
+        await client.query("ROLLBACK");
+        console.log(error);
+    }
+    finally {
+        client.release();
+    }
+}
 
 
 module.exports = {
@@ -175,6 +252,9 @@ module.exports = {
     getPrestatairesEtatAccepte :getPrestatairesEtatAccepte,
     getPrestatairesTypes :getPrestatairesTypes,
     getPrestatairesServices:getPrestatairesServices,
-    updateServiceState
+    updateServiceState,
+    addServiceToPresta,
+    removeServicePresta,
+    getPrestatairesUnatribuedServices
 }
 

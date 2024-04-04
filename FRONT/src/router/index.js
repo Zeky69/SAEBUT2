@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from "@/store";
 import utilisateur from "@/services/utilisateur";
+import RestauService from "@/services/reservation";
 
 
 Vue.use(VueRouter)
@@ -98,12 +99,29 @@ const routes = [
     path: '/restauration',
     name: 'restauration',
     meta: { requiresAuth: false, group_id: 3 },
-    component: () => import(/* webpackChunkName: "about" */ '../views/ReservationView.vue')
-  },{
+    component: () => import('../views/ReservationView.vue')
+  },
+  {
+    path: '/restauration/:idDelete',
+    name: 'restauration',
+    meta: { requiresAuth: false, group_id: 3 },
+    component: () => import( '../views/ReservationView.vue'),
+    beforeEnter: (to, from, next) => {
+        RestauService.deleteResa({"id_resa":to.params.idDelete})
+        next();
+    }
+  },
+  {
     path: '/search',
     name: 'search',
     meta: { requiresAuth: false, group_id: 3 },
     component: () => import('../views/SearchVue.vue')
+  },
+    {
+      path: '/contact',
+      name: 'contact',
+      meta: { requiresAuth: false, group_id: 3 },
+      component: () => import('../views/ContactView.vue')
     },
   {
     path: '/prestataire',
@@ -199,7 +217,11 @@ const routes = [
         name: 'admin.map',
         component: ()=>import ('../views/Map2DAdmin.vue')
       },
-
+      {
+        path: 'homepage'
+        ,name: 'admin.homepage',
+        component: ()=>import ('../components/Admin/EditorHomePage.vue')
+      },
       {
         path:'*',
         name: 'admin.notFound,',
@@ -242,10 +264,13 @@ router.beforeEach(async (to, from, next) => {
     return;
   }
 
-  await store.dispatch('getInformationFromToken', store.state.token);
+  if(store.state.token && !store.state.user_id){
+    await store.dispatch('getInformationFromToken', store.state.token);
+  }
+
 
   if (requiresAuth) {
-    if (group_id === store.state.group_id) {
+    if (group_id == store.state.group_id) {
       next();
     } else {
       switch (store.state.group_id) {
@@ -261,9 +286,9 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
-    if (store.state.group_id === 1) {
+    if (store.state.group_id == 1) {
       next("/admin");
-    } else if (store.state.group_id === 2) {
+    } else if (store.state.group_id == 2) {
       next("/prestataire");
     } else {
       next();

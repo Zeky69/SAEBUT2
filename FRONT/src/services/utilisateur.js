@@ -22,6 +22,21 @@ async function ChangePasswordFROMAPI(token,data){
     return postRequest(url+'/reset-password/'+token,data,'RESET')
 }
 
+async function sendContactMessageFromAPI(data){
+    console.log(data)
+    return postRequest(url+'/contact',data,'CONTACT')
+}
+
+async function sendContact(firstname, name, email, object, message) {
+    try {
+        let answer = await sendContactMessageFromAPI({nom: name, prenom: firstname, email: email, subject: object, message: message});
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de l\'envoi du message', error.message);
+        throw error;
+    }
+}
+
 
 async function Login(data) {
     try {
@@ -125,4 +140,5 @@ export default {
     Forget,
     VerifyToken,
     ChangePassword,
+    sendContact
 }

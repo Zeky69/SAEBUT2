@@ -1,6 +1,14 @@
-<template >
+<template>
+  <!--
+  <form v-if="$route.params.idDelete !== null">
+    <label style="padding-top: 170px" for="idTicket">Veuillez indiquer l'identifiant de votre ticket</label>
+    <input type="text" id="idTicket" name="idTicket" v-model="uuidTicket">
+    <input type="submit" @click="annulerReservation" value="Annuler la reservation">
+  </form>
+  -->
   <div>
-    <h1 >Reservations</h1>
+    <h1>Reservations</h1>
+
     <label for="idTicket" style="padding-top: 150px">L'identifiant de votre ticket</label>
     <input type="text" id="idTicket" name="idTicket" v-model="uuidTicket">
     <ul>
@@ -16,9 +24,7 @@
                 :uuidTicket="uuidTicket"
                 :display="batiment.use_resa"
                 @updateDisplay="updateDisplay($event)">
-
             </reservationComponent>
-
           </li>
         </ul>
       </li>
@@ -32,6 +38,7 @@ import { mapState} from "vuex";
 import reservationComponent from "@/components/reservation.vue";
 import batService from "@/services/batiment.service";
 import prestataireService from "@/services/prestataire.service";
+import RestauService from "@/services/reservation";
 
 
 export default defineComponent({
@@ -48,6 +55,28 @@ export default defineComponent({
     ...mapState(['token','group_id']), //Remettre ,'user_id' après le token
   },
   methods: {
+    async annulerReservation(){
+      try {
+        let response = await RestauService.getAllResaById({'id_resa':this.$route.params.idDelete})
+        if (response.error) {
+          console.log("Erreur lors de la récupération de la reservation");
+        } else {
+          if (response[0].uuid === this.uuidTicket){
+            response = await RestauService.deleteResa({'id_resa':this.$route.params.idDelete})
+            if (response.error) {
+              console.log("Erreur lors de l'annulation de la reservation");
+            } else {
+              this.$router.push('/').catch(() => {
+              });
+            }
+          } else {
+            console.log("L'identifiant de votre ticket ne correspond pas à celui de la reservation")
+          }
+        }
+      } catch (e) {
+        console.error("An error occurred:", e);
+      }
+    },
     async recupererPrestataires(){
       try {
         let response = await prestataireService.getPrestataires()

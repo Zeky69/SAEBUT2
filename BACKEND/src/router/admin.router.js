@@ -3,6 +3,7 @@
 const express = require('express');
 const adminController = require('../controllers/admin.controllers');
 const adminMiddlewares = require('../middlewares/admin.middlewares');
+const {verifyToken, verifyisAdmin} = require("../middlewares/utilisateur.middlewares");
 var router = express.Router();
 
 //affiche tous les utilisateurs
@@ -23,5 +24,9 @@ router.post('/delete', adminMiddlewares.validateUserInput, adminController.delet
 
 //modifie un utilisateur
 router.post('/change',adminMiddlewares.validateUserInput, adminController.changeUser);
+
+router.patch('/homepage',verifyToken,verifyisAdmin,adminController.setHomePage);
+
+router.get('/homepage',adminController.getHomePage);
 
 module.exports = router;

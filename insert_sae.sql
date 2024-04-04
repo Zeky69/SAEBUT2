@@ -1,6 +1,5 @@
 INSERT INTO type VALUES('1', 'Restaurant' ,'restaurant.png'),
                        ('2', 'Attraction','coaster.png'),
-                      ('3', 'Scene','stadium.png'),
                        ('4', 'Stand' , 'tent.png'),
                       ('5', 'Boutique' ,'tent.png'),
                       ('6', 'Toilettes','toilets.png');
@@ -69,7 +68,7 @@ INSERT INTO mots_de_passe_utilisateurs(User_Id, Password) VALUES
 
 
 INSERT INTO prestataire ( description, nom, id_user, etat_id,page_info ,photo_profil) VALUES
-('admin','belforaine', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'fnAdmin' AND LAST_NAME = 'lnAdmin'),2,NULL,NULL),
+('admin','Belforaine', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'fnAdmin' AND LAST_NAME = 'lnAdmin'),2,NULL,'zeky_hebs.png'),
 ('Prestataire Description de macdonald', 'Mcdonald', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'), 2,'<p style="text-align:justify;">Bienvenue chez McDonalds, l endroit où la convivialité et la gourmandise se rencontrent pour créer des moments inoubliables ! Notre histoire est celle dune passion pour la qualité, la diversité et linnovation culinaire, et chaque visite chez McDonalds est une expérience exceptionnelle.<br><br>Découvrez un monde de saveurs exquises, où nos menus variés captivent tous les palais. Des classiques emblématiques aux créations audacieuses, nous sommes fiers de vous offrir un éventail de délices conçus pour satisfaire toutes les envies. Chez McDonalds, nous pensons que chaque repas devrait être une célébration de la bonne cuisine, partagée avec ceux que vous aimez.<br><br>Nos restaurants sont bien plus que des lieux de restauration rapide. Ce sont des espaces chaleureux où se mêlent l arôme alléchant de nos produits fraîchement préparés et l atmosphère accueillante de nos établissements. Que ce soit pour une pause décontractée en solo, un déjeuner entre collègues ou un dîner en famille, McDonalds est l endroit idéal pour créer des souvenirs autour d un bon repas.<br><br>En choisissant McDonald s, vous rejoignez une communauté mondiale qui célèbre la diversité, l innovation et l engagement envers un monde meilleur. Nous nous efforçons constamment d adopter des pratiques durables et responsables, tout en participant activement à des initiatives sociales pour contribuer au bien-être de nos communautés.<br><br>Nous sommes ravis de vous accueillir dans notre univers où la qualité, le plaisir et la responsabilité se rencontrent. Chez McDonald s, chaque moment est une célébration de la vie, et nous sommes impatients de partager cette expérience unique avec vous. Bon appétit et bienvenue chez McDonald s, là où chaque instant est délicieusement mémorable !','macdo.jpeg'),
 ('Prestataire Description de pixar', 'Pixar', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Jane' AND LAST_NAME = 'Smith'), 2,NULL,'pixar.jpg'),
 ('Prestataire Description de disney', 'Disney', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Bob' AND LAST_NAME = 'Johnson'), 2 ,NULL,'Disnet.jpeg');
@@ -140,21 +139,17 @@ INSERT INTO sousBillet (subId , id_billet , subtitle) VALUES
 (2,3,'Enfant');
 
 INSERT INTO date_belforaine (date_evenement) VALUES
-('2024-01-15'),
-('2024-01-16'),
-('2024-01-17');
-
-
-
-
+('2024-04-08'),
+('2024-04-09'),
+('2024-04-10'),
+('2024-04-11'),
+('2024-04-12'),
+('2024-04-13')
+;
 
 INSERT INTO commande (id_user,date_commande) VALUES
 (2,now());
 
-
-
-
-select * from emplacement;
 
 INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom) VALUES
 ('151',1,1,2,'Zekeriya','Akburak'),
@@ -167,5 +162,18 @@ INSERT INTO ligneCommandeArticle(id_commande , id_produit ,valide, quantite) VAL
 INSERT INTO emplacement (id_emplacement,id_type,nom,description,matricePoints,prestataire_id,use_Resa,accepted) VALUES
 ('1','1','Restaurant 1','Description Restaurant 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',3,false,true),
 ('2','2','Attraction 1','Description Attraction 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',3,true,true),
-('3','3','Scene 1','Description Scene 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',4,false,true),
 ('4','4','Stand 1','Description Stand 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',4,false,true);
+
+INSERT INTO contenuhomepage VALUES (1,'Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences inspirantes et divertissement sans fin fusionnent. Plongez dans la magie que nous réserve le futur, le tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !');
+
+
+SELECT email from utilisateurs
+JOIN public.commande c on utilisateurs.user_id = c.id_user
+JOIN public.lignecommandebillet l on c.id_commande = l.id_commande
+WHERE uuid = '151';
+
+
+
+SELECT * FROM visiteursite;
+
+

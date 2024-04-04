@@ -108,3 +108,16 @@ exports.getPrestaireId = async  (req, res, next) => {
 
 }
 
+exports.validateContactInput = (req, res, next) => {
+  const { nom, prenom, email, subject, message } = req.body;
+  console.log(req.body);
+  if (!subject || !message || !email || !nom || !prenom) {
+    console.log(nom, prenom, email, subject, message);
+    return res.status(400).send("Veuillez remplir tous les champs");
+  }
+  if (!validator.isEmail(email)) {
+    return res.status(400).send("Format incorrect pour l'email");
+  }
+  next();
+
+}
