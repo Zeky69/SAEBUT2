@@ -32,6 +32,17 @@
           </select>
           </td>
         </tr>
+
+        <tr>
+          <th>Etat</th>
+          <td>
+            <label for="accept"></label>
+            <input id="accept" type="checkbox" v-model="newfeature.properties.accept"   >
+          </td>
+        </tr>
+
+
+
         </tbody>
       </table>
 
@@ -58,6 +69,8 @@ export default {
       "description": this.feature.properties.description,
      "typeTerrain": this.feature.properties.typeTerrain,
      "apartient": this.feature.properties.apartient,
+      "accept": this.feature.properties.accept
+
     }
   }
   }
@@ -72,6 +85,7 @@ export default {
         "description": null,
          "typeTerrain": null,
        "apartient": null,
+        "accept": false
       }
     },
     filteredProvider: []
@@ -89,6 +103,7 @@ export default {
           "description": this.feature.properties.description,
            "typeTerrain": this.feature.properties.typeTerrain,
            "apartient": this.feature.properties.apartient,
+          "accept": this.feature.properties.accept
         }
       }
       console.log(this.newfeature);

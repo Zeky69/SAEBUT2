@@ -126,7 +126,6 @@ export default {
     getPrestataires().then((response) => {
       response.forEach((prestataire) => {
 
-        console.log(prestataire)
         this.providers.push(prestataire)
       })
     })
@@ -151,7 +150,7 @@ export default {
             "description": emp.description,
             "typeTerrain": emp.id_type,
             "apartient": emp.prestataire_id,
-            "accept": emp.accept
+            "accept": emp.accepted
             ,
           }
         }
@@ -217,7 +216,7 @@ export default {
               prestaire_id : this.newfeature.properties.apartient,
               type_id : this.newfeature.properties.typeTerrain,
               matricepoints : this.newfeature.geometry,
-              accept : false
+              accept : this.newfeature.properties.accept
         }
         console.log("before",dataemp)
         await createEmp(dataemp)

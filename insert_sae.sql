@@ -154,6 +154,8 @@ INSERT INTO commande (id_user,date_commande) VALUES
 
 
 
+select * from emplacement;
+
 INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom) VALUES
 ('151',1,1,2,'Zekeriya','Akburak'),
 ('15415',1,2,1,'Mhammed','Akburak'),

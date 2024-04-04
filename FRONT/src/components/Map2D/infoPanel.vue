@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if=" !(feature.properties.accept && feature.properties.apartient === prestataire.id_prestataire)">
     <div class="infoPanel-header">
       <h1>Informations</h1>
     </div>
@@ -12,12 +12,17 @@
         </tr>
         <tr>
           <th>Propriétaire</th>
-          <td>{{feature.properties.apartient ? feature.properties.apartient : "Libre"}}</td>
+          <td>{{providername}}</td>
         </tr>
         <tr>
-          <th>Surface</th>
-          <td>{{calculatePolygonArea(convertCoordinatesToMeters(feature.geometry))}} m²</td>
+          <th>Nom du terrain</th>
+          <td>{{feature.properties.name}}</td>
         </tr>
+        <tr>
+          <th>Description</th>
+          <td>{{feature.properties.description}}</td>
+        </tr>
+
         </tbody>
       </table>
 
@@ -27,55 +32,140 @@
     </div>
     <div class="infoPanel-footer">
 
-      <button v-if="(feature.properties.apartient === null || (feature.properties.apartient === prestataire.id_prestataire && feature.properties.accept ) )  " @click="btnClicked"  :disabled="feature.properties.apartient !== prestataire.id_prestataire && feature.properties.apartient !== null  ">{{feature.properties.apartient === null  ? "Réserver" : feature.properties.accept && feature.properties.apartient === prestataire.id_prestataire ? "Liberer" : !feature.properties.accept && feature.properties.apartient === prestataire.id_prestataire ? "En attente ": "Indisponible" }} </button>
+      <button  @click="btnClicked"  :disabled="feature.properties.apartient !== prestataire.id_prestataire && feature.properties.apartient !== null  ">{{feature.properties.apartient === null  ? "Réserver" : feature.properties.accept && feature.properties.apartient === prestataire.id_prestataire ? "Liberer" : !feature.properties.accept && feature.properties.apartient === prestataire.id_prestataire ? "Annuler la demande ": "Indisponible" }} </button>
 
       <button @click="closePanel">Fermer</button>
   </div>
   </div>
+  <div v-else>
+    <div class="infoPanel-header">
+      <h1>Informations</h1>
+    </div>
+    <div class="infoPanel-content">
+      <table>
+        <tbody>
+        <tr>
+          <th>Type terrain</th>
+          <td>{{feature.properties.typeTerrain}}</td>
+        </tr>
+        <tr>
+          <th>Propriétaire</th>
+          <td>{{providername}}</td>
+        </tr>
+        <tr>
+          <th>Nom du terrain</th>
+          <td><input type="text" v-model="newfeature.properties.name" ></td>
+        </tr>
+
+        <tr>
+          <th>Description</th>
+          <td><input type="text" v-model="newfeature.properties.description" ></td>
+        </tr>
+
+        </tbody>
+      </table>
+
+
+      <p class="description">{{feature.properties.description}}</p>
+
+    </div>
+    <div class="infoPanel-footer">
+      <button @click="updateFeature">Modifier</button>
+
+      <button  @click="btnClicked"  :disabled="feature.properties.apartient !== prestataire.id_prestataire && feature.properties.apartient !== null  ">{{feature.properties.apartient === null  ? "Réserver" : feature.properties.accept && feature.properties.apartient === prestataire.id_prestataire ? "Liberer" : !feature.properties.accept && feature.properties.apartient === prestataire.id_prestataire ? "Annuler la demande ": "Indisponible" }} </button>
+
+      <button @click="closePanel">Fermer</button>
+    </div>
+  </div>
+
 </template>
 
 <script>
 export default {
   name: "infoPanel",
-  props: ["prestataire" , "feature"],
+  props: ["prestataire", "providers", "feature"],
+  computed: {
+
+    providername() {
+      if (this.feature.properties.apartient === null) {
+        return "Libre";
+      } else {
+        for (let i = 0; i < this.providers.length; i++) {
+          if (this.providers[i].id_prestataire === this.feature.properties.apartient) {
+            return this.providers[i].nom;
+          }
+        }
+        return "Inconnu";
+      }
+    }
+
+  },
+  data() {
+    return {
+      newfeature: {
+        "geometry": [],
+        "properties": {
+          "id": null,
+          "name": null,
+          "description": null,
+          "typeTerrain": null,
+          "apartient": null,
+          "accept": false
+        }
+      },
+    };
+  },
+  watch: {
+
+    'feature': function () {
+      this.newfeature = {
+        "geometry": this.feature.geometry,
+        "properties": {
+          "id": this.feature.properties.id,
+          "name": this.feature.properties.name,
+          "description": this.feature.properties.description,
+          "typeTerrain": this.feature.properties.typeTerrain,
+          "apartient": this.feature.properties.apartient,
+          "accept": this.feature.properties.accept
+        }
+      }
+      console.log(this.newfeature);
+
+    }
+  },
+
+
+  mounted() {
+    this.newfeature = {
+      "geometry": this.feature.geometry,
+      "properties": {
+        "id": this.feature.properties.id,
+        "name": this.feature.properties.name,
+        "description": this.feature.properties.description,
+        "typeTerrain": this.feature.properties.typeTerrain,
+        "apartient": this.feature.properties.apartient,
+        "accept": this.feature.properties.accept
+
+      }
+    }
+  },
   methods: {
     closePanel() {
       this.$emit("close-panel");
-    },btnClicked() {
-      if(this.feature.properties.apartient === null){
-        this.$emit("ask", this.feature.id);
-      }else if (this.feature.properties.apartient === this.prestataire.id_prestataire ){
-        this.$emit("free", this.feature.id);
+    }, btnClicked() {
+      if (this.feature.properties.apartient === null) {
+        this.$emit("ask", this.feature.properties.id);
+      } else if (this.feature.properties.apartient === this.prestataire.id_prestataire) {
+        this.$emit("free", this.feature.properties.id);
       }
     },
-    convertCoordinatesToMeters(coordinates) {
-      const EARTH_RADIUS = 6371000;
-
-      return coordinates.map(coord => {
-        const latitude = coord[0] * (Math.PI / 180);
-        const longitude = coord[1] * (Math.PI / 180);
-
-        const x = EARTH_RADIUS * Math.cos(latitude) * Math.cos(longitude);
-        const y = EARTH_RADIUS * Math.cos(latitude) * Math.sin(longitude);
-
-        return [x, y];
-      });
+    updateFeature() {
+      this.$emit("edit-feature", this.newfeature);
     },
-    calculatePolygonArea(coordinates) {
-  const n = coordinates.length;
-  let area = 0;
+  },
 
-  for (let i = 0; i < n - 1; i++) {
-    area += (coordinates[i][0] * coordinates[i + 1][1]) - (coordinates[i + 1][0] * coordinates[i][1]);
-  }
-
-  area = Math.abs(area) / 2.0;
-
-  return parseInt(area+"");
-},
-
-},
 }
+
 </script>
 
 
