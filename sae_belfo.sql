@@ -93,7 +93,7 @@ CREATE TABLE categorie_produit(
 	id_categorie SERIAL,
 	libelle_categorie VARCHAR(50),
 	description VARCHAR(250),
-	image VARCHAR(50),
+	image TEXT,
 	PRIMARY KEY(id_categorie)
 );
 
@@ -152,7 +152,7 @@ CREATE TABLE produit(
     nom VARCHAR(50),
     prix NUMERIC(5,2),
     stock INT,
-    photo VARCHAR(50),
+    photo TEXT,
     categorie_id INT,
     prestataire_id INT NOT NULL,
     FOREIGN KEY(categorie_id) REFERENCES categorie_produit(id_categorie),

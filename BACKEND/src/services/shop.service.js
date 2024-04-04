@@ -24,7 +24,7 @@ async function getArticlesByPrestataire(id_prestataire){
     const client = await pool.connect();
     try{
         const query = `SELECT * from produit
-        WHERE id_prestataire=$1;`;
+        WHERE prestataire_id=$1;`;
 
         const res = await client.query(query,[id_prestataire])
         console.log("Récupération des articles réussis");
