@@ -79,7 +79,8 @@ INSERT INTO categorie_produit(libelle_categorie,description,image) VALUES
     ('Goodies', 'Des objets uniques qui ajoutent une touche de magie à votre quotidien.','goodies.png'),
     ('Vêtements', 'Exprimez votre style avec nos vêtements tendance et originaux.','vetement.png'),
     ('Peluches', 'Adoptez des compagnons doux et câlins qui éveilleront votre enfant intérieur.','peluches.png'),
-    ('Accessoires', 'Les petits détails qui font la différence : accessoires audacieux pour des moments mémorables.','accessoires.jpg');
+    ('Accessoires', 'Les petits détails qui font la différence : accessoires audacieux pour des moments mémorables.','accessoires.jpg'),
+    ('Fast Food', 'Des menus rapides et savoureux pour une pause gourmande.','fastfood.png');
 
     select * from categorie_produit;
 
@@ -100,29 +101,37 @@ INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
 
 -- Ajout des produits pour la catégorie 'Vêtements'
 INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
-    ('T-shirt graphique', 19.99, 30, 2,'t-shirt-graphique.png',1),
-    ('Sweat à capuche confort', 39.99, 20, 2,'sweat-capuche.png',2),
-    ('Chaussettes colorées', 8.99, 50, 2,'chaussette-coloré.png',2),
-    ('Casquette brodée', 14.99, 40, 2,'casquette-brode.png',3);
+    ('T-shirt graphique', 19.99, 30, 2,'t-shirt-graphique.png',5),
+    ('Sweat à capuche confort', 39.99, 20, 2,'sweat-capuche.png',5),
+    ('Chaussettes colorées', 8.99, 50, 2,'chaussette-coloré.png',5),
+    ('Casquette brodée', 14.99, 40, 2,'casquette-brode.png',5);
 
 -- Ajout des produits pour la catégorie 'Peluches'
 INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
     ('Peluche licorne magique', 29.99, 15, 3,'peluche_licorne.png',2),
     ('Ours en peluche câlin', 24.99, 20, 3,'ours_calin.png',1),
-    ('Doudou éléphant doux', 19.99, 25, 3,'peluche_elephan.png',3),
-    ('Peluche dragon rigolo', 34.99, 12, 3,'peluche_dragon.png',3),
-	('Peluche ourson géant', 39.99, 20, 3,'peluche_ourson.png',3),
+    ('Doudou éléphant doux', 19.99, 25, 3,'peluche_elephan.png',2),
+    ('Peluche dragon rigolo', 34.99, 12, 3,'peluche_dragon.png',2),
+	('Peluche ourson géant', 39.99, 20, 3,'peluche_ourson.png',1),
     ('Peluche chaton réaliste', 16.99, 35, 3,'peluche_chaton.png',2);
 
 
 -- Ajout des produits pour la catégorie 'Accessoires'
 INSERT INTO produit (nom, prix, stock, categorie_id, photo,prestataire_id) VALUES
-    ('Coque de téléphone artistique', 12.99, 40, 4,'coque_telephone.png',1),
-    ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png',2),
-    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png',3),
-    ('Étui à lunettes original', 8.49, 50, 4,'etui.png',4),
+    ('Coque de téléphone artistique', 12.99, 40, 4,'coque_telephone.png',4),
+    ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png',5),
+    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png',1),
+    ('Étui à lunettes original', 8.49, 50, 4,'etui.png',1),
     ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png',2);
-    
+
+-- Ajout de produit fast food
+INSERT INTO produit (nom, prix, stock, categorie_id, photo,prestataire_id) VALUES
+    ('Menu classique', 9.99, 50, 5,'menu_classique.png',3),
+    ('Menu premium', 14.99, 50, 5,'menu_premium.png',3),
+    ('belofrite', 2.99, 50, 5,'belofrite.png',3),
+    ('beloburger', 4.99, 50, 5,'belofburger.png',3),
+    ('belochicken', 6.99, 50, 5,'belofchicken.png',3);
+
     
 INSERT INTO billet(title,description,price,day,path) VALUES
 ('Billet Basic','Profitez de la magie de Belforaine toute une journée.',24.99,1,'billet_basic.png'),
