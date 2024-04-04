@@ -105,6 +105,12 @@ const routes = [
     meta: { requiresAuth: false, group_id: 3 },
     component: () => import('../views/SearchVue.vue')
     },
+    {
+      path: '/contact',
+      name: 'contact',
+      meta: { requiresAuth: false, group_id: 3 },
+      component: () => import('../views/ContactView.vue')
+    },
   {
     path: '/prestataire',
     component: () => import('../views/EspacePrestaire.vue'),

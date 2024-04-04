@@ -188,6 +188,33 @@ async function updateUserPassword(userId, hashedPassword) {
   }
 }
 
+
+async function saveContactMessage(nom, prenom, email, objet, message) {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    let query = `INSERT INTO contact (nom, prenom, email, objet, message, date_contact)
+            VALUES ($1, $2, $3, $4, $5, now())
+            RETURNING id_contact;`;
+
+    let res = await client.query(query, [nom, prenom, email, objet, message]);
+
+    await client.query("COMMIT");
+
+    console.log("Message envoyé");
+    console.log(res.rows[0].id_contact);
+  } catch (err) {
+    await client.query("ROLLBACK");
+    console.log(err);
+  } finally {
+    client.release();
+  }
+
+}
+
+
 module.exports = {
   getUserByEmail,
   loginUser: loginUser,
@@ -197,4 +224,5 @@ module.exports = {
   registerGhostsUser: registerGhostsUser,
   generatePasswordResetToken,
   updateUserPassword,
+  saveContactMessage,
 };

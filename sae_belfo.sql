@@ -1,4 +1,4 @@
-DROP TABLE if exists accueil CASCADE;
+DROP TABLE if exists contact CASCADE;
 DROP TABLE if exists commentaire CASCADE;
 DROP TABLE if exists possède CASCADE;
 DROP TABLE if exists possede CASCADE;
@@ -322,3 +322,12 @@ CREATE TABLE disponibilite(
    FOREIGN KEY(date_reservation) REFERENCES crenaux(date_reservation)
 );
 
+CREATE TABLE contact(
+    id_contact SERIAL PRIMARY KEY,
+    nom VARCHAR(255),
+    prenom VARCHAR(255),
+    email VARCHAR(255),
+    objet VARCHAR(255),
+    message TEXT,
+   date_contact TIMESTAMP
+);
