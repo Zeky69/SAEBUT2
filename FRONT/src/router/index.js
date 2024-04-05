@@ -108,7 +108,7 @@ const routes = [
     component: () => import( '../views/ReservationView.vue'),
     beforeEnter: (to, from, next) => {
         RestauService.deleteResa({"id_resa":to.params.idDelete})
-        next();
+        next("/restauration/");
     }
   },
   {
