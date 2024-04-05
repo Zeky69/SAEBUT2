@@ -36,7 +36,7 @@ export default {
     crudPath: "/prestataire/produits/crud",
     boutiquePath: "/prestataire/produits/commandes",
     selected: 'crudboutique',
-    show:true // la mettre a false quand t'as fini
+    show:false // la mettre a false quand t'as fini
 
   }),computed   :{
     ...mapState(['prestataireObject','user_id']),
