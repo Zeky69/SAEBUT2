@@ -200,7 +200,7 @@ CREATE TABLE emplacement(
    id_emplacement VARCHAR(50),
    id_type VARCHAR(50),
    nom VARCHAR(50),
-   description VARCHAR(255),
+   description TEXT,
    matricePoints JSON,
    prestataire_id INT,
    use_Resa BOOLEAN default true,
