@@ -44,6 +44,11 @@ export default {
   }),computed   :{
     ...mapState(['prestataireObject','user_id']),
   },created() {
+
+
+  },
+  mounted() {
+    this.checkPath()
     this.getInformation()
   },
   methods: {
@@ -53,6 +58,19 @@ export default {
         router.push(this.crudPath);
       } else if (this.selected === 'listcommande') {
         router.push(this.boutiquePath);
+      }
+    },
+    checkPath(){
+      this.path = window.location.pathname;
+      console.log(this.path)
+      if(this.path === this.crudPath){
+        this.selected = 'crudboutique';
+      }else if(this.path === this.boutiquePath){
+        this.selected = 'listcommande';
+      }
+      else {
+        this.selected = 'crudboutique';
+        router.push(this.crudPath);
       }
     },
     async getInformation() {
