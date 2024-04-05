@@ -41,8 +41,10 @@
         </div>
       </div>
       <div class="Calendrier">
-        <h2>Calendrier</h2>
-        <div class="calendrier-bloc"></div>
+        <h2>Nombre de vente par billet</h2>
+        <div class="calendrier-bloc">
+          <Bar :data="ticketChartData2" :option="chartOptions"></Bar>
+        </div>
       </div>
 
     </div>
@@ -58,8 +60,15 @@
     </div>
     <div>
 
-      <Bar :data="articleChartData" ></Bar>
-      <Bar :data="ticketChartData2" ></Bar>
+      <div class="container-bottom">
+        <h2>Nombre de vente par article</h2>
+        <div class="perform-block">
+
+        <Bar :data="articleChartData" ></Bar>
+        </div>
+
+
+      </div>
     </div>
   </div>
 </template>
@@ -152,6 +161,16 @@ export default {
           }
         }
       }
+    },
+    chartOptions: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+        },
+      },
     },
     ticketData: [],
     topArticles: [],

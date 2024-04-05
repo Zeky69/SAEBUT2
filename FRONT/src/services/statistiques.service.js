@@ -40,6 +40,11 @@ async function getCountCommandeFromAPI() {
     return getRequest(baseUrl+'/commande','get')
 }
 
+async function getAverageNoteFromAPI(id){
+    return getRequest(baseUrl+`/note/${id}`,'GET')
+
+}
+
 async function getVenteBilletParDate() {
     try {
         let answer = await getVenteBilletParDateFromAPI();
@@ -129,6 +134,16 @@ export async function getCountCommande() {
         throw error;
     }
 
+}
+
+export async function getAverageNote(id){
+    try {
+        let answer = await getAverageNoteFromAPI(id);
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération de la note moyenne', error.message);
+        throw error;
+    }
 }
 
 

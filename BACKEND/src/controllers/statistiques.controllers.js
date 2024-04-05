@@ -81,3 +81,15 @@ exports.getCountCommande = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 }
+
+exports.getAverageNote = async (req, res) => {
+    let id_pres = req.params.id;
+    try {
+
+        const result = await statistiquesService.getAverageNote(id_pres);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}
