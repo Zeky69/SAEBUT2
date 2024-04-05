@@ -174,4 +174,6 @@ router.post("/addConnexionToday", userController.addConnexionToday);
 router.get("/getConnextionToday", userController.getConnextionToday);
 router.get("/commande", userController.getCountCommande);
 router.get("/ventesTotales", userController.getVentesTotales);
+
+router.get("/note/:id", userController.getAverageNote);
 module.exports = router;

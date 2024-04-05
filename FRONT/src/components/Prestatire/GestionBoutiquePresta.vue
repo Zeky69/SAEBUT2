@@ -88,8 +88,6 @@ export default {
 }
 </script>
 
-
-
 <style scoped>
 .conten {
   margin: 2%;

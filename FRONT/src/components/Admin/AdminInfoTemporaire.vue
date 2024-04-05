@@ -411,7 +411,7 @@ export default {
 
 .calendrier-bloc{
   margin-top: 2%;
-
+  padding-left: 20px;
   width: 100%;
   height: 100%;
   border-radius: 40px;
