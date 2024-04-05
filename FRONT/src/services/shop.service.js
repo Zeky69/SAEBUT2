@@ -46,6 +46,22 @@ async function getArticlesByPrestataire(id) {
     }
 }
 
+async function getArticlesByPrestataireFromAPIServ(id) {
+    return getRequest(url+`/articles/prestataire/serv/${id}`, 'getArticlesByPrestataire')
+}
+
+async function getArticlesByPrestataireServ(id) {
+    try {
+        console.log("yata")
+        let answer = await getArticlesByPrestataireFromAPIServ(id);
+        return answer;
+    }
+    catch (error) {
+        console.error('Erreur lors de la récupération des articles', error.message);
+        throw error;
+    }
+}
+
 async function getArticlesByCategorieFromAPI(id) {
     return getRequest(url+`articles/${id}`, 'getArticlesByCategorie')
 }
@@ -260,5 +276,6 @@ export default{
     getAllCategorie,
     getRandomArticles,
     getCategorieByProduct,
-    createCommandeWithoutAccount
+    createCommandeWithoutAccount,
+    getArticlesByPrestataireServ
 }

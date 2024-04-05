@@ -87,7 +87,7 @@ INSERT INTO categorie_produit(libelle_categorie,description,image) VALUES
 select * from categorie_produit;
 
 INSERT INTO service (id_type_service, id_prestataire, etat) VALUES
-	(1,1,true),(1,2,true),(1,3,true),(1,4,true),(1,5,true),(2,1,true),(2,2,true),(2,3,true);
+	(1,1,true),(1,2,true),(1,3,true),(1,4,true),(1,5,true),(2,1,true),(2,2,true),(2,3,true),(2,4,true);
 
 -- Ajout des produits pour la catégorie 'Goodies'
 INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
@@ -108,21 +108,21 @@ INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
 
 -- Ajout des produits pour la catégorie 'Peluches'
 INSERT INTO produit (nom, prix, stock, categorie_id,photo,prestataire_id) VALUES
-    ('Peluche licorne magique', 29.99, 15, 3,'peluche_licorne.png',2),
+    ('Peluche licorne magique', 29.99, 15, 3,'peluche_licorne.png',1),
     ('Ours en peluche câlin', 24.99, 20, 3,'ours_calin.png',1),
-    ('Doudou éléphant doux', 19.99, 25, 3,'peluche_elephan.png',2),
-    ('Peluche dragon rigolo', 34.99, 12, 3,'peluche_dragon.png',2),
+    ('Doudou éléphant doux', 19.99, 25, 3,'peluche_elephan.png',4),
+    ('Peluche dragon rigolo', 34.99, 12, 3,'peluche_dragon.png',4),
 	('Peluche ourson géant', 39.99, 20, 3,'peluche_ourson.png',1),
-    ('Peluche chaton réaliste', 16.99, 35, 3,'peluche_chaton.png',2);
+    ('Peluche chaton réaliste', 16.99, 35, 3,'peluche_chaton.png',5);
 
 
 -- Ajout des produits pour la catégorie 'Accessoires'
 INSERT INTO produit (nom, prix, stock, categorie_id, photo,prestataire_id) VALUES
     ('Coque de téléphone artistique', 12.99, 40, 4,'coque_telephone.png',4),
     ('Sac à dos tendance', 29.99, 25, 4,'sac-a-dos.png',5),
-    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png',1),
-    ('Étui à lunettes original', 8.49, 50, 4,'etui.png',1),
-    ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png',2);
+    ('Bracelet en cuir élégant', 16.99, 35, 4,'bracelet-cuir.png',2),
+    ('Étui à lunettes original', 8.49, 50, 4,'etui.png',5),
+    ('Bracelet en argent avec pendentif', 29.99, 25, 4,'bracelet-argent.png',5);
 
 -- Ajout de produit fast food
 INSERT INTO produit (nom, prix, stock, categorie_id, photo,prestataire_id) VALUES
@@ -157,7 +157,11 @@ INSERT INTO date_belforaine (date_evenement) VALUES
 ;
 
 INSERT INTO commande (id_user,date_commande) VALUES
+(2,now()),
+(2,now()),
+(2,now()),
 (2,now());
+
 
 
 INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom) VALUES
@@ -166,7 +170,25 @@ INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom) VA
 ('5415',1,3,1,'Enzo','LeRaptor');
 
 INSERT INTO ligneCommandeArticle(id_commande , id_produit ,valide, quantite) VALUES
-(1,1,false,5);
+(1,1,false,5),
+(1,22,true,1),
+(1,21,false,2),
+(2,22,true,1),
+(2,23,true,2),
+(2,24,false,3),
+(2,25,true,4),
+(2,26,false,5),
+(3,3,true,1),
+(3,11,true,2),
+(3,15,false,3),
+(3,18,true,4),
+(3,7,false,5),
+(4,10,true,1),
+(4,2,true,2),
+(4,1,false,3),
+(4,5,true,4),
+(4,13,false,5);
+
 
 INSERT INTO emplacement (id_emplacement,id_type,nom,description,matricePoints,prestataire_id,use_Resa,accepted) VALUES
 ('1','1','Restaurant 1','Description Restaurant 1','{"matricepoints":[[47.748075302987075,6.802453448783919],[47.74813481828826,6.802359606875716],[47.74827368705965,6.802426636810158],[47.74818711955734,6.802678669363586],[47.748075302987075,6.802453448783919]]}',3,false,true),

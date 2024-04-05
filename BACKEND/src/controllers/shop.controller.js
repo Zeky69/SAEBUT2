@@ -53,6 +53,23 @@ exports.getArticlesByPrestataire = async (req, res) => {
     }
 }
 
+exports.getArticlesByPrestataireService = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+      const articles = await shopService.getArticlesByPrestataireWithServ(id);
+
+      if (!articles) {
+      return res.status(404).send("Aucun article trouvé pour ce prestataire.");
+      }
+
+      return res.status(200).json(articles);
+  } catch (error) {
+      console.error("Controller encountered an unexpected error: ", error);
+      return res.status(500).send("Erreur lors de la récupération des articles");
+  }
+}
+
 exports.getArticlesByCategorie = async (req, res) => {
     const id = req.params.id;
 
