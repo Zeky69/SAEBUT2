@@ -5,12 +5,15 @@
       <div class="Bienvenue">
         <h2 class="EffetViolet">Bienvenue, <br> {{ lname }} {{ fname }}</h2>
       </div>
-      <div class="Perfomance">
+
+      <div  v-if="show" class="Perfomance">
         <Bar :data="articleChartData" ></Bar>
       </div>
+
+
     </div>
 
-    <div class="container-middle">
+    <div v-if="show" class="container-middle">
       <div class="chiffreDuJour">
         <h2>Chiffres du jour</h2>
         <div class="rubriqueChiffre">
@@ -54,7 +57,7 @@ export default {
   name: 'AdminInfoTemporaire',
   components: {Bar},
   computed: {
-    ...mapState(['token', 'fname', 'lname', 'group_id', 'user_id', 'email']),
+    ...mapState(['token', 'fname', 'lname', 'group_id', 'user_id', 'email','prestataireObject']),
     articleChartData() {
       return {
         labels: this.topArticles.map(article => article.nom),
@@ -68,6 +71,8 @@ export default {
   },
   data: () => ({
     topArticles: [],
+    services:[],
+    show:false,
     ventes:0,
     articlesVendu:0,
     loadcommandes: 0,
@@ -76,7 +81,7 @@ export default {
 
   }),
   methods: {
-    ...mapActions(['logout']),
+    ...mapActions(['logout','getPrestataireObject']),
     deconnexion() {
       this.$router.replace('/login');
       this.logout();
@@ -106,6 +111,17 @@ export default {
         console.error(e);
       }
     },
+    async getInformation() {
+      await this.getPrestataireObject(this.user_id);
+      this.id_presta = this.prestataireObject.id_prestataire;
+
+      let services = await prestataireService.getPrestatairesServices(this.id_presta);
+      if (Array.isArray(services) && services.length > 0) {
+        this.show = services.some(e => {
+          return e.id_type_service === 2
+        });
+      }
+    },
     async formatCommandes(commandes) {
       const formatedCommandes = {};
       const id = this.user_id;
@@ -113,7 +129,6 @@ export default {
       var prestataire = await prestataireService.getPrestataireObject(this.user_id);
       console.log("prestataire obj lsdkqslkdlmqsl", prestataire)
       prestataire = prestataire[0];
-      this.id_presta = prestataire.id_prestataire;
 
       commandes.forEach(commande => {
         const { id_commande, id_user, date_commande, id_produit, quantite, prix, nom, valide, prestataire_id } = commande;
@@ -163,6 +178,7 @@ export default {
     }
   },
   mounted() {
+    this.getInformation()
     this.getTopArticles();
   }
 };
