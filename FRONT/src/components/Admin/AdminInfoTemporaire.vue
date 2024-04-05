@@ -23,7 +23,7 @@
         <h2>Chiffres du jour</h2>
         <div class="rubriqueChiffre">
           <div class="rubriqueChiffre-content">
-            <h2>€  11,983.98</h2>
+            <h2>€ {{ totalVentes.vente_total }}</h2>
             <h3>Ventes</h3>
           </div>
           <img src="@/assets/pagePrestataire/Sell.svg" style="max-height: 60px">
@@ -140,7 +140,8 @@ export default {
     ticketData: [],
     topArticles: [],
     topTickets: [],
-    topCategories: []
+    topCategories: [],
+    totalVentes: null
   }),
   components: {
     PageTitre,
@@ -202,6 +203,18 @@ export default {
       } catch (e) {
         console.error(e);
       }
+    },
+    async getTotalVentes(){
+      try {
+        let response = await statistiquesService.getTotalVentes();
+        if (!response.error) {
+          this.totalVentes = response;
+        } else {
+          console.log("Erreur lors de la récupération des réservations");
+        }
+      } catch (e) {
+        console.error(e);
+      }
     }
   },
   mounted() {
@@ -209,6 +222,7 @@ export default {
     this.getTopArticles();
     this.getTopTickets();
     this.getTopCategories();
+    this.getTotalVentes();
     getConnextionToday().then((response) => {
       this.visiteurs = response.visiteur
     });
