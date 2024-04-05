@@ -10,7 +10,14 @@
         <Bar :data="articleChartData" ></Bar>
       </div>
 
+      <div class="rubriqueChiffre">
+        <div class="rubriqueChiffre-content">
+          <h2>{{note}}</h2>
+          <h3>Note</h3>
+        </div>
+        <i class="fas fa-star" style="font-size: 60px; color: #FFD700"></i>
 
+      </div>
     </div>
 
     <div v-if="show" class="container-middle">
@@ -40,13 +47,14 @@
         </div>
       </div>
 
+
     </div>
   </div>
 
 </template>
 <script>
 import {mapActions, mapState} from "vuex";
-import statistiquesService from "@/services/statistiques.service";
+import statistiquesService, {getAverageNote} from "@/services/statistiques.service";
 import {Bar} from "vue-chartjs";
 import {Chart, registerables} from "chart.js";
 import prestataireService from "@/services/prestataire.service";
@@ -78,6 +86,7 @@ export default {
     loadcommandes: 0,
     formatedComandesaft:[],
     id_presta:null,
+    note:0.0
 
   }),
   methods: {
@@ -180,9 +189,14 @@ export default {
       return Object.values(formatedCommandes);
     }
   },
-  mounted() {
-    this.getInformation()
-    this.getTopArticles();
+  async mounted() {
+    await this.getInformation()
+    await this.getTopArticles();
+    let res = await getAverageNote(this.id_presta)
+    console.log("note",res)
+    this.note = res.note
+
+
   }
 };
 </script>
