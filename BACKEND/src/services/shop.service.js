@@ -37,6 +37,24 @@ async function getArticlesByPrestataire(id_prestataire){
     }
 }
 
+async function getArticlesByPrestataireWithServ(id_prestataire){
+    const client = await pool.connect();
+    try{
+        const query = `SELECT * from produit
+        INNER JOIN service s on s.id_prestataire = produit.prestataire_id
+        WHERE prestataire_id=$1 and id_type_service=2    and etat=true;`;
+
+        const res = await client.query(query,[id_prestataire])
+        console.log("Récupération des articles réussis");
+        return res.rows;
+    }catch(err){
+        console.log("Echec récupération des articles")
+        console.log(err)
+    }finally{
+        client.release();
+    }
+}
+
 async function getArticle(id_produit){
     const client = await pool.connect();
     try{
@@ -77,6 +95,8 @@ async function getRandomArticles(){
     try{
         const query = `SELECT * from produit
         INNER JOIN categorie_produit c on c.id_categorie = produit.categorie_id 
+        INNER JOIN service s on s.id_prestataire = produit.prestataire_id
+		WHERE id_type_service=2 and etat =true
         order by random() limit 6;`;
         
         const res = await client.query(query)
@@ -363,5 +383,6 @@ module.exports ={
     setCommande,
     setCommandeLineArticle,
     setCommandeLineBillet,
-    getDateBillet
+    getDateBillet,
+    getArticlesByPrestataireWithServ
 }
