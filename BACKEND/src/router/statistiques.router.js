@@ -11,9 +11,9 @@ router.get("/venteBilletParDate", userController.getVenteBilletParDate);
  *     get:
  *       summary: récupérer les ventes de billet par date
  *       tags:
- *       - statistiques
+ *          - statistiques
  *       consumes:
- *         - application/json
+ *          - application/json
  *       responses:
  *         200:
  *           description: récupération avec succès  des données
@@ -25,7 +25,7 @@ router.get("/venteBilletParDate", userController.getVenteBilletParDate);
  *                  nbr_billet_vendus:
  *                   type: string
  *                   description: nombre de billets vendus ce jour
- *                 date:
+ *                  date:
  *                   type: string
  *                   format: date
  *                   description: Date d'achat des billets
@@ -40,7 +40,7 @@ router.get("/venteBilletParType", userController.getVenteBilletParType);
  *     get:
  *       summary: récupérer les ventes de billet par date
  *       tags:
- *       - statistiques
+ *         - statistiques
  *       consumes:
  *         - application/json
  *       responses:
@@ -54,13 +54,13 @@ router.get("/venteBilletParType", userController.getVenteBilletParType);
  *                  title:
  *                   type: string
  *                   description: nom du billet
- *                 quantitetotalebillet:
+ *                  quantitetotalebillet:
  *                   type: string
  *                   description: quantité totale des billets vendus
- *                 price:
+ *                  price:
  *                   type: string
  *                   description: prix de vente de billets chaque billet
- *                 prixtotalbillet:
+ *                  prixtotalbillet:
  *                   type: string
  *                   description: prix total des billets vendus
  *         500:
@@ -74,7 +74,7 @@ router.get("/venteArticle", userController.getVenteArticle);
  *     get:
  *       summary: récupérer les ventes d'article'
  *       tags:
- *       - statistiques
+ *         - statistiques
  *       consumes:
  *         - application/json
  *       responses:
@@ -88,13 +88,13 @@ router.get("/venteArticle", userController.getVenteArticle);
  *                  nom:
  *                   type: string
  *                   description: nom des articles vendus
- *                 quantitetotalearticle:
+ *                  quantitetotalearticle:
  *                   type: string
  *                   description: Quantité totale vendue de cet article
- *                 prix:
+ *                  prix:
  *                   type: string
  *                   description: Prix de vente de l'article
- *                 prixtotalarticle:
+ *                  prixtotalarticle:
  *                   type: string
  *                   description: Prix total des articles vendus
  *         500:
@@ -108,7 +108,7 @@ router.get("/venteArticle/:id", userController.getVenteArticle);
  *     get:
  *       summary: récupérer les ventes d'article'
  *       tags:
- *       - statistiques
+ *         - statistiques
  *       parameters:
  *         - name: id
  *           in: path
@@ -129,13 +129,13 @@ router.get("/venteArticle/:id", userController.getVenteArticle);
  *                  nom:
  *                   type: string
  *                   description: nom des articles vendus
- *                 quantitetotalearticle:
+ *                  quantitetotalearticle:
  *                   type: string
  *                   description: Quantité totale vendue de cet article
- *                 prix:
+ *                  prix:
  *                   type: string
  *                   description: Prix de vente de l'article
- *                 prixtotalarticle:
+ *                  prixtotalarticle:
  *                   type: string
  *                   description: Prix total des articles vendus
  *         500:
@@ -145,11 +145,11 @@ router.get("/venteArticle/:id", userController.getVenteArticle);
 router.get("/venteParCatetorie", userController.getVenteParCategorie);
 /**
  * @swagger
- * /statistiques/venteParCatetorie:
+ * /statistiques/venteParCategorie:
  *     get:
  *       summary: récupérer les ventes d'article par catégorie
  *       tags:
- *       - statistiques
+ *         - statistiques
  *       consumes:
  *         - application/json
  *       responses:
@@ -163,7 +163,7 @@ router.get("/venteParCatetorie", userController.getVenteParCategorie);
  *                  libelle_categorie:
  *                   type: string
  *                   description: nom de la catégorie
- *                 totalventecategorie:
+ *                  totalventecategorie:
  *                   type: string
  *                   description: Prix total vendu de cet catégorie
  *         500:
