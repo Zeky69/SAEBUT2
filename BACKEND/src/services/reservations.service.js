@@ -198,6 +198,22 @@ async function accepterDispo(req, callback){
     }
 }
 
+async function getAllResaByIdTicket (req,callback) {
+    let id_ticket = req.params.idTicket;
+    const client = await pool.connect();
+    try{
+        const query = `SELECT * from reservation where id_ticket_client=$1 ORDER BY ouverture ASC`;
+        res = await client.query(query,[id_ticket]);
+        for (let i = 0; i < res.rows.length; i++) {
+            res.rows[i].ouverture = res.rows[i].ouverture.toLocaleString('fr-FR', { timeZone: 'Europe/Paris' , year: 'numeric', month: 'numeric', day: 'numeric', hour : "2-digit", minute:"2-digit" });
+        }
+        callback(null,res.rows);
+    }catch(err){
+        callback(err,null);
+    }finally{
+        client.release();
+    }
+}
 
 module.exports = {
     getAllResaById:getAllResaById,
@@ -209,5 +225,6 @@ module.exports = {
     deleteResaById:deleteResaById,
     getDispoByID:getDispoByID,
     accepterDispo:accepterDispo,
+    getAllResaByIdTicket:getAllResaByIdTicket,
     test:test
 };

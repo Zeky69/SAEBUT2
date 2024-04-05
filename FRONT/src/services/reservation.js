@@ -4,6 +4,10 @@ async function getAllResaByIdFromAPI(id) {
     return getRequest('/reservation/'+id, 'GETALLRESABYID')
 }
 
+async function getAllResaByIdTicketFromAPI(id) {
+    return getRequest('/reservation/ticket/'+id, 'GETALLRESABYIDTICKET')
+}
+
 async function getAllDispoByIdFromAPI(id) {
     return getRequest('/reservation/disponibilite/'+id, 'GETALLDISPOBYID')
 }
@@ -36,6 +40,11 @@ async function accepterDispoFromAPI(id_dispo) {
 
 async function getAllResaById(id_bat) {
     let answer = await getAllResaByIdFromAPI(id_bat)
+    return answer
+}
+
+async function getAllResaByIdTicket(id_ticket) {
+    let answer = await getAllResaByIdTicketFromAPI(id_ticket)
     return answer
 }
 
@@ -118,6 +127,7 @@ async function accepterDispo(id) {
 
 export default {
     getAllResaById,
+    getAllResaByIdTicket,
     getAllDispoById,
     postDispo,
     postResa,
