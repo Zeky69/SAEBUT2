@@ -19,47 +19,52 @@
               <td v-if="commande.lignes.length > 0">{{ commande.id_commande }}</td>
               <td v-if="commande.lignes.length > 0">{{ commande.id_user }}</td>
               <td v-if="commande.lignes.length > 0">{{ commande.date_commande }}</td>
-              <td v-if="commande.lignes.length > 0">{{ commande.total_prix }}</td>
+              <td v-if="commande.lignes.length > 0">{{ commande.total_prix }} €</td>
               <td v-if="commande.lignes.length > 0"><i class="fas fa-angle-down"></i></td>
-          </tr>
-          <tr v-if="lignesVisibles">
-            <h3>Détails de la commande</h3>
-            <td colspan="5">
-              <table>
-                <thead>
-                <tr>
-                  <th>Produit</th>
-                  <th>Quantité</th>
-                  <th>Prix unitaire</th>
-                  <th>Prix total</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="ligne in lignes" :key="ligne.id_produit">
-                  <td>{{ ligne.nom }}</td>
-                  <td>{{ ligne.quantite }}</td>
-                  <td>{{ ligne.prix }} €</td>
-                  <td>{{ ligne.prix * ligne.quantite }} €</td>
-                  <td>{{ ligne.valide }} </td>
-                  <td>
-                    <button v-if="ligne.valide" @click="validerligne(ligne.id_commande ,  ligne.id_produit)">
-                      Annuler
-                    </button>
-                    <button v-else @click="validerligne(ligne.id_commande ,  ligne.id_produit)">
-                      Valider
-                    </button>
 
-                  </td>
-
-                </tr>
-                </tbody>
-              </table>
-            </td>
           </tr>
+
           </tbody>
         </table>
+
+        <br v-if="lignesVisibles" />
+        <div v-if="lignesVisibles">
+          <h3>Détails de la commande</h3>
+          <div colspan="5">
+            <table>
+              <thead>
+              <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Prix unitaire</th>
+                <th>Prix total</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="ligne in lignes" :key="ligne.id_produit">
+                <td>{{ ligne.nom }}</td>
+                <td>{{ ligne.quantite }}</td>
+                <td>{{ ligne.prix  }} €</td>
+                <td> {{getprixtot(ligne.prix , ligne.quantite)}} €</td>
+                <td>{{ ligne.valide }} </td>
+                <td>
+                  <button class="annuler" id="annuler" v-if="ligne.valide" @click="validerligne(ligne.id_commande ,  ligne.id_produit)">
+                    Annuler
+                  </button>
+                  <button class="valider" id="valider" v-else @click="validerligne(ligne.id_commande ,  ligne.id_produit)">
+                    Valider
+                  </button>
+
+                </td>
+
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </template>
   </div>
@@ -137,6 +142,9 @@ export default {
       });
 
     },
+    getprixtot(prix, quantite) {
+      return (prix * quantite).toFixed(2);
+    },
 
     async formatCommandes(commandes) {
       const formatedCommandes = {};
@@ -179,15 +187,21 @@ export default {
           formatedCommandes[id_commande].total_prix += prixcomande;
         }
       });
-  
+
       //pour chaque commande suprimer les ligne qui ne sont pas du prestataire
       for (const key in formatedCommandes) {
         formatedCommandes[key].lignes = formatedCommandes[key].lignes.filter(ligne => ligne.prestataire_id === this.id_presta);
-        console.log("id prestataire", this.id_presta)
+        //fomater la date jj/mm/aaaa
+        formatedCommandes[key].date_commande = new Date(formatedCommandes[key].date_commande).toLocaleDateString();
+        //mettre les 0 devant les jours et mois < 10
+        formatedCommandes[key].date_commande = formatedCommandes[key].date_commande.split('/').map((el, i) => (i < 2 && el.length < 2 ? '0' + el : el)).join('/');
+
       }
 
       for (const key in formatedCommandes) {
         formatedCommandes[key].total_prix = formatedCommandes[key].lignes.reduce((acc, ligne) => acc + ligne.prix * ligne.quantite, 0);
+        // prendre que 2 chiffres après la virgule
+        formatedCommandes[key].total_prix = formatedCommandes[key].total_prix.toFixed(2);
       }
 
       // Convertir l'objet en tableau
@@ -204,52 +218,198 @@ export default {
 };
 
 </script>
+<style lang="scss" scoped>
+$purple: #745f8f;
+$dark-gray:  black;
 
-<style scoped>
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+button {
+  cursor:  pointer;
+  border:  solid 1px #745f8f;
+  //centre
+  display:  flex;
+  align-items:  center;
+  justify-content:  center;
+  //taille
+  width:  10vw;
 }
-
-th,
-td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
+.admin-commande  {
+  font-family:  "DM Sans Regular";
+  display:  flex;
+  flex-direction:  column;
+  padding:  0;
+  height:  100vh;
+  color:  $dark-gray;
+  & h1  {
+    text-align:  left;
+    font-family:  "DM Sans";
+    font-size:  50px;
+    font-weight:  bold;
+    line-height:  60px;
+    margin-bottom:  20px;
   }
-
-th {
-  background-color: #f2f2f2;
-  font-weight: bold;
+  table  {
+    border-collapse:  collapse;
+    width:  100%;
+    margin-top:  20px;
+    background:  rgba(255,  255,  255,  0.479);
+    border-radius:  16px;
+    box-shadow:  0 4px 30px rgba(0,  0,  0,  0.1);
+    backdrop-filter:  blur(8.5px);
+    -webkit-backdrop-filter:  blur(8.5px);
+    border:  1px solid rgba(130,  23,  119,  0.43);
+    overflow:  hidden;
+    tr {
+      transition: all 0.2s ease-in-out;
+      &:hover{
+        background-color:  rgba($color: #000000,  $alpha: 0.05);
+        td button  {
+          opacity:  1;
+        }
+      }
+    } th,  td  {
+        padding:  1rem;
+        text-align:  left;
+      }
+    th  {
+      position:  sticky;
+      top:  0;
+      padding:  1.5rem;
+      z-index:  1;
+      font-weight:  normal;
+      color:  $purple;
+      font-weight:  bold;
+      background-color:  rgba(255,  255,  255,  0.21);
+      backdrop-filter:  blur(7px);
+      -webkit-backdrop-filter:  blur(7px);
+    }
+    td  {
+      &:last-child  {
+        display:  flex;
+        justify-content:  flex-end;
+        button  {
+          font-size:  20px;
+          cursor:  pointer;
+          transition:  all 0.2s ease-in-out;
+          opacity:  0.6;
+          margin-right:  10px;
+          &:hover {
+            opacity:  1;
+          }
+        }
+      } } table  {
+            margin:  15px 2px;
+            tr  {
+              td  {
+                &:last-child  {
+                  button  {
+                    background-color:  transparent;
+                    border:  none;
+                    font-size:  20px;
+                    cursor:  pointer;
+                    transition:  all 0.2s ease-in-out;
+                    opacity:  0.6;
+                    margin-right:  10px;
+                    &:hover  {
+                      opacity:  1;
+                    }
+                  }
+                } } } } } .green  {
+                            color:  green;
+                          }
+  .red  {
+    color:  red;
+  }
+  .yellow  {
+    color:  rgb(147,  107,  56);
+  }
+  .del  {
+    background-color:  #bc0505;
+    color:  #FFFFFF;
+    cursor:  pointer;
+    border:  none;
+    border-radius:  5px;
+    padding:  0.5rem 4rem;
+    font-size:  16px;
+    transition:  background-color 0.2s ease-in-out;
+    opacity:  0.6;
+    margin-top:  auto;
+    margin-bottom:  auto;
+  }
+  .del:hover  {
+    background-color:  #FFFFFF;
+    color:  #bc0505;
+    border:  1px solid #bc0505;
+  }
+  div  {
+    text-align:  center;
+    margin-top:  3%;
+    font-size:  20px;
+    color:  $dark-gray;
+  }
+  .input-form  {
+    margin:  10px;
+    padding:  10px;
+    border-radius:  10px;
+    border:  1px solid $purple;
+    width:  90%;
+    font-size:  20px;
+  }
+}
+.modal  {
+  position:  fixed;
+  top:  50%;
+  left:  50%;
+  transform:  translate(-50%,  -50%);
+  background-color:  white;
+  padding:  20px;
+  border-radius:  5px;
+  box-shadow:  0 2px 5px rgba(0,  0,  0,  0.3);
+  display:  flex;
+  flex-direction:  column;
+  align-items:  center;
+  justify-content:  center;
+  z-index:  1000;
 }
 
-tr:hover {
-  background-color: #f5f5f5;
+.annuler  {
+  border: solid;
+  border-width:  2px;
+  background-color:  #bc0505;
+  color:  #FFFFFF;
+  cursor:  pointer;
+  border-radius:  5px;
+  padding:  0.5rem 4rem;
+  font-size:  16px;
+  transition:  background-color 0.2s ease-in-out;
+  opacity:  0.6;
+  margin-top:  auto;
+  margin-bottom:  auto;
 }
 
-tr:hover td i {
-  transform: rotate(180deg);
-  transition: transform 0.3s ease;
+.annuler:hover  {
+  background-color:  #FFFFFF;
+  color:  #bc0505;
+  border:  1px solid #bc0505;
 }
 
-td i {
-  transform: rotate(0deg);
-  transition: transform 0.3s ease;
-  cursor: pointer;
+.valider  {
+  background-color:  #57c896;
+  color:  #FFFFFF;
+  cursor:  pointer;
+  border:  none;
+  border-radius:  5px;
+  padding:  0.5rem 4rem;
+  font-size:  16px;
+  transition:  background-color 0.2s ease-in-out;
+  opacity:  0.6;
+  margin-top:  auto;
+  margin-bottom:  auto;
 }
 
-table table {
-  margin: 20px 0;
-}
-
-table table th,
-table table td {
-  border-bottom: none;
-}
-
-table table td {
-  padding: 6px 12px;
+.valider:hover  {
+  background-color:  #FFFFFF;
+  color:  #57c896;
+  border:  1px solid #57c896;
 }
 
 </style>

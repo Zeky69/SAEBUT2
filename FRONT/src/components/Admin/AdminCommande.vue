@@ -11,7 +11,7 @@
       <tbody>
       <tr v-for="(commande, index) in commandes" :key="index">
         <td v-for="(field, key) in Object.keys(commandes[0])" :key="key">
-          <span v-if="key === 'date'">{{ formatDate(commande[field]) }}</span>
+          <span v-if="field === 'date'">{{ formatDate(commande[field]) }}</span>
           <span v-else>{{ commande[field] }}</span>
         </td>
       </tr>
@@ -58,8 +58,6 @@ export default {
         year: 'numeric',
         month: 'numeric',
         day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
       });
     }
   },
@@ -84,6 +82,40 @@ export default {
   font-family: "DM Sans";
   font-size: 50px;
   font-style: normal;
+}
+
+.EspaceAdmin {
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  width: 80%;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+tr:hover {
+  background-color: #f5f5f5;
+}
+
+span {
+  display: block;
+  margin-top: 5px;
 }
 
 
