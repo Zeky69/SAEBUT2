@@ -5,8 +5,24 @@ const pool = require("../database/db.js");
 async function getVenteBilletParDate() {
     const client = await pool.connect();
     try {
-        const query = `SELECT count(uuid) as nbr_billet_vendus, date FROM ligneCommandeBillet
-                       group by date;`;
+        const query = `WITH dates AS (
+            SELECT generate_series(
+                           (SELECT MIN(date) FROM ligneCommandeBillet),
+                           (SELECT MAX(date) FROM ligneCommandeBillet),
+                           INTERVAL '1 day'
+                   ) AS date
+        )
+                       SELECT
+                           TO_CHAR(d.date, 'DD Mon YYYY') AS date,
+                           COALESCE(COUNT(l.uuid), 0) AS nbr_billet_vendus
+                       FROM
+                           dates d
+                               LEFT JOIN
+                           ligneCommandeBillet l ON DATE_TRUNC('day', d.date) = DATE_TRUNC('day', l.date)
+                       GROUP BY
+                           d.date
+                       ORDER BY
+                           d.date;`;
         const res = await client.query(query);
         return res.rows;
     } catch (error) {

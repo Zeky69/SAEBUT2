@@ -4,11 +4,7 @@ INSERT INTO type VALUES('1', 'Restaurant' ,'restaurant.png'),
                       ('5', 'Boutique' ,'tent.png'),
                       ('6', 'Toilettes','toilets.png');
 
-
-
 INSERT INTO ETAT (Etat_libelle) VALUES ('en attente'), ('accepté'), ('refusé');
-
-
 
 --INSERT INTO toilette VALUES ( 'c8511a54-441b-43b1-b888-5d261f853924',
 --                             'descriptiion toillette 1: 2 toilette Femme, 1 toilette Personne mobilité réduite', 'toilette 1', 'bat_6_wc',-126.34925842285156, 6.462428092956543, 49.19313430786133, 0 ),
@@ -19,9 +15,6 @@ INSERT INTO ETAT (Etat_libelle) VALUES ('en attente'), ('accepté'), ('refusé')
 
 --INSERT INTO scene VALUES ('9fcbe75a-2918-4fbd-a558-dc994100f656', 'description scene', 'stadium 1', 'bat_3_confer', -119.60863494873047, 11.881292343139648, 101.35678100585938, 1.570796461153735);
 
-
-
-
 INSERT INTO groupes VALUES  (1, 'groupe admin'),
                             (2, 'groupe prestataire'),
                             (3, 'groupe user');
@@ -30,14 +23,15 @@ INSERT INTO UTILISATEURS(FIRST_NAME,LAST_NAME,email,Date_Created,Group_Id) VALUE
                               ( 'fnUser', 'lnUser', 'test@test.com',now(),3),
                               ('fnPresta', 'lnPresta', 'test2@test2.com' ,now(),2);
 
-	INSERT INTO mots_de_passe_utilisateurs(User_Id,Password) VALUES(1,'$2b$10$i5g1xQgrDAbFT.I6Fi6PVubx9ciGHKk7FRaAJCMEoefhAmd2NKiV6'),
-		                                     (2,'$2b$10$0uVsqG09RJDqfHu0QeJE..552NrRvAKh5.ypknPBCbYbErOaq6D8a'),
-		                                     (3,'$2b$10$Q6WR1IlxWBcityVVNbO2p.ehl3vuLtRKnN2klfpSR6xQpASf9cIIu');
+INSERT INTO mots_de_passe_utilisateurs(User_Id,Password) VALUES(1,'$2b$10$i5g1xQgrDAbFT.I6Fi6PVubx9ciGHKk7FRaAJCMEoefhAmd2NKiV6'),
+                                         (2,'$2b$10$0uVsqG09RJDqfHu0QeJE..552NrRvAKh5.ypknPBCbYbErOaq6D8a'),
+                                         (3,'$2b$10$Q6WR1IlxWBcityVVNbO2p.ehl3vuLtRKnN2klfpSR6xQpASf9cIIu');
 
 
 INSERT INTO prestataire( description, nom, id_user, etat_id ,photo_profil) VALUES ('Drake le meilleur chanteur','Drake','3',2,'drake.jpeg');
 
-INSERT INTO type_service(nom) VALUES ('Commentaire'),
+INSERT INTO type_service(nom) VALUES
+                        ('Commentaire'),
                         ('Boutique');
 
 INSERT INTO tags VALUES ('1', 'accessible handicapé'),
@@ -54,26 +48,21 @@ INSERT INTO droits VALUES   ('1', 'base'),
                             ('3', 'gestion de tout'),
                             ('4', 'affichage user');
 
-
-
 INSERT INTO UTILISATEURS(FIRST_NAME, LAST_NAME, email, Date_Created, Group_Id) VALUES
-('John', 'Doe', 'john.doe@example.com', CURRENT_TIMESTAMP, 2),
-('Jane', 'Smith', 'jane.smith@example.com', CURRENT_TIMESTAMP, 2),
-('Bob', 'Johnson', 'bob.johnson@example.com', CURRENT_TIMESTAMP, 2);
+    ('John', 'Doe', 'john.doe@example.com', CURRENT_TIMESTAMP, 2),
+    ('Jane', 'Smith', 'jane.smith@example.com', CURRENT_TIMESTAMP, 2),
+    ('Bob', 'Johnson', 'bob.johnson@example.com', CURRENT_TIMESTAMP, 2);
 
 INSERT INTO mots_de_passe_utilisateurs(User_Id, Password) VALUES
-((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'), '$2b$10$H0zB1Ub0YiHQXu.pstzZOescgnHpZLAjNTAXfo/CiOuCnuFse/4ha'),
-((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Jane' AND LAST_NAME = 'Smith'), '$2b$10$H0zB1Ub0YiHQXu.pstzZOescgnHpZLAjNTAXfo/CiOuCnuFse/4ha'),
-((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Bob' AND LAST_NAME = 'Johnson'), '$2b$10$H0zB1Ub0YiHQXu.pstzZOescgnHpZLAjNTAXfo/CiOuCnuFse/4ha');
-
+    ((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'), '$2b$10$H0zB1Ub0YiHQXu.pstzZOescgnHpZLAjNTAXfo/CiOuCnuFse/4ha'),
+    ((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Jane' AND LAST_NAME = 'Smith'), '$2b$10$H0zB1Ub0YiHQXu.pstzZOescgnHpZLAjNTAXfo/CiOuCnuFse/4ha'),
+    ((SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Bob' AND LAST_NAME = 'Johnson'), '$2b$10$H0zB1Ub0YiHQXu.pstzZOescgnHpZLAjNTAXfo/CiOuCnuFse/4ha');
 
 INSERT INTO prestataire ( description, nom, id_user, etat_id,page_info ,photo_profil) VALUES
-('admin','Belforaine', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'fnAdmin' AND LAST_NAME = 'lnAdmin'),2,NULL,'logoWF2W.png'),
-('Prestataire Description de macdonald', 'Mcdonald', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'), 2,'<p style="text-align:justify;">Bienvenue chez McDonalds, l endroit où la convivialité et la gourmandise se rencontrent pour créer des moments inoubliables ! Notre histoire est celle dune passion pour la qualité, la diversité et linnovation culinaire, et chaque visite chez McDonalds est une expérience exceptionnelle.<br><br>Découvrez un monde de saveurs exquises, où nos menus variés captivent tous les palais. Des classiques emblématiques aux créations audacieuses, nous sommes fiers de vous offrir un éventail de délices conçus pour satisfaire toutes les envies. Chez McDonalds, nous pensons que chaque repas devrait être une célébration de la bonne cuisine, partagée avec ceux que vous aimez.<br><br>Nos restaurants sont bien plus que des lieux de restauration rapide. Ce sont des espaces chaleureux où se mêlent l arôme alléchant de nos produits fraîchement préparés et l atmosphère accueillante de nos établissements. Que ce soit pour une pause décontractée en solo, un déjeuner entre collègues ou un dîner en famille, McDonalds est l endroit idéal pour créer des souvenirs autour d un bon repas.<br><br>En choisissant McDonald s, vous rejoignez une communauté mondiale qui célèbre la diversité, l innovation et l engagement envers un monde meilleur. Nous nous efforçons constamment d adopter des pratiques durables et responsables, tout en participant activement à des initiatives sociales pour contribuer au bien-être de nos communautés.<br><br>Nous sommes ravis de vous accueillir dans notre univers où la qualité, le plaisir et la responsabilité se rencontrent. Chez McDonald s, chaque moment est une célébration de la vie, et nous sommes impatients de partager cette expérience unique avec vous. Bon appétit et bienvenue chez McDonald s, là où chaque instant est délicieusement mémorable !','macdo.jpeg'),
-('Prestataire Description de pixar', 'Pixar', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Jane' AND LAST_NAME = 'Smith'), 2,NULL,'pixar.jpg'),
-('Prestataire Description de disney', 'Disney', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Bob' AND LAST_NAME = 'Johnson'), 2 ,NULL,'Disnet.jpeg');
-
-
+    ('admin','Belforaine', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'fnAdmin' AND LAST_NAME = 'lnAdmin'),2,NULL,'logoWF2W.png'),
+    ('Prestataire Description de macdonald', 'Mcdonald', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'John' AND LAST_NAME = 'Doe'), 2,'<p style="text-align:justify;">Bienvenue chez McDonalds, l endroit où la convivialité et la gourmandise se rencontrent pour créer des moments inoubliables ! Notre histoire est celle dune passion pour la qualité, la diversité et linnovation culinaire, et chaque visite chez McDonalds est une expérience exceptionnelle.<br><br>Découvrez un monde de saveurs exquises, où nos menus variés captivent tous les palais. Des classiques emblématiques aux créations audacieuses, nous sommes fiers de vous offrir un éventail de délices conçus pour satisfaire toutes les envies. Chez McDonalds, nous pensons que chaque repas devrait être une célébration de la bonne cuisine, partagée avec ceux que vous aimez.<br><br>Nos restaurants sont bien plus que des lieux de restauration rapide. Ce sont des espaces chaleureux où se mêlent l arôme alléchant de nos produits fraîchement préparés et l atmosphère accueillante de nos établissements. Que ce soit pour une pause décontractée en solo, un déjeuner entre collègues ou un dîner en famille, McDonalds est l endroit idéal pour créer des souvenirs autour d un bon repas.<br><br>En choisissant McDonald s, vous rejoignez une communauté mondiale qui célèbre la diversité, l innovation et l engagement envers un monde meilleur. Nous nous efforçons constamment d adopter des pratiques durables et responsables, tout en participant activement à des initiatives sociales pour contribuer au bien-être de nos communautés.<br><br>Nous sommes ravis de vous accueillir dans notre univers où la qualité, le plaisir et la responsabilité se rencontrent. Chez McDonald s, chaque moment est une célébration de la vie, et nous sommes impatients de partager cette expérience unique avec vous. Bon appétit et bienvenue chez McDonald s, là où chaque instant est délicieusement mémorable !','macdo.jpeg'),
+    ('Prestataire Description de pixar', 'Pixar', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Jane' AND LAST_NAME = 'Smith'), 2,NULL,'pixar.jpg'),
+    ('Prestataire Description de disney', 'Disney', (SELECT User_Id FROM UTILISATEURS WHERE FIRST_NAME = 'Bob' AND LAST_NAME = 'Johnson'), 2 ,NULL,'Disnet.jpeg');
 
 INSERT INTO categorie_produit(libelle_categorie,description,image) VALUES
     ('Goodies', 'Des objets uniques qui ajoutent une touche de magie à votre quotidien.','goodies.png'),
@@ -81,10 +70,6 @@ INSERT INTO categorie_produit(libelle_categorie,description,image) VALUES
     ('Peluches', 'Adoptez des compagnons doux et câlins qui éveilleront votre enfant intérieur.','peluches.png'),
     ('Accessoires', 'Les petits détails qui font la différence : accessoires audacieux pour des moments mémorables.','accessoires.jpg'),
     ('Fast Food', 'Des menus rapides et savoureux pour une pause gourmande.','fastfood.png');
-
-    select * from categorie_produit;
-
-select * from categorie_produit;
 
 INSERT INTO service (id_type_service, id_prestataire, etat) VALUES
 	(1,1,true),(1,2,true),(1,3,true),(1,4,true),(1,5,true),(2,1,true),(2,2,false),(2,3,true),(2,4,true),(2,5,true);
@@ -160,14 +145,36 @@ INSERT INTO commande (id_user,date_commande) VALUES
 (2,now()),
 (2,now()),
 (2,now()),
-(2,now());
-
+(2,now()),
+(1, '2024-03-01 10:00:00'),
+(2, '2024-03-02 11:30:00'),
+(3, '2024-03-03 12:45:00'),
+(1, '2024-03-04 14:20:00'),
+(2, '2024-03-05 15:10:00'),
+(3, '2024-03-06 16:55:00'),
+(1, '2024-03-07 17:45:00'),
+(2, '2024-03-08 18:30:00'),
+(3, '2024-03-09 19:20:00'),
+(1, '2024-03-10 20:00:00');
 
 
 INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom) VALUES
 ('151',1,1,2,'Zekeriya','Akburak'),
 ('15415',1,2,1,'Mhammed','Akburak'),
 ('5415',1,3,1,'Enzo','LeRaptor');
+INSERT INTO ligneCommandeBillet (uuid,id_commande,id_billet,subId,nom,prenom,date) VALUES
+('uuid1', 1, 1, 1, 'Doe', 'John', '2024-03-01'),
+('uuid2', 1, 1, 1, 'Doe', 'Jake', '2024-03-01'),
+('uuid3', 2, 2, 1, 'Smith', 'Jane', '2024-03-02'),
+('uuid4', 2, 2, 1, 'Smith', 'Enzo', '2024-03-02'),
+('uuid5', 2, 2, 1, 'Smith', 'MCaliya', '2024-03-02'),
+('uuid6', 3, 3, 1, 'Johnson', 'Alice', '2024-03-03'),
+('uuid7', 4, 1, 1, 'Doe', 'John', '2024-03-04'),
+('uuid8', 6, 3, 1, 'Johnson', 'Alice', '2024-03-06'),
+('uuid9', 7, 1, 1, 'Doe', 'John', '2024-03-07'),
+('uuid10', 8, 2, 1, 'Smith', 'Jane', '2024-03-08'),
+('uuid11', 9, 3, 1, 'Johnson', 'Alice', '2024-03-09'),
+('uuid12', 10, 1, 1, 'Doe', 'John', '2024-03-10');
 
 INSERT INTO ligneCommandeArticle(id_commande , id_produit ,valide, quantite) VALUES
 (1,1,false,5),
@@ -189,19 +196,7 @@ INSERT INTO ligneCommandeArticle(id_commande , id_produit ,valide, quantite) VAL
 (4,5,true,4),
 (4,13,false,5);
 
-
-
 INSERT INTO contenuhomepage VALUES (1,'Découvrez un monde où LANs survoltés, aventures en réalité virtuelle époustouflantes, conférences inspirantes et divertissement sans fin fusionnent. Plongez dans la magie que nous réserve le futur, le tout dans une seule destination. Belforaine, où le futur devient réalité, et le plaisir est infini !');
-
-
-SELECT email from utilisateurs
-JOIN public.commande c on utilisateurs.user_id = c.id_user
-JOIN public.lignecommandebillet l on c.id_commande = l.id_commande
-WHERE uuid = '151';
-
-
-
-SELECT * FROM visiteursite;
 
 INSERT INTO public.emplacement (id_emplacement, id_type, nom, description, matricepoints, prestataire_id, use_resa, accepted) VALUES ('635471e4-630f-41fd-9a05-c9d97e384c20', '1', 'Mcdonald''s', 'Aujourd''hui, McDonalds est le plus important groupe de restauration rapide, devant Restaurant Brands International (Burger King) ou Yum! Brands (KFC, Pizza Hut).', '{"matricepoints":[[47.748619131384125,6.802443363703788],[47.748626796157254,6.802496337331832],[47.74859568618874,6.80252114776522],[47.74857900402407,6.802448057569564],[47.748619131384125,6.802443363703788]]}', 3, false, true);
 INSERT INTO public.emplacement (id_emplacement, id_type, nom, description, matricepoints, prestataire_id, use_resa, accepted) VALUES ('43a48d2f-47e2-4a3c-ac18-9f7f99af6986', '4', 'Stand de tir à la carabine', 'Les participants utilisent une carabine pour viser des cibles et gagner des prix en fonction de leur précision de tir.', '{"matricepoints":[[47.74859478445025,6.801972636021675],[47.748613720955355,6.802021586336196],[47.74862048399123,6.802070536650718],[47.74861417182445,6.802104734815658],[47.74860154748859,6.802116134203971],[47.748571339243895,6.802126863040031],[47.74854068011196,6.802121498622001],[47.74852489966938,6.8020504200831065],[47.74852580140907,6.801984705962242],[47.74855420620181,6.801945143379271],[47.7485803566322,6.801937767304481],[47.74859478445025,6.801972636021675]]}', 2, false, true);
@@ -221,21 +216,4 @@ INSERT INTO public.emplacement (id_emplacement, id_type, nom, description, matri
 INSERT INTO public.emplacement (id_emplacement, id_type, nom, description, matricepoints, prestataire_id, use_resa, accepted) VALUES ('f785eeed-6001-4bb1-b540-8cd0a88aef06', '2', 'Terrain ', 'Un grand terrain pour mettre un manège', '{"matricepoints":[[47.7480198454861,6.801724825054408],[47.74792606356137,6.801724825054408],[47.74792065306055,6.802092287689449],[47.74800541750867,6.802014503628016],[47.748028862969946,6.801880393177272],[47.7480198454861,6.801724825054408]]}', null, true, false);
 INSERT INTO public.emplacement (id_emplacement, id_type, nom, description, matricepoints, prestataire_id, use_resa, accepted) VALUES ('f5669d3c-88c0-4067-b280-10ab1fee41c8', '1', 'Restaurant', 'Un grand terrain pour un restaurant', '{"matricepoints":[[47.74830479722063,6.80219689384103],[47.74823806815686,6.802089605480434],[47.74819117741224,6.802175436168911],[47.74820019486639,6.802271995693446],[47.74831561814183,6.802266631275417],[47.74830479722063,6.80219689384103]]}', null, true, false);
 INSERT INTO public.emplacement (id_emplacement, id_type, nom, description, matricepoints, prestataire_id, use_resa, accepted) VALUES ('58d3b063-b332-42e7-8eac-b54276954dff','4','Draky Draky Scene','Drake, de son vrai nom Aubrey Drake Graham, est un artiste canadien né le 24 octobre 1986 à Toronto. Il est surtout connu comme rappeur, chanteur, auteur-compositeur et producteur de musique. Drake a acquis une renommée mondiale grâce à ses hits à succès tels que "Hotline Bling" et "God''s Plan". Il est également reconnu pour son influence dans la mode et la culture populaire.','{"matricepoints":[[47.748227247219546,6.801740918308498],[47.74830119024639,6.80193403735757],[47.74818576693896,6.801968906074763],[47.74811182374813,6.801810655742885],[47.748227247219546,6.801740918308498]]}',1,false,true);
-
-SELECT * from lignecommandebillet;
-SELECT * from lignecommandearticle;
-
-SELECT SUM(ventes) as vente_total from (
-SELECT SUM(prixTotalBillet) as ventes
-from (SELECT b.price * count(lcb.uuid) as prixTotalBillet
-     FROM ligneCommandeBillet lcb
-              JOIN billet b ON lcb.id_billet = b.id
-     group by b.id, b.title, b.price) as lbpTB
-UNION
-SELECT SUM(prixTotalArticle) as ventes
-from (SELECT p.prix * sum(lca.quantite) as prixTotalArticle
-     FROM ligneCommandeArticle lca
-              JOIN produit p ON lca.id_produit = p.id_produit
-     group by p.id_produit) as lbpTA
-) as lTvlTv;
 
