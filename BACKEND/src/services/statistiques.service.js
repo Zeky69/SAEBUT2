@@ -180,7 +180,8 @@ async function getCountCommande(){
 async function getAverageNote(id_prestataire){
     const client = await  pool.connect()
         try{
-            const query = "select ROUND(avg(note), 2)as note from commentaire where id_prestataire = $1";
+            const query = "SELECT COALESCE(ROUND(AVG(note), 2), 0) AS note FROM commentaire WHERE id_prestataire = $1" +
+                "";
             const res = await client.query(query, [id_prestataire]);
             return res.rows[0];
         }catch (e){

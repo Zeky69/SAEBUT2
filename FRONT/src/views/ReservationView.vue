@@ -17,7 +17,6 @@
 
     <div class="container-reservation" v-if="uuidTicketRempli">
       <div v-for="(prestataire, indexPresta) in prestataires" :key="indexPresta" class="container-reserve">
-        <h2 class="title-prestaitaire" v-if="batimentsPrestataires.find((bat)=>{return bat.prestataire_id === prestataire.id_prestataire})">{{prestataire.nom}}</h2>
         <div class="prestataire-reservation">
           <div v-for="(batiment, indexBat) in batimentsPrestataires" :key="indexBat" >
             <reservationComponent
