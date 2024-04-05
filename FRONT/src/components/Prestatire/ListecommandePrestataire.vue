@@ -106,6 +106,8 @@ export default {
 
       this.formatedComandesaft = await this.formatCommandes(this.loadcommandes);
 
+      //changer chaque commande.total_prix pour prendre juste le prix des produits du prestataire
+
       console.log("Commandes formatées :", this.formatedComandesaft);
 
 
@@ -121,10 +123,12 @@ export default {
         this.id_commande_show = null;
       }
     },
-    async validerligne(id_produit, id_commande) {
+    async validerligne( id_commande,id_produit) {
       const res = await shopService.updateCommandeLigne(id_commande,id_produit);
       console.log("ligne validée", res);
-      //modifier le status de la lignedans le front
+      console.log("id produit", id_produit);
+      console.log("id commande", id_commande);
+      console.log("lignes", this.lignes);
       this.lignes = this.lignes.map(ligne => {
         if (ligne.id_produit === id_produit && res) {
           ligne.valide = !ligne.valide;
@@ -147,7 +151,7 @@ export default {
         const { id_commande, id_user, date_commande, id_produit, quantite, prix, nom, valide, prestataire_id } = commande;
 
         // Créer un nouvel objet ligne
-
+        let prixcomande = 0;
         const ligne = {
           id_commande,
           id_produit,
@@ -158,6 +162,8 @@ export default {
           nom
         };
 
+
+
         // Ajouter la ligne à l'objet formatedCommandes
         if (!formatedCommandes[id_commande]) {
           formatedCommandes[id_commande] = {
@@ -166,18 +172,22 @@ export default {
             prestataire_id,
             date_commande,
             lignes: [ligne],
-            total_prix: prix * quantite
+            total_prix: prixcomande
           };
         } else {
           formatedCommandes[id_commande].lignes.push(ligne);
-          formatedCommandes[id_commande].total_prix += prix * quantite;
+          formatedCommandes[id_commande].total_prix += prixcomande;
         }
       });
-
+  
       //pour chaque commande suprimer les ligne qui ne sont pas du prestataire
       for (const key in formatedCommandes) {
         formatedCommandes[key].lignes = formatedCommandes[key].lignes.filter(ligne => ligne.prestataire_id === this.id_presta);
         console.log("id prestataire", this.id_presta)
+      }
+
+      for (const key in formatedCommandes) {
+        formatedCommandes[key].total_prix = formatedCommandes[key].lignes.reduce((acc, ligne) => acc + ligne.prix * ligne.quantite, 0);
       }
 
       // Convertir l'objet en tableau

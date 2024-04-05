@@ -117,11 +117,31 @@ async function addConnexionToday(){
 
 }
 
+
+
+async function getCountCommande(){
+    const client = await pool.connect();
+    try {
+        const query = `select count(*) as nombre from commande;`;
+        const res = await client.query(query);
+        return res.rows[0];
+    } catch (error) {
+        console.error("Erreur lors de la récupération des ventes de billets par date: ", error);
+        return null;
+    } finally {
+        client.release();
+    }
+
+}
+
+
+
 module.exports = {
     getVenteArticle,
     getVenteBilletParDate,
     getVenteParCategorie,
     getVenteBilletParType,
     getConnextionToday,
-    addConnexionToday
+    addConnexionToday,
+    getCountCommande
 }

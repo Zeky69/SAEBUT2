@@ -2,7 +2,7 @@
 <div>
   <div class="navbar-height"></div>
   <div class="hearder-container">
-  <div class="header"> <div class="image-container"><img :src="urlImage" alt=""></div></div>
+  <div class="header"> <div class="image-container"><img class="image-element" :src="urlImage" alt=""></div></div>
     <h1 class="header-titlte">{{nom}}</h1>
   </div>
   <div class="container-contenu">
@@ -568,6 +568,10 @@ table {
     color: white;
     transition: color 0.2s ease-in-out;
   }
+}
+
+.image-element{
+  background-color: #212121 ;
 }
 
 
