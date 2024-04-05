@@ -15,5 +15,6 @@ router.get("/venteParCatetorie", userController.getVenteParCategorie);
 
 router.post("/addConnexionToday", userController.addConnexionToday);
 router.get("/getConnextionToday", userController.getConnextionToday);
+router.get("/commande", userController.getCountCommande);
 
 module.exports = router;

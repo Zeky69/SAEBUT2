@@ -32,6 +32,10 @@ async function getVenteArticleParIdPrestataireFromAPI(id) {
     return getRequest(baseUrl+'/venteArticle/'+id, 'GET')
 }
 
+async function getCountCommandeFromAPI() {
+    return getRequest(baseUrl+'/commande','get')
+}
+
 async function getVenteBilletParDate() {
     try {
         let answer = await getVenteBilletParDateFromAPI();
@@ -102,6 +106,16 @@ export async function addConnexionToday() {
     }
 }
 
+export async function getCountCommande() {
+    try {
+        let answer = await getCountCommandeFromAPI();
+        return answer;
+    } catch (error) {
+        console.error('Erreur lors de la récupération du nombre de commandes', error.message);
+        throw error;
+    }
+
+}
 
 
 export default {
@@ -111,4 +125,5 @@ export default {
     getVenteArticleParIdPrestataire,
     getVenteParCategorie,
     getConnextionToday,
+    getCountCommande
 }
