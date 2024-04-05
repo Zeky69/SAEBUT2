@@ -16,7 +16,10 @@
     </div>
 
     <div class="container-reservation" v-if="uuidTicketRempli">
+      <h2 class="title-prestaitaire" v-if="!batimentsPrestataires.some((bat) => bat.use_resa)">Aucune réservation possible disponible</h2>
+
       <div v-for="(prestataire, indexPresta) in prestataires" :key="indexPresta" class="container-reserve">
+        <h2 class="title-prestaitaire" v-if="batimentsPrestataires.find((bat)=>{return bat.prestataire_id === prestataire.id_prestataire && bat.use_resa===true})">{{prestataire.nom}}</h2>
         <div class="prestataire-reservation">
           <div v-for="(batiment, indexBat) in batimentsPrestataires" :key="indexBat" >
             <reservationComponent
