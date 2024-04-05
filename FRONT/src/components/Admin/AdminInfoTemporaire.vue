@@ -10,10 +10,6 @@
         <div class="graphique">
           <Doughnut :data="categoryChartData" :options="options" />
         </div>
-        <div class="Perfomance-text">
-          <h2>Parts de vente</h2>
-
-        </div>
 
       </div>
     </div>
@@ -119,7 +115,7 @@ export default {
         labels: this.topCategories.map(category => category.libelle_categorie),
         datasets: [{
           label: 'Total vente par catégorie',
-          backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)', 'rgb(75, 192, 192)'],
+          backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)', 'rgb(75, 192, 192)', 'rgb(75, 102, 192)'],
           data: this.topCategories.map(category => category.totalventecategorie)
         }]
       };
@@ -135,7 +131,27 @@ export default {
       }],
     },
     options :{
-      rotation: -100,
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'right',
+          align: 'end', // Alignement de la légende par rapport au texte (start pour aligner le texte à gauche)
+          labels: {
+            boxWidth: 10, // Largeur de la boîte de légende
+            padding: 10, // Espacement entre les légendes
+            usePointStyle: true // Utiliser les formes des points dans la légende
+          }
+        },
+        title: {
+          display: true,
+          text: 'Parts de vente',
+          font: {
+            size: 20
+          }
+        }
+      }
     },
     ticketData: [],
     topArticles: [],
@@ -404,6 +420,6 @@ export default {
 
 .graphique {
   height: 155px; /* Ajuster la hauteur du graphique selon vos besoins */
-  width: 155px; /* Ajuster la largeur du graphique selon vos besoins */
+  width: fit-content; /* Ajuster la largeur du graphique selon vos besoins */
 }
 </style>
