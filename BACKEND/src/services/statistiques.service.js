@@ -117,11 +117,58 @@ async function addConnexionToday(){
 
 }
 
+async function getVentesTotales(){
+    const client = await pool.connect();
+    try {
+        const query = `SELECT SUM(ventes) as vente_total from (
+                              SELECT SUM(prixTotalBillet) as ventes
+                              from (SELECT b.price * count(lcb.uuid) as prixTotalBillet
+                                    FROM ligneCommandeBillet lcb
+                                             JOIN billet b ON lcb.id_billet = b.id
+                                    group by b.id, b.title, b.price) as lbpTB
+                              UNION
+                              SELECT SUM(prixTotalArticle) as ventes
+                              from (SELECT p.prix * sum(lca.quantite) as prixTotalArticle
+                                    FROM ligneCommandeArticle lca
+                                             JOIN produit p ON lca.id_produit = p.id_produit
+                                    group by p.id_produit) as lbpTA
+                          ) as lTvlTv;`;
+        const res = await client.query(query);
+        return res.rows[0];
+    } catch (error) {
+        console.error("Erreur lors de la récupération des ventes totales: ", error);
+        return null;
+    } finally {
+        client.release();
+    }
+}
+
+
+
+async function getCountCommande(){
+    const client = await pool.connect();
+    try {
+        const query = `select count(*) as nombre from commande;`;
+        const res = await client.query(query);
+        return res.rows[0];
+    } catch (error) {
+        console.error("Erreur lors de la récupération des ventes de billets par date: ", error);
+        return null;
+    } finally {
+        client.release();
+    }
+
+}
+
+
+
 module.exports = {
     getVenteArticle,
     getVenteBilletParDate,
     getVenteParCategorie,
     getVenteBilletParType,
     getConnextionToday,
-    addConnexionToday
+    addConnexionToday,
+    getVentesTotales,
+    getCountCommande
 }

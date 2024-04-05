@@ -61,3 +61,23 @@ exports.addConnexionToday = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 }
+
+exports.getVentesTotales = async (req, res) => {
+    try {
+        const result = await statistiquesService.getVentesTotales();
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}
+
+exports.getCountCommande = async (req, res) => {
+    try {
+        const result = await statistiquesService.getCountCommande();
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}

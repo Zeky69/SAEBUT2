@@ -178,7 +178,7 @@ CREATE TABLE service(
    id_prestataire INT,
    etat BOOL,
    PRIMARY KEY(id_service),
-   FOREIGN KEY(id_prestataire) REFERENCES prestataire(id_prestataire),
+   FOREIGN KEY(id_prestataire) REFERENCES prestataire(id_prestataire) ON DELETE CASCADE,
    FOREIGN KEY(id_type_service) REFERENCES type_service(id_type_service),
    UNIQUE(id_prestataire, id_type_service)
 );
@@ -192,7 +192,7 @@ CREATE TABLE produit(
    categorie_id INT,
    prestataire_id INT NOT NULL,
    FOREIGN KEY(categorie_id) REFERENCES categorie_produit(id_categorie),
-   FOREIGN KEY (prestataire_id) REFERENCES prestataire(id_prestataire),
+   FOREIGN KEY (prestataire_id) REFERENCES prestataire(id_prestataire) ON DELETE CASCADE,
    PRIMARY KEY(id_produit)
 );
 

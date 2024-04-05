@@ -108,7 +108,7 @@ async function removePrestataire(user_id, prestataire_id) {
       prestataire_id,
     ]);
     await client.query(
-      "UPDATE emplacement SET prestataire_id = NULL and accepted=false WHERE prestataire_id = $1;",
+      "UPDATE emplacement SET prestataire_id = NULL, accepted=false WHERE prestataire_id = $1;",
       [prestataire_id]
     );
 

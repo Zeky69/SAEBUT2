@@ -23,7 +23,7 @@
         <h2>Chiffres du jour</h2>
         <div class="rubriqueChiffre">
           <div class="rubriqueChiffre-content">
-            <h2>€  11,983.98</h2>
+            <h2>€ {{ totalVentes.vente_total }}</h2>
             <h3>Ventes</h3>
           </div>
           <img src="@/assets/pagePrestataire/Sell.svg" style="max-height: 60px">
@@ -37,7 +37,7 @@
         </div>
         <div class="rubriqueChiffre">
           <div class="rubriqueChiffre-content">
-            <h2>320</h2>
+            <h2>{{nbCommande}}</h2>
             <h3>Commandes</h3>
           </div>
           <img src="@/assets/pagePrestataire/commande.svg" style="max-height: 60px">
@@ -75,7 +75,7 @@ Chart.register(...registerables);
 import {Line, Bar, Doughnut} from 'vue-chartjs'
 import PageTitre from "./PageTitre.vue";
 
-import statistiquesService, {getConnextionToday} from "@/services/statistiques.service";
+import statistiquesService, {getConnextionToday, getCountCommande} from "@/services/statistiques.service";
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -127,6 +127,7 @@ export default {
   },
   data: () => ({
     visiteurs: null,
+    nbCommande: null,
     data: {
       datasets: [{
         data: [0.5909,0.4091],
@@ -139,7 +140,8 @@ export default {
     ticketData: [],
     topArticles: [],
     topTickets: [],
-    topCategories: []
+    topCategories: [],
+    totalVentes: null
   }),
   components: {
     PageTitre,
@@ -201,6 +203,18 @@ export default {
       } catch (e) {
         console.error(e);
       }
+    },
+    async getTotalVentes(){
+      try {
+        let response = await statistiquesService.getTotalVentes();
+        if (!response.error) {
+          this.totalVentes = response;
+        } else {
+          console.log("Erreur lors de la récupération des réservations");
+        }
+      } catch (e) {
+        console.error(e);
+      }
     }
   },
   mounted() {
@@ -208,9 +222,14 @@ export default {
     this.getTopArticles();
     this.getTopTickets();
     this.getTopCategories();
+    this.getTotalVentes();
     getConnextionToday().then((response) => {
       this.visiteurs = response.visiteur
     });
+
+    getCountCommande().then((response)=>{
+      this.nbCommande = response.nombre
+    })
   },
 }
 </script>
