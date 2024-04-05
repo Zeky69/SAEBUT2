@@ -91,7 +91,7 @@ export default {
   },
   methods:{
     async getArticles() {
-      this.articles = await ArticleShop.getArticlesByPrestataire(this.id);
+      this.articles = await ArticleShop.getArticlesByPrestataireServ(this.id);
       console.log("articles", this.articles);
       console.log("articles", this.articles.length);
     },

@@ -79,7 +79,7 @@
     <reservationComponent
         v-if="idPrestataire !==-1"
         :id_bat="batiment.id_emplacement"
-        :id_prestataire="idPrestataire.toString()"
+        :id_prestataire="idPrestataire"
         :mode="mode"
         :nom="batiment.nom"
         :uuidTicket="idPrestataire.toString()"
