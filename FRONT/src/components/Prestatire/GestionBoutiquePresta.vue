@@ -1,10 +1,13 @@
 <template>
   <div class="conten" v-if="show===true">
-    <div class="segmented-picker">
-      <input type="radio" id="crudboutique" name="picker" value="crudboutique" v-model="selected" @change="onPickerChange">
-      <label for="crudboutique">Crudboutique</label>
-      <input type="radio" id="listcommande" name="picker" value="listcommande" v-model="selected" @change="onPickerChange">
-      <label for="listcommande">Listcommande</label>
+    <div class="pickfather">
+      <div class="segmented-picker">
+        <input type="radio" id="crudboutique" name="picker" value="crudboutique" v-model="selected" @change="onPickerChange">
+        <label for="crudboutique">Crudboutique</label>
+        <input type="radio" id="listcommande" name="picker" value="listcommande" v-model="selected" @change="onPickerChange">
+        <label for="listcommande">Listcommande</label>
+      </div>
+
     </div>
 
 
@@ -35,7 +38,7 @@ export default {
     path:"",
     crudPath: "/prestataire/produits/crud",
     boutiquePath: "/prestataire/produits/commandes",
-    selected: 'crudboutique',
+    selected: 'listcommande',
     show:false // la mettre a false quand t'as fini
 
   }),computed   :{
@@ -68,17 +71,28 @@ export default {
 </script>
 
 
+<s
 <style scoped>
-
-.conten{
+.conten {
   margin: 2%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pickfather {
+  display: flex;
+  justify-content: center;
 }
 
 .segmented-picker {
   display: flex;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid rgba(130, 23, 119, 0.43);
+  background-color: #f9f9f9;
+  width: 40vw;
+  border-radius: 10px;
+  justify-self: center;
   overflow: hidden;
+  position: relative;
 }
 
 .segmented-picker input[type="radio"] {
@@ -86,6 +100,7 @@ export default {
 }
 
 .segmented-picker label {
+  width: 50%;
   padding: 10px 20px;
   display: block;
   cursor: pointer;
@@ -95,7 +110,25 @@ export default {
 }
 
 .segmented-picker input[type="radio"]:checked + label {
-  background-color: #fff;
-  border-bottom: 2px solid #007bff;
+  background-color: rgba(130, 23, 119, 0.43);
+  color: white;
+}
+
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background-color: rgba(130, 23, 119, 0.43);
+  transition: transform 0.3s ease;
+}
+
+.segmented-picker input[type="radio"]:nth-child(1):checked ~ .slider {
+  transform: translateX(0%);
+}
+
+.segmented-picker input[type="radio"]:nth-child(2):checked ~ .slider {
+  transform: translateX(100%);
 }
 </style>
