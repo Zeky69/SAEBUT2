@@ -99,6 +99,8 @@ router.get('/:id_bat', resaController.getAllResa);
  *           description: Erreur interne du serveur
  */
 
+router.get('/ticket/:idTicket', resaController.getAllResaTicket);
+
 router.post('/disponibilite/', resaController.createDispo);
 /**
  * @swagger

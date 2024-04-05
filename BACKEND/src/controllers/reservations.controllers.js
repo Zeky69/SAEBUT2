@@ -29,6 +29,20 @@ exports.getAllResa = (req, res) => {
     });
 }
 
+exports.getAllResaTicket = (req, res) => {
+    console.log(req.params.idTicket)
+    if (req.params.idTicket) {
+        return resaService.getAllResaByIdTicket(req,(error,data)=>{
+            if (error) {
+                console.log(error)
+                return res.status(500).send("Internal error");
+            }
+            return res.status(200).send(data);
+        });
+    }
+    return res.status(500).send("Internal error");
+}
+
 exports.getAllDispoById = (req, res) => {
     return resaService.getAllDispoById(req,(error,data)=>{
         if (error) {

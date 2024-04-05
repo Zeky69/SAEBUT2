@@ -12,12 +12,18 @@
       <h1>Réservations</h1>
       <label for="idTicket">L'identifiant de votre ticket</label>
       <input type="text" id="idTicket" name="idTicket" v-model="uuidTicket">
-      <button @click="uuidTicketRempli = uuidTicket.length >= 1">Valider</button>
+      <button @click="validerTicket">Valider</button>
     </div>
 
     <div class="container-reservation" v-if="uuidTicketRempli">
+      <h2>Vos réservations</h2>
+      <div v-for="(reservation, indexResa) in reservations" :key="indexResa+'z'">
+        {{reservation.ouverture}} - {{reservation.duree}} min
+      </div>
+      <h2 class="title-prestaitaire" v-if="!batimentsPrestataires.some((bat) => bat.use_resa)">Aucune réservation possible disponible</h2>
+
       <div v-for="(prestataire, indexPresta) in prestataires" :key="indexPresta" class="container-reserve">
-        <h2 class="title-prestaitaire" v-if="batimentsPrestataires.find((bat)=>{return bat.prestataire_id === prestataire.id_prestataire})">{{prestataire.nom}}</h2>
+        <h2 class="title-prestaitaire" v-if="batimentsPrestataires.find((bat)=>{return bat.prestataire_id === prestataire.id_prestataire && bat.use_resa===true})">{{prestataire.nom}}</h2>
         <div class="prestataire-reservation">
           <div v-for="(batiment, indexBat) in batimentsPrestataires" :key="indexBat" >
             <reservationComponent
@@ -54,6 +60,7 @@ export default defineComponent({
   data : () => ({
     prestataires: [],
     batimentsPrestataires: [],
+    reservations: [],
     uuidTicket : "",
     uuidTicketRempli : false,
   }),
@@ -61,6 +68,11 @@ export default defineComponent({
     ...mapState(['token','group_id']), //Remettre ,'user_id' après le token
   },
   methods: {
+    async validerTicket(){
+      this.uuidTicketRempli = this.uuidTicket.length >= 1
+      await this.recupererReservationsTicket()
+      console.log(this.reservations)
+    },
     async annulerReservation(){
       try {
         let response = await RestauService.getAllResaById({'id_resa':this.$route.params.idDelete})
@@ -102,6 +114,20 @@ export default defineComponent({
           console.log("Erreur lors de la récupération des batiments");
         } else {
           this.batimentsPrestataires = response;
+        }
+      } catch (e) {
+        console.error("An error occurred:", e);
+      }
+    },
+    async recupererReservationsTicket(){
+      try {
+        console.log("uuidTicket : "+this.uuidTicket)
+        let response = await RestauService.getAllResaByIdTicket(this.uuidTicket)
+        if (response.error) {
+          console.log("Erreur lors de la récupération des reservations");
+        } else {
+          console.log("La rep "+response)
+          this.reservations = response;
         }
       } catch (e) {
         console.error("An error occurred:", e);
