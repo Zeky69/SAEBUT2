@@ -338,7 +338,7 @@ CREATE TABLE ligneCommandeArticle(
    quantite INT NOT NULL,
    valide BOOLEAN NOT NULL,
    PRIMARY KEY(id_commande, id_produit),
-   FOREIGN KEY(id_produit) REFERENCES produit(id_produit)
+   FOREIGN KEY(id_produit) REFERENCES produit(id_produit) ON DELETE CASCADE
 );
 
 CREATE TABLE disponibilite(
