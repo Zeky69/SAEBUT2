@@ -19,7 +19,7 @@
         <tr v-for="(feature, index) in sortfeaturebyaccepted" :key="index" class="feature-row">
           <td>{{ feature.properties.name }}</td>
           <td>{{ feature.properties.description }}</td>
-          <td>{{ feature.properties.typeTerrain }}</td>
+          <td>{{ typeTerrainName(feature)}}</td>
           <td>{{ providername(feature) }}</td>
           <td><span v-if="feature.properties.accept === true">
             <i class="fas fa-check-circle" style="color: green;"></i>
@@ -296,6 +296,18 @@ export default {
         for (let i = 0; i < this.providers.length; i++) {
           if (this.providers[i].id_prestataire === feature.properties.apartient) {
             return this.providers[i].nom;
+          }
+        }
+        return "Inconnu";
+      }
+    },
+    typeTerrainName(feature){
+      if(feature.properties.typeTerrain === null){
+        return "Sans type"
+      }else {
+        for (let i = 0; i < this.types.length; i++) {
+          if(this.types[i].value === feature.properties.typeTerrain){
+            return this.types[i].libelle
           }
         }
         return "Inconnu";
