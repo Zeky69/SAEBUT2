@@ -98,8 +98,11 @@ export default {
           })
 
           this.loadcommandes = await shopService.getCommandes();
-
           this.formatedComandesaft = await this.formatCommandes(this.loadcommandes);
+
+
+          let tabe = this.formatedComandesaft.filter(e => e.prestataire_id === this.id_presta)
+          this.formatedComandesaft = tabe
 
           console.log(this.formatedComandesaft)
 
