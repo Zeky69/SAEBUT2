@@ -174,11 +174,11 @@ export default {
       });
     }
   },
-  mounted() {
+  created() {
+    this.getidpresta();
     this.chargerArticles();
     this.chargerCategories();
-    this.getidpresta();
-  },
+  }
 };
 
 
