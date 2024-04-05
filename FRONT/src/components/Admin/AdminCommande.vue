@@ -5,15 +5,28 @@
     <table  v-if="commandes.length > 0" >
       <thead>
       <tr>
-        <th v-for="(field, index) in Object.keys(commandes[0])" :key="index">{{ field }}</th>
+        <th>
+          Type de Billet
+        </th>
+        <th>
+          Nom
+        </th>
+        <th>
+          Prénom
+        </th>
+        <th>
+          Date
+        </th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="(commande, index) in commandes" :key="index">
-        <td v-for="(field, key) in Object.keys(commandes[0])" :key="key">
-          <span v-if="field === 'date'">{{ formatDate(commande[field]) }}</span>
-          <span v-else>{{ commande[field] }}</span>
+        <td>
+          {{commande.title}}
         </td>
+        <td>{{commande.nom}}</td>
+        <td>{{commande.prenom}}</td>
+        <td>{{formatDate(commande.date)}}</td>
       </tr>
       </tbody>
     </table>
@@ -82,18 +95,18 @@ export default {
   font-family: "DM Sans";
   font-size: 50px;
   font-style: normal;
+
 }
 
 .EspaceAdmin {
   font-family: Arial, sans-serif;
   margin: 0 auto;
-  width: 80%;
-  padding: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 table {
   width: 100%;
+  padding: 10px;
+  margin-top: 50px;
   border-collapse: collapse;
 }
 
@@ -105,12 +118,15 @@ td {
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: #e7e7e7;
   font-weight: bold;
 }
 
+tr {
+  background-color: #f0f0f0;
+}
 tr:hover {
-  background-color: #f5f5f5;
+  background-color: #e7e7e7;
 }
 
 span {
