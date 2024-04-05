@@ -22,8 +22,8 @@
     </div>
   </div>
 
+  <div class="services" v-if="mode==='1'">
 
-  <div class="services" v-if="services.length > 0 && mode==='1'">
 
 
     <div class="rect" v-if="servicetoAdd.length>0">
@@ -40,6 +40,7 @@
 
     <page-titre :title="`Gestions des services`"></page-titre>
 
+    <div v-if="services.length > 0">
 
     <table>
       <thead>
@@ -72,7 +73,20 @@
       </tr>
       </tbody>
     </table>
+    </div>
   </div>
+  <span v-if="mode === '2'">
+    <div v-if="showBoutique">
+      <button class="btn tkt" @click="versBoutique">Redirection vers la boutique de {{prestataire.nom}}</button>
+
+    </div>
+
+    <div v-if="showCom">
+      <commentaire-component v-if="idPrestataire !==-1" :disabled="this.$store.state.group_id ===3" :id_prestataire="idPrestataire"></commentaire-component>
+
+    </div>
+
+  </span>
 
   <div v-for="(batiment,index) in batimentPrestataire" :key="index">
 
@@ -87,25 +101,13 @@
         @updateDisplay="updateDisplay($event)"></reservationComponent>
   </div>
 
-  <span v-if="mode === '2'">
-    <div v-if="showBoutique">
-      <button class="btn tkt">Redirection vers la boutique de {{prestataire.nom}}</button>
-
-    </div>
-
-    <div v-if="showCom">
-      <commentaire-component v-if="idPrestataire !==-1" :disabled="this.$store.state.group_id ===3" :id_prestataire="idPrestataire"></commentaire-component>
-
-    </div>
-
-  </span>
 
 
 
 
 
 
-  </div>
+</div>
 </template>
 
 <script>
@@ -201,6 +203,10 @@ export default {
 
   methods: {
     getImage,
+    versBoutique(){
+      this.$router.push("/articles/"+this.idPrestataire)
+
+    },
     changeMode(mode) {
       this.mode = mode;
     },

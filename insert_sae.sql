@@ -221,5 +221,21 @@ INSERT INTO public.emplacement (id_emplacement, id_type, nom, description, matri
 INSERT INTO public.emplacement (id_emplacement, id_type, nom, description, matricepoints, prestataire_id, use_resa, accepted) VALUES ('f785eeed-6001-4bb1-b540-8cd0a88aef06', '2', 'Terrain ', 'Un grand terrain pour mettre un manège', '{"matricepoints":[[47.7480198454861,6.801724825054408],[47.74792606356137,6.801724825054408],[47.74792065306055,6.802092287689449],[47.74800541750867,6.802014503628016],[47.748028862969946,6.801880393177272],[47.7480198454861,6.801724825054408]]}', null, true, false);
 INSERT INTO public.emplacement (id_emplacement, id_type, nom, description, matricepoints, prestataire_id, use_resa, accepted) VALUES ('f5669d3c-88c0-4067-b280-10ab1fee41c8', '1', 'Restaurant', 'Un grand terrain pour un restaurant', '{"matricepoints":[[47.74830479722063,6.80219689384103],[47.74823806815686,6.802089605480434],[47.74819117741224,6.802175436168911],[47.74820019486639,6.802271995693446],[47.74831561814183,6.802266631275417],[47.74830479722063,6.80219689384103]]}', null, true, false);
 INSERT INTO public.emplacement (id_emplacement, id_type, nom, description, matricepoints, prestataire_id, use_resa, accepted) VALUES ('58d3b063-b332-42e7-8eac-b54276954dff','4','Draky Draky Scene','Drake, de son vrai nom Aubrey Drake Graham, est un artiste canadien né le 24 octobre 1986 à Toronto. Il est surtout connu comme rappeur, chanteur, auteur-compositeur et producteur de musique. Drake a acquis une renommée mondiale grâce à ses hits à succès tels que "Hotline Bling" et "God''s Plan". Il est également reconnu pour son influence dans la mode et la culture populaire.','{"matricepoints":[[47.748227247219546,6.801740918308498],[47.74830119024639,6.80193403735757],[47.74818576693896,6.801968906074763],[47.74811182374813,6.801810655742885],[47.748227247219546,6.801740918308498]]}',1,false,true);
-select * from emplacement
+
+SELECT * from lignecommandebillet;
+SELECT * from lignecommandearticle;
+
+SELECT SUM(ventes) as vente_total from (
+SELECT SUM(prixTotalBillet) as ventes
+from (SELECT b.price * count(lcb.uuid) as prixTotalBillet
+     FROM ligneCommandeBillet lcb
+              JOIN billet b ON lcb.id_billet = b.id
+     group by b.id, b.title, b.price) as lbpTB
+UNION
+SELECT SUM(prixTotalArticle) as ventes
+from (SELECT p.prix * sum(lca.quantite) as prixTotalArticle
+     FROM ligneCommandeArticle lca
+              JOIN produit p ON lca.id_produit = p.id_produit
+     group by p.id_produit) as lbpTA
+) as lTvlTv;
 
