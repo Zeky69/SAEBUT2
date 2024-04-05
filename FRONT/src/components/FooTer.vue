@@ -45,7 +45,7 @@
         <h3 v-t="'footer.evenMore'"></h3>
         <router-link to="/organisateurs" class="link" v-t="'footer.whoAreWe'"></router-link>
         <router-link to="/contact" class="link" v-t="'footer.contactUs'"></router-link>
-        <router-link to="/login" class="link" v-t="'footer.connectYou'"></router-link>
+        <router-link to="/login" class="link" ><button style="border: none;">{{ $t("footer.connectYou")}} </button></router-link>
       </div>
     </div>
   </div>

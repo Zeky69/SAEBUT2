@@ -164,7 +164,7 @@ async function getCountCommande(){
 async function getAverageNote(id_prestataire){
     const client = await  pool.connect()
         try{
-            const query = "select avg(note) as note from commentaire where id_prestataire = $1";
+            const query = "select ROUND(avg(note), 2)as note from commentaire where id_prestataire = $1";
             const res = await client.query(query, [id_prestataire]);
             return res.rows[0];
         }catch (e){
