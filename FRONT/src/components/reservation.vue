@@ -1,10 +1,12 @@
 <template>
   <div class="main" v-if="mode==='1' || (mode==='2' && display)">
-    <div class="reservation" >
-    <h1>{{this.nom}}</h1>
+    <div class="reservation">
+      <h1 class="highlighted-title">{{this.nom}}</h1>
       <div v-if="mode==='1'">
-        <label for="display" >Utiliser les réservations ?</label>
-        <input id="display" type="checkbox" :checked="display" @click="$emit('updateDisplay', id_bat)">
+        <div class="custom-checkbox">
+          <input id="display" type="checkbox" :checked="display" @click="$emit('updateDisplay', id_bat)">
+          <label for="display">Utiliser les réservations ?</label>
+        </div>
 
         <h2>Reservations</h2>
         <ul v-if="reservations.length !== 0">
@@ -188,20 +190,30 @@ export default defineComponent({
 <style scoped>
 
 .main {
-  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+  width: 80%;
+  margin: auto;
+  padding: 20px 50px;
   border-radius: 34px;
-  background: #cbbdbf;
+  background: rgba(255, 255, 255, 0.6);
   color: #553c65;
-  box-shadow:  5px 5px 10px #cccccc,
-  -5px -5px 10px #f4f4f4;
+  box-shadow:  5px 5px 10px rgba(255, 255, 255, 0.3),
+  -5px -5px 10px rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  margin-bottom: 5%;
 }
 
 .reservation {
+  grid-column: 1 / span 2;
   padding: 20px 50px;
   border-radius: 34px 34px 0px 0px;
 }
 
 .diponibilite {
+  grid-column: 1 / span 3;
   padding: 20px 50px;
 }
 
@@ -212,6 +224,9 @@ button, input[type=button], input[type=submit], input[type=reset] {
   height: fit-content;
   border-radius: 10px;
   color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover, input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
@@ -222,6 +237,12 @@ input[type=datetime-local], input[type=time] {
   border-radius: 10px;
   padding: 5px;
   border: #1b1b1b solid 1px;
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #553c65;
+  box-shadow:  5px 5px 10px rgba(255, 255, 255, 0.3),
+  -5px -5px 10px rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 input:invalid + span:after {
@@ -239,11 +260,54 @@ ul {
 }
 
 ul li {
-  background-color: #897a8e;
+  background-color: rgba(255, 255, 255, 0.25);
   color : #2c3e50;
   padding: 5px;
   border : #1b1b1b solid 1px;
   border-radius: 10px;
+  box-shadow:  5px 5px 10px rgba(255, 255, 255, 0.3),
+  -5px -5px 10px rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
+
+.custom-checkbox {
+  background-color: transparent;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+
+.custom-checkbox input[type="checkbox"] {
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
+  cursor: pointer;
+  
+}
+
+.custom-checkbox label {
+  display: inline-block;
+  padding: 10px 20px;
+  background: transparent;
+  color: #845497;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  /** outline and only outline with the same color as the text */
+  outline: 1px solid #845497;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + label {
+  background-color: #845497;
+  color: white;
+  cursor: pointer;
+}
+
+.highlighted-title {
+  color: #2c3e50;
+  font-weight: bold;
+}
+
 
 </style>
