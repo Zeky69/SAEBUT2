@@ -5,9 +5,41 @@
       <div class="Bienvenue">
         <h2 class="EffetViolet">Bienvenue, <br> {{ lname }} {{ fname }}</h2>
       </div>
-      <div class="Perfomance">
+
+      <div  v-if="show" class="Perfomance">
         <Bar :data="articleChartData" ></Bar>
       </div>
+
+
+    </div>
+
+    <div v-if="show" class="container-middle">
+      <div class="chiffreDuJour">
+        <h2>Chiffres du jour</h2>
+        <div class="rubriqueChiffre">
+          <div class="rubriqueChiffre-content">
+            <h2>{{ ventes }} €</h2>
+            <h3>Ventes</h3>
+          </div>
+          <img src="@/assets/pagePrestataire/Sell.svg" style="max-height: 60px">
+        </div>
+        <div class="rubriqueChiffre">
+          <div class="rubriqueChiffre-content">
+            <h2>{{articlesVendu}}</h2>
+            <h3>Article vendu</h3>
+          </div>
+          <img src="@/assets/icons/cart.png" style="max-height: 80px;">
+        </div>
+        <div class="rubriqueChiffre">
+          <div class="rubriqueChiffre-content">
+            <h2>{{formatedComandesaft.length}}</h2>
+            <h3>Commandes</h3>
+          </div>
+          <img src="@/assets/pagePrestataire/commande.svg" style="max-height: 60px">
+
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -17,12 +49,15 @@ import {mapActions, mapState} from "vuex";
 import statistiquesService from "@/services/statistiques.service";
 import {Bar} from "vue-chartjs";
 import {Chart, registerables} from "chart.js";
+import prestataireService from "@/services/prestataire.service";
+import shopService from "@/services/shop.service";
+
 Chart.register(...registerables);
 export default {
   name: 'AdminInfoTemporaire',
   components: {Bar},
   computed: {
-    ...mapState(['token', 'fname', 'lname', 'group_id', 'user_id', 'email']),
+    ...mapState(['token', 'fname', 'lname', 'group_id', 'user_id', 'email','prestataireObject']),
     articleChartData() {
       return {
         labels: this.topArticles.map(article => article.nom),
@@ -36,9 +71,17 @@ export default {
   },
   data: () => ({
     topArticles: [],
+    services:[],
+    show:false,
+    ventes:0,
+    articlesVendu:0,
+    loadcommandes: 0,
+    formatedComandesaft:[],
+    id_presta:null,
+
   }),
   methods: {
-    ...mapActions(['logout']),
+    ...mapActions(['logout','getPrestataireObject']),
     deconnexion() {
       this.$router.replace('/login');
       this.logout();
@@ -48,6 +91,18 @@ export default {
         let response = await statistiquesService.getVenteArticleParIdPrestataire(this.user_id);
         if (!response.error) {
           this.topArticles = response;
+          this.articlesVendu = response.length;
+
+          this.topArticles.forEach(e =>{
+            this.ventes += parseFloat(e.prixtotalarticle)
+          })
+
+          this.loadcommandes = await shopService.getCommandes();
+
+          this.formatedComandesaft = await this.formatCommandes(this.loadcommandes);
+
+          console.log(this.formatedComandesaft)
+
           console.log("article "+this.topArticles);
         } else {
           console.log("Erreur lors de la récupération des réservations");
@@ -56,8 +111,74 @@ export default {
         console.error(e);
       }
     },
+    async getInformation() {
+      await this.getPrestataireObject(this.user_id);
+      this.id_presta = this.prestataireObject.id_prestataire;
+
+      let services = await prestataireService.getPrestatairesServices(this.id_presta);
+      if (Array.isArray(services) && services.length > 0) {
+        this.show = services.some(e => {
+          return e.id_type_service === 2
+        });
+      }
+    },
+    async formatCommandes(commandes) {
+      const formatedCommandes = {};
+      const id = this.user_id;
+      console.log("id prestataire", id)
+      var prestataire = await prestataireService.getPrestataireObject(this.user_id);
+      console.log("prestataire obj lsdkqslkdlmqsl", prestataire)
+      prestataire = prestataire[0];
+
+      commandes.forEach(commande => {
+        const { id_commande, id_user, date_commande, id_produit, quantite, prix, nom, valide, prestataire_id } = commande;
+
+        // Créer un nouvel objet ligne
+        let prixcomande = 0;
+        const ligne = {
+          id_commande,
+          id_produit,
+          prestataire_id,
+          quantite,
+          valide,
+          prix,
+          nom
+        };
+
+
+
+        // Ajouter la ligne à l'objet formatedCommandes
+        if (!formatedCommandes[id_commande]) {
+          formatedCommandes[id_commande] = {
+            id_commande,
+            id_user,
+            prestataire_id,
+            date_commande,
+            lignes: [ligne],
+            total_prix: prixcomande
+          };
+        } else {
+          formatedCommandes[id_commande].lignes.push(ligne);
+          formatedCommandes[id_commande].total_prix += prixcomande;
+        }
+      });
+
+      //pour chaque commande suprimer les ligne qui ne sont pas du prestataire
+      for (const key in formatedCommandes) {
+        formatedCommandes[key].lignes = formatedCommandes[key].lignes.filter(ligne => ligne.prestataire_id === this.id_presta);
+        console.log("id prestataire", this.id_presta)
+      }
+
+      for (const key in formatedCommandes) {
+        formatedCommandes[key].total_prix = formatedCommandes[key].lignes.reduce((acc, ligne) => acc + ligne.prix * ligne.quantite, 0);
+      }
+
+      // Convertir l'objet en tableau
+      return Object.values(formatedCommandes);
+    }
   },
   mounted() {
+    this.getInformation()
     this.getTopArticles();
   }
 };
@@ -202,6 +323,70 @@ export default {
   text-align: left;
   color: #56565C;
   font-size: 30px;
+}
+
+
+.container-middle{
+  display: flex;
+  margin-top: 2%;
+  gap: 10%;
+  height: 350px;
+  margin-right: 8%;
+
+}
+
+.container-middle h2{
+  color: #56565C;
+  font-size: 30px;
+
+
+}
+
+
+.chiffreDuJour{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 7%;
+  align-items: flex-start;
+}
+
+.rubriqueChiffre{
+  display: flex;
+  flex: 1;
+  width: 100%;
+  padding: 2% 4%;
+  justify-content: space-between;
+  border-radius: 10px;
+  background: radial-gradient(182.37% 182.37% at 50% 50%, rgba(236, 231, 241, 0.60) 0%, rgba(236, 231, 241, 0.00) 100%);
+  box-shadow: 0px 0px 155.2px -76px rgba(0, 0, 0, 0.25);
+}
+
+
+.rubriqueChiffre-content h2{
+  color: #252336;
+  font-family: DM Sans;
+  font-size: 35px;
+  text-align: left;
+
+
+}
+
+.rubriqueChiffre-content h3{
+  color: #BFB7CC;
+  font-family: DM Sans;
+  font-size: 20px;
+  text-align: left;
+
+}
+
+.calendrier-bloc{
+  margin-top: 2%;
+
+  width: 100%;
+  height: 100%;
+  border-radius: 40px;
+  background: radial-gradient(97.12% 97.12% at 50% 40.46%, #BAA8FC 0%, rgba(198, 188, 235, 0.00) 100%);
 }
 
 
