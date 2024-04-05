@@ -5,8 +5,11 @@ import store from './store'
 import VueI18n from 'vue-i18n';
 import frJson from '@/assets/locales/fr.json';
 import enJson from '@/assets/locales/en.json';
+import ClickOutside from 'vue-click-outside'
 
 Vue.use(VueI18n);
+
+Vue.use(ClickOutside);
 
 const messages = {
   fr: frJson,
