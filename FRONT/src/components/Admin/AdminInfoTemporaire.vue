@@ -43,7 +43,7 @@
       <div class="Calendrier">
         <h2>Nombre de vente par billet</h2>
         <div class="calendrier-bloc">
-          <Bar :data="ticketChartData2" ></Bar>
+          <Bar :data="ticketChartData2" :option="chartOptions"></Bar>
         </div>
       </div>
 
@@ -161,6 +161,16 @@ export default {
           }
         }
       }
+    },
+    chartOptions: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+        },
+      },
     },
     ticketData: [],
     topArticles: [],
