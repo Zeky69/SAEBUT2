@@ -5,11 +5,50 @@ const resaController = require("../controllers/reservations.controllers");
 var router = express.Router();
 
 router.get('/', batimentController.getAllBatiment);
+/**
+ * @swagger
+ * /batiment :
+ *     get:
+ *       summary: Obtenir les bâtiments associés à un prestataire
+ *       tags:
+ *       - Batiment
+ *       responses:
+ *         200:
+ *           description: Succès - Récupération des bâtiments associés réussie
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 id_emplacement:
+ *                   type: string
+ *                   description: L'identifiant du bâtiment
+ *                 id_type:
+ *                   type: string
+ *                   description: L'identifiant du type du bâtiment
+ *                 description:
+ *                   type: string
+ *                   description: La description du bâtiment
+ *                 nom:
+ *                   type: string
+ *                   description: Le nom du bâtiment
+ *                 accepted:
+ *                   type: string
+ *                   description: Le statut du bâtiment (accepté ou non)
+ *                 prestataire_id:
+ *                   type: boolean
+ *                   description: L'identifiant du prestataire associé
+ *                 use_resa:
+ *                   type: boolean
+ *                   description: Utilisation des réservations pour le bâtiment
+ *         500:
+ *           description: Erreur interne du serveur
+ */
 
 router.get('/:idPresta', batimentController.getBatByIdPrestataire);
 /**
  * @swagger
- * /batiment/{idPresta}:
+ * /batiment :
  *     get:
  *       summary: Obtenir les bâtiments associés à un prestataire
  *       tags:
@@ -28,47 +67,27 @@ router.get('/:idPresta', batimentController.getBatByIdPrestataire);
  *             items:
  *               type: object
  *               properties:
- *                 id_batiment:
+ *                 id_emplacement:
  *                   type: string
  *                   description: L'identifiant du bâtiment
+ *                 id_type:
+ *                   type: string
+ *                   description: L'identifiant du type du bâtiment
  *                 description:
  *                   type: string
  *                   description: La description du bâtiment
  *                 nom:
  *                   type: string
  *                   description: Le nom du bâtiment
- *                 name:
- *                   type: string
- *                   description: Le nom de l'objet 3D associé au bâtiment
- *                 status:
+ *                 accepted:
  *                   type: string
  *                   description: Le statut du bâtiment (accepté ou non)
- *                 posx:
- *                   type: double
- *                   description: La position en x du bâtiment
- *                 posy:
- *                   type: double
- *                   description: La position en y du bâtiment
- *                 posz:
- *                   type: double
- *                   description: La position en z du bâtiment
- *                 rota:
- *                   type: double
- *                   description: La rotation du bâtiment
  *                 prestataire_id:
- *                   type: integer
+ *                   type: boolean
  *                   description: L'identifiant du prestataire associé
- *                 image_path:
- *                   type: string
- *                   description: Le chemin vers l'image du bâtiment
- *                 id_emplacement:
- *                   type: string
- *                   description: L'identifiant de l'emplacement associé
  *                 use_resa:
  *                   type: boolean
  *                   description: Utilisation des réservations pour le bâtiment
- *         404:
- *           description: Aucun bâtiment trouvé pour le prestataire spécifié
  *         500:
  *           description: Erreur interne du serveur
  */
@@ -96,8 +115,6 @@ router.post('/updateDisplay', batimentController.updateDisplay);
  *       responses:
  *         200:
  *           description: Mise à jour de l'affichage réussie
- *         400:
- *           description: Requête invalide - Vérifiez la structure de la requête
  *         500:
  *           description: Erreur interne du serveur
  */
