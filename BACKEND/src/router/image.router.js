@@ -7,7 +7,4 @@ router.delete('/:filename', imageController.deleteImage)
 router.post('/', imageController.uploadImage)
 
 
-
-
-
 module.exports = router;

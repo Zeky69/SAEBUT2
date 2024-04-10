@@ -12,26 +12,16 @@ router.post('/articles',shopController.createArticle)
 router.put('/articles/:id',shopController.updateArticle)
 router.delete('/articles/:id',shopController.deleteArticle)
 
-
 router.get('/articles',shopController.getAllArticles)
 router.get('/articles/prestataire/:id',shopController.getArticlesByPrestataire)
 router.get('/articles/prestataire/serv/:id',shopController.getArticlesByPrestataireService)
-
-
-
 
 router.get('/categorie',shopController.getAllCategorie)
 router.get('/articles/:id',shopController.getArticlesByCategorie)
 router.get('/categorie/:id',shopController.getCategorie)
 
-
-
-
-
-
 router.get('/commande',shopController.getCommandes)
 router.get('/commande/:id',shopController.getCommande)
-
 
 router.patch('/commande/:id/ligne/:idligne',shopController.updateCommandeLigne)
 

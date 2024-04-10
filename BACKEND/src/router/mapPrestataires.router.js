@@ -18,14 +18,6 @@ router.delete('/emp/:id', mapPrestatairesMiddlewares.validateDelempInput , mapPr
 router.patch('/emp', mapPrestatairesMiddlewares.validateUpdateempInput , mapPrestatairesControllers.updateEmp);
 router.patch('/emp/info', mapPrestatairesMiddlewares.validateUpdateempInfoInput , mapPrestatairesControllers.updateEmpInfo);
 
-//router.get('/bat', mapPrestatairesMiddlewares.validatebatFilterInput, mapPrestatairesControllers.getBat);
-
-//router.get('/bat/type',mapPrestatairesMiddlewares.validatebatTypeFilterInput, mapPrestatairesControllers.getBatType);
-
-//router.get('/bat/:uuid', mapPrestatairesMiddlewares.validatebatUUID, mapPrestatairesControllers.getBatUUID);
-
-//router.get('/bat/emp/:uuid', mapPrestatairesMiddlewares.validebatempUUID, mapPrestatairesControllers.getBatempUUID);
-
 
 
 router.post('/bat', mapPrestatairesMiddlewares.validateAddbatInputdebug , mapPrestatairesControllers.savebat);
@@ -33,9 +25,6 @@ router.post('/bat', mapPrestatairesMiddlewares.validateAddbatInputdebug , mapPre
 router.patch('/bat', mapPrestatairesMiddlewares.validateUpdatebatInput , mapPrestatairesControllers.updatebat);
 
 router.delete('/bat', mapPrestatairesMiddlewares.validateDelbatInput , mapPrestatairesControllers.deletebat);
-
-//router.get('/bat/debug',mapPrestatairesMiddlewares.validatebatFilterInputdebug, (req,res) =>{res.send(mapPrestatairesControllers.getBatdebug(req,res))});
-
 
 
 router.get('/bat/debug',mapPrestatairesMiddlewares.validatebatFilterInputdebug, mapPrestatairesControllers.getBatdebug);

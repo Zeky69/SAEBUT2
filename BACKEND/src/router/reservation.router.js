@@ -93,13 +93,28 @@ router.get('/:id_bat', resaController.getAllResa);
  *                 id_reservation:
  *                   type: integer
  *                   description: L'identifiant de la réservation (en option)
- *         404:
- *           description: Aucune réservation trouvée pour le bâtiment spécifié
  *         500:
  *           description: Erreur interne du serveur
  */
 
 router.get('/ticket/:idTicket', resaController.getAllResaTicket);
+/**
+ * @swagger
+ * /reservation/ticket/{idTicket}:
+ *    get:
+ *       summary: Obtenir toutes les réservations pour un ticket spécifié
+ *       tags:
+ *         - Reservation
+ *       parameters:
+ *         - name: idTicket
+ *           in: path
+ *           required: true
+ *           type: integer
+ *           description: L'identifiant du ticket
+ *       responses:
+ *         500:
+ *           description: Erreur interne du serveur
+ */
 
 router.post('/disponibilite/', resaController.createDispo);
 /**
@@ -138,6 +153,7 @@ router.post('/disponibilite/', resaController.createDispo);
  *           description: Erreur interne du serveur
  *
  */
+
 router.post('/', resaController.reserver)
 /**
  * @swagger
@@ -164,15 +180,89 @@ router.post('/', resaController.reserver)
  *       responses:
  *         200:
  *           description: Réservation réussie
- *         400:
- *           description: Requête invalide - Vérifiez la structure de la requête
  *         500:
  *           description: Erreur interne du serveur
  */
 
 router.get('/disponibilite/id/:id_dispo', resaController.getDispoByID);
+/**
+ * @swagger
+ * /reservation/disponibilite/id/{id_dispo}:
+ *    get:
+ *      summary: Obtenir une disponibilité par son identifiant
+ *      tags:
+ *      - Reservation
+ *      parameters:
+ *         - name: idTicket
+ *           in: path
+ *           required: true
+ *           type: integer
+ *           description: L'identifiant du ticket
+ *       responses:
+ *         200:
+ *           description: Succès - Récupération de la disponibilité réussie
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 id_reservation:
+ *                   type: integer
+ *                   description: L'identifiant de la réservation
+ *                 id_emplacement:
+ *                   type: string
+ *                   description: uuid de l'emplacement
+ *                 id_prestataire:
+ *                   type: integer
+ *                   description: L'identifiant du prestataire
+ *                 ouverture:
+ *                   type: string
+ *                   format: date-time
+ *                   description: La date et l'heure d'ouverture de la disponibilité
+ *                 duree:
+ *                   type: string
+ *                   description: La durée en minute de la disponibilité
+ *                 id_ticket_client:
+ *                   type: string
+ *                   description: L'identifiant du ticket client
+ *                 description:
+ *                   type: string
+ *                   description: La description de la disponibilité
+ *                 nom:
+ *                   type: string
+ *                   description: Le nom du client
+ *                 color:
+ *                   type: string
+ *                   description: La couleur de la disponibilité
+ *                 status:
+ *                   type: string
+ *                   description: Le statut de la disponibilité
+ *         500:
+ *           description: Erreur interne du serveur
+ *
+ */
 
 router.patch('/disponibilite/:id_dispo', resaController.accepterDispo);
+/**
+ * @swagger
+ * /reservation/disponibilite/{id_dispo}:
+ *     patch:
+ *       summary: Accepter une disponibilité
+ *       tags:
+ *       - Reservation
+ *       parameters:
+ *         - name: id_dispo
+ *           in: path
+ *           required: true
+ *           type: integer
+ *           description: L'identifiant de la disponibilité à accepter
+ *           example: 1
+ *       responses:
+ *         200:
+ *           description: Acceptation de la disponibilité réussie
+ *         500:
+ *           description: Erreur interne du serveur
+ */
 
 router.delete('/disponibilite/:id_dispo', resaController.deleteDispoById);
 /**
@@ -192,8 +282,6 @@ router.delete('/disponibilite/:id_dispo', resaController.deleteDispoById);
  *       responses:
  *         200:
  *           description: Suppression de la disponibilité réussie
- *         400:
- *           description: Disponibilité non trouvée pour l'identifiant spécifié
  *         500:
  *           description: Erreur interne du serveur
  */
