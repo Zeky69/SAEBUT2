@@ -36,6 +36,10 @@
         <input class="input-form" v-if="modification" type="number" id="id_produit" v-model="id_produit" hidden>
         <label for="nom">Nom :</label>
         <input class="input-form" type="text" id="nom" v-model="article.nom" required>
+          <label for="images" class="drop-container" id="dropcontainer">
+          <input type="file" @change="onFileSelected" id="images" accept="image/*" ref="imageInput" enctype="multipart/form-data"/>
+
+        </label>
         <label for="categorie">Categorie :</label>
         <select v-model="article.categorie_id" required>
           <option v-for="categorie in categories" :key="categorie.id_categorie" :value="categorie.id_categorie">{{ categorie.libelle_categorie }}</option>
@@ -61,6 +65,7 @@
 import shopService from "@/services/shop.service";
 import PageTitre from "@/components/Admin/PageTitre.vue";
 import prestataireService from "@/services/prestataire.service";
+import { uploadImage } from "@/services/image.service"
 
 import { mapGetters } from 'vuex';
 
@@ -79,11 +84,16 @@ export default {
       modification: false,
       id_prestataire: null,
       id_produit: null,
+      file: null,
       prix: null,
       stock: 0,
+      photo: "",
+      photoname: "",
+      photoDeProfilChoisi: "",
       article: {
         id_produit: this.id_produit,
         nom: "",
+        photo: this.photo,
         categorie_id: 1,
         prix: this.prix,
         stock: this.stock,
@@ -98,6 +108,7 @@ export default {
     }
   },
   methods: {
+
     async chargerArticles() {
       this.articles = await shopService.getArticles();
       this.articles = this.articles.filter(article => article.prestataire_id === this.id_prestataire);
@@ -115,6 +126,7 @@ export default {
       this.article = {
         id_produit: null,
         nom: "",
+        photo: "",
         categorie_id: 1,
         prix: null,
         stock: 0,
@@ -130,8 +142,23 @@ export default {
     async ajouterArticle() {
 
       this.articles.id_prestataire = await this.getidpresta();
+
+      try {
+        if(this.file){
+          console.log("file",this.file)
+          await uploadImage(this.file);
+        }
+        this.accept();
+      } catch (error) {
+        console.error("Une erreur est survenue lors du changement d'image:", error.message);
+      }
+
+      this.article.photo = this.photoname;
+
       console.log("article front",this.article)
       await shopService.addArticle(this.article);
+
+
       this.chargerArticles();
       this.annulerFormulaire();
     },
@@ -148,12 +175,19 @@ export default {
       await shopService.deleteArticle(id);
       this.chargerArticles();
     },
+    onFileSelected(eve) {
+      console.log("eve",eve)
+      this.file = eve.target.files[0];
+      this.photoname = this.file.name;
+      this.photoDeProfilChoisi = URL.createObjectURL(this.file);
+    },
     annulerFormulaire() {
       this.formulaireVisible = false;
       this.modification = false;
       this.article = {
         id: null,
         nom: "",
+        photo: "",
         categorie_id: 1,
         prix: null,
         stock: 0,

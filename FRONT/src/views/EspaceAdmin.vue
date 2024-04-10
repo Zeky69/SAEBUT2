@@ -46,7 +46,7 @@ data: () => ({
 
     },
     {
-      title: "Map",
+      title: "Carte",
       path: "/admin/map",
       img: "fas fa-map",
 

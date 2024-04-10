@@ -195,6 +195,9 @@ export default {
     let res = await getAverageNote(this.id_presta)
     console.log("note",res)
     this.note = res.note
+    if(this.note === null){
+      this.note = 0.0
+    }
 
 
   }

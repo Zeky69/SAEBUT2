@@ -43,7 +43,7 @@ export default {
         path: "/prestataire/prestataires",
       },*/
       {
-        title: "Map",
+        title: "Carte",
         path: "/prestataire/map",
         img: "fas fa-map"
       },

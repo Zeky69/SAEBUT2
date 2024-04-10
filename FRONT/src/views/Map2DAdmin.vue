@@ -1,7 +1,7 @@
 <template>
 
   <div class="container-map-all">
-    <PageTitre title="Map 2D interactive"></PageTitre>
+    <PageTitre title="Carte interactive"></PageTitre>
     <TestMap/>
   </div>
 

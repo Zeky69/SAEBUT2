@@ -187,10 +187,10 @@ async function getAllCategorie(){
 async function createArticle(article){
     const client = await pool.connect();
     try{
-        const query = `INSERT INTO produit ( nom, prix, stock, categorie_id, prestataire_id)
-        VALUES ($1, $2, $3, $4, $5);`;
+        const query = `INSERT INTO produit ( nom, prix, stock, categorie_id, prestataire_id, photo)
+        VALUES ($1, $2, $3, $4, $5, $6);`;
         
-        const res = await client.query(query,[article.nom, article.prix, article.stock, article.categorie_id, article.id_prestataire])
+        const res = await client.query(query,[article.nom, article.prix, article.stock, article.categorie_id, article.id_prestataire, article.photo])
         console.log("Création de l'article réussie");
         return true;
     }catch(err){
@@ -204,13 +204,14 @@ async function createArticle(article){
 
 async function updateArticle(id,article){
     const client = await pool.connect();
+
     try{
 
         const query = `UPDATE produit
-        SET nom=$1, categorie_id=$2, prix=$3, stock=$4, prestataire_id=$5
+        SET nom=$1, categorie_id=$2, prix=$3, stock=$4, prestataire_id=$5 
         WHERE id_produit=$6 RETURNING *; `;
         
-        const res = await client.query(query,[article.nom, article.categorie_id, article.prix, article.stock, article.prestataire_id, article.id_produit])
+        const res = await client.query(query,[article.nom, article.categorie_id, article.prix, article.stock, article.prestataire_id ,article.id_produit])
         console.log("Mise à jour de l'article réussie");
         console.log(res.rows)
         return true;
